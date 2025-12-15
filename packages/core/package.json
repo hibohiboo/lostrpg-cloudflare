@@ -1,0 +1,21 @@
+{
+  "name": "@age-of-hero/core",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint . --fix && tsc --noEmit",
+    "ncu": "ncu -u"
+  },
+  "dependencies": {
+    "@age-of-hero/schemas": "workspace:*"
+  },
+  "devDependencies": {
+    "@age-of-hero/eslint-config-custom": "workspace:*",
+    "@age-of-hero/typescript-config": "workspace:*"
+  }
+}

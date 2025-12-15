@@ -1,0 +1,50 @@
+{
+  "name": "age-of-hero",
+  "packageManager": "bun@1.2.22",
+  "private": true,
+  "scripts": {
+    "init": "git config --local core.hooksPath .githooks && echo Changed hooks directory when npm install",
+    "local:rdb": "bash ./infra/local/neon/bin/up.sh",
+    "db:up": "docker-compose up -d postgres",
+    "db:down": "docker-compose down",
+    "dev:backend": "cd apps/backend && bun run dev",
+    "dev:backend:full": "cd apps/backend && bun run dev:full",
+    "dev:frontend": "cd apps/frontend && bun run dev",
+    "dev:ui": "cd packages/ui && bun run dev",
+    "dev": "bunx concurrently \"npm:dev:backend\" \"npm:dev:frontend\" \"npm:dev:ui\"",
+    "dev:full": "bunx concurrently \"npm:dev:backend:full\" \"npm:dev:frontend\" \"npm:dev:ui\"",
+    "prebuild": "bun install",
+    "build": "bunx --bun turbo build",
+    "lint": "turbo lint",
+    "ncu": "turbo ncu --force && ncu -u",
+    "test": "vitest"
+  },
+  "turbo": {
+    "pipeline": {
+      "build": {
+        "dependsOn": [
+          "^build"
+        ],
+        "outputs": [
+          "dist/**"
+        ]
+      },
+      "dev": {
+        "cache": false
+      }
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "concurrently": "^9.2.1",
+    "dependency-cruiser": "^17.0.1",
+    "prettier": "^3.6.2",
+    "turbo": "^2.5.6",
+    "vite-tsconfig-paths": "^6.0.0-beta.4",
+    "vitest": "^3.2.4"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ]
+}

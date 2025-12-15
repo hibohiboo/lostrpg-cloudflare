@@ -1,0 +1,26 @@
+{
+  "name": "@age-of-hero/eslint-config-custom",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@conarti/eslint-plugin-feature-sliced": "^1.0.5",
+    "@eslint/config-inspector": "^1.3.0",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.36.0",
+    "eslint": "^9.36.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "eslint-plugin-sonarjs": "^3.0.5",
+    "eslint-plugin-unused-imports": "^4.2.0",
+    "typescript-eslint": "^8.44.1"
+  },
+  "scripts": {
+    "ncu": "ncu -u",
+    "inspect": "eslint-config-inspector",
+    "build-inspect": "eslint-config-inspector build --base age-of-hero/age-of-hero-eslint-config-inspector --outDir ../../docs/astro/dist/age-of-hero-eslint-config-inspector"
+  }
+}

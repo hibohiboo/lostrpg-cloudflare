@@ -1,0 +1,7 @@
+{
+  "extends": "@age-of-hero/typescript-config/tsconfig.base.json",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "moduleResolution": "bundler"
+  }
+}

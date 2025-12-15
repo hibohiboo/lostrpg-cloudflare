@@ -1,0 +1,47 @@
+{
+  "name": "@age-of-hero/backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --hot src/index.ts",
+    "dev:full": "bun run db:up && bun run db:migrate && bun run dev",
+    "dev:worker": "wrangler dev",
+    "build": "bun build src/index.ts --outdir dist --target bun",
+    "build:worker": "bun build src/index.ts --outdir dist --target node --minify",
+    "start": "bun dist/index.js",
+    "deploy": "wrangler deploy",
+    "deploy:staging": "wrangler deploy --env staging",
+    "test": "vitest",
+    "test:contract": "vitest run tests/contract",
+    "test:integration": "vitest run tests/integration",
+    "test:unit": "vitest run tests/unit",
+    "db:up": "cd ../.. && docker-compose up -d postgres",
+    "db:down": "cd ../.. && docker-compose down",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "lint": "eslint . --fix && tsc -b  --noEmit",
+    "type-check": "tsc --noEmit",
+    "ncu": "ncu -u"
+  },
+  "dependencies": {
+    "@age-of-hero/schemas": "workspace:*",
+    "@hono/zod-validator": "^0.7.3",
+    "@neondatabase/serverless": "^1.0.1",
+    "@types/bcryptjs": "^3.0.0",
+    "bcryptjs": "^3.0.2",
+    "drizzle-orm": "^0.44.5",
+    "hono": "^4.9.8",
+    "postgres": "^3.4.7",
+    "zod": "^4.1.11"
+  },
+  "devDependencies": {
+    "@age-of-hero/eslint-config-custom": "workspace:*",
+    "@age-of-hero/typescript-config": "workspace:*",
+    "@testcontainers/postgresql": "^11.6.0",
+    "drizzle-kit": "^0.31.4",
+    "wrangler": "4"
+  }
+}

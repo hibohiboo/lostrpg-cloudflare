@@ -1,0 +1,9 @@
+{
+  "extends": "@age-of-hero/typescript-config/tsconfig.backend.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src/**/*", "tests/validation/character.test.ts"],
+  "exclude": ["dist", "node_modules", "**/*.test.ts"]
+}

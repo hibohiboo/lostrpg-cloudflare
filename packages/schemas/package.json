@@ -1,0 +1,26 @@
+{
+  "name": "@age-of-hero/schemas",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared validation schemas for Age of Hero",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "dev": "tsc --watch",
+    "test": "vitest",
+    "type-check": "tsc --noEmit",
+    "ncu": "ncu -u",
+    "lint": "eslint . --fix && tsc -b  --noEmit"
+  },
+  "dependencies": {
+    "zod": "^4.1.11"
+  },
+  "devDependencies": {
+    "@age-of-hero/typescript-config": "*"
+  }
+}
