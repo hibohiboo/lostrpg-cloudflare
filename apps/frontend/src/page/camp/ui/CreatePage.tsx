@@ -5,22 +5,15 @@ import {
   Button,
   Container,
   FormControl,
-  IconButton,
   InputLabel,
   Link as MuiLink,
   MenuItem,
-  Paper,
   Select,
   SelectChangeEvent,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   TextField,
   Typography,
 } from '@mui/material';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import React, { useState } from 'react';
 
 // 型定義
@@ -180,22 +173,24 @@ const CreatePage: React.FC = () => {
     });
   };
 
-  // 施設レベル変更ハンドラー
-  const handleFacilityLevelChange = (id: string, level: number) => {
+  // 施設更新ハンドラー
+  const handleFacilityUpdate = (updatedRow: Facility) => {
     setCamp({
       ...camp,
       facilities: camp.facilities.map((f) =>
-        f.id === id ? { ...f, level } : f,
+        f.id === updatedRow.id ? updatedRow : f,
       ),
     });
+    return updatedRow;
   };
 
-  // アイテム数変更ハンドラー
-  const handleItemNumberChange = (id: string, number: number) => {
+  // アイテム更新ハンドラー
+  const handleItemUpdate = (updatedRow: Item) => {
     setCamp({
       ...camp,
-      items: camp.items.map((i) => (i.id === id ? { ...i, number } : i)),
+      items: camp.items.map((i) => (i.id === updatedRow.id ? updatedRow : i)),
     });
+    return updatedRow;
   };
 
   // 保存ハンドラー
@@ -219,8 +214,72 @@ const CreatePage: React.FC = () => {
     }
   };
 
+  // 施設テーブルの列定義
+  const facilityColumns: GridColDef[] = [
+    { field: 'name', headerName: '名前', width: 150, editable: true },
+    { field: 'type', headerName: '種別', width: 100, editable: true },
+    { field: 'specialty', headerName: '専門', width: 100, editable: true },
+    {
+      field: 'level',
+      headerName: 'レベル',
+      width: 100,
+      type: 'number',
+      editable: true,
+    },
+    { field: 'effect', headerName: '効果', width: 200, editable: true },
+    {
+      field: 'actions',
+      headerName: '操作',
+      width: 80,
+      sortable: false,
+      renderCell: (params) => (
+        <Button
+          size="small"
+          color="error"
+          onClick={() => handleFacilityDelete(params.row.id)}
+        >
+          <DeleteIcon fontSize="small" />
+        </Button>
+      ),
+    },
+  ];
+
+  // アイテムテーブルの列定義
+  const itemColumns: GridColDef[] = [
+    { field: 'name', headerName: '名前', width: 200, editable: true },
+    {
+      field: 'number',
+      headerName: '個数',
+      width: 100,
+      type: 'number',
+      editable: true,
+    },
+    {
+      field: 'weight',
+      headerName: '重量',
+      width: 100,
+      type: 'number',
+      editable: true,
+    },
+    {
+      field: 'actions',
+      headerName: '操作',
+      width: 80,
+      sortable: false,
+      renderCell: (params) => (
+        <Button
+          size="small"
+          color="error"
+          onClick={() => handleItemDelete(params.row.id)}
+        >
+          <DeleteIcon fontSize="small" />
+        </Button>
+      ),
+    },
+  ];
+
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="lg">
       <Box my={4}>
         <Typography variant="h4" component="h2" gutterBottom>
           キャンプ作成
@@ -288,64 +347,9 @@ const CreatePage: React.FC = () => {
           <Typography variant="h6" gutterBottom>
             施設
           </Typography>
-          <TableContainer component={Paper}>
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>名前</TableCell>
-                  <TableCell>種別</TableCell>
-                  <TableCell>専門</TableCell>
-                  <TableCell>レベル</TableCell>
-                  <TableCell>効果</TableCell>
-                  <TableCell>操作</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {camp.facilities.map((facility) => (
-                  <TableRow key={facility.id}>
-                    <TableCell>{facility.name}</TableCell>
-                    <TableCell>{facility.type}</TableCell>
-                    <TableCell>{facility.specialty}</TableCell>
-                    <TableCell>
-                      <TextField
-                        type="number"
-                        size="small"
-                        value={facility.level}
-                        onChange={(e) =>
-                          handleFacilityLevelChange(
-                            facility.id,
-                            Number(e.target.value),
-                          )
-                        }
-                        sx={{ width: 80 }}
-                      />
-                    </TableCell>
-                    <TableCell>{facility.effect}</TableCell>
-                    <TableCell>
-                      <IconButton
-                        size="small"
-                        onClick={() => handleFacilityDelete(facility.id)}
-                      >
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-                {camp.facilities.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={6} align="center">
-                      <Typography variant="body2" color="text.secondary">
-                        施設がありません
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
 
           {/* 設備・人材追加 */}
-          <Box display="flex" gap={2} mt={2}>
+          <Box display="flex" gap={2} mb={2}>
             <FormControl sx={{ minWidth: 200 }}>
               <InputLabel>設備追加</InputLabel>
               <Select
@@ -378,6 +382,19 @@ const CreatePage: React.FC = () => {
               </Select>
             </FormControl>
           </Box>
+
+          <Box sx={{ height: 400, width: '100%' }}>
+            <DataGrid
+              rows={camp.facilities}
+              columns={facilityColumns}
+              processRowUpdate={handleFacilityUpdate}
+              hideFooter
+              disableRowSelectionOnClick
+              localeText={{
+                noRowsLabel: '施設がありません',
+              }}
+            />
+          </Box>
         </Box>
 
         {/* アイテムテーブル */}
@@ -402,57 +419,18 @@ const CreatePage: React.FC = () => {
             </Select>
           </FormControl>
 
-          <TableContainer component={Paper}>
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>名前</TableCell>
-                  <TableCell>個数</TableCell>
-                  <TableCell>重量</TableCell>
-                  <TableCell>操作</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {camp.items.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>
-                      <TextField
-                        type="number"
-                        size="small"
-                        value={item.number}
-                        onChange={(e) =>
-                          handleItemNumberChange(
-                            item.id,
-                            Number(e.target.value),
-                          )
-                        }
-                        sx={{ width: 80 }}
-                      />
-                    </TableCell>
-                    <TableCell>{item.weight}</TableCell>
-                    <TableCell>
-                      <IconButton
-                        size="small"
-                        onClick={() => handleItemDelete(item.id)}
-                      >
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-                {camp.items.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={4} align="center">
-                      <Typography variant="body2" color="text.secondary">
-                        アイテムがありません
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Box sx={{ height: 400, width: '100%' }}>
+            <DataGrid
+              rows={camp.items}
+              columns={itemColumns}
+              processRowUpdate={handleItemUpdate}
+              hideFooter
+              disableRowSelectionOnClick
+              localeText={{
+                noRowsLabel: 'アイテムがありません',
+              }}
+            />
+          </Box>
         </Box>
 
         {/* キャンプポイント */}
