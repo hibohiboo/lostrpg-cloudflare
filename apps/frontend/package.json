@@ -17,13 +17,17 @@
     "upgrade-msw": "bunx msw init public --save"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@lostrpg/core": "workspace:*",
+    "@lostrpg/ui": "workspace:*",
+    "@mui/icons-material": "^7.3.6",
+    "@mui/material": "^7.3.6",
     "hono": "^4.11.1",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-router": "^7.10.1",
-    "swr": "^2.3.7",
-    "@lostrpg/ui": "workspace:*",
-    "@lostrpg/core": "workspace:*"
+    "swr": "^2.3.7"
   },
   "devDependencies": {
     "@lostrpg/eslint-config-custom": "workspace:*",
