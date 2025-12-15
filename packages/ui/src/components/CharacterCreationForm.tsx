@@ -23,11 +23,10 @@ import { Card } from './Card';
 import { Button } from './form/Button';
 import { CardSection } from './form/CardSection';
 import { FormField, InputField, SelectField } from './form/FormField';
-import { ItemForm } from './form/ItemForm';
+import { ItemColumn, ItemForm } from './form/ItemForm';
 import { LimitSettingsSection } from './form/LimitSettingsSection';
 import { SessionHistoryForm } from './form/SessionHistoryForm';
 import { ExternalSkill, SkillForm } from './form/SkillForm';
-import { ItemColumn } from './form/ItemForm';
 import { ValidationSummary } from './form/ValidationSummary';
 
 interface CharacterCreationFormProps {

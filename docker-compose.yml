@@ -1,11 +1,11 @@
 services:
   postgres:
-    image: postgres:18rc1-alpine
+    image: postgres:18.1
     container_name: lostrpg-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: age_of_hero
+      POSTGRES_DB: lostrpg
       POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
     ports:
       - "5432:5432"

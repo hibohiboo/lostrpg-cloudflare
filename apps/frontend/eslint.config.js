@@ -1,13 +1,18 @@
 import customConfig from '@lostrpg/eslint-config-custom/frontend.js';
-import { defineConfig } from 'eslint/config';
+import { defineConfig, globalIgnores } from 'eslint/config';
 
-export default defineConfig(
-  { ignores: ['vite.config.ts', '**/dist/**', '**/public/**'] },
+export default defineConfig([
+  globalIgnores(['dist', 'vite.config.ts']),
   {
     extends: [
       ...customConfig,
       {
-        files: ['**/tests/**','**/*.test.tsx','**/*.test.ts','vitest.config.ts'],
+        files: [
+          '**/tests/**',
+          '**/*.test.tsx',
+          '**/*.test.ts',
+          'vitest.config.ts',
+        ],
         rules: {
           'import/extensions': ['off'],
           'import/no-extraneous-dependencies': ['off'],
@@ -43,4 +48,4 @@ export default defineConfig(
       },
     },
   },
-);
+]);

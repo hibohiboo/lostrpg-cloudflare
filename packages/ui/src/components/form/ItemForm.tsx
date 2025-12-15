@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import React from 'react';
 import { FaTrash } from 'react-icons/fa';
 
@@ -57,7 +58,6 @@ const ITEM_TYPES = [
   { label: 'その他', value: 'その他' },
 ];
 
-// eslint-disable-next-line complexity
 export const ItemForm: React.FC<ItemFormProps> = ({
   item,
   index,

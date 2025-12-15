@@ -8,7 +8,7 @@ describe('validateCreateCharacter', () => {
   // 有効なテストデータ
   const validCharacterData: CreateCharacterRequest = {
     name: '山田太郎',
-    selectedClasses: ['class-uuid-1', 'class-uuid-2'],
+    selectedClasses: ['マッスル', 'テクノロジー'],
     skillAllocations: {
       パワー: 20,
       タフネス: 30,
@@ -22,8 +22,8 @@ describe('validateCreateCharacter', () => {
         skill: '白兵攻撃',
         target: '単体',
         range: '武器',
-        cost: 4,
-        effect: '対象に白兵攻撃を行う。'
+        cost: '4',
+        effect: '対象に白兵攻撃を行う。',
       },
     ],
     specialAttacks: [
@@ -35,8 +35,8 @@ describe('validateCreateCharacter', () => {
         skill: '白兵攻撃',
         target: '単体',
         range: '武器',
-        cost: 8,
-        effect: '強力な一撃'
+        cost: '8',
+        effect: '強力な一撃',
       },
     ],
     items: [
@@ -116,7 +116,7 @@ describe('validateCreateCharacter', () => {
       it('selectedClassesが1個でも成功すること（寛容な設計）', () => {
         const validData = {
           ...validCharacterData,
-          selectedClasses: ['550e8400-e29b-41d4-a716-446655440001'],
+          selectedClasses: ['テクノロジー'],
         };
         const result = validateCreateCharacter(validData);
 
@@ -126,11 +126,7 @@ describe('validateCreateCharacter', () => {
       it('selectedClassesが3個でも成功すること（寛容な設計）', () => {
         const validData = {
           ...validCharacterData,
-          selectedClasses: [
-            '550e8400-e29b-41d4-a716-446655440001',
-            '550e8400-e29b-41d4-a716-446655440002',
-            '550e8400-e29b-41d4-a716-446655440003',
-          ],
+          selectedClasses: ['マッスル', 'バイオ', 'アーツ'],
         };
         const result = validateCreateCharacter(validData);
 
@@ -228,7 +224,9 @@ describe('validateCreateCharacter', () => {
 
         expect(result.success).toBe(false);
         if (!result.success) {
-          expect(result.error.details.some(d => d.field.includes('price'))).toBe(true);
+          expect(
+            result.error.details.some((d) => d.field.includes('price')),
+          ).toBe(true);
         }
       });
 

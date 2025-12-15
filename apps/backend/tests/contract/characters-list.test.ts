@@ -45,8 +45,8 @@ describe('GET /api/characters', () => {
     name: '山田太郎',
     selectedClasses: ['マッスル', 'バイオ'],
     skillAllocations: {
-      'パワー': 20,
-      'タフネス': 30,
+      パワー: 20,
+      タフネス: 30,
     },
     heroSkills: [
       {
@@ -58,7 +58,7 @@ describe('GET /api/characters', () => {
         target: '単体',
         range: '武器',
         cost: 4,
-        effect: '対象に白兵攻撃を行う。'
+        effect: '対象に白兵攻撃を行う。',
       },
     ],
     specialAttacks: [
@@ -71,7 +71,7 @@ describe('GET /api/characters', () => {
         target: '単体',
         range: '武器',
         cost: 8,
-        effect: '強力な一撃'
+        effect: '強力な一撃',
       },
     ],
     items: ['射撃武器（小）', 'ブレード（小）'],
@@ -99,7 +99,7 @@ describe('GET /api/characters', () => {
 
       // 一覧を取得
       const listRes = await getCharacterList();
-      const listData = await listRes.json();
+      const listData = (await listRes.json()) as any;
 
       expect(listRes.status).toBe(200);
       expect(Array.isArray(listData)).toBe(true);
@@ -125,7 +125,7 @@ describe('GET /api/characters', () => {
 
       // 一覧を取得
       const listRes = await getCharacterList();
-      const listData = await listRes.json();
+      const listData = (await listRes.json()) as any;
 
       expect(listRes.status).toBe(200);
       expect(Array.isArray(listData)).toBe(true);
@@ -144,14 +144,14 @@ describe('GET /api/characters', () => {
       await createCharacter(character1);
 
       // 少し待機
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
 
       const character2 = { ...basicCharacterData, name: '新しいキャラクター' };
       await createCharacter(character2);
 
       // 一覧を取得
       const listRes = await getCharacterList();
-      const listData = await listRes.json();
+      const listData = (await listRes.json()) as any;
 
       expect(listRes.status).toBe(200);
       expect(listData).toHaveLength(2);
@@ -166,7 +166,9 @@ describe('GET /api/characters', () => {
       // 日時が正しい順序であることを確認
       const firstUpdatedAt = new Date(firstCharacter.updatedAt);
       const secondUpdatedAt = new Date(secondCharacter.updatedAt);
-      expect(firstUpdatedAt.getTime()).toBeGreaterThanOrEqual(secondUpdatedAt.getTime());
+      expect(firstUpdatedAt.getTime()).toBeGreaterThanOrEqual(
+        secondUpdatedAt.getTime(),
+      );
     });
 
     it('正しいレスポンス形式を返すこと', async () => {
@@ -175,7 +177,7 @@ describe('GET /api/characters', () => {
 
       // 一覧を取得
       const listRes = await getCharacterList();
-      const listData = await listRes.json();
+      const listData = (await listRes.json()) as any;
 
       expect(listRes.status).toBe(200);
       expect(Array.isArray(listData)).toBe(true);
@@ -196,7 +198,8 @@ describe('GET /api/characters', () => {
       expect(typeof character.updatedAt).toBe('string');
 
       // UUIDの形式を確認
-      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+      const uuidRegex =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
       expect(character.id).toMatch(uuidRegex);
 
       // 日時の形式を確認（ISO形式）
@@ -225,15 +228,15 @@ describe('GET /api/characters', () => {
       const promises = Array.from({ length: 10 }, (_, index) =>
         createCharacter({
           ...basicCharacterData,
-          name: `キャラクター${index + 1}`
-        })
+          name: `キャラクター${index + 1}`,
+        }),
       );
 
       await Promise.all(promises);
 
       // 一覧を取得
       const listRes = await getCharacterList();
-      const listData = await listRes.json();
+      const listData = (await listRes.json()) as any;
 
       expect(listRes.status).toBe(200);
       expect(Array.isArray(listData)).toBe(true);

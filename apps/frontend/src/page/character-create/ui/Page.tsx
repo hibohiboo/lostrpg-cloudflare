@@ -1,11 +1,11 @@
 import { CharacterCreationForm } from '@lostrpg/ui';
-import type { CharacterFormData } from '@lostrpg/ui';
 import { useNavigate } from 'react-router';
 import {
   useSpreadSheetItemData,
   useSpreadSheetSkillData,
   useSpreadSheetUltimateData,
 } from '@lostrpg/frontend/shared/spreadsheet';
+import type { CharacterFormData } from '@lostrpg/ui';
 
 export function Page() {
   const navigate = useNavigate();

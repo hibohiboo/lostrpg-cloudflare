@@ -18,9 +18,11 @@
     "lint": "eslint . --fix && tsc -b  --noEmit"
   },
   "dependencies": {
-    "zod": "^4.1.11"
+    "zod": "^4.2.0"
   },
   "devDependencies": {
-    "@lostrpg/typescript-config": "*"
+    "@lostrpg/eslint-config-custom": "workspace:*",
+    "@lostrpg/typescript-config": "workspace:*",
+    "eslint": "^9.39.2"
   }
 }

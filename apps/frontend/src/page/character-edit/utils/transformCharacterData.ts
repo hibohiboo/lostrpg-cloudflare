@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any  */
 import type { CharacterFormData } from '@lostrpg/ui';
 
 interface CharacterDetail {
@@ -26,9 +26,9 @@ interface CharacterDetail {
   sessions?: any[];
 }
 
-// eslint-disable-next-line complexity
 export const transformCharacterToFormData = (
   character: CharacterDetail,
+  // eslint-disable-next-line complexity
 ): CharacterFormData => ({
   name: character.name,
   selectedClasses: character.selectedClasses || ['マッスル', 'マッスル'],

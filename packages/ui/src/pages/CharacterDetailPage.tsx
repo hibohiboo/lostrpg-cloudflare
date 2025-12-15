@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { AbilityName } from '@lostrpg/core';
 import { calculateAbilities } from '@lostrpg/core/ability-calculation/calculateAbilities';
 import { ClassName } from '@lostrpg/core/game-data/classes';
@@ -459,7 +460,7 @@ const StatusItem: React.FC<{
 );
 
 // ステータス計算ヘルパー
-// eslint-disable-next-line complexity
+
 const useStatusCalculation = (
   character: CharacterDetail,
   calculatedAbilities: CalculatedAbilities,

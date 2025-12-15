@@ -1,5 +1,5 @@
 import { CharacterDetailPage, type CharacterDetail } from '@lostrpg/ui';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 export function Page() {
@@ -8,7 +8,7 @@ export function Page() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchCharacter = async () => {
+  const fetchCharacter = useCallback(async () => {
     if (!id) {
       setError('キャラクターIDが指定されていません');
       setLoading(false);
@@ -35,11 +35,11 @@ export function Page() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     fetchCharacter();
-  }, [id]);
+  }, [fetchCharacter, id]);
 
   const handleRetry = () => {
     fetchCharacter();

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { CharacterFormData } from '@lostrpg/ui';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import {
@@ -7,6 +6,7 @@ import {
   useSpreadSheetSkillData,
   useSpreadSheetUltimateData,
 } from '@lostrpg/frontend/shared/spreadsheet';
+import type { CharacterFormData } from '@lostrpg/ui';
 
 interface CharacterDetail {
   id: string;
