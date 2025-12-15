@@ -15,6 +15,7 @@ import {
   UltimateSkillPage,
 } from '@lostrpg/ui/index';
 import { createBrowserRouter } from 'react-router';
+import { CampCreatePage, CampListPage } from '@lostrpg/frontend/page/camp';
 import { Page as CharacterCreatePage } from '@lostrpg/frontend/page/character-create';
 import { Page as CharacterDetailPage } from '@lostrpg/frontend/page/character-detail';
 import { Page as CharacterEditPage } from '@lostrpg/frontend/page/character-edit';
@@ -65,12 +66,25 @@ const ItemWrapper = ({
 export const createRouter = () =>
   createBrowserRouter([
     {
-      path: '/sample',
+      path: '/',
       Component: Layout,
       children: [
         {
           path: '',
           element: <TopPage />,
+        },
+        {
+          path: '/camp',
+          children: [
+            {
+              path: '',
+              element: <CampListPage />,
+            },
+            {
+              path: 'create',
+              element: <CampCreatePage />,
+            },
+          ],
         },
       ],
     },

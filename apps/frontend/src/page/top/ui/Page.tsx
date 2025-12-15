@@ -1,7 +1,14 @@
-import { HomePage } from '@lostrpg/ui/index';
+import { Link } from 'react-router';
 
 export const Page = () => (
   <div>
-    <HomePage />
+    <ul>
+      <li>
+        <Link to="/camp">camp</Link>
+      </li>
+      <li>
+        <Link to="/camp/create">camp create</Link>
+      </li>
+    </ul>
   </div>
 );
