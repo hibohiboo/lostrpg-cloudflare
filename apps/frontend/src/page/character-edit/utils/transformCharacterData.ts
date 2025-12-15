@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { CharacterFormData } from '@age-of-hero/ui';
+import type { CharacterFormData } from '@lostrpg/ui';
 
 interface CharacterDetail {
   id: string;

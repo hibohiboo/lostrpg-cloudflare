@@ -1,4 +1,4 @@
-import { HomePage } from '@age-of-hero/ui/index';
+import { HomePage } from '@lostrpg/ui/index';
 
 export const Page = () => (
   <div>

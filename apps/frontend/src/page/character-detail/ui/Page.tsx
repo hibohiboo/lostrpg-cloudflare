@@ -1,4 +1,4 @@
-import { CharacterDetailPage, type CharacterDetail } from '@age-of-hero/ui';
+import { CharacterDetailPage, type CharacterDetail } from '@lostrpg/ui';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 

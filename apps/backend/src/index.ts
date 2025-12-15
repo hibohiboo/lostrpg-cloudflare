@@ -2,7 +2,7 @@
 import {
   createCharacterSchema,
   updateCharacterSchema,
-} from '@age-of-hero/schemas';
+} from '@lostrpg/schemas';
 import { zValidator } from '@hono/zod-validator';
 import bcrypt from 'bcryptjs';
 import { desc, eq } from 'drizzle-orm';
@@ -24,7 +24,7 @@ app.use(
   cors({
     origin:
       process.env.NODE_ENV === 'production'
-        ? ['https://age-of-hero.hibohiboo66-cloudflare.workers.dev']
+        ? ['https://lostrpg.hibohiboo66-cloudflare.workers.dev']
         : '*', // テスト環境では全オリジンを許可
     credentials: true,
   }),

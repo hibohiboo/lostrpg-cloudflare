@@ -1,5 +1,5 @@
 {
-  "name": "@age-of-hero/eslint-config-custom",
+  "name": "@lostrpg/eslint-config-custom",
   "type": "module",
   "private": true,
   "devDependencies": {
@@ -21,6 +21,6 @@
   "scripts": {
     "ncu": "ncu -u",
     "inspect": "eslint-config-inspector",
-    "build-inspect": "eslint-config-inspector build --base age-of-hero/age-of-hero-eslint-config-inspector --outDir ../../docs/astro/dist/age-of-hero-eslint-config-inspector"
+    "build-inspect": "eslint-config-inspector build --base lostrpg/lostrpg-eslint-config-inspector --outDir ../../docs/astro/dist/lostrpg-eslint-config-inspector"
   }
 }

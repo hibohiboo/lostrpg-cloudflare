@@ -1,4 +1,4 @@
-import { formatHeroSkillForUI } from '@age-of-hero/core/index';
+import { formatHeroSkillForUI } from '@lostrpg/core/index';
 import React from 'react';
 import {
   GiRobotGrab,

@@ -12,27 +12,27 @@ import {
   PsychicClassPage,
   TechnologyClassPage,
   UltimateSkillPage,
-} from '@age-of-hero/ui/index';
+} from '@lostrpg/ui/index';
 import { createBrowserRouter } from 'react-router';
-import { Page as CharacterCreatePage } from '@age-of-hero/frontend/page/character-create';
-import { Page as CharacterDetailPage } from '@age-of-hero/frontend/page/character-detail';
-import { Page as CharacterEditPage } from '@age-of-hero/frontend/page/character-edit';
-import { Page as CharacterListPage } from '@age-of-hero/frontend/page/character-list';
+import { Page as CharacterCreatePage } from '@lostrpg/frontend/page/character-create';
+import { Page as CharacterDetailPage } from '@lostrpg/frontend/page/character-detail';
+import { Page as CharacterEditPage } from '@lostrpg/frontend/page/character-edit';
+import { Page as CharacterListPage } from '@lostrpg/frontend/page/character-list';
 import {
   AcclaimRulePage,
   BattleRulePage,
   JudgmentRulePage,
   RulesPage,
   SessionProgressPage,
-} from '@age-of-hero/frontend/page/rules';
-import { Page as CharacterCreationPage } from '@age-of-hero/frontend/page/rules/character-creation';
-import { TopPage } from '@age-of-hero/frontend/page/top';
-import { Layout } from '@age-of-hero/frontend/shared/layout';
+} from '@lostrpg/frontend/page/rules';
+import { Page as CharacterCreationPage } from '@lostrpg/frontend/page/rules/character-creation';
+import { TopPage } from '@lostrpg/frontend/page/top';
+import { Layout } from '@lostrpg/frontend/shared/layout';
 import {
   useSpreadSheetItemData,
   useSpreadSheetSkillData,
   useSpreadSheetUltimateData,
-} from '@age-of-hero/frontend/shared/spreadsheet';
+} from '@lostrpg/frontend/shared/spreadsheet';
 
 const ClassPageWrapper = ({
   className,

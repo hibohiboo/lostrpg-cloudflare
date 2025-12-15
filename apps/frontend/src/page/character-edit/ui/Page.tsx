@@ -1,4 +1,4 @@
-import { CharacterCreationForm } from '@age-of-hero/ui';
+import { CharacterCreationForm } from '@lostrpg/ui';
 import { useParams } from 'react-router';
 import { ErrorState } from '../components/ErrorState';
 import { LoadingState } from '../components/LoadingState';

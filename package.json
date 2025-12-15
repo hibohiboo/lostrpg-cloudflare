@@ -1,5 +1,5 @@
 {
-  "name": "age-of-hero",
+  "name": "lostrpg",
   "packageManager": "bun@1.2.22",
   "private": true,
   "scripts": {

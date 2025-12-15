@@ -1,5 +1,5 @@
 {
-  "name": "@age-of-hero/core",
+  "name": "@lostrpg/core",
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
@@ -12,10 +12,10 @@
     "ncu": "ncu -u"
   },
   "dependencies": {
-    "@age-of-hero/schemas": "workspace:*"
+    "@lostrpg/schemas": "workspace:*"
   },
   "devDependencies": {
-    "@age-of-hero/eslint-config-custom": "workspace:*",
-    "@age-of-hero/typescript-config": "workspace:*"
+    "@lostrpg/eslint-config-custom": "workspace:*",
+    "@lostrpg/typescript-config": "workspace:*"
   }
 }

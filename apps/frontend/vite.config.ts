@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      '@age-of-hero/frontend': path.join(__dirname, './src'),
+      '@lostrpg/frontend': path.join(__dirname, './src'),
     },
   },
   server: {

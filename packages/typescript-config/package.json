@@ -1,5 +1,5 @@
 {
-  "name": "@age-of-hero/typescript-config",
+  "name": "@lostrpg/typescript-config",
   "private": true,
   "scripts": {
     "ncu": "ncu -u"

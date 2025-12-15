@@ -1,4 +1,4 @@
-import { calculateAbilities } from '@age-of-hero/core/ability-calculation/calculateAbilities';
+import { calculateAbilities } from '@lostrpg/core/ability-calculation/calculateAbilities';
 import React, { useState, useMemo } from 'react';
 import { CLASSES } from '../constants/gameData';
 

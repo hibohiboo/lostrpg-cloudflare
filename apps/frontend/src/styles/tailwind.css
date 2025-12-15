@@ -1,2 +1,2 @@
-@import '@age-of-hero/ui/tailwind.css';
+@import '@lostrpg/ui/tailwind.css';
 @source "../../../../packages/ui/**/*.{js,ts,jsx,tsx,mdx}";

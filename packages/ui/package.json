@@ -1,5 +1,5 @@
 {
-  "name": "@age-of-hero/ui",
+  "name": "@lostrpg/ui",
   "private": true,
   "type": "module",
   "main": "./src/index.ts",
@@ -11,19 +11,19 @@
   "scripts": {
     "ncu": "ncu -u",
     "dev": "storybook dev -p 6006",
-    "build-storybook": "storybook build -o ../../docs/astro/public/age-of-hero-components",
+    "build-storybook": "storybook build -o ../../docs/astro/public/lostrpg-components",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "test": "vitest"
   },
   "dependencies": {
-    "@age-of-hero/core": "workspace:*",
+    "@lostrpg/core": "workspace:*",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-icons": "^5.5.0",
     "react-router": "^7.9.1"
   },
   "devDependencies": {
-    "@age-of-hero/typescript-config": "workspace:*",
+    "@lostrpg/typescript-config": "workspace:*",
     "@storybook/addon-docs": "9.1.7",
     "@storybook/addon-links": "^9.1.7",
     "@storybook/addon-onboarding": "^9.1.7",

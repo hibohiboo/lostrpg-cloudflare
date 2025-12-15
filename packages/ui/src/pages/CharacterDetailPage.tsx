@@ -1,6 +1,6 @@
-import { AbilityName } from '@age-of-hero/core';
-import { calculateAbilities } from '@age-of-hero/core/ability-calculation/calculateAbilities';
-import { ClassName } from '@age-of-hero/core/game-data/classes';
+import { AbilityName } from '@lostrpg/core';
+import { calculateAbilities } from '@lostrpg/core/ability-calculation/calculateAbilities';
+import { ClassName } from '@lostrpg/core/game-data/classes';
 import React from 'react';
 import { IconType } from 'react-icons';
 import { FaUser, FaArrowLeft, FaEdit } from 'react-icons/fa';

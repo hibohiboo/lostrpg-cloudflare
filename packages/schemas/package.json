@@ -1,5 +1,5 @@
 {
-  "name": "@age-of-hero/schemas",
+  "name": "@lostrpg/schemas",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -21,6 +21,6 @@
     "zod": "^4.1.11"
   },
   "devDependencies": {
-    "@age-of-hero/typescript-config": "*"
+    "@lostrpg/typescript-config": "*"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "extends": "@age-of-hero/typescript-config/tsconfig.backend.json",
+  "extends": "@lostrpg/typescript-config/tsconfig.backend.json",
   "compilerOptions": {
     "outDir": "./dist",
     "baseUrl": ".",

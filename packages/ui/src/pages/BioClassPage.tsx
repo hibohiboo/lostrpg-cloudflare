@@ -1,4 +1,4 @@
-import { formatHeroSkillForUI } from '@age-of-hero/core';
+import { formatHeroSkillForUI } from '@lostrpg/core';
 import React from 'react';
 import {
   GiDna2,

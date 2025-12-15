@@ -1,4 +1,4 @@
-import customConfig from '@age-of-hero/eslint-config-custom/defaults.js';
+import customConfig from '@lostrpg/eslint-config-custom/defaults.js';
 import { defineConfig } from 'eslint/config';
 import storybook from 'eslint-plugin-storybook';
 

@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { CharacterFormData } from '@age-of-hero/ui';
+import type { CharacterFormData } from '@lostrpg/ui';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import {
   useSpreadSheetItemData,
   useSpreadSheetSkillData,
   useSpreadSheetUltimateData,
-} from '@age-of-hero/frontend/shared/spreadsheet';
+} from '@lostrpg/frontend/shared/spreadsheet';
 
 interface CharacterDetail {
   id: string;

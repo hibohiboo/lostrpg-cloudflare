@@ -1,4 +1,4 @@
-import { CharacterListPage, type Character } from '@age-of-hero/ui';
+import { CharacterListPage, type Character } from '@lostrpg/ui';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 

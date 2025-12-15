@@ -1,4 +1,4 @@
-import { Layout as UILayout } from '@age-of-hero/ui/index';
+import { Layout as UILayout } from '@lostrpg/ui/index';
 import { Outlet, ScrollRestoration } from 'react-router';
 
 export function Layout() {

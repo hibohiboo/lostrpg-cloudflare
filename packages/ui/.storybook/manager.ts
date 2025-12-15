@@ -5,7 +5,7 @@ addons.setConfig({
   theme: {
     ...themes.dark,
     brandTitle: 'Age of Hero UI',
-    brandUrl: 'https://github.com/hibohiboo/age-of-hero/packages/ui',
+    brandUrl: 'https://github.com/hibohiboo/lostrpg/packages/ui',
     brandTarget: '_blank',
   },
 });

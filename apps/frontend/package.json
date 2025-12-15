@@ -1,5 +1,5 @@
 {
-  "name": "@age-of-hero/frontend",
+  "name": "@lostrpg/frontend",
   "private": true,
   "type": "module",
   "scripts": {
@@ -22,12 +22,12 @@
     "react-dom": "^19.1.1",
     "react-router": "^7.9.1",
     "swr": "^2.3.6",
-    "@age-of-hero/ui": "workspace:*",
-    "@age-of-hero/core": "workspace:*"
+    "@lostrpg/ui": "workspace:*",
+    "@lostrpg/core": "workspace:*"
   },
   "devDependencies": {
-    "@age-of-hero/eslint-config-custom": "workspace:*",
-    "@age-of-hero/typescript-config": "workspace:*",
+    "@lostrpg/eslint-config-custom": "workspace:*",
+    "@lostrpg/typescript-config": "workspace:*",
     "@tailwindcss/vite": "^4.1.13",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",

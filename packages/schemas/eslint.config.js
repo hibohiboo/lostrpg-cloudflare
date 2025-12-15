@@ -1,4 +1,4 @@
-import backendConfig from '@age-of-hero/eslint-config-custom/backend.js';
+import backendConfig from '@lostrpg/eslint-config-custom/backend.js';
 import { defineConfig } from 'eslint/config';
 
 export default defineConfig(

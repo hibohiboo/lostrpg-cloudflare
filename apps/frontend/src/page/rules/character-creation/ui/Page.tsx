@@ -1,4 +1,4 @@
-import { CharacterCreationPage } from '@age-of-hero/ui/index';
+import { CharacterCreationPage } from '@lostrpg/ui/index';
 
 export function Page() {
   return <CharacterCreationPage />;

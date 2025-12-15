@@ -4,4 +4,4 @@ export {
   SessionProgressPage,
   AcclaimRulePage,
   BattleRulePage,
-} from '@age-of-hero/ui/index';
+} from '@lostrpg/ui/index';
