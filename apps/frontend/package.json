@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "bunx --bun vite",
     "dev:mock": "bunx --bun vite --mode mock",
-    "prebuild": "node ../../node_modules/typescript/bin/tsc -b",
+    "prebuild": "bun tsc -b",
     "build": "vite build",
-    "lint": "eslint . --fix && node ../../node_modules/typescript/bin/tsc -b",
+    "lint": "eslint . --fix && bun tsc -b",
     "preview": "bunx --bun vite preview",
     "prepreview:ci": "tsc -b && bunx --bun vite build --mode ci",
     "preview:ci": "bunx --bun vite preview --port 5173 ",

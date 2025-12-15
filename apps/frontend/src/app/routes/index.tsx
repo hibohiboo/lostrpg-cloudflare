@@ -65,7 +65,17 @@ const ItemWrapper = ({
 export const createRouter = () =>
   createBrowserRouter([
     {
-      path: '/',
+      path: '/sample',
+      Component: Layout,
+      children: [
+        {
+          path: '',
+          element: <TopPage />,
+        },
+      ],
+    },
+    {
+      path: '/sample',
       Component: Layout,
       children: [
         {

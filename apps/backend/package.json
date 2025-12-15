@@ -22,8 +22,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "lint": "eslint . --fix && tsc -b  --noEmit",
-    "type-check": "tsc --noEmit",
+    "lint": "eslint . --fix && bun run tsc -b  --noEmit",
+    "type-check": "bun run tsc --noEmit",
     "ncu": "ncu -u"
   },
   "dependencies": {
