@@ -8,7 +8,7 @@ export interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({
   children,
-  title = 'Age of Hero TRPG',
+  title = 'LOSTTRPGサポートツール',
 }) => (
   <div className="min-h-screen bg-gray-50">
     <header className="bg-blue-600 text-white shadow-lg">
