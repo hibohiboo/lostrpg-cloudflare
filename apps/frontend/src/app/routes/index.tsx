@@ -39,12 +39,12 @@ import {
 } from '@lostrpg/frontend/page/rules';
 import { Page as CharacterCreationPage } from '@lostrpg/frontend/page/rules/character-creation';
 import { TopPage } from '@lostrpg/frontend/page/top';
-import { Layout } from '@lostrpg/frontend/shared/layout';
 import {
   useSpreadSheetItemData,
   useSpreadSheetSkillData,
   useSpreadSheetUltimateData,
 } from '@lostrpg/frontend/shared/spreadsheet';
+import { Layout } from '@lostrpg/frontend/shared/ui';
 
 const ClassPageWrapper = ({
   className,
