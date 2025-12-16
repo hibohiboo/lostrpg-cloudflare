@@ -1,4 +1,3 @@
-import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import {
   Box,
@@ -9,7 +8,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import React, { useState } from 'react';
 import {
   AddFacilityForm,
@@ -17,14 +15,11 @@ import {
   Facility,
   FacilityTable,
 } from '@lostrpg/frontend/entities/facility';
-import { AddItemSelectForm } from '@lostrpg/frontend/shared/ui/components/molecules/AddItemSelectForm';
-
-interface Item {
-  id: string;
-  name: string;
-  number: number;
-  weight: number;
-}
+import {
+  AddItemForm,
+  Item,
+  ItemTable,
+} from '@lostrpg/frontend/entities/item';
 
 interface CampFormData {
   playerName: string;
@@ -37,15 +32,6 @@ interface CampFormData {
   summary: string;
   freeWriting: string;
 }
-
-// ダミーデータ - アイテムリスト
-const ITEM_LIST = [
-  { name: '回復薬', weight: 0.1 },
-  { name: '魔法の石', weight: 0.5 },
-  { name: '古文書', weight: 1.0 },
-  { name: '保存食', weight: 0.3 },
-  { name: '宝の地図', weight: 0.1 },
-];
 
 const CreatePage: React.FC = () => {
   const [camp, setCamp] = useState<CampFormData>({
@@ -91,14 +77,8 @@ const CreatePage: React.FC = () => {
   };
 
   // アイテム追加ハンドラー
-  const handleItemAdd = (item: { name: string; weight: number }) => {
-    const newItem: Item = {
-      id: `item-${Date.now()}`,
-      name: item.name,
-      number: 1,
-      weight: item.weight,
-    };
-    setCamp({ ...camp, items: [...camp.items, newItem] });
+  const handleItemAdd = (item: Item) => {
+    setCamp({ ...camp, items: [...camp.items, item] });
     setItemSelect('');
   };
 
@@ -158,40 +138,6 @@ const CreatePage: React.FC = () => {
       alert('キャンプを削除しました（ダミー動作）');
     }
   };
-
-  // アイテムテーブルの列定義
-  const itemColumns: GridColDef[] = [
-    { field: 'name', headerName: '名前', width: 200, editable: true },
-    {
-      field: 'number',
-      headerName: '個数',
-      width: 100,
-      type: 'number',
-      editable: true,
-    },
-    {
-      field: 'weight',
-      headerName: '重量',
-      width: 100,
-      type: 'number',
-      editable: true,
-    },
-    {
-      field: 'actions',
-      headerName: '操作',
-      width: 80,
-      sortable: false,
-      renderCell: (params) => (
-        <Button
-          size="small"
-          color="error"
-          onClick={() => handleItemDelete(params.row.id)}
-        >
-          <DeleteIcon fontSize="small" />
-        </Button>
-      ),
-    },
-  ];
 
   return (
     <Container maxWidth="lg">
@@ -292,25 +238,14 @@ const CreatePage: React.FC = () => {
           </Typography>
 
           <Box mb={2}>
-            <AddItemSelectForm
-              label="アイテム追加"
-              value={itemSelect}
-              items={ITEM_LIST}
-              getItemName={(item) => item.name}
-              onAdd={handleItemAdd}
-            />
+            <AddItemForm itemSelect={itemSelect} onItemAdd={handleItemAdd} />
           </Box>
 
           <Box sx={{ height: 400, width: '100%' }}>
-            <DataGrid
-              rows={camp.items}
-              columns={itemColumns}
-              processRowUpdate={handleItemUpdate}
-              hideFooter
-              disableRowSelectionOnClick
-              localeText={{
-                noRowsLabel: 'アイテムがありません',
-              }}
+            <ItemTable
+              items={camp.items}
+              handleItemDelete={handleItemDelete}
+              handleItemUpdate={handleItemUpdate}
             />
           </Box>
         </Box>
