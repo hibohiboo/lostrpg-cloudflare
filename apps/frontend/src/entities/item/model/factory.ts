@@ -2,7 +2,14 @@ import { Item } from './types';
 
 type ItemInput = {
   name: string;
+  price: number;
   weight: number;
+  type: string;
+  area: string;
+  specialty: string;
+  target: string;
+  trait: string;
+  effect: string;
 };
 
 /**
@@ -12,7 +19,14 @@ type ItemInput = {
  */
 export const createItem = (item: ItemInput): Item => ({
   id: `item-${Date.now()}`,
-  name: item.name,
   number: 1,
+  name: item.name,
+  price: item.price,
   weight: item.weight,
+  type: item.type,
+  area: item.area,
+  specialty: item.specialty,
+  target: item.target,
+  trait: item.trait,
+  effect: item.effect,
 });

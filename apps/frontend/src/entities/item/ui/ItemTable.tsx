@@ -20,21 +20,34 @@ export const ItemTable: React.FC<Props> = ({
   handleItemUpdate,
 }) => {
   const columns: GridColDef<Item>[] = [
-    { field: 'name', headerName: '名前', width: 200, editable: true },
     {
       field: 'number',
       headerName: '個数',
-      width: 100,
+      width: 80,
+      type: 'number',
+      editable: true,
+    },
+    { field: 'name', headerName: '名前', width: 150, editable: true },
+    {
+      field: 'price',
+      headerName: '価格',
+      width: 80,
       type: 'number',
       editable: true,
     },
     {
       field: 'weight',
       headerName: '重量',
-      width: 100,
+      width: 80,
       type: 'number',
       editable: true,
     },
+    { field: 'type', headerName: 'タイプ', width: 100, editable: true },
+    { field: 'area', headerName: '部位', width: 100, editable: true },
+    { field: 'specialty', headerName: '特技', width: 120, editable: true },
+    { field: 'target', headerName: '対象', width: 100, editable: true },
+    { field: 'trait', headerName: '特性', width: 150, editable: true },
+    { field: 'effect', headerName: '効果', width: 300, editable: true },
   ];
 
   return (
