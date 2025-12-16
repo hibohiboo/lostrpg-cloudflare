@@ -13,6 +13,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import React, { useState } from 'react';
 import {
   AddFacilityForm,
+  AddPersonalityForm,
   Facility,
   FacilityTable,
 } from '@lostrpg/frontend/entities/facility';
@@ -36,14 +37,6 @@ interface CampFormData {
   summary: string;
   freeWriting: string;
 }
-
-// ダミーデータ - 人材リスト
-const PERSONALITY_LIST = [
-  { name: '料理人', type: '人材', specialty: '料理', effect: '食事効果+2' },
-  { name: '鍛冶屋', type: '人材', specialty: '製作', effect: '武器強化+1' },
-  { name: '医者', type: '人材', specialty: '治療', effect: '回復効果+2' },
-  { name: '商人', type: '人材', specialty: '交易', effect: '売却価格+10%' },
-];
 
 // ダミーデータ - アイテムリスト
 const ITEM_LIST = [
@@ -92,21 +85,8 @@ const CreatePage: React.FC = () => {
   };
 
   // 人材追加ハンドラー
-  const handlePersonalityAdd = (item: {
-    name: string;
-    type: string;
-    specialty: string;
-    effect: string;
-  }) => {
-    const newFacility: Facility = {
-      id: `personality-${Date.now()}`,
-      name: item.name,
-      type: item.type,
-      specialty: item.specialty,
-      level: 1,
-      effect: item.effect,
-    };
-    setCamp({ ...camp, facilities: [...camp.facilities, newFacility] });
+  const handlePersonalityAdd = (item: Facility) => {
+    setCamp({ ...camp, facilities: [...camp.facilities, item] });
     setPersonalitySelect('');
   };
 
@@ -290,12 +270,9 @@ const CreatePage: React.FC = () => {
               onEquipmentAdd={handleEquipmentAdd}
             />
 
-            <AddItemSelectForm
-              label="人材追加"
-              value={personalitySelect}
-              items={PERSONALITY_LIST}
-              getItemName={(item) => item.name}
-              onAdd={handlePersonalityAdd}
+            <AddPersonalityForm
+              personalitySelect={personalitySelect}
+              onPersonalityAdd={handlePersonalityAdd}
             />
           </Box>
 
