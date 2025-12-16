@@ -1,5 +1,6 @@
 import { campPersonalityList } from '@lostrpg/core/game-data/lostrpg';
 import { AddItemSelectForm } from '@lostrpg/frontend/shared/ui/components/molecules/AddItemSelectForm';
+import { createFacility } from '../model/factory';
 import { Facility } from '../model/types';
 
 type Props = {
@@ -19,14 +20,7 @@ export const AddPersonalityForm: React.FC<Props> = ({
   onPersonalityAdd,
 }) => {
   const handleAdd = (item: PersonalityItem) => {
-    const newPersonality: Facility = {
-      id: `personality-${Date.now()}`,
-      name: item.name,
-      type: item.type,
-      specialty: item.specialty,
-      level: 1,
-      effect: item.effect,
-    };
+    const newPersonality = createFacility(item, 'personality');
     onPersonalityAdd(newPersonality);
   };
 

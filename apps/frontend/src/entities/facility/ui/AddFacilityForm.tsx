@@ -1,5 +1,6 @@
 import { equipmentList } from '@lostrpg/core/game-data/lostrpg';
 import { AddItemSelectForm } from '@lostrpg/frontend/shared/ui/components/molecules/AddItemSelectForm';
+import { createFacility } from '../model/factory';
 import { Facility } from '../model/types';
 
 type Props = {
@@ -19,14 +20,7 @@ export const AddFacilityForm: React.FC<Props> = ({
   onEquipmentAdd,
 }) => {
   const handleAdd = (item: EquipmentItem) => {
-    const newFacility: Facility = {
-      id: `facility-${Date.now()}`,
-      name: item.name,
-      type: item.type,
-      specialty: item.specialty,
-      level: 1,
-      effect: item.effect,
-    };
+    const newFacility = createFacility(item, 'facility');
     onEquipmentAdd(newFacility);
   };
 
