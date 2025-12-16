@@ -228,7 +228,12 @@ const DUMMY_CHARACTER: Character = {
     },
   ],
   statusAilments: [
-    { id: '1', name: '毒', effect: 'ラウンド終了時に2D6ダメージ', isChecked: false },
+    {
+      id: '1',
+      name: '毒',
+      effect: 'ラウンド終了時に2D6ダメージ',
+      isChecked: false,
+    },
     { id: '2', name: '呪い', effect: '判定-1D6', isChecked: false },
     { id: '3', name: '気絶', effect: '行動不能', isChecked: false },
   ],
@@ -280,18 +285,19 @@ const CharacterHeader: React.FC<{
   </Box>
 );
 
+// eslint-disable-next-line complexity
 const DetailPage: React.FC = () => {
   const character = DUMMY_CHARACTER;
   const isOwner = false;
 
   const totalWeight = character.items.reduce(
     (sum, item) => sum + item.weight * item.number,
-    0
+    0,
   );
 
   const totalValue = character.items.reduce(
     (sum, item) => sum + item.cost * item.number,
-    0
+    0,
   );
 
   return (
@@ -536,7 +542,7 @@ const DetailPage: React.FC = () => {
             {character.bags.map((bag) => {
               const bagWeight = bag.items.reduce(
                 (sum, item) => sum + item.weight * item.number,
-                0
+                0,
               );
               return (
                 <Box
@@ -693,9 +699,7 @@ const DetailPage: React.FC = () => {
               {character.useStrangeField ? (
                 <Chip label="ストレンジフィールド" />
               ) : null}
-              {character.useDragonPlain ? (
-                <Chip label="竜の平原" />
-              ) : null}
+              {character.useDragonPlain ? <Chip label="竜の平原" /> : null}
             </Box>
           </Box>
         ) : null}

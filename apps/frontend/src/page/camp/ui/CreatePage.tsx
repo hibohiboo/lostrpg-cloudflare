@@ -40,15 +40,6 @@ interface CampFormData {
   freeWriting: string;
 }
 
-// ダミーデータ - 設備リスト
-const EQUIPMENT_LIST = [
-  { name: '宿舎', type: '設備', specialty: '生活', effect: '休息効果+1' },
-  { name: '倉庫', type: '設備', specialty: '保管', effect: '収納量+10' },
-  { name: '訓練場', type: '設備', specialty: '訓練', effect: '経験値+10%' },
-  { name: '工房', type: '設備', specialty: '製作', effect: '製作成功率+10%' },
-  { name: '食堂', type: '設備', specialty: '生活', effect: '士気+1' },
-];
-
 // ダミーデータ - 人材リスト
 const PERSONALITY_LIST = [
   { name: '料理人', type: '人材', specialty: '料理', effect: '食事効果+2' },
