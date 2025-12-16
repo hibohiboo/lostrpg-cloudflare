@@ -1,5 +1,7 @@
 import {
   Box,
+  Button,
+  Checkbox,
   Chip,
   Container,
   InputLabel,
@@ -37,6 +39,41 @@ interface Item {
   cost: number;
 }
 
+interface Equipment {
+  id: string;
+  equipedArea: string;
+  name: string;
+  weight: number;
+  cost: number;
+}
+
+interface Bag {
+  id: string;
+  name: string;
+  capacity: number;
+  items: Item[];
+}
+
+interface StatusAilment {
+  id: string;
+  name: string;
+  effect: string;
+  isChecked: boolean;
+}
+
+interface Backbone {
+  id: string;
+  title: string;
+  content: string;
+}
+
+interface SpecialtyRow {
+  id: string;
+  specialty: string;
+  gap: number;
+  damage: number;
+}
+
 interface Character {
   id: string;
   playerName: string;
@@ -46,6 +83,7 @@ interface Character {
   imageUrl: string;
   classes: CharacterClass[];
   specialties: string[];
+  specialtyRows: SpecialtyRow[];
   abilities: Ability[];
   staminaBase: number;
   stamina: number;
@@ -53,12 +91,18 @@ interface Character {
   willPower: number;
   carryingCapacity: number;
   items: Item[];
+  equipment: Equipment[];
+  bags: Bag[];
+  statusAilments: StatusAilment[];
+  backbones: Backbone[];
   unusedExperience: number;
   totalExperience: number;
   summary: string;
   appearance: string;
   freeWriting: string;
   quote: string;
+  useStrangeField: boolean;
+  useDragonPlain: boolean;
   uid: string;
 }
 
@@ -83,6 +127,39 @@ const ITEM_COLUMNS: GridColDef[] = [
   { field: 'cost', headerName: '価格', width: 100, type: 'number' },
 ];
 
+// 専門特技テーブルの列定義
+const SPECIALTY_COLUMNS: GridColDef[] = [
+  { field: 'specialty', headerName: '専門特技', width: 150 },
+  { field: 'gap', headerName: 'ギャップ', width: 120, type: 'number' },
+  { field: 'damage', headerName: 'ダメージ', width: 120, type: 'number' },
+];
+
+// 装備テーブルの列定義
+const EQUIPMENT_COLUMNS: GridColDef[] = [
+  { field: 'equipedArea', headerName: '部位', width: 120 },
+  { field: 'name', headerName: '名前', width: 200 },
+  { field: 'weight', headerName: '重量', width: 100, type: 'number' },
+  { field: 'cost', headerName: '価格', width: 100, type: 'number' },
+];
+
+// 状態異常テーブルの列定義
+const STATUS_AILMENT_COLUMNS: GridColDef[] = [
+  {
+    field: 'isChecked',
+    headerName: '',
+    width: 80,
+    renderCell: (params) => <Checkbox checked={params.value} disabled />,
+  },
+  { field: 'name', headerName: '名前', width: 150 },
+  { field: 'effect', headerName: '効果', width: 300 },
+];
+
+// バックボーンテーブルの列定義
+const BACKBONE_COLUMNS: GridColDef[] = [
+  { field: 'title', headerName: 'タイトル', width: 200 },
+  { field: 'content', headerName: '内容', width: 400 },
+];
+
 const DUMMY_CHARACTER: Character = {
   id: '1',
   playerName: '冒険者太郎',
@@ -95,6 +172,11 @@ const DUMMY_CHARACTER: Character = {
     { id: '2', name: '騎士' },
   ],
   specialties: ['武器攻撃', '防御', '知覚'],
+  specialtyRows: [
+    { id: '1', specialty: '武器攻撃', gap: 2, damage: 5 },
+    { id: '2', specialty: '防御', gap: 1, damage: 3 },
+    { id: '3', specialty: '知覚', gap: 0, damage: 2 },
+  ],
   abilities: [
     {
       id: '1',
@@ -129,6 +211,31 @@ const DUMMY_CHARACTER: Character = {
     { id: '2', name: '保存食', number: 10, weight: 0.3, cost: 10 },
     { id: '3', name: '武器強化石', number: 1, weight: 0.2, cost: 500 },
   ],
+  equipment: [
+    { id: '1', equipedArea: '右手', name: '長剣', weight: 2.0, cost: 1000 },
+    { id: '2', equipedArea: '左手', name: '盾', weight: 3.0, cost: 800 },
+    { id: '3', equipedArea: '体', name: '鎧', weight: 10.0, cost: 5000 },
+  ],
+  bags: [
+    {
+      id: '1',
+      name: '旅行用バッグ',
+      capacity: 20,
+      items: [
+        { id: 'b1', name: 'ロープ', number: 1, weight: 1.0, cost: 100 },
+        { id: 'b2', name: '松明', number: 5, weight: 0.5, cost: 10 },
+      ],
+    },
+  ],
+  statusAilments: [
+    { id: '1', name: '毒', effect: 'ラウンド終了時に2D6ダメージ', isChecked: false },
+    { id: '2', name: '呪い', effect: '判定-1D6', isChecked: false },
+    { id: '3', name: '気絶', effect: '行動不能', isChecked: false },
+  ],
+  backbones: [
+    { id: '1', title: '故郷の記憶', content: '村を襲った竜の姿が忘れられない' },
+    { id: '2', title: '師匠の教え', content: '強さとは弱き者を守る力だ' },
+  ],
   unusedExperience: 5,
   totalExperience: 120,
   summary:
@@ -138,6 +245,8 @@ const DUMMY_CHARACTER: Character = {
   freeWriting:
     '【来歴】\n故郷の村がモンスターに襲われた際、唯一生き残った。\nその経験から、自分の力で弱き者を守ることを誓った。\n\n【性格】\n正義感が強く、困っている人を放っておけない。\n少々無鉄砲なところがあるが、仲間思いで信頼されている。\n\n【目標】\n最強の戦士となり、故郷のような悲劇を二度と起こさせない。',
   quote: '俺が守る。それが俺の生きる道だ。',
+  useStrangeField: true,
+  useDragonPlain: false,
   uid: 'dummy-user-id',
 };
 
@@ -262,6 +371,23 @@ const DetailPage: React.FC = () => {
           </Box>
         </Box>
 
+        {/* 専門特技テーブル */}
+        {character.specialtyRows.length > 0 ? (
+          <Box my={4}>
+            <Box sx={{ height: 300, width: '100%' }}>
+              <DataGrid
+                rows={character.specialtyRows}
+                columns={SPECIALTY_COLUMNS}
+                hideFooter
+                disableRowSelectionOnClick
+                localeText={{
+                  noRowsLabel: '専門特技データがありません',
+                }}
+              />
+            </Box>
+          </Box>
+        ) : null}
+
         {/* アビリティテーブル */}
         {character.abilities.length > 0 ? (
           <Box my={4}>
@@ -381,6 +507,126 @@ const DetailPage: React.FC = () => {
           </Box>
         </Box>
 
+        {/* 装備 */}
+        {character.equipment.length > 0 ? (
+          <Box my={4}>
+            <Typography variant="h6" gutterBottom>
+              装備
+            </Typography>
+            <Box sx={{ height: 300, width: '100%' }}>
+              <DataGrid
+                rows={character.equipment}
+                columns={EQUIPMENT_COLUMNS}
+                hideFooter
+                disableRowSelectionOnClick
+                localeText={{
+                  noRowsLabel: '装備がありません',
+                }}
+              />
+            </Box>
+          </Box>
+        ) : null}
+
+        {/* バッグ */}
+        {character.bags.length > 0 ? (
+          <Box my={4}>
+            <Typography variant="h6" gutterBottom>
+              バッグ
+            </Typography>
+            {character.bags.map((bag) => {
+              const bagWeight = bag.items.reduce(
+                (sum, item) => sum + item.weight * item.number,
+                0
+              );
+              return (
+                <Box
+                  key={bag.id}
+                  my={2}
+                  p={2}
+                  border={1}
+                  borderColor="grey.300"
+                  borderRadius={1}
+                >
+                  <Typography variant="subtitle1" gutterBottom>
+                    {bag.name}
+                  </Typography>
+                  <Box display="flex" gap={2} mb={2}>
+                    <TextField
+                      label="容量"
+                      value={bag.capacity}
+                      slotProps={{
+                        input: {
+                          readOnly: true,
+                        },
+                      }}
+                      sx={{ width: 150 }}
+                    />
+                    <TextField
+                      label="合計重量"
+                      value={bagWeight.toFixed(1)}
+                      slotProps={{
+                        input: {
+                          readOnly: true,
+                        },
+                      }}
+                      sx={{ width: 150 }}
+                    />
+                  </Box>
+                  <Box sx={{ height: 300, width: '100%' }}>
+                    <DataGrid
+                      rows={bag.items}
+                      columns={ITEM_COLUMNS}
+                      hideFooter
+                      disableRowSelectionOnClick
+                      localeText={{
+                        noRowsLabel: 'アイテムがありません',
+                      }}
+                    />
+                  </Box>
+                </Box>
+              );
+            })}
+          </Box>
+        ) : null}
+
+        {/* 状態異常 */}
+        <Box my={4}>
+          <Typography variant="h6" gutterBottom>
+            状態異常
+          </Typography>
+          <Box sx={{ height: 300, width: '100%' }}>
+            <DataGrid
+              rows={character.statusAilments}
+              columns={STATUS_AILMENT_COLUMNS}
+              hideFooter
+              disableRowSelectionOnClick
+              localeText={{
+                noRowsLabel: '状態異常がありません',
+              }}
+            />
+          </Box>
+        </Box>
+
+        {/* バックボーン */}
+        {character.backbones.length > 0 ? (
+          <Box my={4}>
+            <Typography variant="h6" gutterBottom>
+              バックボーン
+            </Typography>
+            <Box sx={{ height: 300, width: '100%' }}>
+              <DataGrid
+                rows={character.backbones}
+                columns={BACKBONE_COLUMNS}
+                hideFooter
+                disableRowSelectionOnClick
+                localeText={{
+                  noRowsLabel: 'バックボーンがありません',
+                }}
+              />
+            </Box>
+          </Box>
+        ) : null}
+
         {/* 経験値 */}
         <Box display="flex" gap={2} my={3}>
           <TextField
@@ -438,6 +684,41 @@ const DetailPage: React.FC = () => {
             </Box>
           </Box>
         ) : null}
+
+        {/* サプリメント使用 */}
+        {character.useStrangeField || character.useDragonPlain ? (
+          <Box my={3}>
+            <InputLabel sx={{ mb: 1 }}>使用サプリメント</InputLabel>
+            <Box display="flex" flexWrap="wrap" gap={1}>
+              {character.useStrangeField ? (
+                <Chip label="ストレンジフィールド" />
+              ) : null}
+              {character.useDragonPlain ? (
+                <Chip label="竜の平原" />
+              ) : null}
+            </Box>
+          </Box>
+        ) : null}
+
+        {/* エクスポートボタン */}
+        <Box my={3}>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ mr: 1, mb: 1 }}
+            onClick={() => alert('Udonarium形式でエクスポート（ダミー）')}
+          >
+            Udonarium形式でエクスポート
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ mr: 1, mb: 1 }}
+            onClick={() => alert('TRPG Studio形式でエクスポート（ダミー）')}
+          >
+            TRPG Studio形式でエクスポート
+          </Button>
+        </Box>
 
         {/* 戻るリンク */}
         <Box mt={4}>

@@ -45,6 +45,41 @@ interface Item {
   cost: number;
 }
 
+interface Equipment {
+  id: string;
+  equipedArea: string;
+  name: string;
+  weight: number;
+  cost: number;
+}
+
+interface Bag {
+  id: string;
+  name: string;
+  capacity: number;
+  items: Item[];
+}
+
+interface StatusAilment {
+  id: string;
+  name: string;
+  effect: string;
+  isChecked: boolean;
+}
+
+interface Backbone {
+  id: string;
+  title: string;
+  content: string;
+}
+
+interface SpecialtyRow {
+  id: string;
+  specialty: string;
+  gap: number;
+  damage: number;
+}
+
 interface CharacterFormData {
   playerName: string;
   name: string;
@@ -52,6 +87,7 @@ interface CharacterFormData {
   imageUrl: string;
   classes: CharacterClass[];
   specialties: string[];
+  specialtyRows: SpecialtyRow[];
   abilities: Ability[];
   staminaBase: number;
   stamina: number;
@@ -59,12 +95,18 @@ interface CharacterFormData {
   willPower: number;
   carryingCapacity: number;
   items: Item[];
+  equipment: Equipment[];
+  bags: Bag[];
+  statusAilments: StatusAilment[];
+  backbones: Backbone[];
   unusedExperience: number;
   totalExperience: number;
   summary: string;
   appearance: string;
   freeWriting: string;
   quote: string;
+  useStrangeField: boolean;
+  useDragonPlain: boolean;
 }
 
 // ダミーデータ
@@ -103,6 +145,7 @@ const CreatePage: React.FC = () => {
     imageUrl: '',
     classes: [],
     specialties: [],
+    specialtyRows: [],
     abilities: [],
     staminaBase: 6,
     stamina: 6,
@@ -110,18 +153,30 @@ const CreatePage: React.FC = () => {
     willPower: 3,
     carryingCapacity: 10,
     items: [],
+    equipment: [],
+    bags: [],
+    statusAilments: [
+      { id: '1', name: '毒', effect: 'ラウンド終了時に2D6ダメージ', isChecked: false },
+      { id: '2', name: '呪い', effect: '判定-1D6', isChecked: false },
+      { id: '3', name: '気絶', effect: '行動不能', isChecked: false },
+    ],
+    backbones: [],
     unusedExperience: 0,
     totalExperience: 0,
     summary: '',
     appearance: '',
     freeWriting: '',
     quote: '',
+    useStrangeField: false,
+    useDragonPlain: false,
   });
 
   const [isValidError, setIsValidError] = useState(false);
   const [previewUrl, setPreviewUrl] = useState('');
   const [classSelect, setClassSelect] = useState('');
   const [itemSelect, setItemSelect] = useState('');
+  const [equipmentArea, setEquipmentArea] = useState('');
+  const [bagName, setBagName] = useState('');
 
   // 画像変更ハンドラー
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -212,6 +267,109 @@ const CreatePage: React.FC = () => {
     });
   };
 
+  // 装備追加ハンドラー
+  const handleEquipmentAdd = () => {
+    if (!equipmentArea) return;
+    const newEquipment: Equipment = {
+      id: `eq-${Date.now()}`,
+      equipedArea: equipmentArea,
+      name: '',
+      weight: 0,
+      cost: 0,
+    };
+    setCharacter({ ...character, equipment: [...character.equipment, newEquipment] });
+    setEquipmentArea('');
+  };
+
+  // 装備更新ハンドラー
+  const handleEquipmentUpdate = (updatedRow: Equipment) => {
+    setCharacter({
+      ...character,
+      equipment: character.equipment.map((e) =>
+        e.id === updatedRow.id ? updatedRow : e
+      ),
+    });
+    return updatedRow;
+  };
+
+  // 装備削除ハンドラー
+  const handleEquipmentDelete = (id: string) => {
+    setCharacter({
+      ...character,
+      equipment: character.equipment.filter((e) => e.id !== id),
+    });
+  };
+
+  // バッグ追加ハンドラー
+  const handleBagAdd = () => {
+    if (!bagName) return;
+    const newBag: Bag = {
+      id: `bag-${Date.now()}`,
+      name: bagName,
+      capacity: 10,
+      items: [],
+    };
+    setCharacter({ ...character, bags: [...character.bags, newBag] });
+    setBagName('');
+  };
+
+  // バッグ削除ハンドラー
+  const handleBagDelete = (bagId: string) => {
+    setCharacter({
+      ...character,
+      bags: character.bags.filter((b) => b.id !== bagId),
+    });
+  };
+
+  // バッグ容量変更ハンドラー
+  const handleBagCapacityChange = (bagId: string, capacity: number) => {
+    setCharacter({
+      ...character,
+      bags: character.bags.map((b) =>
+        b.id === bagId ? { ...b, capacity } : b
+      ),
+    });
+  };
+
+  // 状態異常トグルハンドラー
+  const handleStatusAilmentToggle = (id: string) => {
+    setCharacter({
+      ...character,
+      statusAilments: character.statusAilments.map((s) =>
+        s.id === id ? { ...s, isChecked: !s.isChecked } : s
+      ),
+    });
+  };
+
+  // バックボーン追加ハンドラー
+  const handleBackboneAdd = () => {
+    const newBackbone: Backbone = {
+      id: `bb-${Date.now()}`,
+      title: '',
+      content: '',
+    };
+    setCharacter({ ...character, backbones: [...character.backbones, newBackbone] });
+  };
+
+  // バックボーン更新ハンドラー
+  const handleBackboneUpdate = (updatedRow: Backbone) => {
+    setCharacter({
+      ...character,
+      backbones: character.backbones.map((b) =>
+        b.id === updatedRow.id ? updatedRow : b
+      ),
+    });
+    return updatedRow;
+  };
+
+  // バックボーン削除ハンドラー
+  const handleBackboneDelete = (id: string) => {
+    setCharacter({
+      ...character,
+      backbones: character.backbones.filter((b) => b.id !== id),
+    });
+  };
+
   // 保存ハンドラー
   const handleSave = () => {
     if (!character.name) {
@@ -265,6 +423,62 @@ const CreatePage: React.FC = () => {
           size="small"
           color="error"
           onClick={() => handleItemDelete(params.row.id)}
+        >
+          <DeleteIcon fontSize="small" />
+        </Button>
+      ),
+    },
+  ];
+
+  // 装備テーブルの列定義
+  const equipmentColumns: GridColDef[] = [
+    { field: 'equipedArea', headerName: '部位', width: 120, editable: true },
+    { field: 'name', headerName: '名前', width: 200, editable: true },
+    {
+      field: 'weight',
+      headerName: '重量',
+      width: 100,
+      type: 'number',
+      editable: true,
+    },
+    {
+      field: 'cost',
+      headerName: '価格',
+      width: 100,
+      type: 'number',
+      editable: true,
+    },
+    {
+      field: 'actions',
+      headerName: '操作',
+      width: 80,
+      sortable: false,
+      renderCell: (params) => (
+        <Button
+          size="small"
+          color="error"
+          onClick={() => handleEquipmentDelete(params.row.id)}
+        >
+          <DeleteIcon fontSize="small" />
+        </Button>
+      ),
+    },
+  ];
+
+  // バックボーンテーブルの列定義
+  const backboneColumns: GridColDef[] = [
+    { field: 'title', headerName: 'タイトル', width: 200, editable: true },
+    { field: 'content', headerName: '内容', width: 400, editable: true },
+    {
+      field: 'actions',
+      headerName: '操作',
+      width: 80,
+      sortable: false,
+      renderCell: (params) => (
+        <Button
+          size="small"
+          color="error"
+          onClick={() => handleBackboneDelete(params.row.id)}
         >
           <DeleteIcon fontSize="small" />
         </Button>
@@ -535,6 +749,125 @@ const CreatePage: React.FC = () => {
           </Box>
         </Box>
 
+        {/* 装備 */}
+        <Box my={3}>
+          <Typography variant="h6" gutterBottom>
+            装備
+          </Typography>
+          <Box display="flex" gap={2} mb={2}>
+            <TextField
+              label="部位"
+              value={equipmentArea}
+              onChange={(e) => setEquipmentArea(e.target.value)}
+              sx={{ width: 200 }}
+            />
+            <Button variant="outlined" onClick={handleEquipmentAdd}>
+              追加
+            </Button>
+          </Box>
+          <Box sx={{ height: 400, width: '100%' }}>
+            <DataGrid
+              rows={character.equipment}
+              columns={equipmentColumns}
+              processRowUpdate={handleEquipmentUpdate}
+              hideFooter
+              disableRowSelectionOnClick
+              localeText={{
+                noRowsLabel: '装備がありません',
+              }}
+            />
+          </Box>
+        </Box>
+
+        {/* バッグ */}
+        <Box my={3}>
+          <Typography variant="h6" gutterBottom>
+            バッグ
+          </Typography>
+          <Box display="flex" gap={2} mb={2}>
+            <TextField
+              label="バッグ名"
+              value={bagName}
+              onChange={(e) => setBagName(e.target.value)}
+              sx={{ width: 200 }}
+            />
+            <Button variant="outlined" onClick={handleBagAdd}>
+              追加
+            </Button>
+          </Box>
+          {character.bags.map((bag) => (
+            <Box
+              key={bag.id}
+              my={2}
+              p={2}
+              border={1}
+              borderColor="grey.300"
+              borderRadius={1}
+            >
+              <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                <Typography variant="subtitle1">{bag.name}</Typography>
+                <Button
+                  size="small"
+                  color="error"
+                  onClick={() => handleBagDelete(bag.id)}
+                >
+                  削除
+                </Button>
+              </Box>
+              <TextField
+                type="number"
+                label="容量"
+                value={bag.capacity}
+                onChange={(e) => handleBagCapacityChange(bag.id, Number(e.target.value))}
+                sx={{ width: 150, mb: 2 }}
+              />
+            </Box>
+          ))}
+        </Box>
+
+        {/* 状態異常 */}
+        <Box my={3}>
+          <Typography variant="h6" gutterBottom>
+            状態異常
+          </Typography>
+          <Box>
+            {character.statusAilments.map((ailment) => (
+              <FormControlLabel
+                key={ailment.id}
+                control={
+                  <Checkbox
+                    checked={ailment.isChecked}
+                    onChange={() => handleStatusAilmentToggle(ailment.id)}
+                  />
+                }
+                label={`${ailment.name} - ${ailment.effect}`}
+              />
+            ))}
+          </Box>
+        </Box>
+
+        {/* バックボーン */}
+        <Box my={3}>
+          <Typography variant="h6" gutterBottom>
+            バックボーン
+          </Typography>
+          <Button variant="outlined" onClick={handleBackboneAdd} sx={{ mb: 2 }}>
+            追加
+          </Button>
+          <Box sx={{ height: 300, width: '100%' }}>
+            <DataGrid
+              rows={character.backbones}
+              columns={backboneColumns}
+              processRowUpdate={handleBackboneUpdate}
+              hideFooter
+              disableRowSelectionOnClick
+              localeText={{
+                noRowsLabel: 'バックボーンがありません',
+              }}
+            />
+          </Box>
+        </Box>
+
         {/* 経験値 */}
         <Box my={3}>
           <Typography variant="h6" gutterBottom>
@@ -620,6 +953,37 @@ const CreatePage: React.FC = () => {
               setCharacter({ ...character, quote: e.target.value })
             }
           />
+        </Box>
+
+        {/* サプリメント使用 */}
+        <Box my={3}>
+          <Typography variant="h6" gutterBottom>
+            使用サプリメント
+          </Typography>
+          <Box>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={character.useStrangeField}
+                  onChange={(e) =>
+                    setCharacter({ ...character, useStrangeField: e.target.checked })
+                  }
+                />
+              }
+              label="ストレンジフィールド"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={character.useDragonPlain}
+                  onChange={(e) =>
+                    setCharacter({ ...character, useDragonPlain: e.target.checked })
+                  }
+                />
+              }
+              label="竜の平原"
+            />
+          </Box>
         </Box>
 
         {/* 保存ボタン */}
