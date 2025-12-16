@@ -15,16 +15,7 @@ import {
 } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import React, { useState } from 'react';
-
-// 型定義
-interface Facility {
-  id: string;
-  name: string;
-  type: string;
-  specialty: string;
-  level: number;
-  effect: string;
-}
+import { Facility, FacilityTable } from '@lostrpg/frontend/entities/facility';
 
 interface Item {
   id: string;
@@ -214,36 +205,6 @@ const CreatePage: React.FC = () => {
     }
   };
 
-  // 施設テーブルの列定義
-  const facilityColumns: GridColDef[] = [
-    { field: 'name', headerName: '名前', width: 150, editable: true },
-    { field: 'type', headerName: '種別', width: 100, editable: true },
-    { field: 'specialty', headerName: '専門', width: 100, editable: true },
-    {
-      field: 'level',
-      headerName: 'レベル',
-      width: 100,
-      type: 'number',
-      editable: true,
-    },
-    { field: 'effect', headerName: '効果', width: 200, editable: true },
-    {
-      field: 'actions',
-      headerName: '操作',
-      width: 80,
-      sortable: false,
-      renderCell: (params) => (
-        <Button
-          size="small"
-          color="error"
-          onClick={() => handleFacilityDelete(params.row.id)}
-        >
-          <DeleteIcon fontSize="small" />
-        </Button>
-      ),
-    },
-  ];
-
   // アイテムテーブルの列定義
   const itemColumns: GridColDef[] = [
     { field: 'name', headerName: '名前', width: 200, editable: true },
@@ -384,15 +345,10 @@ const CreatePage: React.FC = () => {
           </Box>
 
           <Box sx={{ height: 400, width: '100%' }}>
-            <DataGrid
-              rows={camp.facilities}
-              columns={facilityColumns}
-              processRowUpdate={handleFacilityUpdate}
-              hideFooter
-              disableRowSelectionOnClick
-              localeText={{
-                noRowsLabel: '施設がありません',
-              }}
+            <FacilityTable
+              facilities={camp.facilities}
+              handleFacilityDelete={handleFacilityDelete}
+              handleFacilityUpdate={handleFacilityUpdate}
             />
           </Box>
         </Box>
