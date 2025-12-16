@@ -1,12 +1,17 @@
-import DeleteIcon from '@mui/icons-material/Delete';
-import { Button } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { GridColDef, GridRowId } from '@mui/x-data-grid';
+import { EditableDataGrid } from '@lostrpg/frontend/shared/ui';
 import { Item } from '../model/types';
 
 type Props = {
   items: Item[];
   handleItemDelete: (id: string) => void;
-  handleItemUpdate: (updatedRow: Item) => Item;
+  handleItemUpdate: (
+    newRow: Item,
+    oldRow: Item,
+    params: {
+      rowId: GridRowId;
+    },
+  ) => Item;
 };
 
 export const ItemTable: React.FC<Props> = ({
@@ -14,7 +19,7 @@ export const ItemTable: React.FC<Props> = ({
   handleItemDelete,
   handleItemUpdate,
 }) => {
-  const columns: GridColDef[] = [
+  const columns: GridColDef<Item>[] = [
     { field: 'name', headerName: '名前', width: 200, editable: true },
     {
       field: 'number',
@@ -30,28 +35,14 @@ export const ItemTable: React.FC<Props> = ({
       type: 'number',
       editable: true,
     },
-    {
-      field: 'actions',
-      headerName: '操作',
-      width: 80,
-      sortable: false,
-      renderCell: (params) => (
-        <Button
-          size="small"
-          color="error"
-          onClick={() => handleItemDelete(params.row.id)}
-        >
-          <DeleteIcon fontSize="small" />
-        </Button>
-      ),
-    },
   ];
 
   return (
-    <DataGrid
+    <EditableDataGrid
       rows={items}
       columns={columns}
       processRowUpdate={handleItemUpdate}
+      onDelete={(id: GridRowId) => handleItemDelete(String(id))}
       hideFooter
       disableRowSelectionOnClick
       localeText={{

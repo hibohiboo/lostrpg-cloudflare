@@ -99,23 +99,23 @@ const CreatePage: React.FC = () => {
   };
 
   // 施設更新ハンドラー
-  const handleFacilityUpdate = (updatedRow: Facility) => {
+  const handleFacilityUpdate = (newRow: Facility) => {
     setCamp({
       ...camp,
       facilities: camp.facilities.map((f) =>
-        f.id === updatedRow.id ? updatedRow : f,
+        f.id === newRow.id ? newRow : f,
       ),
     });
-    return updatedRow;
+    return newRow;
   };
 
   // アイテム更新ハンドラー
-  const handleItemUpdate = (updatedRow: Item) => {
+  const handleItemUpdate = (newRow: Item) => {
     setCamp({
       ...camp,
-      items: camp.items.map((i) => (i.id === updatedRow.id ? updatedRow : i)),
+      items: camp.items.map((i) => (i.id === newRow.id ? newRow : i)),
     });
-    return updatedRow;
+    return newRow;
   };
 
   // 保存ハンドラー
