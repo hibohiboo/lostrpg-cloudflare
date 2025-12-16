@@ -16,7 +16,7 @@ import {
   Facility,
   FacilityTable,
 } from '@lostrpg/frontend/entities/facility';
-import { AddItemSelectForm } from '@lostrpg/frontend/shared/ui/AddItemSelectForm';
+import { AddItemSelectForm } from '@lostrpg/frontend/shared/ui/components/molecules/AddItemSelectForm';
 
 interface Item {
   id: string;
@@ -87,7 +87,6 @@ const CreatePage: React.FC = () => {
 
   // 設備追加ハンドラー
   const handleEquipmentAdd = (item: Facility) => {
-    setEquipmentSelect(item.name);
     setCamp({ ...camp, facilities: [...camp.facilities, item] });
     setEquipmentSelect('');
   };

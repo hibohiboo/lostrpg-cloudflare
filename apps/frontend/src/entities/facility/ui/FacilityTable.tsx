@@ -1,5 +1,5 @@
 import { GridColDef, GridRowId } from '@mui/x-data-grid';
-import { EditableDataGrid } from '@lostrpg/frontend/shared/components/organisms';
+import { EditableDataGrid } from '@lostrpg/frontend/shared/ui';
 import { Facility } from '../model/types';
 
 type Props = {

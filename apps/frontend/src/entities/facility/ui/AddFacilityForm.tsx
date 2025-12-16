@@ -1,5 +1,5 @@
 import { equipmentList } from '@lostrpg/core/game-data/lostrpg';
-import { AddItemSelectForm } from '@lostrpg/frontend/shared/ui/AddItemSelectForm';
+import { AddItemSelectForm } from '@lostrpg/frontend/shared/ui/components/molecules/AddItemSelectForm';
 import { Facility } from '../model/types';
 
 type Props = {
