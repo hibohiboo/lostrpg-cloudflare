@@ -22,17 +22,6 @@ export const FacilityTable: React.FC<Props> = ({
 }) => {
   // 施設テーブルの列定義
   const facilityColumns: GridColDef[] = [
-    { field: 'name', headerName: '名前', width: 150, editable: true },
-    { field: 'type', headerName: '種別', width: 100, editable: true },
-    { field: 'specialty', headerName: '特技', width: 100, editable: true },
-    {
-      field: 'level',
-      headerName: 'レベル',
-      width: 100,
-      type: 'number',
-      editable: true,
-    },
-    { field: 'effect', headerName: '効果', width: 200, editable: true },
     {
       field: 'actions',
       headerName: '操作',
@@ -48,6 +37,17 @@ export const FacilityTable: React.FC<Props> = ({
         </Button>
       ),
     },
+    { field: 'name', headerName: '名前', width: 150, editable: true },
+    { field: 'type', headerName: '種別', width: 100, editable: true },
+    { field: 'specialty', headerName: '特技', width: 100, editable: true },
+    {
+      field: 'level',
+      headerName: 'レベル',
+      width: 100,
+      type: 'number',
+      editable: true,
+    },
+    { field: 'effect', headerName: '効果', width: 200, editable: true },
   ];
   return (
     <DataGrid
