@@ -21,6 +21,11 @@ import {
   CampEditPage,
   CampListPage,
 } from '@lostrpg/frontend/page/camp';
+import {
+  LOSTCharacterCreatePage,
+  LOSTCharacterDetailPage,
+  LOSTCharacterListPage,
+} from '@lostrpg/frontend/page/character';
 import { Page as CharacterCreatePage } from '@lostrpg/frontend/page/character-create';
 import { Page as CharacterDetailPage } from '@lostrpg/frontend/page/character-detail';
 import { Page as CharacterEditPage } from '@lostrpg/frontend/page/character-edit';
@@ -97,6 +102,27 @@ export const createRouter = () =>
               path: ':id/edit',
               element: <CampEditPage />,
             },
+          ],
+        },
+        {
+          path: '/character',
+          children: [
+            {
+              path: '',
+              element: <LOSTCharacterListPage />,
+            },
+            {
+              path: 'create',
+              element: <LOSTCharacterCreatePage />,
+            },
+            {
+              path: ':id',
+              element: <LOSTCharacterDetailPage />,
+            },
+            // {
+            //   path: ':id/edit',
+            //   element: <LOSTCharacterEditPage />,
+            // },
           ],
         },
       ],
