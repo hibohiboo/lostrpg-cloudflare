@@ -4,12 +4,8 @@ import {
   Box,
   Button,
   Container,
-  FormControl,
   InputLabel,
   Link as MuiLink,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
   TextField,
   Typography,
 } from '@mui/material';
@@ -20,6 +16,7 @@ import {
   Facility,
   FacilityTable,
 } from '@lostrpg/frontend/entities/facility';
+import { AddItemSelectForm } from '@lostrpg/frontend/shared/ui/AddItemSelectForm';
 
 interface Item {
   id: string;
@@ -96,39 +93,34 @@ const CreatePage: React.FC = () => {
   };
 
   // 人材追加ハンドラー
-  const handlePersonalityAdd = (event: SelectChangeEvent) => {
-    const { value } = event.target;
-    setPersonalitySelect(value);
-    const item = PERSONALITY_LIST.find((i) => i.name === value);
-    if (item) {
-      const newFacility: Facility = {
-        id: `personality-${Date.now()}`,
-        name: item.name,
-        type: item.type,
-        specialty: item.specialty,
-        level: 1,
-        effect: item.effect,
-      };
-      setCamp({ ...camp, facilities: [...camp.facilities, newFacility] });
-      setPersonalitySelect('');
-    }
+  const handlePersonalityAdd = (item: {
+    name: string;
+    type: string;
+    specialty: string;
+    effect: string;
+  }) => {
+    const newFacility: Facility = {
+      id: `personality-${Date.now()}`,
+      name: item.name,
+      type: item.type,
+      specialty: item.specialty,
+      level: 1,
+      effect: item.effect,
+    };
+    setCamp({ ...camp, facilities: [...camp.facilities, newFacility] });
+    setPersonalitySelect('');
   };
 
   // アイテム追加ハンドラー
-  const handleItemAdd = (event: SelectChangeEvent) => {
-    const { value } = event.target;
-    setItemSelect(value);
-    const item = ITEM_LIST.find((i) => i.name === value);
-    if (item) {
-      const newItem: Item = {
-        id: `item-${Date.now()}`,
-        name: item.name,
-        number: 1,
-        weight: item.weight,
-      };
-      setCamp({ ...camp, items: [...camp.items, newItem] });
-      setItemSelect('');
-    }
+  const handleItemAdd = (item: { name: string; weight: number }) => {
+    const newItem: Item = {
+      id: `item-${Date.now()}`,
+      name: item.name,
+      number: 1,
+      weight: item.weight,
+    };
+    setCamp({ ...camp, items: [...camp.items, newItem] });
+    setItemSelect('');
   };
 
   // 施設削除ハンドラー
@@ -299,21 +291,13 @@ const CreatePage: React.FC = () => {
               onEquipmentAdd={handleEquipmentAdd}
             />
 
-            <FormControl sx={{ minWidth: 200 }}>
-              <InputLabel>人材追加</InputLabel>
-              <Select
-                value={personalitySelect}
-                label="人材追加"
-                onChange={handlePersonalityAdd}
-              >
-                <MenuItem value="">未選択</MenuItem>
-                {PERSONALITY_LIST.map((item) => (
-                  <MenuItem value={item.name} key={item.name}>
-                    {item.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <AddItemSelectForm
+              label="人材追加"
+              value={personalitySelect}
+              items={PERSONALITY_LIST}
+              getItemName={(item) => item.name}
+              onAdd={handlePersonalityAdd}
+            />
           </Box>
 
           <Box sx={{ height: 400, width: '100%' }}>
@@ -331,21 +315,15 @@ const CreatePage: React.FC = () => {
             保管庫
           </Typography>
 
-          <FormControl sx={{ minWidth: 200, mb: 2 }}>
-            <InputLabel>アイテム追加</InputLabel>
-            <Select
-              value={itemSelect}
+          <Box mb={2}>
+            <AddItemSelectForm
               label="アイテム追加"
-              onChange={handleItemAdd}
-            >
-              <MenuItem value="">未選択</MenuItem>
-              {ITEM_LIST.map((item) => (
-                <MenuItem value={item.name} key={item.name}>
-                  {item.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              value={itemSelect}
+              items={ITEM_LIST}
+              getItemName={(item) => item.name}
+              onAdd={handleItemAdd}
+            />
+          </Box>
 
           <Box sx={{ height: 400, width: '100%' }}>
             <DataGrid
