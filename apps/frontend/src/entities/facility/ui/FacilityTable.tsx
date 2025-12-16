@@ -3,7 +3,7 @@ import { Button } from '@mui/material';
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { Facility } from '../model/types';
 
-export const FacilityTable: React.FC<{
+type Props = {
   facilities: Facility[];
   handleFacilityDelete: (id: string) => void;
   handleFacilityUpdate: (
@@ -13,7 +13,13 @@ export const FacilityTable: React.FC<{
       rowId: GridRowId;
     },
   ) => Facility;
-}> = ({ facilities, handleFacilityDelete, handleFacilityUpdate }) => {
+};
+
+export const FacilityTable: React.FC<Props> = ({
+  facilities,
+  handleFacilityDelete,
+  handleFacilityUpdate,
+}) => {
   // 施設テーブルの列定義
   const facilityColumns: GridColDef[] = [
     { field: 'name', headerName: '名前', width: 150, editable: true },

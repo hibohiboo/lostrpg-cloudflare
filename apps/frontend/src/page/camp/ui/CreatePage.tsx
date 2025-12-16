@@ -15,7 +15,11 @@ import {
 } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import React, { useState } from 'react';
-import { Facility, FacilityTable } from '@lostrpg/frontend/entities/facility';
+import {
+  AddFacilityForm,
+  Facility,
+  FacilityTable,
+} from '@lostrpg/frontend/entities/facility';
 
 interface Item {
   id: string;
@@ -94,22 +98,10 @@ const CreatePage: React.FC = () => {
   };
 
   // 設備追加ハンドラー
-  const handleEquipmentAdd = (event: SelectChangeEvent) => {
-    const { value } = event.target;
-    setEquipmentSelect(value);
-    const item = EQUIPMENT_LIST.find((i) => i.name === value);
-    if (item) {
-      const newFacility: Facility = {
-        id: `facility-${Date.now()}`,
-        name: item.name,
-        type: item.type,
-        specialty: item.specialty,
-        level: 1,
-        effect: item.effect,
-      };
-      setCamp({ ...camp, facilities: [...camp.facilities, newFacility] });
-      setEquipmentSelect('');
-    }
+  const handleEquipmentAdd = (item: Facility) => {
+    setEquipmentSelect(item.name);
+    setCamp({ ...camp, facilities: [...camp.facilities, item] });
+    setEquipmentSelect('');
   };
 
   // 人材追加ハンドラー
@@ -311,21 +303,10 @@ const CreatePage: React.FC = () => {
 
           {/* 設備・人材追加 */}
           <Box display="flex" gap={2} mb={2}>
-            <FormControl sx={{ minWidth: 200 }}>
-              <InputLabel>設備追加</InputLabel>
-              <Select
-                value={equipmentSelect}
-                label="設備追加"
-                onChange={handleEquipmentAdd}
-              >
-                <MenuItem value="">未選択</MenuItem>
-                {EQUIPMENT_LIST.map((item) => (
-                  <MenuItem value={item.name} key={item.name}>
-                    {item.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <AddFacilityForm
+              equipmentSelect={equipmentSelect}
+              onEquipmentAdd={handleEquipmentAdd}
+            />
 
             <FormControl sx={{ minWidth: 200 }}>
               <InputLabel>人材追加</InputLabel>
