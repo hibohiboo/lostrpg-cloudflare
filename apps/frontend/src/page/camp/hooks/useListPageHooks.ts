@@ -34,12 +34,12 @@ export const useListPageHooks = () => {
 
   const hasMore = displayCount < camps.length && searchName === '';
   return {
-    displayedCamps,
+    list: displayedCamps,
     isLoading,
     searchName,
     setSearchName: handleSetSearchName,
     handleLoadMore,
     hasMore,
-    ITEMS_PER_PAGE,
+    itemsPerPage: ITEMS_PER_PAGE,
   };
 };
