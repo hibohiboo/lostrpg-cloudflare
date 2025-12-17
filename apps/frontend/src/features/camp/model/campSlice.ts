@@ -31,10 +31,9 @@ export const campSlice = createSlice({
   initialState,
   reducers: {
     setCamp: (_, action: PayloadAction<CampFormData>) => action.payload,
-    updateCamp: (state, action: PayloadAction<Partial<CampFormData>>) => ({
-      ...state,
-      ...action.payload,
-    }),
+    updateCamp: (state, action: PayloadAction<Partial<CampFormData>>) => {
+      Object.assign(state, action.payload);
+    },
     addFacility: (state, action: PayloadAction<Facility>) => {
       state.facilities.push(action.payload);
     },
