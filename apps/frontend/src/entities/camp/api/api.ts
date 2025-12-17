@@ -1,3 +1,4 @@
+import { CreateCampRequest } from '@lostrpg/schemas';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from '@lostrpg/frontend/shared/lib/store/api';
 
@@ -14,6 +15,13 @@ export const campApi = createApi({
   endpoints: (builder) => ({
     getCampList: builder.query<ListItem[], void>({
       query: () => `/camps`,
+    }),
+    createCamp: builder.mutation<{ id: string }, CreateCampRequest>({
+      query: (data) => ({
+        url: `/camps`,
+        method: 'POST',
+        body: data,
+      }),
     }),
   }),
 });
