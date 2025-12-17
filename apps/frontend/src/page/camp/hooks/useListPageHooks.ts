@@ -1,10 +1,13 @@
 import { useGetCampListQuery } from '@lostrpg/frontend/entities/camp';
-import { useAppDispatch, useAppSelector } from '@lostrpg/frontend/shared/lib/store';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '@lostrpg/frontend/shared/lib/store';
 import {
   selectDisplayedCamps,
   selectSearchName,
   selectDisplayCount,
-  setDisplayedCamps,
+  selectCamps,
   setSearchName,
   setDisplayCount,
   ITEMS_PER_PAGE_CONSTANT,
@@ -15,33 +18,14 @@ export const useListPageHooks = () => {
   const displayedCamps = useAppSelector(selectDisplayedCamps);
   const searchName = useAppSelector(selectSearchName);
   const displayCount = useAppSelector(selectDisplayCount);
+  const camps = useAppSelector(selectCamps);
   const ITEMS_PER_PAGE = ITEMS_PER_PAGE_CONSTANT;
-  const { data: camps = [], isLoading } = useGetCampListQuery();
-
-  // 検索処理
-  const handleSearch = () => {
-    if (searchName.trim() === '') {
-      dispatch(setDisplayedCamps(camps.slice(0, displayCount)));
-    } else {
-      const filtered = camps.filter((camp) =>
-        camp.name.toLowerCase().includes(searchName.toLowerCase()),
-      );
-      dispatch(setDisplayedCamps(filtered));
-    }
-  };
+  const { isLoading } = useGetCampListQuery();
 
   // もっと読み込む
   const handleLoadMore = () => {
     const newCount = displayCount + ITEMS_PER_PAGE;
     dispatch(setDisplayCount(newCount));
-    dispatch(setDisplayedCamps(camps.slice(0, newCount)));
-  };
-
-  // エンターキーで検索
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
   };
 
   // 検索名を更新する関数
@@ -55,9 +39,7 @@ export const useListPageHooks = () => {
     isLoading,
     searchName,
     setSearchName: handleSetSearchName,
-    handleSearch,
     handleLoadMore,
-    handleKeyPress,
     hasMore,
     ITEMS_PER_PAGE,
   };

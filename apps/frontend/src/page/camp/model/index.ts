@@ -1,6 +1,5 @@
 export { campListPageSlice, ITEMS_PER_PAGE_CONSTANT } from './campListPageSlice';
 export {
-  setDisplayedCamps,
   setSearchName,
   setDisplayCount,
   incrementDisplayCount,

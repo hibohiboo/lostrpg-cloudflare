@@ -6,7 +6,6 @@ export interface Camp {
 }
 
 export interface CampListPageState {
-  displayedCamps: Camp[];
   searchName: string;
   displayCount: number;
 }
@@ -14,7 +13,6 @@ export interface CampListPageState {
 const ITEMS_PER_PAGE = 5;
 
 const initialState: CampListPageState = {
-  displayedCamps: [],
   searchName: '',
   displayCount: ITEMS_PER_PAGE,
 };
@@ -23,9 +21,6 @@ export const campListPageSlice = createSlice({
   name: 'campListPage',
   initialState,
   reducers: {
-    setDisplayedCamps: (state, action: PayloadAction<Camp[]>) => {
-      state.displayedCamps = action.payload;
-    },
     setSearchName: (state, action: PayloadAction<string>) => {
       state.searchName = action.payload;
     },
@@ -40,7 +35,6 @@ export const campListPageSlice = createSlice({
 });
 
 export const {
-  setDisplayedCamps,
   setSearchName,
   setDisplayCount,
   incrementDisplayCount,

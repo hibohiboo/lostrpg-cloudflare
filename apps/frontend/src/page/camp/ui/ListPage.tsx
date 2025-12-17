@@ -21,9 +21,7 @@ const ListPage: React.FC = () => {
     isLoading,
     searchName,
     setSearchName,
-    handleSearch,
     handleLoadMore,
-    handleKeyPress,
     hasMore,
     ITEMS_PER_PAGE,
   } = useListPageHooks();
@@ -49,14 +47,12 @@ const ListPage: React.FC = () => {
             variant="standard"
             value={searchName}
             onChange={(e) => setSearchName(e.target.value)}
-            onKeyDown={handleKeyPress}
             fullWidth
             size="small"
           />
           <Button
             variant="contained"
             color="primary"
-            onClick={handleSearch}
             sx={{ minWidth: 'auto', px: 2 }}
           >
             <SearchIcon />
@@ -87,7 +83,7 @@ const ListPage: React.FC = () => {
                   <ListItemButton
                     key={camp.id}
                     component="a"
-                    href={`/lostrpg/public/ja/camp?id=${camp.id}`}
+                    href={`/camp/${camp.id}`}
                   >
                     <ListItemText primary={camp.name} />
                   </ListItemButton>
