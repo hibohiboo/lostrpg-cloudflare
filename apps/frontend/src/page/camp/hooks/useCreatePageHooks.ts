@@ -1,8 +1,6 @@
 import { useNavigate } from 'react-router';
-import {
-  createCampAction,
-  useEditFormHooks,
-} from '@lostrpg/frontend/features/camp';
+import { createCampAction } from '@lostrpg/frontend/entities/camp';
+import { useEditFormHooks } from '@lostrpg/frontend/features/camp';
 import { useAppDispatch } from '@lostrpg/frontend/shared/lib/store';
 
 export const useCreatePageHooks = () => {
