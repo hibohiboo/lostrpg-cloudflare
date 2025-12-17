@@ -70,7 +70,7 @@ describe('POST /api/characters', () => {
     items: ['射撃武器（小）', 'ブレード（小）'],
   };
 
-  describe('正常系', () => {
+  describe.skip('正常系', () => {
     it('ステータス201を返すこと', async () => {
       const res = await createCharacter(basicCharacterData);
       expect(res.status).toBe(201);

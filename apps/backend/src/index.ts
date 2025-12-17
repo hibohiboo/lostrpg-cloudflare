@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { HTTPException } from 'hono/http-exception';
 import { logger } from 'hono/logger';
+import { campsRouter } from './routes/camps';
 import { charactersRouter } from './routes/characters';
 import { gameDataRouter } from './routes/game-data';
 
@@ -46,6 +47,7 @@ app.get('/health', (c) =>
 // API routes
 app.route('/api/game-data', gameDataRouter);
 app.route('/api/characters', charactersRouter);
+app.route('/api/camps', campsRouter);
 
 const port = Number(process.env.PORT) || 3001;
 
