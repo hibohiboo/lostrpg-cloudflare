@@ -94,5 +94,17 @@ describe('POST /api/characters', () => {
 
       expect(updateRes.status).toBe(401);
     });
+    it('保護されたデータを更新できること', async () => {
+      const protectedData = {
+        ...minimalData,
+        password: 'test123',
+      };
+      const createRes = await create(protectedData);
+      const createData = (await createRes.json()) as any;
+
+      const updateRes = await update(createData.id, protectedData);
+
+      expect(updateRes.status).toBe(200);
+    });
   });
 });
