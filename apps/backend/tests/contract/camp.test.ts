@@ -20,15 +20,25 @@ describe('POST /api/characters', () => {
     // 各テスト前にデータをクリーンアップ
     await cleanupTestData();
   });
-
+  const url = 'http://localhost/api/camps';
   // テストヘルパー関数
-  const createCharacter = async (data: any) => {
-    const req = new Request('http://localhost/api/camps', {
+  const create = async (data: any) => {
+    const req = new Request(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
+    });
+    return app.fetch(req);
+  };
+  const update = async (id: string, sessionData: any) => {
+    const req = new Request(`${url}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(sessionData),
     });
     return app.fetch(req);
   };
@@ -45,11 +55,11 @@ describe('POST /api/characters', () => {
   };
   describe('正常系', () => {
     it('ステータス201を返すこと', async () => {
-      const res = await createCharacter(minimalData);
+      const res = await create(minimalData);
       expect(res.status).toBe(201);
     });
     it('作成されたキャンプのidを返すこと', async () => {
-      const res = await createCharacter(minimalData);
+      const res = await create(minimalData);
       const data = (await res.json()) as any;
       expect(res.status).toBe(201);
       expect(data).toHaveProperty('id');
@@ -62,15 +72,27 @@ describe('POST /api/characters', () => {
   describe('パスワード', () => {
     it('パスワードありで作成できること', async () => {
       const dataWithPassword = { ...minimalData, password: 'secret123' };
-      const res = await createCharacter(dataWithPassword);
+      const res = await create(dataWithPassword);
 
       expect(res.status).toBe(201);
     });
 
     it('パスワードなしで作成できること', async () => {
-      const res = await createCharacter(minimalData);
+      const res = await create(minimalData);
 
       expect(res.status).toBe(201);
+    });
+    it('保護されたデータはパスワード必須であること', async () => {
+      const protectedData = {
+        ...minimalData,
+        password: 'test123',
+      };
+      const createRes = await create(protectedData);
+      const createData = (await createRes.json()) as any;
+
+      const updateRes = await update(createData.id, minimalData);
+
+      expect(updateRes.status).toBe(401);
     });
   });
 });

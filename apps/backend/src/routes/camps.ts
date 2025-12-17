@@ -3,6 +3,7 @@ import { createCampSchema, updateCampSchema } from '@lostrpg/schemas';
 import bcrypt from 'bcryptjs';
 import { desc, eq } from 'drizzle-orm';
 import { Hono } from 'hono';
+import { HTTPException } from 'hono/http-exception';
 import { z } from 'zod';
 import { getDb } from '../lib/db/connection';
 import { camps } from '../lib/db/schema';
@@ -140,6 +141,10 @@ campsRouter.put(
         200,
       );
     } catch (error) {
+      // HTTPExceptionは再スローして適切なステータスコードを返す
+      if (error instanceof HTTPException) {
+        throw error;
+      }
       console.error('Database error:', error);
       return c.json({ error: 'Database error' }, 500);
     }
