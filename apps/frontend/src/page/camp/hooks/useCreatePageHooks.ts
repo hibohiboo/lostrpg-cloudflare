@@ -12,7 +12,10 @@ import {
   updateItem,
   createCampAction,
 } from '@lostrpg/frontend/features/camp';
-import { useAppDispatch, useAppSelector } from '@lostrpg/frontend/store/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '@lostrpg/frontend/shared/lib/store';
 
 export const useCreatePageHooks = () => {
   const dispatch = useAppDispatch();

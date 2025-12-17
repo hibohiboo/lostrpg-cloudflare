@@ -12,73 +12,21 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-
-// ダミーデータの型定義
-interface Camp {
-  id: string;
-  name: string;
-}
-
-// ダミーデータ
-const DUMMY_CAMPS: Camp[] = [
-  { id: '1', name: 'ドラゴンの洞窟キャンプ' },
-  { id: '2', name: '妖精の森ベースキャンプ' },
-  { id: '3', name: '古代遺跡探索拠点' },
-  { id: '4', name: '山岳地帯前線基地' },
-  { id: '5', name: '海辺の休息所' },
-  { id: '6', name: '魔法学院キャンプ' },
-  { id: '7', name: '商人ギルドの宿場' },
-  { id: '8', name: '冒険者の酒場付近' },
-  { id: '9', name: '王都近郊野営地' },
-  { id: '10', name: '辺境の監視所' },
-];
+import React from 'react';
+import { useListPageHooks } from '../hooks/useListPageHooks';
 
 const ListPage: React.FC = () => {
-  const [camps, setCamps] = useState<Camp[]>([]);
-  const [displayedCamps, setDisplayedCamps] = useState<Camp[]>([]);
-  const [searchName, setSearchName] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [displayCount, setDisplayCount] = useState(5);
-  const ITEMS_PER_PAGE = 5;
-
-  // 初回読み込み
-  useEffect(() => {
-    // ダミーデータを読み込む（実際はAPI呼び出し）
-    setTimeout(() => {
-      setCamps(DUMMY_CAMPS);
-      setDisplayedCamps(DUMMY_CAMPS.slice(0, displayCount));
-      setLoading(false);
-    }, 500);
-  }, [displayCount]);
-
-  // 検索処理
-  const handleSearch = () => {
-    if (searchName.trim() === '') {
-      setDisplayedCamps(camps.slice(0, displayCount));
-    } else {
-      const filtered = camps.filter((camp) =>
-        camp.name.toLowerCase().includes(searchName.toLowerCase()),
-      );
-      setDisplayedCamps(filtered);
-    }
-  };
-
-  // もっと読み込む
-  const handleLoadMore = () => {
-    const newCount = displayCount + ITEMS_PER_PAGE;
-    setDisplayCount(newCount);
-    setDisplayedCamps(camps.slice(0, newCount));
-  };
-
-  // エンターキーで検索
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  };
-
-  const hasMore = displayCount < camps.length && searchName === '';
+  const {
+    displayedCamps,
+    isLoading,
+    searchName,
+    setSearchName,
+    handleSearch,
+    handleLoadMore,
+    handleKeyPress,
+    hasMore,
+    ITEMS_PER_PAGE,
+  } = useListPageHooks();
 
   return (
     <Container maxWidth="md">
@@ -117,13 +65,13 @@ const ListPage: React.FC = () => {
 
         {/* キャンプ一覧 */}
         <Box mt={3}>
-          {loading && (
+          {isLoading && (
             <Box display="flex" justifyContent="center" p={3}>
               <CircularProgress />
             </Box>
           )}
 
-          {!loading && (
+          {!isLoading && (
             <>
               <List
                 sx={{
@@ -156,7 +104,7 @@ const ListPage: React.FC = () => {
               )}
 
               {/* 結果が0件の場合 */}
-              {displayedCamps.length === 0 && !loading && (
+              {displayedCamps.length === 0 && !isLoading && (
                 <Typography
                   variant="body2"
                   color="text.secondary"
