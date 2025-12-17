@@ -1,35 +1,40 @@
-import { useState } from 'react';
 import { useGetCampListQuery } from '@lostrpg/frontend/entities/camp';
-
-interface Camp {
-  id: string;
-  name: string;
-}
+import { useAppDispatch, useAppSelector } from '@lostrpg/frontend/shared/lib/store';
+import {
+  selectDisplayedCamps,
+  selectSearchName,
+  selectDisplayCount,
+  setDisplayedCamps,
+  setSearchName,
+  setDisplayCount,
+  ITEMS_PER_PAGE_CONSTANT,
+} from '../model';
 
 export const useListPageHooks = () => {
-  const [displayedCamps, setDisplayedCamps] = useState<Camp[]>([]);
-  const [searchName, setSearchName] = useState('');
-  const [displayCount, setDisplayCount] = useState(5);
-  const ITEMS_PER_PAGE = 5;
+  const dispatch = useAppDispatch();
+  const displayedCamps = useAppSelector(selectDisplayedCamps);
+  const searchName = useAppSelector(selectSearchName);
+  const displayCount = useAppSelector(selectDisplayCount);
+  const ITEMS_PER_PAGE = ITEMS_PER_PAGE_CONSTANT;
   const { data: camps = [], isLoading } = useGetCampListQuery();
 
   // 検索処理
   const handleSearch = () => {
     if (searchName.trim() === '') {
-      setDisplayedCamps(camps.slice(0, displayCount));
+      dispatch(setDisplayedCamps(camps.slice(0, displayCount)));
     } else {
       const filtered = camps.filter((camp) =>
         camp.name.toLowerCase().includes(searchName.toLowerCase()),
       );
-      setDisplayedCamps(filtered);
+      dispatch(setDisplayedCamps(filtered));
     }
   };
 
   // もっと読み込む
   const handleLoadMore = () => {
     const newCount = displayCount + ITEMS_PER_PAGE;
-    setDisplayCount(newCount);
-    setDisplayedCamps(camps.slice(0, newCount));
+    dispatch(setDisplayCount(newCount));
+    dispatch(setDisplayedCamps(camps.slice(0, newCount)));
   };
 
   // エンターキーで検索
@@ -39,12 +44,17 @@ export const useListPageHooks = () => {
     }
   };
 
+  // 検索名を更新する関数
+  const handleSetSearchName = (value: string) => {
+    dispatch(setSearchName(value));
+  };
+
   const hasMore = displayCount < camps.length && searchName === '';
   return {
     displayedCamps,
     isLoading,
     searchName,
-    setSearchName,
+    setSearchName: handleSetSearchName,
     handleSearch,
     handleLoadMore,
     handleKeyPress,
