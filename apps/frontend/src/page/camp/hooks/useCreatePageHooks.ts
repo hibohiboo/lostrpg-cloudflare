@@ -1,31 +1,20 @@
 import { useState } from 'react';
 import { Facility } from '@lostrpg/frontend/entities/facility';
 import { Item } from '@lostrpg/frontend/entities/item';
-
-interface CampFormData {
-  playerName: string;
-  name: string;
-  imageUrl: string;
-  facilities: Facility[];
-  items: Item[];
-  unusedCampPoint: number;
-  totalCampPoint: number;
-  summary: string;
-  freeWriting: string;
-}
+import {
+  setCamp,
+  addFacility,
+  addItem,
+  deleteFacility,
+  deleteItem,
+  updateFacility,
+  updateItem,
+} from '@lostrpg/frontend/features/camp';
+import { useAppDispatch, useAppSelector } from '@lostrpg/frontend/store/hooks';
 
 export const useCreatePageHooks = () => {
-  const [camp, setCamp] = useState<CampFormData>({
-    playerName: '',
-    name: '',
-    imageUrl: '',
-    facilities: [],
-    items: [],
-    unusedCampPoint: 0,
-    totalCampPoint: 0,
-    summary: '',
-    freeWriting: '',
-  });
+  const dispatch = useAppDispatch();
+  const camp = useAppSelector((state) => state.camp);
 
   const [isValidError, setIsValidError] = useState(false);
   const [previewUrl, setPreviewUrl] = useState('');
@@ -47,53 +36,41 @@ export const useCreatePageHooks = () => {
 
   // 設備追加ハンドラー
   const handleEquipmentAdd = (item: Facility) => {
-    setCamp({ ...camp, facilities: [...camp.facilities, item] });
+    dispatch(addFacility(item));
     setEquipmentSelect('');
   };
 
   // 人材追加ハンドラー
   const handlePersonalityAdd = (item: Facility) => {
-    setCamp({ ...camp, facilities: [...camp.facilities, item] });
+    dispatch(addFacility(item));
     setPersonalitySelect('');
   };
 
   // アイテム追加ハンドラー
   const handleItemAdd = (item: Item) => {
-    setCamp({ ...camp, items: [...camp.items, item] });
+    dispatch(addItem(item));
     setItemSelect('');
   };
 
   // 施設削除ハンドラー
   const handleFacilityDelete = (id: string) => {
-    setCamp({
-      ...camp,
-      facilities: camp.facilities.filter((f) => f.id !== id),
-    });
+    dispatch(deleteFacility(id));
   };
 
   // アイテム削除ハンドラー
   const handleItemDelete = (id: string) => {
-    setCamp({
-      ...camp,
-      items: camp.items.filter((i) => i.id !== id),
-    });
+    dispatch(deleteItem(id));
   };
 
   // 施設更新ハンドラー
   const handleFacilityUpdate = (newRow: Facility) => {
-    setCamp({
-      ...camp,
-      facilities: camp.facilities.map((f) => (f.id === newRow.id ? newRow : f)),
-    });
+    dispatch(updateFacility(newRow));
     return newRow;
   };
 
   // アイテム更新ハンドラー
   const handleItemUpdate = (newRow: Item) => {
-    setCamp({
-      ...camp,
-      items: camp.items.map((i) => (i.id === newRow.id ? newRow : i)),
-    });
+    dispatch(updateItem(newRow));
     return newRow;
   };
 
@@ -124,7 +101,7 @@ export const useCreatePageHooks = () => {
     equipmentSelect,
     personalitySelect,
     itemSelect,
-    setCamp,
+    setCamp: (data: typeof camp) => dispatch(setCamp(data)),
     handleImageChange,
     handleEquipmentAdd,
     handlePersonalityAdd,
