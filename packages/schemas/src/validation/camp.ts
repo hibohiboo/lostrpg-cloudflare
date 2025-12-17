@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { createValidator } from './helpers';
 
 // 施設スキーマ
 const facilitySchema = z.object({
@@ -25,8 +26,8 @@ const itemSchema = z.object({
   effect: z.string(),
 });
 
-// Camp作成リクエストスキーマ
-export const createCampSchema = z.object({
+// 基本フィールドスキーマ
+const baseCampFields = {
   playerName: z.string().optional(),
   name: z.string().max(50, 'name は50文字以内で入力してください'),
   imageUrl: z.string().optional(),
@@ -37,86 +38,23 @@ export const createCampSchema = z.object({
   summary: z.string().optional(),
   freeWriting: z.string().optional(),
   password: z.string().nullable().optional(),
-});
+};
+
+// Camp作成リクエストスキーマ
+export const createCampSchema = z.object(baseCampFields);
 
 export type CreateCampRequest = z.infer<typeof createCampSchema>;
 
-// Camp更新リクエストスキーマ
-export const updateCampSchema = z.object({
-  playerName: z.string().optional(),
-  name: z.string().max(50).optional(),
-  imageUrl: z.string().optional(),
-  facilities: z.array(facilitySchema).optional(),
-  items: z.array(itemSchema).optional(),
-  unusedCampPoint: z.number().int().min(0).optional(),
-  totalCampPoint: z.number().int().min(0).optional(),
-  summary: z.string().optional(),
-  freeWriting: z.string().optional(),
-  password: z.string().nullable().optional(),
-});
+// Camp更新リクエストスキーマ（作成スキーマのpartial + nameを必須から任意に）
+export const updateCampSchema = createCampSchema
+  .omit({ name: true })
+  .extend({
+    name: z.string().max(50).optional(),
+  })
+  .partial();
 
 export type UpdateCampRequest = z.infer<typeof updateCampSchema>;
 
-// バリデーション結果の型（character.tsから再利用）
-type ValidationResult<T> =
-  | {
-      success: true;
-      data: T;
-    }
-  | {
-      success: false;
-      error: {
-        code: string;
-        message: string;
-        details: Array<{
-          field: string;
-          message: string;
-        }>;
-      };
-    };
-
 // バリデーション実行関数
-export const validateCreateCamp = (
-  data: unknown,
-): ValidationResult<CreateCampRequest> => {
-  const result = createCampSchema.safeParse(data);
-
-  if (result.success) {
-    return {
-      success: true,
-      data: result.data,
-    };
-  }
-
-  return {
-    success: false,
-    error: {
-      code: 'VALIDATION_ERROR',
-      message: 'バリデーションエラーが発生しました',
-      details: [],
-    },
-  };
-};
-
-// UpdateCampRequest バリデーション実行関数
-export const validateUpdateCamp = (
-  data: unknown,
-): ValidationResult<UpdateCampRequest> => {
-  const result = updateCampSchema.safeParse(data);
-
-  if (result.success) {
-    return {
-      success: true,
-      data: result.data,
-    };
-  }
-
-  return {
-    success: false,
-    error: {
-      code: 'VALIDATION_ERROR',
-      message: 'バリデーションエラーが発生しました',
-      details: [],
-    },
-  };
-};
+export const validateCreateCamp = createValidator(createCampSchema);
+export const validateUpdateCamp = createValidator(updateCampSchema);

@@ -32,37 +32,33 @@ campsRouter.get('/', async (c) => {
 });
 
 // Create new camp
-campsRouter.post(
-  '/',
-  zValidator('json', createCampSchema as any),
-  async (c) => {
-    const campData = c.req.valid('json');
+campsRouter.post('/', zValidator('json', createCampSchema), async (c) => {
+  const campData = c.req.valid('json');
 
-    // パスワードハッシュ化
-    let passwordHash: string | undefined;
-    if (campData.password) {
-      passwordHash = await bcrypt.hash(campData.password, 12);
-    }
+  // パスワードハッシュ化
+  let passwordHash: string | undefined;
+  if (campData.password) {
+    passwordHash = await bcrypt.hash(campData.password, 12);
+  }
 
-    // パスワードを除いたデータを準備
-    // eslint-disable-next-line sonarjs/no-unused-vars
-    const { password: _password, ...dataWithoutPassword } = campData;
+  // パスワードを除いたデータを準備
+  // eslint-disable-next-line sonarjs/no-unused-vars
+  const { password: _password, ...dataWithoutPassword } = campData;
 
-    // データベースに保存
-    const [newCamp] = await getDb()
-      .insert(camps)
-      .values({
-        name: campData.name,
-        data: dataWithoutPassword,
-        passwordHash,
-      })
-      .returning();
+  // データベースに保存
+  const [newCamp] = await getDb()
+    .insert(camps)
+    .values({
+      name: campData.name,
+      data: dataWithoutPassword,
+      passwordHash,
+    })
+    .returning();
 
-    const url = `/camp/${newCamp.id}`;
+  const url = `/camp/${newCamp.id}`;
 
-    return c.json({ id: newCamp.id, url }, 201);
-  },
-);
+  return c.json({ id: newCamp.id, url }, 201);
+});
 
 // Get camp by ID
 campsRouter.get(
@@ -70,7 +66,7 @@ campsRouter.get(
   zValidator(
     'param',
     z.object({
-      id: z.string().uuid('Invalid ID format'),
+      id: z.uuid('Invalid ID format'),
     }),
   ),
   async (c) => {

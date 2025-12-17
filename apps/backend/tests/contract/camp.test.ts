@@ -48,5 +48,11 @@ describe('POST /api/characters', () => {
       const res = await createCharacter(minimalData);
       expect(res.status).toBe(201);
     });
+    it('作成されたキャンプのidを返すこと', async () => {
+      const res = await createCharacter(minimalData);
+      const data = (await res.json()) as any;
+      expect(res.status).toBe(201);
+      expect(data).toHaveProperty('id');
+    });
   });
 });
