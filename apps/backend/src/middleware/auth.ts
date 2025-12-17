@@ -7,7 +7,7 @@ export interface PasswordProtectedEntity {
 
 export async function requirePasswordAuth(
   entity: PasswordProtectedEntity,
-  providedPassword?: string,
+  providedPassword?: string | null,
 ): Promise<void> {
   if (!entity.passwordHash) {
     return;

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { zValidator } from '@hono/zod-validator';
 import { createCampSchema, updateCampSchema } from '@lostrpg/schemas';
 import bcrypt from 'bcryptjs';
@@ -100,7 +99,7 @@ campsRouter.put(
       id: z.string(),
     }),
   ),
-  zValidator('json', updateCampSchema as any),
+  zValidator('json', updateCampSchema),
   async (c) => {
     const { id } = c.req.valid('param');
     const requestBody = c.req.valid('json');
