@@ -53,6 +53,24 @@ describe('POST /api/characters', () => {
       const data = (await res.json()) as any;
       expect(res.status).toBe(201);
       expect(data).toHaveProperty('id');
+      // UUID v4 形式の正規表現
+      const uuidRegex =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+      expect(data.id).toMatch(uuidRegex);
+    });
+  });
+  describe('パスワード', () => {
+    it('パスワードありで作成できること', async () => {
+      const dataWithPassword = { ...minimalData, password: 'secret123' };
+      const res = await createCharacter(dataWithPassword);
+
+      expect(res.status).toBe(201);
+    });
+
+    it('パスワードなしで作成できること', async () => {
+      const res = await createCharacter(minimalData);
+
+      expect(res.status).toBe(201);
     });
   });
 });
