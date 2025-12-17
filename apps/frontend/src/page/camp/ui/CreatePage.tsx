@@ -207,11 +207,13 @@ const CreatePage: React.FC = () => {
         </Box>
 
         {/* 削除ボタン（編集時のみ表示する想定） */}
-        <Box my={2} sx={{ display: 'none' }}>
-          <Button variant="contained" color="error" onClick={handleDelete}>
-            削除
-          </Button>
-        </Box>
+        {handleDelete && (
+          <Box my={2} sx={{ display: 'none' }}>
+            <Button variant="contained" color="error" onClick={handleDelete}>
+              削除
+            </Button>
+          </Box>
+        )}
 
         {/* 戻るリンク */}
         <Box mt={4}>

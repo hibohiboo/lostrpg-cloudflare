@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import { Facility } from '@lostrpg/frontend/entities/facility';
 import { Item } from '@lostrpg/frontend/entities/item';
 import {
@@ -9,11 +10,14 @@ import {
   deleteItem,
   updateFacility,
   updateItem,
+  createCampAction,
 } from '@lostrpg/frontend/features/camp';
 import { useAppDispatch, useAppSelector } from '@lostrpg/frontend/store/hooks';
 
 export const useCreatePageHooks = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const camp = useAppSelector((state) => state.camp);
 
   const [isValidError, setIsValidError] = useState(false);
@@ -75,25 +79,19 @@ export const useCreatePageHooks = () => {
   };
 
   // 保存ハンドラー
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!camp.name) {
       setIsValidError(true);
       window.scrollTo(0, 0);
       return;
     }
-    // 実際にはAPI呼び出しを行う
-    console.log('Saving camp:', camp);
-    alert('キャンプを保存しました（ダミー動作）');
+    const { id } = await dispatch(createCampAction({ data: camp })).unwrap();
+
+    navigate(`/camp/${id}`);
   };
 
   // 削除ハンドラー
-  const handleDelete = () => {
-    if (window.confirm('本当に削除しますか？')) {
-      // 実際にはAPI呼び出しを行う
-      console.log('Deleting camp');
-      alert('キャンプを削除しました（ダミー動作）');
-    }
-  };
+  const handleDelete = undefined;
   return {
     camp,
     isValidError,
