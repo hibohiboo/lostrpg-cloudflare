@@ -28,7 +28,6 @@ export const useListPageHooks = () => {
     dispatch(setDisplayCount(newCount));
   };
 
-  // 検索名を更新する関数
   const handleSetSearchName = (value: string) => {
     dispatch(setSearchName(value));
   };

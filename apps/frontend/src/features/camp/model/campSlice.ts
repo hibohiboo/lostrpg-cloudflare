@@ -1,18 +1,9 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Facility } from '@lostrpg/frontend/entities/facility';
-import { Item } from '@lostrpg/frontend/entities/item';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { Camp } from '@lostrpg/frontend/entities/camp';
+import type { Facility } from '@lostrpg/frontend/entities/facility';
+import type { Item } from '@lostrpg/frontend/entities/item';
 
-export interface CampFormData {
-  playerName: string;
-  name: string;
-  imageUrl: string;
-  facilities: Facility[];
-  items: Item[];
-  unusedCampPoint: number;
-  totalCampPoint: number;
-  summary: string;
-  freeWriting: string;
-}
+export type CampFormData = Camp;
 
 const initialState: CampFormData = {
   playerName: '',
