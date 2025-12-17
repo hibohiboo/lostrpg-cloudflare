@@ -60,7 +60,7 @@ const ListPage: React.FC<Prop> = (props) => {
         {/* 検索フォーム */}
         <Box display="flex" alignItems="flex-end" mt={2} gap={1} maxWidth={400}>
           <TextField
-            label="名前"
+            label="名前で絞り込み"
             variant="standard"
             value={searchName}
             onChange={(e) => setSearchName(e.target.value)}
