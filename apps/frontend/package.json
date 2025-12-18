@@ -19,6 +19,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@lostrpg/backend": "workspace:*",
     "@lostrpg/core": "workspace:*",
     "@lostrpg/schemas": "workspace:*",
     "@lostrpg/ui": "workspace:*",

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
 import {
   useAppDispatch,
   useAppSelector,
@@ -18,7 +17,6 @@ import type { Item } from '@lostrpg/frontend/entities/item';
 
 export const useEditFormHooks = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const camp = useAppSelector((state) => state.camp);
 

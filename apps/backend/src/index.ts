@@ -45,10 +45,11 @@ app.get('/health', (c) =>
 );
 
 // API routes
-app.route('/api/game-data', gameDataRouter);
-app.route('/api/characters', charactersRouter);
-app.route('/api/camps', campsRouter);
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, unused-imports/no-unused-vars
+const routes = app.route('/api/camps', campsRouter);
+app
+  .route('/api/game-data', gameDataRouter)
+  .route('/api/characters', charactersRouter);
 const port = Number(process.env.PORT) || 3001;
 
 console.log(`🚀 Backend server running on port ${port}`);
@@ -57,3 +58,4 @@ export default {
   port,
   fetch: app.fetch,
 };
+export type AppType = typeof routes;

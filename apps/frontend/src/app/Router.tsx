@@ -1,8 +1,11 @@
+import { useMemo } from 'react';
 import { RouterProvider } from 'react-router';
+import { useAppDispatch } from '@lostrpg/frontend/shared/lib/store';
 import { createRouter } from './routes';
 
 function Router() {
-  const router = createRouter();
+  const dispatch = useAppDispatch();
+  const router = useMemo(() => createRouter({ dispatch }), [dispatch]);
 
   return <RouterProvider router={router} />;
 }

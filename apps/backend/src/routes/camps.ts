@@ -9,11 +9,9 @@ import { getDb } from '../lib/db/connection';
 import { camps } from '../lib/db/schema';
 import { requirePasswordAuth } from '../middleware/auth';
 
-export const campsRouter = new Hono();
-
-// Get all camps
-campsRouter.get('/', async (c) => {
-  try {
+export const campsRouter = new Hono()
+  // Get all camps
+  .get('/', async (c) => {
     const campList = await getDb()
       .select({
         id: camps.id,
@@ -25,168 +23,169 @@ campsRouter.get('/', async (c) => {
       .orderBy(desc(camps.updatedAt));
 
     return c.json(campList);
-  } catch (error) {
-    console.error('Database error:', error);
-    return c.json({ error: 'Database error' }, 500);
-  }
-});
+  })
+  // Create new camp
+  .post('/', zValidator('json', createCampSchema), async (c) => {
+    const campData = c.req.valid('json');
 
-// Create new camp
-campsRouter.post('/', zValidator('json', createCampSchema), async (c) => {
-  const campData = c.req.valid('json');
-
-  // パスワードハッシュ化
-  let passwordHash: string | undefined;
-  if (campData.password) {
-    passwordHash = await bcrypt.hash(campData.password, 12);
-  }
-
-  // パスワードを除いたデータを準備
-  // eslint-disable-next-line sonarjs/no-unused-vars
-  const { password: _password, ...dataWithoutPassword } = campData;
-
-  // データベースに保存
-  const [newCamp] = await getDb()
-    .insert(camps)
-    .values({
-      name: campData.name,
-      data: dataWithoutPassword,
-      passwordHash,
-    })
-    .returning();
-
-  const url = `/camp/${newCamp.id}`;
-
-  return c.json({ id: newCamp.id, url }, 201);
-});
-
-// Get camp by ID
-campsRouter.get(
-  '/:id',
-  zValidator(
-    'param',
-    z.object({
-      id: z.uuid('Invalid ID format'),
-    }),
-  ),
-  async (c) => {
-    const { id } = c.req.valid('param');
-
-    const [camp] = await getDb().select().from(camps).where(eq(camps.id, id));
-
-    if (!camp) {
-      return c.json({ error: 'Camp not found' }, 404);
+    // パスワードハッシュ化
+    let passwordHash: string | undefined;
+    if (campData.password) {
+      passwordHash = await bcrypt.hash(campData.password, 12);
     }
 
-    const data = camp.data as object;
+    // パスワードを除いたデータを準備
+    // eslint-disable-next-line sonarjs/no-unused-vars
+    const { password: _password, ...dataWithoutPassword } = campData;
 
-    return c.json({
-      id: camp.id,
-      name: camp.name,
-      createdAt: camp.createdAt,
-      updatedAt: camp.updatedAt,
-      isPasswordProtected: !!camp.passwordHash,
-      ...data,
-    });
-  },
-);
+    // データベースに保存
+    const [newCamp] = await getDb()
+      .insert(camps)
+      .values({
+        name: campData.name,
+        data: dataWithoutPassword,
+        passwordHash,
+      })
+      .returning();
 
-// Update camp
-campsRouter.put(
-  '/:id',
-  zValidator(
-    'param',
-    z.object({
-      id: z.string(),
-    }),
-  ),
-  zValidator('json', updateCampSchema),
-  async (c) => {
-    const { id } = c.req.valid('param');
-    const requestBody = c.req.valid('json');
+    const url = `/camp/${newCamp.id}`;
 
-    try {
+    return c.json({ id: newCamp.id, url }, 201);
+  })
+
+  // Get camp by ID
+  .get(
+    '/:id',
+    zValidator(
+      'param',
+      z.object({
+        id: z.uuid('Invalid ID format'),
+      }),
+    ),
+    async (c) => {
+      const { id } = c.req.valid('param');
+
       const [camp] = await getDb().select().from(camps).where(eq(camps.id, id));
 
       if (!camp) {
         return c.json({ error: 'Camp not found' }, 404);
       }
 
-      // パスワード認証
-      await requirePasswordAuth(camp, requestBody.password);
+      const data = camp.data as object;
 
-      // パスワードを除いたデータを準備
-      // eslint-disable-next-line sonarjs/no-unused-vars
-      const { password: _password, ...dataWithoutPassword } = requestBody;
+      return c.json({
+        id: camp.id,
+        name: camp.name,
+        createdAt: camp.createdAt,
+        updatedAt: camp.updatedAt,
+        isPasswordProtected: !!camp.passwordHash,
+        data,
+      });
+    },
+  )
 
-      // データベースを更新
-      const [updatedCamp] = await getDb()
-        .update(camps)
-        .set({
-          data: dataWithoutPassword,
-          name: requestBody.name || camp.name,
-          updatedAt: new Date(),
-        })
-        .where(eq(camps.id, id))
-        .returning();
+  // Update camp
+  .put(
+    '/:id',
+    zValidator(
+      'param',
+      z.object({
+        id: z.string(),
+      }),
+    ),
+    zValidator('json', updateCampSchema),
+    async (c) => {
+      const { id } = c.req.valid('param');
+      const requestBody = c.req.valid('json');
 
-      return c.json(
-        {
-          id: updatedCamp.id,
-          name: updatedCamp.name,
-          createdAt: updatedCamp.createdAt,
-          updatedAt: updatedCamp.updatedAt,
-          ...dataWithoutPassword,
-        },
-        200,
-      );
-    } catch (error) {
-      // HTTPExceptionは再スローして適切なステータスコードを返す
-      if (error instanceof HTTPException) {
-        throw error;
+      try {
+        const [camp] = await getDb()
+          .select()
+          .from(camps)
+          .where(eq(camps.id, id));
+
+        if (!camp) {
+          return c.json({ error: 'Camp not found' }, 404);
+        }
+
+        // パスワード認証
+        await requirePasswordAuth(camp, requestBody.password);
+
+        // パスワードを除いたデータを準備
+        // eslint-disable-next-line sonarjs/no-unused-vars
+        const { password: _password, ...dataWithoutPassword } = requestBody;
+
+        // データベースを更新
+        const [updatedCamp] = await getDb()
+          .update(camps)
+          .set({
+            data: dataWithoutPassword,
+            name: requestBody.name || camp.name,
+            updatedAt: new Date(),
+          })
+          .where(eq(camps.id, id))
+          .returning();
+
+        return c.json(
+          {
+            id: updatedCamp.id,
+            name: updatedCamp.name,
+            createdAt: updatedCamp.createdAt,
+            updatedAt: updatedCamp.updatedAt,
+            ...dataWithoutPassword,
+          },
+          200,
+        );
+      } catch (error) {
+        // HTTPExceptionは再スローして適切なステータスコードを返す
+        if (error instanceof HTTPException) {
+          throw error;
+        }
+        console.error('Database error:', error);
+        return c.json({ error: 'Database error' }, 500);
       }
-      console.error('Database error:', error);
-      return c.json({ error: 'Database error' }, 500);
-    }
-  },
-);
+    },
+  )
 
-// Delete camp
-campsRouter.delete(
-  '/:id',
-  zValidator(
-    'param',
-    z.object({
-      id: z.string().uuid('Invalid ID format'),
-    }),
-  ),
-  zValidator(
-    'json',
-    z.object({
-      password: z.string().nullable().optional(),
-    }),
-  ),
-  async (c) => {
-    const { id } = c.req.valid('param');
-    const { password } = c.req.valid('json');
+  // Delete camp
+  .delete(
+    '/:id',
+    zValidator(
+      'param',
+      z.object({
+        id: z.string().uuid('Invalid ID format'),
+      }),
+    ),
+    zValidator(
+      'json',
+      z.object({
+        password: z.string().nullable().optional(),
+      }),
+    ),
+    async (c) => {
+      const { id } = c.req.valid('param');
+      const { password } = c.req.valid('json');
 
-    try {
-      const [camp] = await getDb().select().from(camps).where(eq(camps.id, id));
+      try {
+        const [camp] = await getDb()
+          .select()
+          .from(camps)
+          .where(eq(camps.id, id));
 
-      if (!camp) {
-        return c.json({ error: 'Camp not found' }, 404);
+        if (!camp) {
+          return c.json({ error: 'Camp not found' }, 404);
+        }
+
+        // パスワード認証
+        await requirePasswordAuth(camp, password ?? undefined);
+
+        // データベースから削除
+        await getDb().delete(camps).where(eq(camps.id, id));
+
+        return c.json({ message: 'Camp deleted successfully' }, 200);
+      } catch (error) {
+        console.error('Database error:', error);
+        return c.json({ error: 'Database error' }, 500);
       }
-
-      // パスワード認証
-      await requirePasswordAuth(camp, password ?? undefined);
-
-      // データベースから削除
-      await getDb().delete(camps).where(eq(camps.id, id));
-
-      return c.json({ message: 'Camp deleted successfully' }, 200);
-    } catch (error) {
-      console.error('Database error:', error);
-      return c.json({ error: 'Database error' }, 500);
-    }
-  },
-);
+    },
+  );
