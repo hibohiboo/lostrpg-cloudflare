@@ -6,6 +6,21 @@ import {
 import { useEditFormHooks } from '@lostrpg/frontend/features/camp';
 import { useAppDispatch } from '@lostrpg/frontend/shared/lib/store';
 
+const handleUpdateError = (error: unknown) => {
+  // パスワードエラーまたは認証エラーの場合
+  if (
+    error &&
+    typeof error === 'object' &&
+    'status' in error &&
+    error.status === 401
+  ) {
+    alert('パスワードが正しくありません。もう一度お試しください。');
+  } else {
+    // その他のエラー
+    alert('保存中にエラーが発生しました。もう一度お試しください。');
+  }
+};
+
 export const useEditPageHooks = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -21,8 +36,12 @@ export const useEditPageHooks = () => {
     }
     if (!id) return;
 
-    await dispatch(updateCampAction({ id, data: camp })).unwrap();
-    navigate(`/camp/${id}`);
+    try {
+      await dispatch(updateCampAction({ id, data: camp })).unwrap();
+      navigate(`/camp/${id}`);
+    } catch (error) {
+      handleUpdateError(error);
+    }
   };
 
   const handleDelete = async () => {
