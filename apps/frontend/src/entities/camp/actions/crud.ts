@@ -17,11 +17,13 @@ export const createCampAction = createAsyncThunk<
 export const updateCampAction = createAsyncThunk<
   void,
   { id: string; data: UpdateCampRequest }
->('camp/update', async ({ id, data }, { dispatch }) => {
+>('camp/update', async ({ id, data }, { dispatch, rejectWithValue }) => {
   const ret = await dispatch(
     campApi.endpoints.updateCamp.initiate({ id, data }),
   );
-  if (ret.error) throw ret.error;
+  if (ret.error) {
+    return rejectWithValue(ret.error);
+  }
 });
 
 export const deleteCampAction = createAsyncThunk<void, { id: string }>(

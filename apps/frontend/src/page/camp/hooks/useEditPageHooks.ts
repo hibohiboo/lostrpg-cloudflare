@@ -7,19 +7,17 @@ import { useEditFormHooks } from '@lostrpg/frontend/features/camp';
 import { useAppDispatch } from '@lostrpg/frontend/shared/lib/store';
 
 const handleUpdateError = (error: unknown) => {
-  console.log('error', error);
-  // パスワードエラーまたは認証エラーの場合
-  if (
-    error &&
-    typeof error === 'object' &&
-    'status' in error &&
-    error.status === 401
-  ) {
-    alert('パスワードが正しくありません。もう一度お試しください。');
-  } else {
-    // その他のエラー
-    alert('保存中にエラーが発生しました。もう一度お試しください。');
+  console.warn(error);
+  if (error) {
+    const err = error as { originalStatus?: number };
+    if (err.originalStatus === 401) {
+      alert('パスワードが正しくありません。もう一度お試しください。');
+      return;
+    }
   }
+
+  // その他のエラー
+  alert('保存中にエラーが発生しました。もう一度お試しください。');
 };
 
 export const useEditPageHooks = () => {
