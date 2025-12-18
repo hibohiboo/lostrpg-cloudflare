@@ -191,6 +191,18 @@ const EditForm: React.FC<Props> = ({
       />
     </Box>
 
+    {/* パスワード */}
+    <Box my={2}>
+      <TextField
+        fullWidth
+        type="password"
+        label="パスワード（任意）"
+        value={camp.password || ''}
+        onChange={(e) => setCamp({ ...camp, password: e.target.value })}
+        helperText="パスワードを設定すると、キャンプの編集にパスワードが必要になります"
+      />
+    </Box>
+
     {/* 保存ボタン */}
     <Box my={2}>
       <Button

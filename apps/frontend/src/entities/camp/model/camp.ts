@@ -4,6 +4,7 @@ import type { Item } from '@lostrpg/frontend/entities/item/@x/camp';
 export interface Camp {
   playerName: string;
   name: string;
+  password?: string;
   imageUrl: string;
   facilities: Facility[];
   items: Item[];
