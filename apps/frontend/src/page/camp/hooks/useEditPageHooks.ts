@@ -7,6 +7,7 @@ import { useEditFormHooks } from '@lostrpg/frontend/features/camp';
 import { useAppDispatch } from '@lostrpg/frontend/shared/lib/store';
 
 const handleUpdateError = (error: unknown) => {
+  console.log('error', error);
   // パスワードエラーまたは認証エラーの場合
   if (
     error &&

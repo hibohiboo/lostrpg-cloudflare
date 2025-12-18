@@ -110,7 +110,11 @@ export const campsRouter = new Hono()
 
         // パスワード認証
         await requirePasswordAuth(camp, requestBody.password);
-
+        // パスワードハッシュ化
+        let passwordHash: string | undefined;
+        if (requestBody.password) {
+          passwordHash = await bcrypt.hash(requestBody.password, 12);
+        }
         // パスワードを除いたデータを準備
         // eslint-disable-next-line sonarjs/no-unused-vars
         const { password: _password, ...dataWithoutPassword } = requestBody;
@@ -122,6 +126,7 @@ export const campsRouter = new Hono()
             data: dataWithoutPassword,
             name: requestBody.name || camp.name,
             updatedAt: new Date(),
+            passwordHash,
           })
           .where(eq(camps.id, id))
           .returning();

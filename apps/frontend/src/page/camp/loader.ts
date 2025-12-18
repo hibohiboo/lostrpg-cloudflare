@@ -21,7 +21,7 @@ export const createCampDetailLoader =
   async ({ params }: LoaderFunctionArgs): Promise<Camp> => {
     const { id } = params;
     const camp = await getCamp(dispatch, id);
-
+    dispatch(setCamp(camp));
     return camp;
   };
 
