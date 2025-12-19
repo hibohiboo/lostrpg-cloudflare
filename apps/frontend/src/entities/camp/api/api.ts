@@ -11,12 +11,14 @@ type CampDetailData = Extract<
 export const campApi = createApi({
   reducerPath: 'campApi',
   baseQuery,
+  tagTypes: ['Camp', 'CampList'],
   endpoints: (builder) => ({
     getCampList: builder.query<
       InferResponseType<ApiType['camps']['$get']>,
       void
     >({
       query: () => `/camps`,
+      providesTags: ['CampList'],
     }),
     createCamp: builder.mutation<
       InferResponseType<ApiType['camps']['$post']>,
@@ -27,9 +29,11 @@ export const campApi = createApi({
         method: 'POST',
         body: data,
       }),
+      invalidatesTags: ['CampList'],
     }),
     getCamp: builder.query<CampDetailData, string>({
       query: (id) => `/camps/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Camp', id }],
     }),
     updateCamp: builder.mutation<
       void,
@@ -40,12 +44,17 @@ export const campApi = createApi({
         method: 'PUT',
         body: data,
       }),
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'Camp', id },
+        'CampList',
+      ],
     }),
     deleteCamp: builder.mutation<void, string>({
       query: (id) => ({
         url: `/camps/${id}`,
         method: 'DELETE',
       }),
+      invalidatesTags: ['CampList'],
     }),
   }),
 });

@@ -110,24 +110,33 @@ export const campsRouter = new Hono()
 
         // パスワード認証
         await requirePasswordAuth(camp, requestBody.password);
-        // パスワードハッシュ化
-        let passwordHash: string | undefined;
-        if (requestBody.password) {
-          passwordHash = await bcrypt.hash(requestBody.password, 12);
-        }
+
         // パスワードを除いたデータを準備
         // eslint-disable-next-line sonarjs/no-unused-vars
         const { password: _password, ...dataWithoutPassword } = requestBody;
 
+        // 更新データの構築
+        const updateData: {
+          data: object;
+          name: string;
+          updatedAt: Date;
+          passwordHash?: string;
+        } = {
+          data: dataWithoutPassword,
+          name: requestBody.name || camp.name,
+          updatedAt: new Date(),
+        };
+
+        // パスワードが未設定で、新しくパスワードを設定する場合のみハッシュ化
+        if (!camp.passwordHash && requestBody.password) {
+          updateData.passwordHash = await bcrypt.hash(requestBody.password, 12);
+        }
+        // 既にパスワードが設定されている場合は、passwordHashは更新しない
+
         // データベースを更新
         const [updatedCamp] = await getDb()
           .update(camps)
-          .set({
-            data: dataWithoutPassword,
-            name: requestBody.name || camp.name,
-            updatedAt: new Date(),
-            passwordHash,
-          })
+          .set(updateData)
           .where(eq(camps.id, id))
           .returning();
 
