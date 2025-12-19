@@ -28,6 +28,10 @@ export default defineConfig({
       output: {
         manualChunks: {
           react: ['react', 'react-router', 'react-dom/client'],
+          redux: ['@reduxjs/toolkit', 'react-redux'],
+          icons: ['@mui/icons-material'],
+          mui: ['@mui/material'],
+          datatable: ['@mui/x-data-grid'],
           util: ['swr'],
           vendors: ['hono'],
         },
