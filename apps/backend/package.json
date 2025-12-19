@@ -28,14 +28,14 @@
   },
   "dependencies": {
     "@lostrpg/schemas": "workspace:*",
-    "@hono/zod-validator": "^0.7.5",
+    "@hono/zod-validator": "^0.7.6",
     "@neondatabase/serverless": "^1.0.2",
     "@types/bcryptjs": "^3.0.0",
     "bcryptjs": "^3.0.3",
     "drizzle-orm": "^0.45.1",
     "hono": "^4.11.1",
     "postgres": "^3.4.7",
-    "zod": "^4.2.0"
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20251219.0",
