@@ -255,7 +255,9 @@ export const campsRouter = new Hono<{ Bindings: Env }>()
     ),
     async (c) => {
       const { id } = c.req.valid('param');
-
+      if (!c.env.IMAGES_BUCKET) {
+        return c.json({ error: 'Bucket not found' }, 404);
+      }
       try {
         // キャンプの存在確認
         const [camp] = await getDb()
