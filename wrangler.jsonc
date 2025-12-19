@@ -8,4 +8,10 @@
   "main": "./apps/backend/dist/index.js",
   "compatibility_flags": ["nodejs_compat"],
   "run_worker_first": ["/api/*"],
+  "r2_buckets": [
+    {
+      "binding": "IMAGES_BUCKET",
+      "bucket_name": "lostrpg-cloudflare"
+    }
+  ]
 }

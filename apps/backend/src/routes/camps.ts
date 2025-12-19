@@ -8,8 +8,48 @@ import { z } from 'zod';
 import { getDb } from '../lib/db/connection';
 import { camps } from '../lib/db/schema';
 import { requirePasswordAuth } from '../middleware/auth';
+import type { Env } from '../types/cloudflare';
+import type { R2Bucket } from '@cloudflare/workers-types';
 
-export const campsRouter = new Hono()
+// 画像ファイルのバリデーション
+function validateImageFile(imageFile: File | null) {
+  if (!imageFile) {
+    throw new HTTPException(400, { message: 'No image file provided' });
+  }
+
+  // ファイルサイズチェック (5MB制限)
+  const maxSize = 5 * 1024 * 1024;
+  if (imageFile.size > maxSize) {
+    throw new HTTPException(400, { message: 'File size exceeds 5MB limit' });
+  }
+
+  // ファイルタイプチェック
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+  if (!allowedTypes.includes(imageFile.type)) {
+    throw new HTTPException(400, {
+      message: 'Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed',
+    });
+  }
+
+  return imageFile;
+}
+
+// R2へ画像をアップロード
+async function uploadToR2(bucket: R2Bucket, id: string, imageFile: File) {
+  const ext = imageFile.type.split('/')[1];
+  const fileName = `camps/${id}.${ext}`;
+
+  const buffer = await imageFile.arrayBuffer();
+  await bucket.put(fileName, buffer, {
+    httpMetadata: {
+      contentType: imageFile.type,
+    },
+  });
+
+  return `${process.env.BUCKET_PUBLIC_URL}/${fileName}`;
+}
+
+export const campsRouter = new Hono<{ Bindings: Env }>()
   // Get all camps
   .get('/', async (c) => {
     const campList = await getDb()
@@ -200,6 +240,73 @@ export const campsRouter = new Hono()
       } catch (error) {
         console.error('Database error:', error);
         return c.json({ error: 'Database error' }, 500);
+      }
+    },
+  )
+
+  // Upload camp image
+  .post(
+    '/:id/upload-image',
+    zValidator(
+      'param',
+      z.object({
+        id: z.string().uuid('Invalid ID format'),
+      }),
+    ),
+    async (c) => {
+      const { id } = c.req.valid('param');
+
+      try {
+        // キャンプの存在確認
+        const [camp] = await getDb()
+          .select()
+          .from(camps)
+          .where(eq(camps.id, id));
+
+        if (!camp) {
+          return c.json({ error: 'Camp not found' }, 404);
+        }
+
+        // multipart/form-dataから画像を取得
+        const formData = await c.req.formData();
+        const imageFile = formData.get('image') as File | null;
+        const password = formData.get('password') as string | null;
+
+        // パスワード認証
+        await requirePasswordAuth(camp, password ?? undefined);
+
+        // 画像ファイルのバリデーション
+        const validatedFile = validateImageFile(imageFile);
+
+        // R2にアップロード
+        const imageUrl = await uploadToR2(
+          c.env.IMAGES_BUCKET,
+          id,
+          validatedFile,
+        );
+
+        // データベースのimageUrlを更新
+        const campData = camp.data as Record<string, unknown>;
+        const updatedData = {
+          ...campData,
+          imageUrl,
+        };
+
+        await getDb()
+          .update(camps)
+          .set({
+            data: updatedData,
+            updatedAt: new Date(),
+          })
+          .where(eq(camps.id, id));
+
+        return c.json({ imageUrl }, 200);
+      } catch (error) {
+        if (error instanceof HTTPException) {
+          throw error;
+        }
+        console.error('Upload error:', error);
+        return c.json({ error: 'Failed to upload image' }, 500);
       }
     },
   );

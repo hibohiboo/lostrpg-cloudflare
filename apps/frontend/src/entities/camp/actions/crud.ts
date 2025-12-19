@@ -24,6 +24,7 @@ export const updateCampAction = createAsyncThunk<
   if (ret.error) {
     return rejectWithValue(ret.error);
   }
+  return undefined;
 });
 
 export const deleteCampAction = createAsyncThunk<void, { id: string }>(

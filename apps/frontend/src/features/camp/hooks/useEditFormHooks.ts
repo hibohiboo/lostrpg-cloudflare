@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useUploadCampImageMutation } from '@lostrpg/frontend/entities/camp';
 import {
   useAppDispatch,
   useAppSelector,
@@ -17,11 +18,13 @@ import type { Item } from '@lostrpg/frontend/entities/item';
 
 export const useEditFormHooks = () => {
   const dispatch = useAppDispatch();
+  const [uploadImage] = useUploadCampImageMutation();
 
   const camp = useAppSelector((state) => state.camp);
 
   const [isValidError, setIsValidError] = useState(false);
   const [previewUrl, setPreviewUrl] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [equipmentSelect, setEquipmentSelect] = useState('');
   const [personalitySelect, setPersonalitySelect] = useState('');
   const [itemSelect, setItemSelect] = useState('');
@@ -30,6 +33,7 @@ export const useEditFormHooks = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreviewUrl(reader.result as string);
@@ -78,10 +82,27 @@ export const useEditFormHooks = () => {
     return newRow;
   };
 
+  // 画像アップロードハンドラー
+  const handleImageUpload = async (
+    id: string,
+    password: string | undefined,
+  ): Promise<string | null> => {
+    if (!imageFile) return null;
+
+    const result = await uploadImage({
+      id,
+      image: imageFile,
+      password: password || '',
+    }).unwrap();
+
+    return result.imageUrl;
+  };
+
   return {
     camp,
     isValidError,
     previewUrl,
+    imageFile,
     equipmentSelect,
     personalitySelect,
     itemSelect,
@@ -95,6 +116,7 @@ export const useEditFormHooks = () => {
     handleItemDelete,
     handleFacilityUpdate,
     handleItemUpdate,
+    handleImageUpload,
   };
 };
 

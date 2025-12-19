@@ -5,8 +5,9 @@ import { logger } from 'hono/logger';
 import { campsRouter } from './routes/camps';
 import { charactersRouter } from './routes/characters';
 import { gameDataRouter } from './routes/game-data';
+import type { Env } from './types/cloudflare';
 
-const app = new Hono();
+const app = new Hono<{ Bindings: Env }>();
 
 // Middleware
 app.use('*', logger());
@@ -45,11 +46,11 @@ app.get('/health', (c) =>
 );
 
 // API routes
-// eslint-disable-next-line @typescript-eslint/no-unused-vars, unused-imports/no-unused-vars
-const routes = app.route('/api/camps', campsRouter);
-app
-  .route('/api/game-data', gameDataRouter)
-  .route('/api/characters', charactersRouter);
+// eslint-disable-next-line no-underscore-dangle
+const _routes = app.route('/api/camps', campsRouter);
+app.route('/api/game-data', gameDataRouter);
+app.route('/api/characters', charactersRouter);
+
 const port = Number(process.env.PORT) || 3001;
 
 console.log(`🚀 Backend server running on port ${port}`);
@@ -58,4 +59,4 @@ export default {
   port,
   fetch: app.fetch,
 };
-export type AppType = typeof routes;
+export type AppType = typeof _routes;

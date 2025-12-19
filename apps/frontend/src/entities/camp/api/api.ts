@@ -8,6 +8,11 @@ type CampDetailData = Extract<
   InferResponseType<CampDetailType['$get']>,
   { id: string }
 >;
+type UploadImageType = ApiType['camps'][':id']['upload-image'];
+export type UploadImageResponse = Extract<
+  InferResponseType<UploadImageType['$post']>,
+  { imageUrl: string }
+>;
 export const campApi = createApi({
   reducerPath: 'campApi',
   baseQuery,
@@ -56,6 +61,28 @@ export const campApi = createApi({
       }),
       invalidatesTags: ['CampList'],
     }),
+    uploadCampImage: builder.mutation<
+      UploadImageResponse,
+      { id: string; image: File; password?: string }
+    >({
+      query: ({ id, image, password }) => {
+        const formData = new FormData();
+        formData.append('image', image);
+        if (password) {
+          formData.append('password', password);
+        }
+        return {
+          url: `/camps/${id}/upload-image`,
+          method: 'POST',
+          body: formData,
+        };
+      },
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'Camp', id }],
+    }),
   }),
 });
-export const { useGetCampListQuery, useGetCampQuery } = campApi;
+export const {
+  useGetCampListQuery,
+  useGetCampQuery,
+  useUploadCampImageMutation,
+} = campApi;

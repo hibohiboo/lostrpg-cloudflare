@@ -20,7 +20,6 @@ const DetailPage: React.FC = () => {
   const { id } = useParams();
   const members = [] as { characterId: string; characterName: string }[];
   const camp = useAppSelector((state) => state.camp);
-  const isOwner = true; // ダミー: 実際は認証情報から判断
 
   return (
     <Container maxWidth="lg">
@@ -30,13 +29,11 @@ const DetailPage: React.FC = () => {
           <Typography variant="h4" component="h1">
             {camp.name}
           </Typography>
-          {isOwner && (
-            <Link to={`/camp/${id}/edit`}>
-              <Button variant="outlined" startIcon={<EditIcon />} size="small">
-                編集
-              </Button>
-            </Link>
-          )}
+          <Link to={`/camp/${id}/edit`}>
+            <Button variant="outlined" startIcon={<EditIcon />} size="small">
+              編集
+            </Button>
+          </Link>
         </Box>
 
         {/* プレイヤー名 */}
