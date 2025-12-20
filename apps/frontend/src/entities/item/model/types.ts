@@ -2,7 +2,7 @@ export interface Item {
   id: string;
   number: number;
   name: string;
-  price: number;
+  j: number;
   weight: number;
   type: string;
   area: string;

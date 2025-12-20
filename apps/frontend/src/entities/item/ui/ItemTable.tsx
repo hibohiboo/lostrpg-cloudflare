@@ -29,7 +29,7 @@ export const ItemTable: React.FC<Props> = ({
     },
     { field: 'name', headerName: '名前', width: 150, editable: true },
     {
-      field: 'price',
+      field: 'j',
       headerName: '価格',
       width: 80,
       type: 'number',

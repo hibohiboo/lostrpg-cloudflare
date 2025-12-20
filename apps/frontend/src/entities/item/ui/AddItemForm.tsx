@@ -26,7 +26,7 @@ export const AddItemForm: React.FC<Props> = ({ itemSelect, onItemAdd }) => {
       typeof item.weight === 'string' ? Number(item.weight) : item.weight;
     const newItem = createItem({
       name: item.name,
-      price: item.j,
+      j: item.j,
       weight,
       type: item.type,
       area: item.area,
