@@ -36,7 +36,9 @@ app.get('/health', (c) =>
 
 // API routes
 // eslint-disable-next-line no-underscore-dangle
-const _routes = app.route('/api/camps', campsRouter);
+const _routes = app
+  .route('/api/camps', campsRouter)
+  .route('/api/characters', charactersRouter);
 app.route('/api/images', imagesRouter);
 
 const port = Number(process.env.PORT) || 3001;

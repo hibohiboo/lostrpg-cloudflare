@@ -67,6 +67,7 @@ const baseCharacterFields = {
   imageUrl: z.string().optional(),
   backbones: z.array(backboneSchema).default([]),
   subbliments: supplementSchema,
+  password: z.string().nullable().optional(),
 };
 
 // キャラクター作成リクエストスキーマ
