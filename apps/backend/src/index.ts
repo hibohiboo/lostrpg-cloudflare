@@ -3,6 +3,7 @@ import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { errorHandler } from './middleware/errorHandler';
 import { campsRouter } from './routes/camps';
+import { charactersRouter } from './routes/characters';
 import { imagesRouter } from './routes/images';
 import type { Env } from './types/cloudflare';
 
