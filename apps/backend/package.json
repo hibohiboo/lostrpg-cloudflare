@@ -40,7 +40,7 @@
     "zod": "^4.2.1"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20251219.0",
+    "@cloudflare/workers-types": "^4.20251220.0",
     "@lostrpg/eslint-config-custom": "workspace:*",
     "@lostrpg/typescript-config": "workspace:*",
     "@testcontainers/postgresql": "^11.10.0",
