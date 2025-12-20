@@ -1,0 +1,2083 @@
+export const abilitiesColumns = [
+  { title: '名前', field: 'name' },
+  { title: 'グループ', field: 'group' },
+  { title: 'タイプ', field: 'type' },
+  { title: '特技', field: 'specialty' },
+  { title: '対象', field: 'target' },
+  { title: '反動', field: 'recoil' },
+  { title: '効果', field: 'effect' },
+];
+
+export const classList = [
+  { name: 'ビッグ', id: 'big' },
+  { name: 'チビ', id: 'little' },
+  { name: 'オトナ', id: 'adult' },
+  { name: 'ニューエイジ', id: 'newage' },
+  { name: 'キズモノ', id: 'wounded' },
+  { name: 'センシ', id: 'fighter' },
+  { name: 'スカウト', id: 'scout' },
+  { name: 'ハンター', id: 'hunter' },
+  { name: 'ハカセ', id: 'professor' },
+  { name: 'ショクニン', id: 'worker' },
+  { name: 'ホープ', id: 'hope' },
+  { name: 'ママ', id: 'mama' },
+];
+
+export const abilityList = [
+  {
+    name: '汎用グループ',
+    id: 'general',
+    list: [
+      {
+        name: '武器攻撃',
+        group: '汎用',
+        type: '攻撃',
+        recoil: '0',
+        specialty: '自由',
+        target: '単体',
+        effect:
+          '指定特技の判定に成功すると、装備中の《指定特技》が一致している武器1つの[攻撃力]点のダメージを与える。この時、命中判定の達成値にプラス2の修正がつく。指定特技ごとに別の【アビリティ】として扱う。',
+      },
+      {
+        name: 'かばう',
+        group: '汎用',
+        type: '割込み',
+        recoil: '2',
+        specialty: '《受ける》',
+        target: '単体',
+        effect:
+          '指定特技の判定に成功すると、キャラクター1人のダメージを肩代わりできる。',
+      },
+      {
+        name: '見切り',
+        group: '汎用',
+        type: '補助',
+        recoil: '2',
+        specialty: '-',
+        target: '-',
+        effect:
+          '回避判定に組み合わせて使用する。回避判定の指定特技を《かわす/胴部9》に変更する。',
+      },
+      {
+        name: '強打',
+        group: '汎用',
+        type: '補助',
+        recoil: '2',
+        specialty: '-',
+        target: '-',
+        effect:
+          '命中判定に組み合わせて使用する。命中した攻撃のダメージを1増加させる。',
+      },
+      {
+        name: '応急手当',
+        group: '汎用',
+        type: '支援',
+        recoil: '3',
+        specialty: '《手当》',
+        target: '単体',
+        effect: '指定特技の判定に成功すると、対象の【体力】が1点増加する。',
+      },
+      {
+        name: '足払い',
+        group: '汎用',
+        type: '攻撃',
+        recoil: '3',
+        specialty: '《しゃがむ》',
+        target: '単体',
+        effect: '指定特技の判定に成功すると、対象に『転倒』の変調を与える。',
+      },
+      {
+        name: '乱舞',
+        group: '汎用',
+        type: '補助',
+        recoil: '8',
+        specialty: '-',
+        target: '-',
+        effect:
+          '命中判定に組み合わせて使用する。命中した攻撃のダメージを3増加させる。',
+      },
+      {
+        name: '集中',
+        group: '汎用',
+        type: '補助',
+        recoil: '2',
+        specialty: '-',
+        target: '-',
+        effect:
+          '命中判定に組み合わせて使用する。命中判定の達成値にプラス1の修正がつく。',
+      },
+      {
+        name: 'たからもの',
+        group: '汎用',
+        type: '割込み',
+        recoil: '3',
+        specialty: '-',
+        target: '自身',
+        effect:
+          '自身の振ったダイス1つの出目を6にする。シナリオ1回。また、生死判定に失敗したとき、この【アビリティ】を失うことでそれを成功にできる。これには気力を消費しない。',
+      },
+      {
+        name: '説得',
+        group: '汎用',
+        type: '攻撃',
+        recoil: '6',
+        specialty: '自由',
+        target: '単体',
+        effect: '指定特技の判定に成功すると、対象の気力を2点減少させる。',
+      },
+    ],
+  },
+  {
+    name: 'ビッグ',
+    id: 'big',
+    list: [
+      {
+        name: 'におうだち',
+        group: 'ビッグ',
+        type: '割込み',
+        recoil: '5',
+        specialty: '《塞ぐ》',
+        target: '自身',
+        effect:
+          '指定特技の判定に成功すると、今行われている攻撃の対象を自分1人に変更する。',
+      },
+      {
+        name: '鉄拳',
+        group: 'ビッグ',
+        type: '攻撃',
+        recoil: '0',
+        specialty: '《殴る》',
+        target: '単体',
+        effect:
+          '指定特技の判定に成功すると、1点のダメージを与える。このとき命中判定の達成値にプラス3の修正がつく。',
+      },
+      {
+        name: '怪力',
+        group: 'ビッグ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect: '白兵攻撃や肉体を使った攻撃により与えるダメージが1点上昇する。',
+      },
+      {
+        name: '頑強',
+        group: 'ビッグ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect: 'あなたの【生命力】にプラス2点する。',
+      },
+      {
+        name: '馬鹿力',
+        group: 'ビッグ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'あなたは「装備部位：両手」のアイテムを「装備部位：片手」として扱うことができる。',
+      },
+      {
+        name: '押し倒し',
+        group: 'ビッグ',
+        type: '補助',
+        recoil: '2',
+        specialty: '-',
+        target: '-',
+        effect:
+          '白兵攻撃や肉体を使った攻撃の命中判定に組み合わせて使用する。対象に『転倒』の変調を与える。',
+      },
+    ],
+  },
+  {
+    name: 'チビ',
+    id: 'little',
+    list: [
+      {
+        name: '痩身',
+        group: 'チビ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect: '回避判定の達成値にプラス1の修正がつく。',
+      },
+      {
+        name: '両手利き',
+        group: 'チビ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          '《利き腕》と《逆腕》の特技を追加で習得する。さらに、代用判定の時、腕部分野の上下のリストが繋がっているように扱う。',
+      },
+      {
+        name: '奇襲',
+        group: 'チビ',
+        type: '割込み',
+        recoil: '5',
+        specialty: '《隠れる》',
+        target: '自身',
+        effect:
+          '戦闘開始時の先制判定の前に使用する。指定特技の判定に成功すると、追加行動を得る。',
+      },
+      {
+        name: 'アクロバット',
+        group: 'チビ',
+        type: '補助',
+        recoil: '2',
+        specialty: '-',
+        target: '-',
+        effect: '回避判定に組み合わせて使用する。達成値にプラス2の修正がつく。',
+      },
+      {
+        name: 'うろちょろ',
+        group: 'チビ',
+        type: '補助',
+        recoil: '2',
+        specialty: '-',
+        target: '-',
+        effect: '命中判定に組み合わせて使用する。対象の気力を1点減少させる。',
+      },
+      {
+        name: '死角',
+        group: 'チビ',
+        type: '補助',
+        recoil: '2',
+        specialty: '-',
+        target: '-',
+        effect: '命中判定に組み合わせて使用する。達成値にプラス2の修正がつく。',
+      },
+    ],
+  },
+  {
+    name: 'オトナ',
+    id: 'adult',
+    list: [
+      {
+        name: '手練',
+        group: 'オトナ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          '「アクション」の特技から１つ選択する。その特技は隣接する部位にダメージを受けても使用不能とならない。',
+      },
+      {
+        name: '百戦錬磨',
+        group: 'オトナ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect: '命中判定の達成値にプラス1の修正がつく。',
+      },
+      {
+        name: '人生経験',
+        group: 'オトナ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'ギャップを2列塗りつぶすことができる。塗りつぶされたギャップは代用判定の際数えない。',
+      },
+      {
+        name: '遭遇歴',
+        group: 'オトナ',
+        type: '支援',
+        recoil: '3',
+        specialty: '《雑学》',
+        target: '単体',
+        effect: '指定特技の判定に成功すると、対象に『暴露』の変調を与える。',
+      },
+      {
+        name: 'へそくり',
+        group: 'オトナ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'キャラメイク時の初期Jにプラス3Jする。また、セッション開始時に3J獲得できる。',
+      },
+      {
+        name: '旧友',
+        group: 'オトナ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'あなたを訪ねて古い友人がやってくる。あなたはキャンプフェイズに任意の[タイミング：支援]のキャンプ人材表1つの効果を使用できる。人材のレベルは1とする。指定特技の判定は行うこと。',
+      },
+    ],
+  },
+  {
+    name: 'ニューエイジ',
+    id: 'newage',
+    list: [
+      {
+        name: '火炎弾',
+        group: 'ニューエイジ',
+        type: '攻撃',
+        recoil: '2',
+        specialty: '《投げる》',
+        target: '単体',
+        effect: '指定特技の判定に成功すると、対象に『炎上』の変調を与える。',
+      },
+      {
+        name: '発電',
+        group: 'ニューエイジ',
+        type: '割込み',
+        recoil: '2',
+        specialty: '《機械》',
+        target: 'アイテム',
+        effect: '指定特技の判定に成功すると、アイテム１つを「充電」できる。',
+      },
+      {
+        name: '念動力',
+        group: 'ニューエイジ',
+        type: '割込み',
+        recoil: '2',
+        specialty: '《逸らす》',
+        target: '単体',
+        effect:
+          'ダメージ適用の直前に使用する。指定特技の判定に成功するとダメージを1点軽減できる。',
+      },
+      {
+        name: '治癒',
+        group: 'ニューエイジ',
+        type: '支援',
+        recoil: '6',
+        specialty: '《手当》',
+        target: '単体',
+        effect:
+          '指定特技の判定に成功すると、対象の部位ダメージを1つ回復できる。ただし、この判定の達成値には[対象の部位ダメージ数]だけのマイナス修正がつく。',
+      },
+      {
+        name: '突然変異',
+        group: 'ニューエイジ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'ムシ、ケモノ、ミュータントのグループアビリティからランダムに１つアビリティを習得できる。ただし、その反動が1増加する。常駐タイプのアビリティを習得した場合、【精神力】が2点減少する。',
+      },
+      {
+        name: '瞬間移動',
+        group: 'ニューエイジ',
+        type: '補助',
+        recoil: '5',
+        specialty: '-',
+        target: '-',
+        effect:
+          '回避判定に組み合わせて使用する。回避に成功したとき、あなた以外のキャラクター1人も回避できたことになる。このアビリティを使用する場合、あなたが攻撃の対象でない場合にも回避判定を行える。',
+      },
+    ],
+  },
+  {
+    name: 'キズモノ',
+    id: 'wounded',
+    list: [
+      {
+        name: '銀の腕',
+        group: 'キズモノ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'あなたはダメージを受ける時、先にそのダメージの命中部位を決める。＜キズ＞の部位に攻撃が命中した場合、そのダメージを無効化する。',
+      },
+      {
+        name: '克服',
+        group: 'キズモノ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'ギャップを2列塗りつぶすことができる。塗りつぶされたギャップは代用判定の際数えない。',
+      },
+      {
+        name: '肉を斬らせて',
+        group: 'キズモノ',
+        type: '割込み',
+        recoil: '4',
+        specialty: '《耐える》',
+        target: '自身',
+        effect:
+          '自身が部位ダメージを受けた時に使用できる。指定特技の判定に成功すると自身は追加行動を得る。',
+      },
+      {
+        name: '悪運',
+        group: 'キズモノ',
+        type: '割込み',
+        recoil: '3',
+        specialty: 'なし',
+        target: '単体',
+        effect:
+          '対象の判定の直後に使用。サイコロ1つの出目をマイナス1する。シナリオ3回。',
+      },
+      {
+        name: 'リハビリ',
+        group: 'キズモノ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          '＜キズ＞に隣接する8つのアクションの《特技》から１つ選び追加で習得する。このアクションは使用可能になる。',
+      },
+      {
+        name: '刺し違え',
+        group: 'キズモノ',
+        type: '割込み',
+        recoil: '5',
+        specialty: '《撃つ》',
+        target: '単体',
+        effect:
+          'あなたが部位ダメージを受けた時に割り込んで使用する。指定特技の判定に成功すると、対象に、受けた部位ダメージと同じ部位ダメージを与える。',
+      },
+    ],
+  },
+  {
+    name: 'センシ',
+    id: 'fighter',
+    list: [
+      {
+        name: '渾身撃',
+        group: 'センシ',
+        type: '攻撃',
+        recoil: '3',
+        specialty: '自由',
+        target: '単体',
+        effect:
+          '指定特技の判定に成功すると対象に[装備している武器1つの攻撃力+3]点のダメージを与える。',
+      },
+      {
+        name: '追撃',
+        group: 'センシ',
+        type: '補助',
+        recoil: '1',
+        specialty: '-',
+        target: '-',
+        effect:
+          '命中判定に組み合わせて使用する。命中した攻撃のダメージを1増加させる。',
+      },
+      {
+        name: '切り返し',
+        group: 'センシ',
+        type: '割込み',
+        recoil: '1',
+        specialty: 'なし',
+        target: '自身',
+        effect: '命中判定の直後に使用する。その判定を振り直す。',
+      },
+      {
+        name: '急所狙い',
+        group: 'センシ',
+        type: '補助',
+        recoil: '2',
+        specialty: '-',
+        target: '-',
+        effect:
+          '命中判定に組み合わせて使用する。その攻撃によるダメージは軽減されない。',
+      },
+      {
+        name: 'なぎ払い',
+        group: 'センシ',
+        type: '攻撃',
+        recoil: '3',
+        specialty: '《振る》',
+        target: '3体',
+        effect:
+          '指定特技の判定に成功すると、3体までの対象に装備中の武器1つの[攻撃力]点のダメージを与える。',
+      },
+      {
+        name: '一刀流',
+        group: 'センシ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '-',
+        effect: '装備している武器が1つだけの場合、武器の攻撃力が1点増加する。',
+      },
+    ],
+  },
+  {
+    name: 'スカウト',
+    id: 'scout',
+    list: [
+      {
+        name: '偵察',
+        group: 'スカウト',
+        type: '割込み',
+        recoil: '5',
+        specialty: '《見つける》',
+        target: '全体',
+        effect:
+          'ランダムエンカウントの表を振る直前に使用する。指定特技の判定に成功すると、表を振った後に、その遭遇を無視できるようになる。',
+      },
+      {
+        name: 'マルチワーク',
+        group: 'スカウト',
+        type: '割込み',
+        recoil: '2',
+        specialty: '《休まない》',
+        target: '自身',
+        effect:
+          '探索フェイズの行動前に使用する。判定に成功すると、行動を2回行うことができる。同じ行動を選んでもよい。',
+      },
+      {
+        name: 'とんずら',
+        group: 'スカウト',
+        type: '支援',
+        recoil: '3',
+        specialty: '《逃げる》',
+        target: '全体',
+        effect:
+          '指定特技の判定に成功すると、味方を好きなだけ選んで（自身含む）戦闘から撤退させることができる。ただし、この判定の達成値にはマイナス[自身以外に撤退させる人数]の修正がつく。',
+      },
+      {
+        name: '踏破',
+        group: 'スカウト',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect: '突破判定及び探索表による判定の達成値にプラス1の修正がつく。',
+      },
+      {
+        name: '先手必勝',
+        group: 'スカウト',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '-',
+        effect:
+          '先制判定の達成値にプラス1の修正がつく。先攻で攻撃した場合のみ、あなたの与えるダメージにプラス1の修正がつく。',
+      },
+      {
+        name: '小器用',
+        group: 'スカウト',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect: 'あなたは補助タイプの特技を2つまで組み合わせられるようになる。',
+      },
+    ],
+  },
+  {
+    name: 'ハンター',
+    id: 'hunter',
+    list: [
+      {
+        name: '毒矢',
+        group: 'ハンター',
+        type: '攻撃',
+        recoil: '3',
+        specialty: '《撃つ》',
+        target: '単体',
+        effect:
+          '指定特技の判定に成功すると、1点のダメージを与える。その結果対象の【体力】が減少した場合、対象に『毒』の変調を与える。',
+      },
+      {
+        name: '狙い撃ち',
+        group: 'ハンター',
+        type: '補助',
+        recoil: '1',
+        specialty: '-',
+        target: '-',
+        effect:
+          '命中判定に組み合わせて使用する。攻撃が命中した時、命中する部位が必ず任意となる。',
+      },
+      {
+        name: '罠設置',
+        group: 'ハンター',
+        type: '攻撃',
+        recoil: '2',
+        specialty: '《罠》',
+        target: '単体',
+        effect: '指定特技の判定に成功すると、対象に『捕縛』の変調を与える。',
+      },
+      {
+        name: '打込み',
+        group: 'ハンター',
+        type: '補助',
+        recoil: '2',
+        specialty: '-',
+        target: '-',
+        effect:
+          '命中判定に組み合わせて使用する。攻撃が命中した時、対象に『重傷』の変調を与える。',
+      },
+      {
+        name: '火炎瓶',
+        group: 'ハンター',
+        type: '攻撃',
+        recoil: '3',
+        specialty: '《投げる》',
+        target: '単体',
+        effect:
+          '指定特技の判定に成功すると、対象に『炎上』の変調と1点のダメージを与える。',
+      },
+      {
+        name: '影牢',
+        group: 'ハンター',
+        type: '支援',
+        recoil: '3',
+        specialty: '《追い込む》',
+        target: '単体',
+        effect:
+          '指定特技の判定に成功すると、[対象が受けている変調]点のダメージを与える。',
+      },
+    ],
+  },
+  {
+    name: 'ハカセ',
+    id: 'professor',
+    list: [
+      {
+        name: '観察眼',
+        group: 'ハカセ',
+        type: '支援',
+        recoil: '3',
+        specialty: '《考える》',
+        target: '単体',
+        effect: '指定特技の判定に成功すると、対象に『暴露』の変調を与える。',
+      },
+      {
+        name: '弱点看破',
+        group: 'ハカセ',
+        type: '支援',
+        recoil: '3',
+        specialty: '《見つける》',
+        target: '単体',
+        effect:
+          '指定特技の判定に成功すると、そのラウンドの間、味方の与えるダメージは軽減されない。',
+      },
+      {
+        name: '戦術',
+        group: 'ハカセ',
+        type: '補助',
+        recoil: '3',
+        specialty: '-',
+        target: '全体',
+        effect:
+          '先制判定に組み合わせて使用する。先制判定の達成値にプラス1の修正がつく。先制判定に成功した場合、味方全員が先攻で行動できる。',
+      },
+      {
+        name: '爆発物',
+        group: 'ハカセ',
+        type: '攻撃',
+        recoil: '4',
+        specialty: '《科学》',
+        target: '全体',
+        effect:
+          '指定特技の判定に成功すると敵全体に2点のダメージを与える。判定に失敗した場合、味方全員に2点のダメージを与える。この攻撃によるダメージは軽減できない。',
+      },
+      {
+        name: '応用と実践',
+        group: 'ハカセ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'あなたの特技リストは技術と環境の分野が繋がっているものとして扱うことができる。',
+      },
+      {
+        name: 'ピタゴラ',
+        group: 'ハカセ',
+        type: '支援',
+        recoil: '2',
+        specialty: '《地理》',
+        target: '単体',
+        effect:
+          '指定特技の判定に成功すると、ラウンドの終了時に対象に2点のダメージを与える。この攻撃によるダメージは軽減できない。周囲の環境を利用した攻撃を行う。',
+      },
+    ],
+  },
+  {
+    name: 'ショクニン',
+    id: 'worker',
+    list: [
+      {
+        name: '改造',
+        group: 'ショクニン',
+        type: '支援',
+        recoil: '3',
+        specialty: '《作る》',
+        target: 'アイテム',
+        effect:
+          '武器1つを対象にする。指定特技の判定に成功すると、セッション中その武器の攻撃力にプラス1の修正を与える。',
+      },
+      {
+        name: '愛刀',
+        group: 'ショクニン',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          '装備している武器1つを愛刀として指定する。愛刀を使った命中判定の達成値にプラス1の修正がつく。さらに愛刀の[攻撃力]が1点増加する。',
+      },
+      {
+        name: '限界突破',
+        group: 'ショクニン',
+        type: '補助',
+        recoil: '-',
+        specialty: '-',
+        target: '-',
+        effect:
+          '武器を使用した攻撃の命中判定に組み合わせて使用する。攻撃に使用する武器の[攻撃力]を2倍にする。攻撃が終わった後、その武器は破壊される。',
+      },
+      {
+        name: '目利き',
+        group: 'ショクニン',
+        type: '割込み',
+        recoil: '1',
+        specialty: '《鑑定》',
+        target: '-',
+        effect:
+          '指定特技の判定に成功すると、ランダムにアイテムを入手する時の表の出目にプラス1かマイナス1の修正をつけることができる。',
+      },
+      {
+        name: '修理',
+        group: 'ショクニン',
+        type: '割込み',
+        recoil: '2',
+        specialty: '《耐える》',
+        target: 'アイテム',
+        effect:
+          '武器が破壊される時に割り込んで使用する。指定特技の判定に成功した場合、1D6を振る。5か6の出目が出た場合、その武器を修理しすぐにもう一度装備する。',
+      },
+      {
+        name: '試作品',
+        group: 'ショクニン',
+        type: '攻撃',
+        recoil: '3',
+        specialty: '《作る》',
+        target: '単体',
+        effect:
+          '食料・消耗品以外のアイテムを1つ消費する。指定特技の判定に成功すると、対象に1D6点のダメージを与える。',
+      },
+    ],
+  },
+  {
+    name: 'ホープ',
+    id: 'hope',
+    list: [
+      {
+        name: 'みなぎる力',
+        group: 'ホープ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect: 'あなたの【精神力】にプラス3する。',
+      },
+      {
+        name: '希望の光',
+        group: 'ホープ',
+        type: '割込み',
+        recoil: '3',
+        specialty: 'なし',
+        target: '単体',
+        effect:
+          '対象の判定の直後に使用。サイコロ1つの出目をプラス1する。シナリオ3回。',
+      },
+      {
+        name: '幸運の星',
+        group: 'ホープ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect: 'あなたの行う行為判定では出目が6,5の時にもスペシャルとなる。',
+      },
+      {
+        name: '揺らぐ運命',
+        group: 'ホープ',
+        type: '割込み',
+        recoil: '5',
+        specialty: 'なし',
+        target: '単体',
+        effect: '対象の行為判定の直後に使用。その判定を振り直す。',
+      },
+      {
+        name: '努力',
+        group: 'ホープ',
+        type: '割込み',
+        recoil: '3',
+        specialty: '《休まない》',
+        target: '単体',
+        effect:
+          '対象が何らかの表を振った直後に使用。その出目をプラス1かマイナス1する。',
+      },
+      {
+        name: '因果応報',
+        group: 'ホープ',
+        type: '補助',
+        recoil: '6',
+        specialty: '-',
+        target: '-',
+        effect:
+          '回避判定に組み合わせて使用する。回避が成功した場合、あなたが受ける予定の攻撃の対象を攻撃者に移し替える。',
+      },
+    ],
+  },
+  {
+    name: 'ママ',
+    id: 'mama',
+    list: [
+      {
+        name: '声援',
+        group: 'ママ',
+        type: '割込み',
+        recoil: '3',
+        specialty: '《伝える》',
+        target: '単体',
+        effect:
+          '自分以外の判定の直前に使用する。指定特技の判定に成功すると対象の達成値にプラス2の修正がつく。',
+      },
+      {
+        name: 'ごちそう',
+        group: 'ママ',
+        type: '支援',
+        recoil: '2',
+        specialty: '《料理》',
+        target: '全体',
+        effect:
+          '人数分の食料を消費する。指定特技の判定に成功すると全員の【気力】が1D6点増加し、【体力】が1点増加する。戦闘中は使用できない。',
+      },
+      {
+        name: '激励',
+        group: 'ママ',
+        type: '支援',
+        recoil: '2',
+        specialty: '《叫ぶ》',
+        target: '単体',
+        effect: '指定特技の判定に成功すると対象の【気力】が3点増加する。',
+      },
+      {
+        name: 'ちちんぷいぷい',
+        group: 'ママ',
+        type: '割込み',
+        recoil: '5',
+        specialty: '《手当》',
+        target: '単体',
+        effect: '指定特技の判定に成功すると、対象の【体力】が3点増加する。',
+      },
+      {
+        name: '節約',
+        group: 'ママ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: 'アイテム',
+        effect:
+          '自身が消耗品を使用した時に、1D6を振る。5か6が出た場合、そのアイテムは失われない。',
+      },
+      {
+        name: 'なだめる',
+        group: 'ママ',
+        type: '割込み',
+        recoil: '2',
+        specialty: '《止める》',
+        target: '単体',
+        effect:
+          '対象が本気状態を宣言した時に使用する。指定特技の判定に成功すると、そのラウンドの間、＜ヌシ＞は本気状態になれない。',
+      },
+    ],
+  },
+];
+
+export const itemsColumns = [
+  { title: '名前', field: 'name' },
+  { title: '個数', field: 'number', type: 'numeric' as const },
+  { title: '価格', field: 'j', type: 'numeric' as const },
+  { title: '重量', field: 'weight', type: 'numeric' as const },
+  { title: 'タイプ', field: 'type' },
+  { title: '部位', field: 'area' },
+  { title: '特技', field: 'specialty' },
+  { title: '対象', field: 'target' },
+  { title: '特性', field: 'trait' },
+  { title: '効果', field: 'effect' },
+];
+
+export const equipmentColumns = [
+  { title: 'タイプ', field: 'type' },
+  { title: '特技', field: 'specialty' },
+  { title: '対象', field: 'target' },
+  { title: '特性', field: 'trait' },
+  { title: '効果', field: 'effect' },
+];
+
+export const statusAilments = [
+  {
+    name: '毒',
+    effect:
+      'ラウンドの終了時にキャラクターの【体力】が1D6点減少します。 部位ダメージは発生しません。',
+  },
+  {
+    name: '炎上',
+    effect: 'ラウンドの終了時に【体力】と【気力】が1点減少します。',
+  },
+  {
+    name: '麻痺',
+    effect:
+      'キャラクターが行う全ての行為判定の達成値にマイナス1の修正がつきます。',
+  },
+  {
+    name: '捕縛',
+    effect: 'キャラクターが行う命中判定の達成値にマイナス1の修正がつきます。',
+  },
+  {
+    name: '転倒',
+    effect: 'キャラクターが行う回避判定の達成値にマイナス2の修正がつきます。',
+  },
+  {
+    name: '重傷',
+    effect: 'キャラクターが行う死亡判定にマイナス1の修正がつきます。',
+  },
+  {
+    name: '暴露',
+    effect:
+      'キャラクターのデータが公開されます。また、攻撃により受けるダメージが 1点増加します。',
+  },
+];
+
+// サプリメント1
+export const strangeFieldsClassList = [
+  { name: 'アキンド', id: 'merchant' },
+  { name: 'カイヌシ', id: 'tamer' },
+  { name: 'オガミヤ', id: 'sherman' },
+  { name: 'アイドル', id: 'idol' },
+  { name: 'ヤセイジ', id: 'wild' },
+];
+
+export const strangeFieldsAbilityList = [
+  {
+    name: '汎用グループ',
+    id: 'general',
+    list: [
+      {
+        name: '休息',
+        group: '汎用',
+        type: '支援',
+        recoil: '0',
+        specialty: '《休む》',
+        target: '自身',
+        effect:
+          '指定特技の判定に成功すると、自身の【気力】を[精神力÷2]点回復する。',
+      },
+    ],
+  },
+  {
+    name: 'ビッグ',
+    id: 'big',
+    list: [
+      {
+        name: '強靭',
+        group: 'ビッグ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect: '死亡判定の達成値にプラス1の修正がつく。',
+      },
+    ],
+  },
+  {
+    name: 'チビ',
+    id: 'little',
+    list: [
+      {
+        name: '大樹の陰',
+        group: 'チビ',
+        type: '割込み',
+        recoil: '3',
+        specialty: '《かわす》',
+        target: '自身',
+        effect:
+          '対象：全体の攻撃の命中判定後に使用する。指定特技の判定に成功すると、攻撃対象から自身を外すことが出来る。',
+      },
+    ],
+  },
+  {
+    name: 'オトナ',
+    id: 'adult',
+    list: [
+      {
+        name: '昔とった杵柄',
+        group: 'オトナ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'オトナ以外のクラスの【アビリティ】を1つ取得する。タイプ：常駐のアビリティおよびエネミーアビリティは取得できない。',
+      },
+    ],
+  },
+  {
+    name: 'ニューエイジ',
+    id: 'newage',
+    list: [
+      {
+        name: '輪廻転生',
+        group: 'ニューエイジ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          '任意の特技を1つ追加で習得する。さらに、ギャップを1列塗りつぶすことができる。',
+      },
+    ],
+  },
+  {
+    name: 'キズモノ',
+    id: 'wounded',
+    list: [
+      {
+        name: '凶運',
+        group: 'キズモノ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          '自分の行う行為判定はゾロ目で成功した場合スペシャル、ゾロ目で失敗した場合ファンブルになる。',
+      },
+    ],
+  },
+  {
+    name: 'センシ',
+    id: 'fighter',
+    list: [
+      {
+        name: '捨て身',
+        group: 'センシ',
+        type: '補助',
+        recoil: '1',
+        specialty: '-',
+        target: '-',
+        effect:
+          '命中判定に組み合わせて使用する。【体力】を1d6点消費する。[消費した体力]点のダメージを追加する。体力が0未満になるようには消費できない。',
+      },
+    ],
+  },
+  {
+    name: 'スカウト',
+    id: 'scout',
+    list: [
+      {
+        name: '撹乱',
+        group: 'スカウト',
+        type: '補助',
+        recoil: '2',
+        specialty: '-',
+        target: '-',
+        effect:
+          '組み合わせた攻撃が命中した場合、対象はそのラウンドの間、【対象：全体】のアビリティが使えなくなる。',
+      },
+    ],
+  },
+  {
+    name: 'ハンター',
+    id: 'hunter',
+    list: [
+      {
+        name: '猟師',
+        group: 'ハンター',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          '探索フェイズにあなたが食料を手に入れる時、余分に1J得ることができる。また、戦闘中以外の支援行動で1J(実質2J）手に入れることができるようになる。',
+      },
+    ],
+  },
+  {
+    name: 'ハカセ',
+    id: 'professor',
+    list: [
+      {
+        name: '秀才',
+        group: 'ハカセ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          '【気力】を5点消費することで、あなたは全ての《特技》の隣に《雑学》があるものとして代用判定できる（つまり、《雑学》での目標値が6となる）。',
+      },
+    ],
+  },
+  //- {
+  //-   "name": "ショクニン",
+  //-   "id": "worker",
+  //-   "list": [
+
+  //-   ]
+  //- },
+  {
+    name: 'ホープ',
+    id: 'hope',
+    list: [
+      {
+        name: '奥の手',
+        group: 'ホープ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          '1サイクル（ラウンド）だけ、任意の【アビリティ】を1つ取得する。セッション中一度だけ使用出来る。エネミーアビリティは取得できない。',
+      },
+    ],
+  },
+  //- {
+  //-   "name": "ママ",
+  //-   "id": "mama",
+  //-   "list": [
+  //-   ]
+  //- },
+  {
+    name: 'アキンド',
+    id: 'merchant',
+    list: [
+      {
+        name: '値切り',
+        group: 'アキンド',
+        type: '割込み',
+        recoil: '3',
+        specialty: '《斬る》',
+        target: 'アイテム',
+        effect:
+          'アイテムを1つ買う時に割り込んで使用する。成功するとそのアイテムの価格を[成功度]J引き下げる。価格の最低値は0。成功度0のときは1J安く買える。',
+      },
+      {
+        name: 'お届け！',
+        group: 'アキンド',
+        type: '割込み',
+        recoil: '3',
+        specialty: '《投げる》',
+        target: '単体',
+        effect:
+          '指定特技の判定に成功すると、自身の所持しているアイテムを1つ目標に渡す。ただしそれを渡すことによって相手が所持限界を超えてしまう場合にはこの判定は必ず失敗する。「肩掛けカバン」「手提げ袋」以外の袋の中のものを渡すことはできない。',
+      },
+      {
+        name: 'おおかばん',
+        group: 'アキンド',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect: '所持限界を3増やす。',
+      },
+      {
+        name: '魔法のかばん',
+        group: 'アキンド',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'あなたは「肩掛けカバン」「手提げ袋」以外の袋でも、袋の中のアイテムをすでに取り出しているかのように扱える。',
+      },
+      {
+        name: '時は金なり',
+        group: 'アキンド',
+        type: '割込み',
+        recoil: '5',
+        specialty: '《閃く》',
+        target: 'アイテム',
+        effect:
+          '指定特技の判定に成功すると、あなたはタイプが支援のアイテムを割込みのタイミングで使用出来る。',
+      },
+      {
+        name: '人脈',
+        group: 'アキンド',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'あなたには冒険商人の仲間がいる。セッション中1度だけ、探索フェイズにその商人からアイテムを1つ買うことができる。',
+      },
+    ],
+  },
+  {
+    name: 'カイヌシ',
+    id: 'tamer',
+    list: [
+      {
+        name: '森へおかえり',
+        group: 'カイヌシ',
+        type: '割込み',
+        recoil: '3',
+        specialty: '《伝える》',
+        target: '全体',
+        effect:
+          '使用時に食料を[敵の数÷2]個消費する。指定特技の判定に成功すると、敵を森に帰らせ戦闘を終了させることができる。＜ヌシ＞との戦闘では使用できない。',
+      },
+      {
+        name: '群れ攻撃',
+        group: 'カイヌシ',
+        type: '攻撃',
+        recoil: '0',
+        specialty: '《叫ぶ》',
+        target: '単体',
+        effect:
+          '食料を2つ消費する。指定特技の判定に成功すると、2点のダメージを与える。さらに『捕縛』の変調を与える。群れに指示し、敵にまとわりつかせる。',
+      },
+      {
+        name: '食料調達',
+        group: 'カイヌシ',
+        type: '支援',
+        recoil: '3',
+        specialty: '自由',
+        target: '自身',
+        effect: '指定特技の判定に成功すると、[1D6]Jを得る。',
+      },
+      {
+        name: '相棒',
+        group: 'カイヌシ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'あなたは《相棒》の特技を追加で習得する。判定直前に食料を1つ消費した場合、あなたは全ての《特技》の隣に《相棒》があるものとして代用判定を行える（つまり、目標値が6となる）。あなたが最初に部位ダメージを受けるとき、それを無効化する代わりにこのセッション中【相棒】は使用不能となる。',
+      },
+      {
+        name: 'おつかい',
+        group: 'カイヌシ',
+        type: '支援',
+        recoil: '1',
+        specialty: '《相棒》',
+        target: '自身',
+        effect:
+          '指定特技の判定に成功した場合、アイテムを1つ選ぶ。あなたは価格の2倍個の食料を消費してそのアイテムを即座に入手できる。',
+      },
+      {
+        name: 'コンビネーション',
+        group: 'カイヌシ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          '【相棒】のアビリティが使用可能な時、あなたの与えるダメージは1点増加する。',
+      },
+    ],
+  },
+  {
+    name: 'オガミヤ',
+    id: 'sherman',
+    list: [
+      {
+        name: '呪術',
+        group: 'オガミヤ',
+        type: '攻撃',
+        recoil: '3',
+        specialty: '《歌う》',
+        target: '単体',
+        effect: '指定特技の判定に成功すると、対象に『毒』の変調を与える。',
+      },
+      {
+        name: '結界',
+        group: 'オガミヤ',
+        type: '支援',
+        recoil: '3',
+        specialty: '《地理》',
+        target: '全体',
+        effect:
+          'そのラウンド中、味方の命中判定と回避判定にプラス1の修正を与える。',
+      },
+      {
+        name: '星見',
+        group: 'オガミヤ',
+        type: '支援',
+        recoil: '5',
+        specialty: '《見つける》',
+        target: '単体',
+        effect:
+          'キャンプフェイズ・探索フェイズに使用出来る。指定特技の判定に成功すると、サイコロを6個振り、好きな順番で左から右へ一列に並べる。今後、行為判定を行うたびに2D6を振る代わりに左から順に2個ずつサイコロをとり、その出目がでたものとして扱う。この効果は6個のサイコロを使い切るまで（行為判定を3回行うまで）持続する。',
+      },
+      {
+        name: '遠見',
+        group: 'オガミヤ',
+        type: '支援',
+        recoil: '5',
+        specialty: '《鑑定》',
+        target: '単体',
+        effect: 'ヌシに『暴露』の変調を与える。戦闘中以外にも使用可能。',
+      },
+      {
+        name: '未来視',
+        group: 'オガミヤ',
+        type: '割込み',
+        recoil: '3',
+        specialty: '《予感》',
+        target: '単体',
+        effect:
+          'ファンブルが発生した時に使用出来る。指定特技の判定に成功すると、その判定を振り直す。',
+      },
+      {
+        name: '兎歩',
+        group: 'オガミヤ',
+        type: '支援',
+        recoil: '2',
+        specialty: '《歩く》',
+        target: '単体',
+        effect:
+          '指定特技の判定に成功すると、対象がそのラウンド中に獲得した追加行動を1回分減らす。',
+      },
+    ],
+  },
+  {
+    name: 'アイドル',
+    id: 'idol',
+    list: [
+      {
+        name: '貴方だけの歌',
+        group: 'アイドル',
+        type: '支援',
+        recoil: '5',
+        specialty: '《歌う》',
+        target: '単体',
+        effect:
+          '戦闘中には使用不可。自身には使用できない。指定特技の判定に成功すると、対象の【気力】を2D6点増加させる。',
+      },
+      {
+        name: 'ファンクラブ',
+        group: 'アイドル',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect: 'キャンプフェイズでの行動回数が１回増える。',
+      },
+      {
+        name: '応援歌',
+        group: 'アイドル',
+        type: '支援',
+        recoil: '5',
+        specialty: '《歌う》',
+        target: '全体',
+        effect:
+          '指定特技の判定に成功すると、そのサイクル（ラウンド）の間、自身を含む味方全員の行為判定にプラス１の修正を与える。',
+      },
+      {
+        name: 'ダンスレッスン',
+        group: 'アイドル',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          '脚部の両側２列のギャップ（DE)を塗りつぶす。塗りつぶされたギャップは代用判定の際数えない。',
+      },
+      {
+        name: '天性の輝き',
+        group: 'アイドル',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect: '【アビリティ】の反動にマイナス1する。0未満にはならない。',
+      },
+      {
+        name: '熱狂のビート',
+        group: 'アイドル',
+        type: '支援',
+        recoil: '5',
+        specialty: '《歌う》',
+        target: '全体',
+        effect:
+          '戦闘中にのみ使用可能。指定特技の判定に成功すると、そのラウンドの間、味方全員の命中判定とダメージにプラス１の修正を与える。',
+      },
+    ],
+  },
+  {
+    name: 'ヤセイジ',
+    id: 'wild',
+    list: [
+      {
+        name: 'ケモノの力',
+        group: 'ヤセイジ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'ケモノグループのアビリティを1つ選んで習得する。【ケモノの力：鋭角】のように指定し、指定アビリティごとに別のアビリティとして扱う。これによって習得したアビリティは反動が1点増加する。',
+      },
+      {
+        name: '森の申し子',
+        group: 'ヤセイジ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          '探索フェイズのサイクル開始時に、[現在の経過サイクル]点の【気力】を増加させる。',
+      },
+      {
+        name: '抜刀牙',
+        group: 'ヤセイジ',
+        type: '攻撃',
+        recoil: '本文',
+        specialty: '《噛む》',
+        target: '単体',
+        effect:
+          '指定特技の判定に成功した場合、1D6点のダメージを与える。攻撃終了後、この1D6と同じだけの気力を失う。判定に失敗した場合にも1D6点の気力を消費する。',
+      },
+      {
+        name: 'よつあし',
+        group: 'ヤセイジ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          '何も装備していない場合、あなたの与えるダメージが1点増加する。また、回避判定にプラス1の修正がつく。',
+      },
+      {
+        name: 'おたけび',
+        group: 'ヤセイジ',
+        type: '支援',
+        recoil: '1',
+        specialty: '《叫ぶ》',
+        target: '自身',
+        effect:
+          '以降、ラウンド開始時に1D6を振る。その出目の数だけ、【気力】を消費する。その出目の数だけ、そのラウンドにあなたの与えるダメージが増加する。この効果はあなたが『無力化』状態になるまで持続する。',
+      },
+      {
+        name: '超回復',
+        group: 'ヤセイジ',
+        type: '割込み',
+        recoil: '5',
+        specialty: '《塞ぐ》',
+        target: '自身',
+        effect: '指定特技の判定に成功すると、自身の【体力】が1D6点増加する。',
+      },
+    ],
+  },
+];
+
+export const backboneColumns = [
+  { title: '名前', field: 'name' },
+  { title: 'タイプ', field: 'type' },
+  { title: '効果', field: 'effect' },
+];
+
+export const backboneList = [
+  {
+    name: 'ペット',
+    cp: '3',
+    type: '常駐',
+    effect:
+      'アイテムの「ペット」を１つ入手する。あなたはペットを飼っている。このペットで買い物することはできない。',
+  },
+  {
+    name: '病気の身内',
+    cp: '5',
+    type: '割り込み',
+    effect:
+      'セッション中1度だけ、自身の振ったダイスを裏返すことができる(1ゾロならば6ゾロになる）。 あなたには家族同然に思っている人物がいる。その人物は病気である。貴方が守ってあげなくてはならない。 セッション終了時に、「コカの葉」など【体力】の回復するアイテムを消費しないと、病気の身内は死亡する。',
+  },
+  {
+    name: '駆逐系',
+    cp: '15',
+    type: '常駐',
+    effect:
+      'あなたは＜ヌシ＞に大切な人たちを蹂躙された過去がある。あなたの与えるダメージが1点上昇する。キャンプフェイズの行動で、墓参りを行うこと（演出だけしてパス扱い）。',
+  },
+  {
+    name: '親友',
+    cp: '20',
+    type: '常駐',
+    effect:
+      'あなたはキャンプフェイズに2回行動できる。あなたには親友がいて、キャンプフェイズに準備を手伝ってくれる。',
+  },
+];
+
+export const expCheckPoints = [
+  { name: '生き残った！', point: '3点' },
+  { name: 'キャンプに希望を与えた', point: '1点' },
+  { name: '失敗を糧にした', point: 'ファンブル1回につき1点' },
+  { name: '＜ヌシ＞を倒した', point: 'ヌシのレベル点' },
+  { name: '＜チェックポイント＞を訪れた', point: '1箇所につき1点' },
+  { name: '障害を突破した', point: '1つにつき1点' },
+  {
+    name: 'リミットよりも早く＜ヌシ＞に挑んだ',
+    point: '1サイクル早いごとに1点',
+  },
+  { name: 'よいロールプレイをした', point: '1点' },
+  { name: '他の人を助けた', point: '1点' },
+  { name: 'セッションの進行を助けた', point: '1点' },
+  { name: '新たなアイテムを手に入れた', point: '1点' },
+  { name: 'キャンプの仲間と友情を育んだ', point: '1点' },
+];
+
+export const recordsColumns = [
+  { title: '経験点', field: 'exp', type: 'numeric' as const },
+  { title: '称号', field: 'trophy' },
+];
+export const trophyList = [
+  {
+    name: 'パッション',
+    id: 'passion',
+    description: '元気に熱くフィールドに向かっていったものに与えられる称号',
+  },
+  {
+    name: 'クール',
+    id: 'cool',
+    description: '冷静に物事を見つめていたものに与えられる称号',
+  },
+  {
+    name: 'ピンク',
+    id: 'pink',
+    description: '甘い雰囲気や恋をしていたものに与えられる称号',
+  },
+  {
+    name: '癒し',
+    id: 'healer',
+    description: 'のんびり皆を和ませていたものに与えられる称号',
+  },
+  {
+    name: 'スター',
+    id: 'star',
+    description: '大きな活躍をしたものに与えられる称号',
+  },
+  {
+    name: 'ハシラ',
+    id: 'pillar',
+    description: '堅実に皆を支えていたものに与えられる称号。',
+  },
+  {
+    name: 'サムライ',
+    id: 'samurai',
+    description: '戦闘で活躍したものに与えられる称号。',
+  },
+  {
+    name: 'シノビ',
+    id: 'sinobi',
+    description: '探索で活躍したものに与えられる称号。',
+  },
+  {
+    name: 'ボケ',
+    id: 'clown',
+    description: '笑いで盛り上げたものに与えられる称号。',
+  },
+  {
+    name: 'ツッコミ',
+    id: 'thrust',
+    description: 'ボケに流されず軌道修正をきちんとしたものに与えられる称号。',
+  },
+];
+
+export const trophyAbilityList = [
+  {
+    name: 'パッション',
+    id: 'passion',
+    list: [
+      {
+        name: '気合ため',
+        group: 'パッション',
+        type: '支援',
+        recoil: '2',
+        specialty: '《叫ぶ》',
+        target: '自身',
+        effect:
+          '指定特技の判定に成功すると、次に行う攻撃のダメージを2倍にする。',
+      },
+      {
+        name: '期待に応える',
+        group: 'パッション',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'あなたが他者のアビリティやアイテムの効果で気力を獲得するときに余分に1点多く獲得できる。',
+      },
+      {
+        name: 'まだまだっ',
+        group: 'パッション',
+        type: '割込み',
+        recoil: '3',
+        specialty: '《跳ぶ》',
+        target: '自身',
+        effect:
+          'エネミーを倒したときに使用できる。指定特技の判定に成功すると、追加行動を得る。',
+      },
+    ],
+  },
+  {
+    name: 'クール',
+    id: 'cool',
+    list: [
+      {
+        name: '完璧な振る舞い',
+        group: 'クール',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'ダイスを振る前に宣言することで判定を自動成功する。成功度は1として扱う。シナリオ１回。',
+      },
+      {
+        name: '手間をかけさせるな',
+        group: 'クール',
+        type: '割込み',
+        recoil: '5',
+        specialty: '《掴む》',
+        target: '単体',
+        effect:
+          '自身以外がファンブルを振った時に割込んで使用する。指定特技の判定に成功した場合、対象はファンブル表を振らなくてもよい。',
+      },
+      {
+        name: '計算通り',
+        group: 'クール',
+        type: '割込み',
+        recoil: '5',
+        specialty: '《見つける》',
+        target: '自身',
+        effect:
+          '自身がファンブルを振った時に割込んで使用する。指定特技の判定に成功した場合、判定は成功となる',
+      },
+    ],
+  },
+  {
+    name: 'ピンク',
+    id: 'pink',
+    list: [
+      {
+        name: '秘密のレッスン',
+        group: 'ピンク',
+        type: '割込み',
+        recoil: '3',
+        specialty: '《伝える》',
+        target: '単体',
+        effect:
+          '対象が判定を行う直前に割込んで使用できる。指定特技の判定に成功すると、対象が行う次の判定の間のみアビリティ使用者の所持している特技を習得させる。',
+      },
+      {
+        name: '真っ赤な誓い',
+        group: 'ピンク',
+        type: '割込み',
+        recoil: '3',
+        specialty: '《閃く》',
+        target: '単体',
+        effect:
+          '指定特技の判定に成功すると、対象にキャラクター1人のダメージを肩代わりさせる',
+      },
+      {
+        name: '手と手を取って',
+        group: 'ピンク',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'このアビリティを習得したときにキャラクターを1人選ぶ。そのキャラクターと連携攻撃行うとき、補助アビリティを2つまで選択して組み合わせることができるようになる。',
+      },
+    ],
+  },
+  {
+    name: '癒し',
+    id: 'healer',
+    list: [
+      {
+        name: '暖かい時間',
+        group: '癒し',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '単体',
+        effect:
+          '休憩表であなたが選んだ相手、もしくはあなたを選んだ相手は【気力】を1点増加させる。',
+      },
+      {
+        name: 'のんびりお散歩',
+        group: '癒し',
+        type: '割込み',
+        recoil: '2',
+        specialty: '《歩く》',
+        target: '自身',
+        effect:
+          '探索フェイズにいつでも割込んで使用できる。指定特技の判定に成功すると、あなたは休憩表を一回振る',
+      },
+      {
+        name: '陽だまりの庭',
+        group: '癒し',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect: 'キャンプフェイズでの判定の達成値にプラス1の修正を得る',
+      },
+    ],
+  },
+  {
+    name: 'スター',
+    id: 'star',
+    list: [
+      {
+        name: 'ピンチのときほど',
+        group: 'スター',
+        type: '割込み',
+        recoil: '-',
+        specialty: '《閃く》',
+        target: '自身',
+        effect:
+          'ファンブルを振った時に使用できる。指定特技の判定に成功すると、ファンブルをスペシャルに変更する。シナリオ1回。',
+      },
+      {
+        name: 'チャンスは逃さない',
+        group: 'スター',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'あなたが命中判定でスペシャルをしたとき、与えるダメージにプラス1D6する',
+      },
+      {
+        name: 'とどめの一撃',
+        group: 'スター',
+        type: '補助',
+        recoil: '5',
+        specialty: '-',
+        target: '自身',
+        effect:
+          '【体力】が0となっているヌシへの命中判定に組み合わせて使用する。この攻撃で与える部位ダメージの個数は【組み合わせた攻撃のダメージ/ヌシのレベル】個となる。',
+      },
+    ],
+  },
+  {
+    name: 'ハシラ',
+    id: 'pillar',
+    list: [
+      {
+        name: '支度',
+        group: 'ハシラ',
+        type: '割込み',
+        recoil: '6',
+        specialty: '《休まない》',
+        target: '単体',
+        effect:
+          '対象はキャンプフェイズで行える行動を、キャンプにいるものとして一度だけ行える。シナリオ1回。',
+      },
+      {
+        name: '一歩ずつ',
+        group: 'ハシラ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'ギャップを1列塗りつぶすことができる。塗りつぶされたギャップは代用判定の際数えない。',
+      },
+      {
+        name: 'こんなこともあろうかと',
+        group: 'ハシラ',
+        type: '補助',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          '任意の特技を１つ習得しているものとして判定できる。シナリオ1回。',
+      },
+
+      {
+        name: '雨垂れ石を穿つ',
+        group: 'ハシラ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'あなたは[習得しているハシラのアビリティ数]までの補助アビリティを組み合わせることができる。このアビリティはハシラのアビリティを他に1つ以上習得している状態でなければ取得できない。',
+      },
+    ],
+  },
+  {
+    name: 'サムライ',
+    id: 'samurai',
+    list: [
+      {
+        name: '気炎万丈',
+        group: 'サムライ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect: '【気力】が【精神力】以上の場合、与えるダメージにプラス1点する',
+      },
+      {
+        name: '後の先',
+        group: 'サムライ',
+        type: '割込み',
+        recoil: '2',
+        specialty: '《待つ》',
+        target: '自身',
+        effect:
+          '先制判定に割込んで使用する。指定特技の判定に成功すると、先制判定を振らず、行動順が後攻となる。ラウンドの間、命中判定の達成値にプラス1点。与えるダメージにプラス2点する。',
+      },
+      {
+        name: '全集中',
+        group: 'サムライ',
+        type: '補助',
+        recoil: '4',
+        specialty: '-',
+        target: '自身',
+        effect:
+          '命中判定に組み合わせて使用する。組み合わせた攻撃の達成値に、[攻撃対象のレベル]点のプラス修正を加える。',
+      },
+      {
+        name: '奥義',
+        group: 'サムライ',
+        type: '攻撃',
+        recoil: '10',
+        specialty: '自由',
+        target: '自身',
+        effect:
+          '指定特技の判定に成功すると、装備中の《指定特技》が一致している武器1つの[攻撃力+成功度]点のダメージを与える。',
+      },
+    ],
+  },
+  {
+    name: 'シノビ',
+    id: 'sinobi',
+    list: [
+      {
+        name: '身代わりの術',
+        group: 'シノビ',
+        type: '割込み',
+        recoil: '8',
+        specialty: '《隠れる》',
+        target: '単体',
+        effect:
+          '自身が【棍棒】を装備している場合、部位ダメージが発生したときに割込んで使用できる。指定特技の判定に成功した場合、自身が装備している【棍棒】を破壊して部位ダメージを打ち消す。',
+      },
+      {
+        name: '二重罠',
+        group: 'シノビ',
+        type: '割込み',
+        recoil: '2',
+        specialty: '《罠》',
+        target: '単体',
+        effect:
+          '対象の変調が解除されたときに割込んで使用する。指定特技の判定に成功すると、対象に1点のダメージを与える',
+      },
+      {
+        name: '縄結界',
+        group: 'シノビ',
+        type: '支援',
+        recoil: '3',
+        specialty: '《追い込む》',
+        target: '単体',
+        effect:
+          '使用時にロープを消費する。戦闘が終了するまで、目標が行う回避判定にマイナス1の修正がつく（最大マイナス3まで)',
+      },
+      {
+        name: '威力偵察',
+        group: 'シノビ',
+        type: '割込み',
+        recoil: '6',
+        specialty: '《現れる》',
+        target: '単体',
+        effect:
+          'その戦闘で最初の先制判定に割込んで使用できる。自分は2D6点のダメージを受ける。指定特技の判定に成功すると、対象は支援タイプのアビリティを１つ、割込みタイプとして即座に使用することができる。',
+      },
+    ],
+  },
+  {
+    name: 'ボケ',
+    id: 'clown',
+    list: [
+      {
+        name: 'ウェーイ！',
+        group: 'ボケ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect: 'スペシャルを振った時、【気力】がさらに1D6増加する',
+      },
+      {
+        name: 'ひっさつわざ！',
+        group: 'ボケ',
+        type: '攻撃',
+        recoil: '1d6',
+        specialty: 'ランダム',
+        target: '単体',
+        effect:
+          '指定特技の判定に成功すると対象に[装備している武器1つの攻撃力+(反動で消費した気力×1d3)]点のダメージを与える。',
+      },
+      {
+        name: 'ころげまわる',
+        group: 'ボケ',
+        type: '支援',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          '体力を3点消費する。自分の受けている変調を全て回復する。消費できない場合このアビリティは使用できない。',
+      },
+    ],
+  },
+  {
+    name: 'ツッコミ',
+    id: 'thrust',
+    list: [
+      {
+        name: '鋭い視点',
+        group: 'ツッコミ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect: '暴露の変調を受けている対象へ与えるダメージにプラス1点する。',
+      },
+      {
+        name: '待った！',
+        group: 'ツッコミ',
+        type: '割込み',
+        recoil: '6',
+        specialty: '《刺す》',
+        target: '単体',
+        effect:
+          'タイプが【割込み】のアビリティが使用されたときに割込んで使用する。指定特技の判定に成功するとそのアビリティの効果を打ち消す。シナリオ回数制限のあるアビリティは打ち消せない。',
+      },
+      {
+        name: 'アドバイス',
+        group: 'ツッコミ',
+        type: '割込み',
+        recoil: '3',
+        specialty: '《伝える》',
+        target: '単体',
+        effect:
+          '自分以外の判定の直前に使用する。指定特技の判定に成功すると対象の達成値にプラス1の修正がつく',
+      },
+    ],
+  },
+  {
+    name: 'グンシ',
+    id: 'tactician',
+    list: [
+      {
+        name: '作戦会議',
+        group: 'グンシ',
+        type: '支援',
+        recoil: '3',
+        specialty: '《考える》',
+        target: '全体',
+        effect:
+          '探索フェイズに使用することができる。指定特技の判定に成功すると、対象がそのサイクルで行う判定の達成値にプラス2の修正がつく。',
+      },
+      {
+        name: '連携指示',
+        group: 'グンシ',
+        type: '支援',
+        recoil: '2',
+        specialty: '《伝える》',
+        target: '単体',
+        effect:
+          '指定特技の判定に成功すると、対象は行動を消費せずに即座に「連携攻撃」を行うことができる。',
+      },
+      {
+        name: 'デスマーチ',
+        group: 'グンシ',
+        type: '割込み',
+        recoil: '5',
+        specialty: '《休まない》',
+        target: '自身',
+        effect:
+          '自身が行動を開始するときに割込んで使用する。指定特技の判定に成功すると、1d6のダメージを受け、その行動では【支援】タイプのアビリティを2回使用することができる。',
+      },
+    ],
+  },
+];
+
+export const dragonPlainAbilityList = [
+  {
+    name: 'ビッグ',
+    id: 'big',
+    list: [
+      {
+        name: '大立ち回り',
+        group: 'ビッグ',
+        type: '補助',
+        recoil: '3',
+        specialty: '-',
+        target: '-',
+        effect:
+          '白兵攻撃の命中判定に組み合わせて使用する。命中判定にマイナス1の修正がつく。攻撃対象をプラス2体まで増やしてもよい。',
+      },
+    ],
+  },
+  {
+    name: 'センシ',
+    id: 'fighter',
+    list: [
+      {
+        name: '合わせ技',
+        group: 'センシ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '-',
+        effect:
+          '白兵攻撃の命中判定に2つまでの補助アビリティを組み合わせられるようになる。',
+      },
+    ],
+  },
+  {
+    name: 'ハンター',
+    id: 'hunter',
+    list: [
+      {
+        name: '十字砲火',
+        group: 'ハンター',
+        type: '補助',
+        recoil: '-',
+        specialty: '-',
+        target: '-',
+        effect:
+          '射撃攻撃の命中判定に組み合わせて使用できる。矢/弾を10消費することで、その攻撃の対象を[2体]にできる。この時、同対象を選択することもでき、その場合、攻撃の処理を2回行う。',
+      },
+    ],
+  },
+  {
+    name: 'ショクニン',
+    id: 'worker',
+    list: [
+      {
+        name: '剣の丘で鉄をうつ',
+        group: 'ショクニン',
+        type: '支援',
+        recoil: '3',
+        specialty: '《作る》',
+        target: 'アイテム',
+        effect: '指定特技の判定に成功すると、装備の強化を行うことができる。',
+      },
+    ],
+  },
+];

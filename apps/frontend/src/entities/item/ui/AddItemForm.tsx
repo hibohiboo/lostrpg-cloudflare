@@ -1,4 +1,4 @@
-import { items } from '@lostrpg/core/game-data/lostrpg';
+import { items } from '@lostrpg/core/game-data/item';
 import { AddItemSelectForm } from '@lostrpg/frontend/shared/ui/components/molecules/AddItemSelectForm';
 import { createItem } from '../model/factory';
 import { Item } from '../model/types';
