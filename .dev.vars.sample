@@ -1,0 +1,4 @@
+DATABASE_URL=postgresql://postgres:password@localhost:5432/lostrpg
+PORT=3001
+NODE_ENV=development
+BUCKET_PUBLIC_URL=https://pub-hoge.r2.dev

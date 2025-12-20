@@ -4,14 +4,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun run --hot src/index.ts",
+    "dev:bun": "bun run --hot src/index.ts",
     "dev:full": "bun run db:up && bun run db:migrate && bun run dev",
-    "dev:worker": "wrangler dev",
+    "dev": "wrangler dev",
     "build": "bun build src/index.ts --outdir dist --target bun",
     "build:worker": "bun build src/index.ts --outdir dist --target node --minify",
     "start": "bun dist/index.js",
-    "deploy": "wrangler deploy",
-    "deploy:staging": "wrangler deploy --env staging",
+    "deploy": "bun run build:worker && wrangler deploy --minify",
+    "deploy:staging": "bun run build:worker && wrangler deploy --env staging --minify",
+    "create:localR2": "wrangler r2 bucket create lostrpg-cloudflare-local",
+    "ls:R2": "wrangler r2 bucket list",
     "test": "vitest",
     "test:contract": "vitest run tests/contract",
     "test:integration": "vitest run tests/integration",
@@ -45,6 +47,6 @@
     "drizzle-kit": "^0.31.8",
     "eslint": "^9.39.2",
     "typescript": "^5.9.3",
-    "wrangler": "4"
+    "wrangler": "^4.56.0"
   }
 }

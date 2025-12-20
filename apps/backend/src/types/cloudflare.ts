@@ -5,3 +5,11 @@ export type Env = {
   IMAGES_BUCKET: R2Bucket;
   NODE_ENV?: string;
 };
+
+// グローバル型定義の拡張
+declare global {
+  // eslint-disable-next-line vars-on-top
+  var WebSocketPair:
+    | typeof import('@cloudflare/workers-types').WebSocketPair
+    | undefined;
+}

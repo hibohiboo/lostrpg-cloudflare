@@ -8,3 +8,6 @@ npm-cache
 tsconfig.tsbuildinfo
 node_modules
 .wrangler/tmp
+.wrangler/state
+.dev.vars
+.env.local

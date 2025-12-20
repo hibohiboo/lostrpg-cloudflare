@@ -11,6 +11,10 @@ type NeonDBClient = NeonHttpDatabase<Record<string, never>> & {
 const connectionString =
   process.env.DATABASE_URL || 'postgresql://localhost:5432/age_of_hero';
 
+// Cloudflare Workers環境かどうかを判定
+const isWorkersEnvironment = () =>
+  typeof globalThis.WebSocketPair !== 'undefined';
+
 // PostgreSQL接続設定
 const client = postgres(connectionString, {
   max: 10,
@@ -34,6 +38,17 @@ export const getDb = () => {
     const sql = neon(connectionString);
     neonDb = neonDrizzle({ client: sql });
     return neonDb;
+  }
+  // Workersでは、各リクエストが独立したコンテキストで実行されるため、あるリクエスト用に作成されたI/Oオブジェクト（データベース接続など）を別のリクエストで使い回すことができない。
+  // ローカルPostgreSQLの場合はリクエストごとに接続を作成
+  if (isWorkersEnvironment()) {
+    // Workers環境でローカルPostgreSQLを使う場合、毎回新しい接続を作成
+    const newClient = postgres(connectionString, {
+      max: 1,
+      idle_timeout: 0,
+      connect_timeout: 10,
+    });
+    return drizzle(newClient);
   }
   return testDbInstance || db;
 };

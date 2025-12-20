@@ -1,25 +1,28 @@
 {
-  "name": "lostrpg",
-  "compatibility_date": "2025-04-01",
-  "assets": {
-    "directory": "./apps/frontend/dist",
-    "not_found_handling": "single-page-application",
-  },
-  "main": "./apps/backend/dist/index.js",
-  "compatibility_flags": ["nodejs_compat"],
-  "run_worker_first": ["/api/*"],
-  "r2_buckets": [
-    {
-      "binding": "IMAGES_BUCKET",
-      "bucket_name": "lostrpg-cloudflare"
-    }
-  ],
-  "observability": {
-    "logs": {
-      "enabled": true,
-      "head_sampling_rate": 1,
-      "invocation_logs": true,
-      "persist": true
-    }
-  }
+	"name": "lostrpg",
+	"compatibility_date": "2025-04-01",
+	"assets": {
+		"directory": "./apps/frontend/dist",
+		"not_found_handling": "single-page-application",
+		"run_worker_first": ["/api/*"],
+	},
+	"main": "./apps/backend/src/index.ts",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"r2_buckets": [
+		{
+			"binding": "IMAGES_BUCKET",
+			"bucket_name": "lostrpg-cloudflare",
+			"preview_bucket_name": "lostrpg-cloudflare-local"
+		}
+	],
+	"observability": {
+		"logs": {
+			"enabled": true,
+			"head_sampling_rate": 1,
+			"invocation_logs": true,
+			"persist": true
+		}
+	}
 }
