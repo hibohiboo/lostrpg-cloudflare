@@ -8,7 +8,6 @@ import { z } from 'zod';
 import { getDb } from '../lib/db/connection';
 import { camps } from '../lib/db/schema';
 import { requirePasswordAuth } from '../middleware/auth';
-import { errorHandler } from '../middleware/errorHandler';
 import type { Env } from '../types/cloudflare';
 import type { R2Bucket } from '@cloudflare/workers-types';
 
@@ -51,7 +50,6 @@ async function uploadToR2(bucket: R2Bucket, id: string, imageFile: File) {
 }
 
 export const campsRouter = new Hono<{ Bindings: Env }>()
-  .onError(errorHandler)
   // Get all camps
   .get('/', async (c) => {
     const campList = await getDb()

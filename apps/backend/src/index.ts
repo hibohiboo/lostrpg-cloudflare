@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
-import { HTTPException } from 'hono/http-exception';
 import { logger } from 'hono/logger';
+import { errorHandler } from './middleware/errorHandler';
 import { campsRouter } from './routes/camps';
 import { charactersRouter } from './routes/characters';
 import { gameDataRouter } from './routes/game-data';
@@ -24,18 +24,7 @@ app.use(
 );
 
 // エラーハンドリングミドルウェア
-app.onError((err, c) => {
-  // JSON parsing error
-  if (err.message && err.message.includes('JSON')) {
-    return c.json({ error: 'Invalid JSON format' }, 400);
-  }
-  if (err instanceof HTTPException) {
-    return err.getResponse();
-  }
-  // その他のエラー
-  console.error('Unexpected error:', err);
-  return c.json({ error: 'Internal server error' }, 500);
-});
+app.onError(errorHandler);
 
 // Health check
 app.get('/health', (c) =>
