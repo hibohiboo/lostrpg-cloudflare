@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { getDb } from '../lib/db/connection';
 import { camps } from '../lib/db/schema';
 import { requirePasswordAuth } from '../middleware/auth';
+import { errorHandler } from '../middleware/errorHandler';
 import type { Env } from '../types/cloudflare';
 import type { R2Bucket } from '@cloudflare/workers-types';
 
@@ -50,6 +51,7 @@ async function uploadToR2(bucket: R2Bucket, id: string, imageFile: File) {
 }
 
 export const campsRouter = new Hono<{ Bindings: Env }>()
+  .onError(errorHandler)
   // Get all camps
   .get('/', async (c) => {
     const campList = await getDb()
@@ -138,66 +140,57 @@ export const campsRouter = new Hono<{ Bindings: Env }>()
       const { id } = c.req.valid('param');
       const requestBody = c.req.valid('json');
 
-      try {
-        const [camp] = await getDb()
-          .select()
-          .from(camps)
-          .where(eq(camps.id, id));
+      const [camp] = await getDb()
+        .select()
+        .from(camps)
+        .where(eq(camps.id, id));
 
-        if (!camp) {
-          return c.json({ error: 'Camp not found' }, 404);
-        }
-
-        // パスワード認証
-        await requirePasswordAuth(camp, requestBody.password);
-
-        // パスワードを除いたデータを準備
-        // eslint-disable-next-line sonarjs/no-unused-vars
-        const { password: _password, ...dataWithoutPassword } = requestBody;
-
-        // 更新データの構築
-        const updateData: {
-          data: object;
-          name: string;
-          updatedAt: Date;
-          passwordHash?: string;
-        } = {
-          data: dataWithoutPassword,
-          name: requestBody.name || camp.name,
-          updatedAt: new Date(),
-        };
-
-        // パスワードが未設定で、新しくパスワードを設定する場合のみハッシュ化
-        if (!camp.passwordHash && requestBody.password) {
-          updateData.passwordHash = await bcrypt.hash(requestBody.password, 12);
-        }
-        // 既にパスワードが設定されている場合は、passwordHashは更新しない
-
-        // データベースを更新
-        const [updatedCamp] = await getDb()
-          .update(camps)
-          .set(updateData)
-          .where(eq(camps.id, id))
-          .returning();
-
-        return c.json(
-          {
-            id: updatedCamp.id,
-            name: updatedCamp.name,
-            createdAt: updatedCamp.createdAt,
-            updatedAt: updatedCamp.updatedAt,
-            ...dataWithoutPassword,
-          },
-          200,
-        );
-      } catch (error) {
-        // HTTPExceptionは再スローして適切なステータスコードを返す
-        if (error instanceof HTTPException) {
-          throw error;
-        }
-        console.error('Database error:', error);
-        return c.json({ error: 'Database error' }, 500);
+      if (!camp) {
+        return c.json({ error: 'Camp not found' }, 404);
       }
+
+      // パスワード認証
+      await requirePasswordAuth(camp, requestBody.password);
+
+      // パスワードを除いたデータを準備
+      // eslint-disable-next-line sonarjs/no-unused-vars
+      const { password: _password, ...dataWithoutPassword } = requestBody;
+
+      // 更新データの構築
+      const updateData: {
+        data: object;
+        name: string;
+        updatedAt: Date;
+        passwordHash?: string;
+      } = {
+        data: dataWithoutPassword,
+        name: requestBody.name || camp.name,
+        updatedAt: new Date(),
+      };
+
+      // パスワードが未設定で、新しくパスワードを設定する場合のみハッシュ化
+      if (!camp.passwordHash && requestBody.password) {
+        updateData.passwordHash = await bcrypt.hash(requestBody.password, 12);
+      }
+      // 既にパスワードが設定されている場合は、passwordHashは更新しない
+
+      // データベースを更新
+      const [updatedCamp] = await getDb()
+        .update(camps)
+        .set(updateData)
+        .where(eq(camps.id, id))
+        .returning();
+
+      return c.json(
+        {
+          id: updatedCamp.id,
+          name: updatedCamp.name,
+          createdAt: updatedCamp.createdAt,
+          updatedAt: updatedCamp.updatedAt,
+          ...dataWithoutPassword,
+        },
+        200,
+      );
     },
   )
 
@@ -220,27 +213,22 @@ export const campsRouter = new Hono<{ Bindings: Env }>()
       const { id } = c.req.valid('param');
       const { password } = c.req.valid('json');
 
-      try {
-        const [camp] = await getDb()
-          .select()
-          .from(camps)
-          .where(eq(camps.id, id));
+      const [camp] = await getDb()
+        .select()
+        .from(camps)
+        .where(eq(camps.id, id));
 
-        if (!camp) {
-          return c.json({ error: 'Camp not found' }, 404);
-        }
-
-        // パスワード認証
-        await requirePasswordAuth(camp, password ?? undefined);
-
-        // データベースから削除
-        await getDb().delete(camps).where(eq(camps.id, id));
-
-        return c.json({ message: 'Camp deleted successfully' }, 200);
-      } catch (error) {
-        console.error('Database error:', error);
-        return c.json({ error: 'Database error' }, 500);
+      if (!camp) {
+        return c.json({ error: 'Camp not found' }, 404);
       }
+
+      // パスワード認証
+      await requirePasswordAuth(camp, password ?? undefined);
+
+      // データベースから削除
+      await getDb().delete(camps).where(eq(camps.id, id));
+
+      return c.json({ message: 'Camp deleted successfully' }, 200);
     },
   )
 
@@ -258,57 +246,50 @@ export const campsRouter = new Hono<{ Bindings: Env }>()
       if (!c.env.IMAGES_BUCKET) {
         return c.json({ error: 'Bucket not found' }, 404);
       }
-      try {
-        // キャンプの存在確認
-        const [camp] = await getDb()
-          .select()
-          .from(camps)
-          .where(eq(camps.id, id));
 
-        if (!camp) {
-          return c.json({ error: 'Camp not found' }, 404);
-        }
+      // キャンプの存在確認
+      const [camp] = await getDb()
+        .select()
+        .from(camps)
+        .where(eq(camps.id, id));
 
-        // multipart/form-dataから画像を取得
-        const formData = await c.req.formData();
-        const imageFile = formData.get('image') as File | null;
-        const password = formData.get('password') as string | null;
-
-        // パスワード認証
-        await requirePasswordAuth(camp, password ?? undefined);
-
-        // 画像ファイルのバリデーション
-        const validatedFile = validateImageFile(imageFile);
-
-        // R2にアップロード
-        const imageUrl = await uploadToR2(
-          c.env.IMAGES_BUCKET,
-          id,
-          validatedFile,
-        );
-
-        // データベースのimageUrlを更新
-        const campData = camp.data as Record<string, unknown>;
-        const updatedData = {
-          ...campData,
-          imageUrl,
-        };
-
-        await getDb()
-          .update(camps)
-          .set({
-            data: updatedData,
-            updatedAt: new Date(),
-          })
-          .where(eq(camps.id, id));
-
-        return c.json({ imageUrl }, 200);
-      } catch (error) {
-        if (error instanceof HTTPException) {
-          throw error;
-        }
-        console.error('Upload error:', error);
-        return c.json({ error: 'Failed to upload image' }, 500);
+      if (!camp) {
+        return c.json({ error: 'Camp not found' }, 404);
       }
+
+      // multipart/form-dataから画像を取得
+      const formData = await c.req.formData();
+      const imageFile = formData.get('image') as File | null;
+      const password = formData.get('password') as string | null;
+
+      // パスワード認証
+      await requirePasswordAuth(camp, password ?? undefined);
+
+      // 画像ファイルのバリデーション
+      const validatedFile = validateImageFile(imageFile);
+
+      // R2にアップロード
+      const imageUrl = await uploadToR2(
+        c.env.IMAGES_BUCKET,
+        id,
+        validatedFile,
+      );
+
+      // データベースのimageUrlを更新
+      const campData = camp.data as Record<string, unknown>;
+      const updatedData = {
+        ...campData,
+        imageUrl,
+      };
+
+      await getDb()
+        .update(camps)
+        .set({
+          data: updatedData,
+          updatedAt: new Date(),
+        })
+        .where(eq(camps.id, id));
+
+      return c.json({ imageUrl }, 200);
     },
   );
