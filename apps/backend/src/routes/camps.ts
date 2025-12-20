@@ -108,7 +108,7 @@ export const campsRouter = new Hono<{ Bindings: Env }>()
       const [camp] = await getDb().select().from(camps).where(eq(camps.id, id));
 
       if (!camp) {
-        return c.json({ error: 'Camp not found' }, 404);
+        throw new HTTPException(404, { message: 'Camp not found' });
       }
 
       const data = camp.data as object;
@@ -144,7 +144,7 @@ export const campsRouter = new Hono<{ Bindings: Env }>()
         .where(eq(camps.id, id));
 
       if (!camp) {
-        return c.json({ error: 'Camp not found' }, 404);
+        throw new HTTPException(404, { message: 'Camp not found' });
       }
 
       // パスワード認証
@@ -217,7 +217,7 @@ export const campsRouter = new Hono<{ Bindings: Env }>()
         .where(eq(camps.id, id));
 
       if (!camp) {
-        return c.json({ error: 'Camp not found' }, 404);
+        throw new HTTPException(404, { message: 'Camp not found' });
       }
 
       // パスワード認証
@@ -242,7 +242,7 @@ export const campsRouter = new Hono<{ Bindings: Env }>()
     async (c) => {
       const { id } = c.req.valid('param');
       if (!c.env.IMAGES_BUCKET) {
-        return c.json({ error: 'Bucket not found' }, 404);
+        throw new HTTPException(404, { message: 'Bucket not found' });
       }
 
       // キャンプの存在確認
@@ -252,7 +252,7 @@ export const campsRouter = new Hono<{ Bindings: Env }>()
         .where(eq(camps.id, id));
 
       if (!camp) {
-        return c.json({ error: 'Camp not found' }, 404);
+        throw new HTTPException(404, { message: 'Camp not found' });
       }
 
       // multipart/form-dataから画像を取得

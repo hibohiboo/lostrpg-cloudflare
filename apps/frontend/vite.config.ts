@@ -33,7 +33,7 @@ export default defineConfig({
           mui: ['@mui/material'],
           datatable: ['@mui/x-data-grid'],
           util: ['swr'],
-          vendors: ['hono'],
+          // vendors: ['hono'],
         },
       },
     },

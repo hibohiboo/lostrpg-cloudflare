@@ -4,15 +4,9 @@ import { baseQuery } from '@lostrpg/frontend/shared/lib/store/api';
 import type { ApiType } from '@lostrpg/frontend/shared/lib/api/client';
 
 type CampDetailType = ApiType['camps'][':id'];
-type CampDetailData = Extract<
-  InferResponseType<CampDetailType['$get']>,
-  { id: string }
->;
+type CampDetailData = InferResponseType<CampDetailType['$get']>;
 type UploadImageType = ApiType['camps'][':id']['upload-image'];
-export type UploadImageResponse = Extract<
-  InferResponseType<UploadImageType['$post']>,
-  { imageUrl: string }
->;
+type UploadImageResponse = InferResponseType<UploadImageType['$post']>;
 export const campApi = createApi({
   reducerPath: 'campApi',
   baseQuery,
