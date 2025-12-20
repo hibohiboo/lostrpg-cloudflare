@@ -6,7 +6,7 @@ import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 import { z } from 'zod';
 import { getDb } from '../lib/db/connection';
-import { characters } from '../lib/db/schema';
+import { characters, campCharacters } from '../lib/db/schema';
 import { validateImageFile, uploadImageToR2 } from '../lib/r2/image-upload';
 import { requirePasswordAuth } from '../middleware/auth';
 import type { Env } from '../types/cloudflare';
@@ -49,6 +49,14 @@ export const charactersRouter = new Hono<{ Bindings: Env }>()
         passwordHash,
       })
       .returning();
+
+    // campIdが設定されている場合、camp_charactersに追加
+    if (characterData.campId) {
+      await getDb().insert(campCharacters).values({
+        campId: characterData.campId,
+        characterId: newCharacter.id,
+      });
+    }
 
     const url = `/character/${newCharacter.id}`;
 
@@ -143,6 +151,20 @@ export const charactersRouter = new Hono<{ Bindings: Env }>()
         .set(updateData)
         .where(eq(characters.id, id))
         .returning();
+
+      // camp_charactersの管理
+      // 1. まず既存の関連を削除
+      await getDb()
+        .delete(campCharacters)
+        .where(eq(campCharacters.characterId, id));
+
+      // 2. 新しいcampIdが設定されている場合のみ追加
+      if (requestBody.campId) {
+        await getDb().insert(campCharacters).values({
+          campId: requestBody.campId,
+          characterId: id,
+        });
+      }
 
       return c.json(
         {

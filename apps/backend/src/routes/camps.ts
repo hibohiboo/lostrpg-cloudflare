@@ -6,7 +6,7 @@ import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 import { z } from 'zod';
 import { getDb } from '../lib/db/connection';
-import { camps } from '../lib/db/schema';
+import { camps, campCharacters, characters } from '../lib/db/schema';
 import { validateImageFile, uploadImageToR2 } from '../lib/r2/image-upload';
 import { requirePasswordAuth } from '../middleware/auth';
 import type { Env } from '../types/cloudflare';
@@ -243,5 +243,41 @@ export const campsRouter = new Hono<{ Bindings: Env }>()
         .where(eq(camps.id, id));
 
       return c.json({ imageUrl }, 200);
+    },
+  )
+
+  // Get characters by camp ID
+  .get(
+    '/:id/characters',
+    zValidator(
+      'param',
+      z.object({
+        id: z.uuid('Invalid ID format'),
+      }),
+    ),
+    async (c) => {
+      const { id } = c.req.valid('param');
+
+      // キャンプの存在確認
+      const [camp] = await getDb()
+        .select()
+        .from(camps)
+        .where(eq(camps.id, id));
+
+      if (!camp) {
+        throw new HTTPException(404, { message: 'Camp not found' });
+      }
+
+      // camp_charactersとcharactersをJOINしてキャラクター一覧を取得
+      const characterList = await getDb()
+        .select({
+          id: characters.id,
+          name: characters.name,
+        })
+        .from(campCharacters)
+        .innerJoin(characters, eq(campCharacters.characterId, characters.id))
+        .where(eq(campCharacters.campId, id));
+
+      return c.json(characterList);
     },
   );
