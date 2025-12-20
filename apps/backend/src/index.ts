@@ -5,6 +5,7 @@ import { logger } from 'hono/logger';
 import { campsRouter } from './routes/camps';
 import { charactersRouter } from './routes/characters';
 import { gameDataRouter } from './routes/game-data';
+import { imagesRouter } from './routes/images';
 import type { Env } from './types/cloudflare';
 
 const app = new Hono<{ Bindings: Env }>();
@@ -50,6 +51,7 @@ app.get('/health', (c) =>
 const _routes = app.route('/api/camps', campsRouter);
 app.route('/api/game-data', gameDataRouter);
 app.route('/api/characters', charactersRouter);
+app.route('/api/images', imagesRouter);
 
 const port = Number(process.env.PORT) || 3001;
 
