@@ -85,5 +85,8 @@ export const characterApi = createApi({
 export const {
   useGetCharacterListQuery,
   useGetCharacterQuery,
+  useCreateCharacterMutation,
+  useUpdateCharacterMutation,
+  useDeleteCharacterMutation,
   useUploadCharacterImageMutation,
 } = characterApi;

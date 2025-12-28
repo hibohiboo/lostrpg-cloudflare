@@ -118,29 +118,38 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
     );
   };
 
+  const getCellBackgroundColor = (cell: SpecialtyCell) => {
+    if (cell.selected) return 'action.selected';
+    if (cell.isBodyParts) return 'action.hover';
+    return undefined;
+  };
+
+  const getCellCursor = (cell: SpecialtyCell) => cell.name && !readOnly && onSpecialtySelect ? 'pointer' : 'default';
+
+  const handleSpecialtyClick = (cellName: string) => {
+    if (!readOnly && onSpecialtySelect && cellName) {
+      onSpecialtySelect(cellName);
+    }
+  };
+
   const renderCell = (
     cell: SpecialtyCell,
     key: string,
     isGapColumn: boolean,
   ) => {
-    let backgroundColor: string | undefined;
-    if (cell.selected) {
-      backgroundColor = 'action.selected';
-    } else if (cell.isBodyParts) {
-      backgroundColor = 'action.hover';
-    }
+    const align = isGapColumn ? 'center' : 'right';
+    const padding = isGapColumn ? 0 : '0 4px 0 8px';
 
     return (
       <TableCell
         key={key}
-        align={isGapColumn ? 'center' : 'right'}
+        align={align}
         sx={{
-          p: isGapColumn ? 0 : '0 4px 0 8px',
+          p: padding,
           height: '44px',
           border: '1px solid rgba(224, 224, 224, 1)',
-          backgroundColor,
-          cursor:
-            cell.name && !readOnly && onSpecialtySelect ? 'pointer' : 'default',
+          backgroundColor: getCellBackgroundColor(cell),
+          cursor: getCellCursor(cell),
         }}
       >
         {cell.name && (
@@ -154,12 +163,7 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
           >
             <Typography
               variant="body2"
-              onClick={() =>
-                !readOnly &&
-                onSpecialtySelect &&
-                cell.name &&
-                onSpecialtySelect(cell.name)
-              }
+              onClick={() => handleSpecialtyClick(cell.name)}
               sx={{
                 fontSize: '13px',
                 marginRight: '4px',

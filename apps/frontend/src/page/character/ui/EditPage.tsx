@@ -2,15 +2,15 @@ import React from 'react';
 
 import { CharacterEditForm } from '@lostrpg/frontend/features/character';
 import { EditPageWrapper } from '@lostrpg/frontend/shared/ui';
-import { useCreatePageHooks } from '../hooks/useCreatePageHooks';
+import { useEditPageHooks } from '../hooks/useEditPageHooks';
 
-const CreatePage: React.FC = () => {
-  const vm = useCreatePageHooks();
+const EditPage: React.FC = () => {
+  const vm = useEditPageHooks();
   return (
-    <EditPageWrapper title="キャラクター作成">
+    <EditPageWrapper title="キャラクター編集">
       <CharacterEditForm {...vm} prevPath="/character" />
     </EditPageWrapper>
   );
 };
 
-export default CreatePage;
+export default EditPage;

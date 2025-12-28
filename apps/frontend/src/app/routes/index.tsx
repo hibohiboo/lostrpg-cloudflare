@@ -12,7 +12,10 @@ import {
 import {
   LOSTCharacterCreatePage,
   LOSTCharacterDetailPage,
+  LOSTCharacterEditPage,
   LOSTCharacterListPage,
+  createCharacterDetailLoader,
+  createCharacterEditLoader,
 } from '@lostrpg/frontend/page/character';
 import { TopPage } from '@lostrpg/frontend/page/top';
 import { Layout } from '@lostrpg/frontend/shared/ui';
@@ -64,11 +67,13 @@ export const createRouter = ({ dispatch }: { dispatch: AppDispatch }) =>
             {
               path: ':id',
               element: <LOSTCharacterDetailPage />,
+              loader: createCharacterDetailLoader(dispatch),
             },
-            // {
-            //   path: ':id/edit',
-            //   element: <LOSTCharacterEditPage />,
-            // },
+            {
+              path: ':id/edit',
+              element: <LOSTCharacterEditPage />,
+              loader: createCharacterEditLoader(dispatch),
+            },
           ],
         },
       ],

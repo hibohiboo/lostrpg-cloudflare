@@ -1,0 +1,270 @@
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+
+type Gap = 'A' | 'B' | 'C' | 'D' | 'E';
+
+interface CharacterClass {
+  id: string;
+  name: string;
+}
+
+interface Ability {
+  name: string;
+  group: string;
+  type: string;
+  recoil: string;
+  specialty: string;
+  target: string;
+  effect: string;
+}
+
+interface Item {
+  id?: string;
+  name: string;
+  number?: number;
+  j: number;
+  weight: number;
+  type: string;
+  area: string;
+  specialty: string;
+  target: string;
+  trait: string;
+  effect: string;
+  equipedArea?: string;
+}
+
+interface Equipment {
+  id: string;
+  equipedArea: string;
+  name: string;
+  j: number;
+  weight: number;
+  type: string;
+  area: string;
+  specialty: string;
+  target: string;
+  trait: string;
+  effect: string;
+}
+
+interface Bag {
+  id: string;
+  name: string;
+  capacity: number;
+  items: Item[];
+}
+
+interface StatusAilment {
+  id: string;
+  name: string;
+  effect: string;
+  isChecked: boolean;
+}
+
+interface Backbone {
+  id: string;
+  name: string;
+  type: string;
+  effect: string;
+}
+
+export interface CharacterFormData {
+  playerName: string;
+  name: string;
+  campId: string;
+  imageUrl: string;
+  classes: CharacterClass[];
+  specialties: string[];
+  gaps: Gap[];
+  damagedSpecialties: string[];
+  abilities: Ability[];
+  staminaBase: number;
+  stamina: number;
+  willPowerBase: number;
+  willPower: number;
+  carryingCapacity: number;
+  items: Item[];
+  equipment: Equipment[];
+  bags: Bag[];
+  statusAilments: StatusAilment[];
+  backbones: Backbone[];
+  unusedExperience: number;
+  totalExperience: number;
+  summary: string;
+  appearance: string;
+  freeWriting: string;
+  quote: string;
+  useStrangeField: boolean;
+  useDragonPlain: boolean;
+  password?: string;
+}
+
+const initialState: CharacterFormData = {
+  playerName: '',
+  name: '',
+  campId: '',
+  imageUrl: '',
+  classes: [],
+  specialties: [],
+  gaps: [],
+  damagedSpecialties: [],
+  abilities: [],
+  staminaBase: 6,
+  stamina: 6,
+  willPowerBase: 3,
+  willPower: 3,
+  carryingCapacity: 10,
+  items: [],
+  equipment: [],
+  bags: [],
+  statusAilments: [
+    { id: '1', name: '毒', effect: 'ラウンド終了時に2D6ダメージ', isChecked: false },
+    { id: '2', name: '呪い', effect: '判定-1D6', isChecked: false },
+    { id: '3', name: '気絶', effect: '行動不能', isChecked: false },
+  ],
+  backbones: [],
+  unusedExperience: 0,
+  totalExperience: 0,
+  summary: '',
+  appearance: '',
+  freeWriting: '',
+  quote: '',
+  useStrangeField: false,
+  useDragonPlain: false,
+};
+
+export const characterSlice = createSlice({
+  name: 'character',
+  initialState,
+  reducers: {
+    setCharacter: (_, action: PayloadAction<CharacterFormData>) => action.payload,
+    updateCharacter: (state, action: PayloadAction<Partial<CharacterFormData>>) => {
+      Object.assign(state, action.payload);
+    },
+    addClass: (state, action: PayloadAction<CharacterClass>) => {
+      state.classes.push(action.payload);
+    },
+    deleteClass: (state, action: PayloadAction<string>) => {
+      state.classes = state.classes.filter((c) => c.id !== action.payload);
+    },
+    toggleSpecialty: (state, action: PayloadAction<string>) => {
+      const index = state.specialties.indexOf(action.payload);
+      if (index !== -1) {
+        state.specialties.splice(index, 1);
+      } else {
+        state.specialties.push(action.payload);
+      }
+    },
+    toggleGap: (state, action: PayloadAction<Gap>) => {
+      const index = state.gaps.indexOf(action.payload);
+      if (index !== -1) {
+        state.gaps.splice(index, 1);
+      } else {
+        state.gaps.push(action.payload);
+      }
+    },
+    toggleDamagedSpecialty: (state, action: PayloadAction<string>) => {
+      const index = state.damagedSpecialties.indexOf(action.payload);
+      if (index !== -1) {
+        state.damagedSpecialties.splice(index, 1);
+      } else {
+        state.damagedSpecialties.push(action.payload);
+      }
+    },
+    addAbility: (state, action: PayloadAction<Ability>) => {
+      state.abilities.push(action.payload);
+    },
+    updateAbility: (state, action: PayloadAction<Ability>) => {
+      const index = state.abilities.findIndex((a) => a.name === action.payload.name);
+      if (index !== -1) {
+        state.abilities[index] = action.payload;
+      }
+    },
+    deleteAbility: (state, action: PayloadAction<Ability>) => {
+      state.abilities = state.abilities.filter((a) => a.name !== action.payload.name);
+    },
+    addItem: (state, action: PayloadAction<Item>) => {
+      state.items.push(action.payload);
+    },
+    updateItem: (state, action: PayloadAction<Item>) => {
+      const index = state.items.findIndex((i) => i.id === action.payload.id);
+      if (index !== -1) {
+        state.items[index] = action.payload;
+      }
+    },
+    deleteItem: (state, action: PayloadAction<string>) => {
+      state.items = state.items.filter((i) => i.id !== action.payload);
+    },
+    addEquipment: (state, action: PayloadAction<Equipment>) => {
+      state.equipment.push(action.payload);
+    },
+    updateEquipment: (state, action: PayloadAction<Equipment>) => {
+      const index = state.equipment.findIndex((e) => e.id === action.payload.id);
+      if (index !== -1) {
+        state.equipment[index] = action.payload;
+      }
+    },
+    deleteEquipment: (state, action: PayloadAction<string>) => {
+      state.equipment = state.equipment.filter((e) => e.id !== action.payload);
+    },
+    addBag: (state, action: PayloadAction<Bag>) => {
+      state.bags.push(action.payload);
+    },
+    updateBag: (state, action: PayloadAction<Bag>) => {
+      const index = state.bags.findIndex((b) => b.id === action.payload.id);
+      if (index !== -1) {
+        state.bags[index] = action.payload;
+      }
+    },
+    deleteBag: (state, action: PayloadAction<string>) => {
+      state.bags = state.bags.filter((b) => b.id !== action.payload);
+    },
+    toggleStatusAilment: (state, action: PayloadAction<string>) => {
+      const ailment = state.statusAilments.find((a) => a.id === action.payload);
+      if (ailment) {
+        ailment.isChecked = !ailment.isChecked;
+      }
+    },
+    addBackbone: (state, action: PayloadAction<Backbone>) => {
+      state.backbones.push(action.payload);
+    },
+    updateBackbone: (state, action: PayloadAction<Backbone>) => {
+      const index = state.backbones.findIndex((b) => b.id === action.payload.id);
+      if (index !== -1) {
+        state.backbones[index] = action.payload;
+      }
+    },
+    deleteBackbone: (state, action: PayloadAction<string>) => {
+      state.backbones = state.backbones.filter((b) => b.id !== action.payload);
+    },
+    resetCharacter: () => initialState,
+  },
+});
+
+export const {
+  setCharacter,
+  updateCharacter,
+  addClass,
+  deleteClass,
+  toggleSpecialty,
+  toggleGap,
+  toggleDamagedSpecialty,
+  addAbility,
+  updateAbility,
+  deleteAbility,
+  addItem,
+  updateItem,
+  deleteItem,
+  addEquipment,
+  updateEquipment,
+  deleteEquipment,
+  addBag,
+  updateBag,
+  deleteBag,
+  toggleStatusAilment,
+  addBackbone,
+  updateBackbone,
+  deleteBackbone,
+  resetCharacter,
+} = characterSlice.actions;
+
+export default characterSlice.reducer;
