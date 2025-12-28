@@ -27,57 +27,15 @@ import {
   updateBackbone,
   deleteBackbone,
 } from '../model/characterSlice';
-import type { CharacterFormData } from '../model/characterSlice';
-
-type Gap = 'A' | 'B' | 'C' | 'D' | 'E';
-
-interface CharacterClass {
-  id: string;
-  name: string;
-}
-
-interface Item {
-  id?: string;
-  name: string;
-  number?: number;
-  j: number;
-  weight: number;
-  type: string;
-  area: string;
-  specialty: string;
-  target: string;
-  trait: string;
-  effect: string;
-  equipedArea?: string;
-}
-
-interface Equipment {
-  id: string;
-  equipedArea: string;
-  name: string;
-  j: number;
-  weight: number;
-  type: string;
-  area: string;
-  specialty: string;
-  target: string;
-  trait: string;
-  effect: string;
-}
-
-interface Bag {
-  id: string;
-  name: string;
-  capacity: number;
-  items: Item[];
-}
-
-interface Backbone {
-  id: string;
-  name: string;
-  type: string;
-  effect: string;
-}
+import type {
+  CharacterFormData,
+  Gap,
+  CharacterClass,
+  Item,
+  Equipment,
+  Bag,
+  Backbone,
+} from '../model/characterSlice';
 
 export const useEditFormHooks = () => {
   const dispatch = useAppDispatch();

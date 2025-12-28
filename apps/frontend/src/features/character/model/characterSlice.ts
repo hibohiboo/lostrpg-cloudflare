@@ -1,13 +1,13 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-type Gap = 'A' | 'B' | 'C' | 'D' | 'E';
+export type Gap = 'A' | 'B' | 'C' | 'D' | 'E';
 
-interface CharacterClass {
+export interface CharacterClass {
   id: string;
   name: string;
 }
 
-interface Ability {
+export interface Ability {
   name: string;
   group: string;
   type: string;
@@ -17,7 +17,7 @@ interface Ability {
   effect: string;
 }
 
-interface Item {
+export interface Item {
   id?: string;
   name: string;
   number?: number;
@@ -32,7 +32,7 @@ interface Item {
   equipedArea?: string;
 }
 
-interface Equipment {
+export interface Equipment {
   id: string;
   equipedArea: string;
   name: string;
@@ -46,21 +46,21 @@ interface Equipment {
   effect: string;
 }
 
-interface Bag {
+export interface Bag {
   id: string;
   name: string;
   capacity: number;
   items: Item[];
 }
 
-interface StatusAilment {
+export interface StatusAilment {
   id: string;
   name: string;
   effect: string;
   isChecked: boolean;
 }
 
-interface Backbone {
+export interface Backbone {
   id: string;
   name: string;
   type: string;

@@ -25,7 +25,17 @@ export {
   deleteBackbone,
   resetCharacter,
 } from './model/characterSlice';
-export type { CharacterFormData } from './model/characterSlice';
+export type {
+  CharacterFormData,
+  Gap,
+  CharacterClass,
+  Ability,
+  Item,
+  Equipment,
+  Bag,
+  StatusAilment,
+  Backbone,
+} from './model/characterSlice';
 export { default as characterReducer } from './model/characterSlice';
 
 export * from './hooks/useEditFormHooks';
