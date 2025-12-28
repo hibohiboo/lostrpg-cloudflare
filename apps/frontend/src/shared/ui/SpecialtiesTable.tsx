@@ -143,6 +143,8 @@ const Cell: React.FC<{
   </TableCell>
 );
 
+const rowNums = [0, 1, 2, 3, 4, 5];
+
 const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
   gaps,
   damagedSpecialties,
@@ -190,7 +192,6 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
                   />
                 );
               }
-
               return <HeaderCell key={c} col={c} />;
             })}
           </TableRow>
@@ -210,53 +211,18 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
               >
                 {i + 2}
               </TableCell>
-              <Cell
-                name={row[0]}
-                damagedSpecialties={damagedSpecialties}
-                handleSpecialtyClick={handleSpecialtyClick}
-                handleDamageClick={handleDamageClick}
-                readOnly={readOnly}
-              />
-              <GapCell />
-              <Cell
-                name={row[1]}
-                damagedSpecialties={damagedSpecialties}
-                handleSpecialtyClick={handleSpecialtyClick}
-                handleDamageClick={handleDamageClick}
-                readOnly={readOnly}
-              />
-              <GapCell />
-              <Cell
-                name={row[2]}
-                damagedSpecialties={damagedSpecialties}
-                handleSpecialtyClick={handleSpecialtyClick}
-                handleDamageClick={handleDamageClick}
-                readOnly={readOnly}
-              />
-              <GapCell />
-              <Cell
-                name={row[3]}
-                damagedSpecialties={damagedSpecialties}
-                handleSpecialtyClick={handleSpecialtyClick}
-                handleDamageClick={handleDamageClick}
-                readOnly={readOnly}
-              />
-              <GapCell />
-              <Cell
-                name={row[4]}
-                damagedSpecialties={damagedSpecialties}
-                handleSpecialtyClick={handleSpecialtyClick}
-                handleDamageClick={handleDamageClick}
-                readOnly={readOnly}
-              />
-              <GapCell />
-              <Cell
-                name={row[5]}
-                damagedSpecialties={damagedSpecialties}
-                handleSpecialtyClick={handleSpecialtyClick}
-                handleDamageClick={handleDamageClick}
-                readOnly={readOnly}
-              />
+              {rowNums.map((number) => (
+                <>
+                  <Cell
+                    name={row[number]}
+                    damagedSpecialties={damagedSpecialties}
+                    handleSpecialtyClick={handleSpecialtyClick}
+                    handleDamageClick={handleDamageClick}
+                    readOnly={readOnly}
+                  />
+                  {number !== 5 && <GapCell />}
+                </>
+              ))}
             </TableRow>
           ))}
         </TableBody>
