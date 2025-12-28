@@ -1,6 +1,7 @@
+import { specialtiesTableGaps } from '@lostrpg/core/game-data/speciality';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-export type Gap = 'A' | 'B' | 'C' | 'D' | 'E';
+export type Gap = (typeof specialtiesTableGaps)[number];
 
 export interface CharacterClass {
   id: string;
@@ -117,7 +118,12 @@ const initialState: CharacterFormData = {
   equipment: [],
   bags: [],
   statusAilments: [
-    { id: '1', name: '毒', effect: 'ラウンド終了時に2D6ダメージ', isChecked: false },
+    {
+      id: '1',
+      name: '毒',
+      effect: 'ラウンド終了時に2D6ダメージ',
+      isChecked: false,
+    },
     { id: '2', name: '呪い', effect: '判定-1D6', isChecked: false },
     { id: '3', name: '気絶', effect: '行動不能', isChecked: false },
   ],
@@ -136,8 +142,12 @@ export const characterSlice = createSlice({
   name: 'character',
   initialState,
   reducers: {
-    setCharacter: (_, action: PayloadAction<CharacterFormData>) => action.payload,
-    updateCharacter: (state, action: PayloadAction<Partial<CharacterFormData>>) => {
+    setCharacter: (_, action: PayloadAction<CharacterFormData>) =>
+      action.payload,
+    updateCharacter: (
+      state,
+      action: PayloadAction<Partial<CharacterFormData>>,
+    ) => {
       Object.assign(state, action.payload);
     },
     addClass: (state, action: PayloadAction<CharacterClass>) => {
@@ -174,13 +184,17 @@ export const characterSlice = createSlice({
       state.abilities.push(action.payload);
     },
     updateAbility: (state, action: PayloadAction<Ability>) => {
-      const index = state.abilities.findIndex((a) => a.name === action.payload.name);
+      const index = state.abilities.findIndex(
+        (a) => a.name === action.payload.name,
+      );
       if (index !== -1) {
         state.abilities[index] = action.payload;
       }
     },
     deleteAbility: (state, action: PayloadAction<Ability>) => {
-      state.abilities = state.abilities.filter((a) => a.name !== action.payload.name);
+      state.abilities = state.abilities.filter(
+        (a) => a.name !== action.payload.name,
+      );
     },
     addItem: (state, action: PayloadAction<Item>) => {
       state.items.push(action.payload);
@@ -198,7 +212,9 @@ export const characterSlice = createSlice({
       state.equipment.push(action.payload);
     },
     updateEquipment: (state, action: PayloadAction<Equipment>) => {
-      const index = state.equipment.findIndex((e) => e.id === action.payload.id);
+      const index = state.equipment.findIndex(
+        (e) => e.id === action.payload.id,
+      );
       if (index !== -1) {
         state.equipment[index] = action.payload;
       }
@@ -228,7 +244,9 @@ export const characterSlice = createSlice({
       state.backbones.push(action.payload);
     },
     updateBackbone: (state, action: PayloadAction<Backbone>) => {
-      const index = state.backbones.findIndex((b) => b.id === action.payload.id);
+      const index = state.backbones.findIndex(
+        (b) => b.id === action.payload.id,
+      );
       if (index !== -1) {
         state.backbones[index] = action.payload;
       }

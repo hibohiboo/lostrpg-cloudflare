@@ -66,6 +66,15 @@ export const specialties = [
   '逃げる',
   '罠',
 ];
+
+export const specialtyRows = specialties.reduce((acc, item, index) => {
+  const col = index % 11;
+
+  if (!acc[col]) acc[col] = [];
+
+  acc[col].push(item);
+  return acc;
+}, [] as string[][]);
 export const bodyParts = [
   '脳',
   '利き腕',
@@ -87,6 +96,7 @@ export const initiativeSpecialties = [
   '追い込む',
 ];
 
+export const specialtiesTableGaps = ['A', 'B', 'C', 'D', 'E'];
 export const specialtiesTableColumns = [
   '',
   '技術',
@@ -100,4 +110,4 @@ export const specialtiesTableColumns = [
   '脚部',
   'E',
   '環境',
-];
+] as const;

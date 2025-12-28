@@ -195,23 +195,6 @@ const EditForm: React.FC<Props> = ({
   handleDelete,
 }) => {
   // 特技テーブルのデータ構造を生成
-  const specialtiesTableColumns = useMemo(
-    () => [
-      { name: 'No' },
-      { name: '才能' },
-      { name: 'A' },
-      { name: '頭部' },
-      { name: 'B' },
-      { name: '腕部' },
-      { name: 'C' },
-      { name: '胴部' },
-      { name: 'D' },
-      { name: '脚部' },
-      { name: 'E' },
-      { name: '生存' },
-    ],
-    [],
-  );
 
   const specialtiesTableRows = useMemo(
     () =>
@@ -390,7 +373,7 @@ const EditForm: React.FC<Props> = ({
           value={classSelect}
           label="クラス追加"
           onChange={(e: SelectChangeEvent) => {
-            const {value} = e.target;
+            const { value } = e.target;
             setClassSelect(value);
             if (value) {
               handleClassAdd(value);
@@ -430,7 +413,6 @@ const EditForm: React.FC<Props> = ({
         </Typography>
         <SpecialtiesTable
           rows={specialtiesTableRows}
-          columns={specialtiesTableColumns}
           gaps={character.gaps}
           damagedSpecialties={character.damagedSpecialties}
           onGapChange={handleGapToggle}
@@ -555,7 +537,7 @@ const EditForm: React.FC<Props> = ({
           value={itemSelect}
           label="アイテム追加"
           onChange={(e: SelectChangeEvent) => {
-            const {value} = e.target;
+            const { value } = e.target;
             setItemSelect(value);
             if (value) {
               handleItemAdd(value);

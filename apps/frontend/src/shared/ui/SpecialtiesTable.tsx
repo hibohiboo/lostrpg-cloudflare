@@ -1,4 +1,9 @@
 import {
+  specialtiesTableColumns,
+  specialtiesTableGaps,
+  specialtyRows,
+} from '@lostrpg/core/game-data/speciality';
+import {
   Table,
   TableBody,
   TableCell,
@@ -11,49 +16,134 @@ import {
 } from '@mui/material';
 import React from 'react';
 
-type Gap = 'A' | 'B' | 'C' | 'D' | 'E';
-
-interface SpecialtyCell {
-  name: string;
-  selected: boolean;
-  damaged: boolean;
-  isBodyParts?: boolean;
-}
-
-interface SpecialtyRow {
-  number: number;
-  talent: SpecialtyCell;
-  a: SpecialtyCell;
-  head: SpecialtyCell;
-  b: SpecialtyCell;
-  arms: SpecialtyCell;
-  c: SpecialtyCell;
-  torso: SpecialtyCell;
-  d: SpecialtyCell;
-  legs: SpecialtyCell;
-  e: SpecialtyCell;
-  survival: SpecialtyCell;
-}
-
-interface Column {
-  name: string;
-  selected?: boolean;
-}
-
 interface SpecialtiesTableProps {
-  rows: SpecialtyRow[];
-  columns: Column[];
-  gaps: Gap[];
+  gaps: string[];
   damagedSpecialties: string[];
-  onGapChange?: (gap: Gap) => void;
+  onGapChange?: (gap: string) => void;
   onSpecialtySelect?: (name: string) => void;
   onDamageChange?: (name: string) => void;
   readOnly?: boolean;
 }
 
+const HeaderCell: React.FC<{ col: string }> = ({ col }) => (
+  <TableCell
+    key={col}
+    align="center"
+    sx={{
+      p: '4px',
+      minWidth: '90px',
+      border: '1px solid rgba(224, 224, 224, 1)',
+      fontSize: '14px',
+      fontWeight: 600,
+      color: 'rgba(0, 0, 0, 0.87)',
+    }}
+  >
+    <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
+      {col}
+    </Typography>
+  </TableCell>
+);
+
+const HeaderGapCell: React.FC<{
+  col: string;
+  gaps: string[];
+  readOnly?: boolean;
+  onGapChange?: (s: string) => void;
+}> = ({ col, gaps, onGapChange, readOnly }) => (
+  <TableCell
+    key={col}
+    align="center"
+    sx={{
+      p: '4px',
+      width: '32px',
+      border: '1px solid rgba(224, 224, 224, 1)',
+      fontSize: '14px',
+      fontWeight: 600,
+      color: 'rgba(0, 0, 0, 0.87)',
+    }}
+  >
+    <Checkbox
+      sx={{ p: 0.5 }}
+      checked={gaps.includes(col)}
+      onChange={() => {
+        if (readOnly || !onGapChange) return;
+        onGapChange(col);
+      }}
+      disabled={readOnly}
+      size="small"
+    />
+    <br />
+    <Typography variant="caption" sx={{ fontWeight: 'bold' }}>
+      {col}
+    </Typography>
+  </TableCell>
+);
+
+const GapCell: React.FC = () => (
+  <TableCell
+    align={'right'}
+    sx={{
+      p: 0,
+      height: '44px',
+      border: '1px solid rgba(224, 224, 224, 1)',
+    }}
+  ></TableCell>
+);
+
+const Cell: React.FC<{
+  name: string;
+  handleSpecialtyClick: (s: string) => void;
+  damagedSpecialties: string[];
+  handleDamageClick: (s: string) => void;
+  readOnly?: boolean;
+}> = ({
+  name,
+  damagedSpecialties,
+  handleSpecialtyClick,
+  handleDamageClick,
+  readOnly,
+}) => (
+  <TableCell
+    align={'center'}
+    sx={{
+      p: '0 4px 0 8px',
+      height: '44px',
+      border: '1px solid rgba(224, 224, 224, 1)',
+      cursor: 'pointer',
+    }}
+  >
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        width: '100%',
+      }}
+    >
+      <Typography
+        variant="body2"
+        onClick={() => handleSpecialtyClick(name)}
+        sx={{
+          fontSize: '13px',
+          marginRight: '4px',
+          flexGrow: 1,
+          textAlign: 'right',
+        }}
+      >
+        {name}
+      </Typography>
+      <Checkbox
+        sx={{ p: 0 }}
+        checked={damagedSpecialties.includes(name)}
+        onChange={() => handleDamageClick(name)}
+        disabled={readOnly}
+        size="small"
+      />
+    </div>
+  </TableCell>
+);
+
 const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
-  rows,
-  columns,
   gaps,
   damagedSpecialties,
   onGapChange,
@@ -61,129 +151,16 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
   onDamageChange,
   readOnly = false,
 }) => {
-  const isGapSelected = (gapName: string): boolean =>
-    gaps.includes(gapName as Gap);
-
-  const isDamaged = (specialtyName: string): boolean =>
-    damagedSpecialties.includes(specialtyName);
-
-  const handleGapClick = (gapName: string) => {
-    if (!readOnly && onGapChange) {
-      onGapChange(gapName as Gap);
-    }
-  };
-
   const handleDamageClick = (specialtyName: string) => {
     if (!readOnly && onDamageChange && specialtyName) {
       onDamageChange(specialtyName);
     }
   };
 
-  const renderHeaderCell = (col: Column) => {
-    const isGap = ['A', 'B', 'C', 'D', 'E'].includes(col.name);
-    return (
-      <TableCell
-        key={col.name}
-        align="center"
-        sx={{
-          p: '4px',
-          width: isGap ? '32px' : undefined,
-          minWidth: isGap ? '32px' : '90px',
-          border: '1px solid rgba(224, 224, 224, 1)',
-          fontSize: '14px',
-          fontWeight: 600,
-          color: 'rgba(0, 0, 0, 0.87)',
-        }}
-      >
-        {isGap ? (
-          <>
-            <Checkbox
-              sx={{ p: 0.5 }}
-              checked={isGapSelected(col.name)}
-              onChange={() => handleGapClick(col.name)}
-              disabled={readOnly}
-              size="small"
-            />
-            <br />
-            <Typography variant="caption" sx={{ fontWeight: 'bold' }}>
-              {col.name}
-            </Typography>
-          </>
-        ) : (
-          <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
-            {col.name}
-          </Typography>
-        )}
-      </TableCell>
-    );
-  };
-
-  const getCellBackgroundColor = (cell: SpecialtyCell) => {
-    if (cell.selected) return 'action.selected';
-    if (cell.isBodyParts) return 'action.hover';
-    return undefined;
-  };
-
-  const getCellCursor = (cell: SpecialtyCell) => cell.name && !readOnly && onSpecialtySelect ? 'pointer' : 'default';
-
   const handleSpecialtyClick = (cellName: string) => {
     if (!readOnly && onSpecialtySelect && cellName) {
       onSpecialtySelect(cellName);
     }
-  };
-
-  const renderCell = (
-    cell: SpecialtyCell,
-    key: string,
-    isGapColumn: boolean,
-  ) => {
-    const align = isGapColumn ? 'center' : 'right';
-    const padding = isGapColumn ? 0 : '0 4px 0 8px';
-
-    return (
-      <TableCell
-        key={key}
-        align={align}
-        sx={{
-          p: padding,
-          height: '44px',
-          border: '1px solid rgba(224, 224, 224, 1)',
-          backgroundColor: getCellBackgroundColor(cell),
-          cursor: getCellCursor(cell),
-        }}
-      >
-        {cell.name && (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              width: '100%',
-            }}
-          >
-            <Typography
-              variant="body2"
-              onClick={() => handleSpecialtyClick(cell.name)}
-              sx={{
-                fontSize: '13px',
-                marginRight: '4px',
-                flexGrow: 1,
-                textAlign: 'right',
-              }}
-            >
-              {cell.name}
-            </Typography>
-            <Checkbox
-              sx={{ p: 0 }}
-              checked={isDamaged(cell.name)}
-              onChange={() => handleDamageClick(cell.name)}
-              disabled={readOnly}
-              size="small"
-            />
-          </div>
-        )}
-      </TableCell>
-    );
   };
 
   return (
@@ -201,12 +178,26 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
       >
         <TableHead>
           <TableRow sx={{ height: '44px' }}>
-            {columns.map((col) => renderHeaderCell(col))}
+            {specialtiesTableColumns.map((c) => {
+              console.log(c);
+              if (specialtiesTableGaps.includes(c)) {
+                return (
+                  <HeaderGapCell
+                    key={c}
+                    col={c}
+                    gaps={gaps}
+                    onGapChange={onGapChange}
+                  />
+                );
+              }
+
+              return <HeaderCell key={c} col={c} />;
+            })}
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.number} sx={{ height: '44px' }}>
+          {specialtyRows.map((row, i) => (
+            <TableRow key={i} sx={{ height: '44px' }}>
               <TableCell
                 align="center"
                 sx={{
@@ -217,19 +208,55 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
                   fontSize: '13px',
                 }}
               >
-                {row.number}
+                {i + 2}
               </TableCell>
-              {renderCell(row.talent, 'talent', false)}
-              {renderCell(row.a, 'a', true)}
-              {renderCell(row.head, 'head', false)}
-              {renderCell(row.b, 'b', true)}
-              {renderCell(row.arms, 'arms', false)}
-              {renderCell(row.c, 'c', true)}
-              {renderCell(row.torso, 'torso', false)}
-              {renderCell(row.d, 'd', true)}
-              {renderCell(row.legs, 'legs', false)}
-              {renderCell(row.e, 'e', true)}
-              {renderCell(row.survival, 'survival', false)}
+              <Cell
+                name={row[0]}
+                damagedSpecialties={damagedSpecialties}
+                handleSpecialtyClick={handleSpecialtyClick}
+                handleDamageClick={handleDamageClick}
+                readOnly={readOnly}
+              />
+              <GapCell />
+              <Cell
+                name={row[1]}
+                damagedSpecialties={damagedSpecialties}
+                handleSpecialtyClick={handleSpecialtyClick}
+                handleDamageClick={handleDamageClick}
+                readOnly={readOnly}
+              />
+              <GapCell />
+              <Cell
+                name={row[2]}
+                damagedSpecialties={damagedSpecialties}
+                handleSpecialtyClick={handleSpecialtyClick}
+                handleDamageClick={handleDamageClick}
+                readOnly={readOnly}
+              />
+              <GapCell />
+              <Cell
+                name={row[3]}
+                damagedSpecialties={damagedSpecialties}
+                handleSpecialtyClick={handleSpecialtyClick}
+                handleDamageClick={handleDamageClick}
+                readOnly={readOnly}
+              />
+              <GapCell />
+              <Cell
+                name={row[4]}
+                damagedSpecialties={damagedSpecialties}
+                handleSpecialtyClick={handleSpecialtyClick}
+                handleDamageClick={handleDamageClick}
+                readOnly={readOnly}
+              />
+              <GapCell />
+              <Cell
+                name={row[5]}
+                damagedSpecialties={damagedSpecialties}
+                handleSpecialtyClick={handleSpecialtyClick}
+                handleDamageClick={handleDamageClick}
+                readOnly={readOnly}
+              />
             </TableRow>
           ))}
         </TableBody>
