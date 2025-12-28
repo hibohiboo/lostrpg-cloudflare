@@ -19,9 +19,12 @@ import {
   Typography,
 } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { SpecialtiesTable } from '@lostrpg/frontend/shared/ui';
 
 // 型定義
+type Gap = 'A' | 'B' | 'C' | 'D' | 'E';
+
 interface CharacterClass {
   id: string;
   name: string;
@@ -101,6 +104,8 @@ interface CharacterFormData {
   imageUrl: string;
   classes: CharacterClass[];
   specialties: string[];
+  gaps: Gap[];
+  damagedSpecialties: string[];
   specialtyRows: SpecialtyRow[];
   abilities: Ability[];
   staminaBase: number;
@@ -126,17 +131,6 @@ interface CharacterFormData {
 // 実際のゲームデータを使用
 const CLASS_LIST = classList;
 
-const SPECIALTY_LIST = [
-  '武器攻撃',
-  '魔法攻撃',
-  '回避',
-  '防御',
-  '知覚',
-  '隠密',
-  '交渉',
-  '知識',
-];
-
 // 実際のゲームデータを使用
 const ITEM_LIST = items;
 
@@ -148,6 +142,8 @@ const CreatePage: React.FC = () => {
     imageUrl: '',
     classes: [],
     specialties: [],
+    gaps: [],
+    damagedSpecialties: [],
     specialtyRows: [],
     abilities: [],
     staminaBase: 6,
@@ -180,6 +176,146 @@ const CreatePage: React.FC = () => {
   const [itemSelect, setItemSelect] = useState('');
   const [equipmentArea, setEquipmentArea] = useState('');
   const [bagName, setBagName] = useState('');
+
+  // 特技テーブルのデータ構造を生成
+  const specialtiesTableColumns = useMemo(() => [
+      { name: 'No' },
+      { name: '才能' },
+      { name: 'A' },
+      { name: '頭部' },
+      { name: 'B' },
+      { name: '腕部' },
+      { name: 'C' },
+      { name: '胴部' },
+      { name: 'D' },
+      { name: '脚部' },
+      { name: 'E' },
+      { name: '生存' },
+    ], []);
+
+  const specialtiesTableRows = useMemo(() => {
+    const createCell = (name: string, isBodyParts = false) => ({
+      name,
+      selected: character.specialties.includes(name),
+      damaged: character.damagedSpecialties.includes(name),
+      isBodyParts,
+    });
+
+    return [
+      {
+        number: 1,
+        talent: createCell('武器攻撃'),
+        a: createCell(''),
+        head: createCell('頭部', true),
+        b: createCell(''),
+        arms: createCell('腕部', true),
+        c: createCell(''),
+        torso: createCell('胴部', true),
+        d: createCell(''),
+        legs: createCell('脚部', true),
+        e: createCell(''),
+        survival: createCell('生存'),
+      },
+      {
+        number: 2,
+        talent: createCell('魔法攻撃'),
+        a: createCell('武器攻撃'),
+        head: createCell(''),
+        b: createCell('魔法攻撃'),
+        arms: createCell(''),
+        c: createCell('回避'),
+        torso: createCell(''),
+        d: createCell('防御'),
+        legs: createCell(''),
+        e: createCell('生存'),
+        survival: createCell(''),
+      },
+      {
+        number: 3,
+        talent: createCell('回避'),
+        a: createCell(''),
+        head: createCell('武器攻撃'),
+        b: createCell(''),
+        arms: createCell('魔法攻撃'),
+        c: createCell(''),
+        torso: createCell('回避'),
+        d: createCell(''),
+        legs: createCell('防御'),
+        e: createCell(''),
+        survival: createCell('知覚'),
+      },
+      {
+        number: 4,
+        talent: createCell('防御'),
+        a: createCell('魔法攻撃'),
+        head: createCell(''),
+        b: createCell('回避'),
+        arms: createCell(''),
+        c: createCell('防御'),
+        torso: createCell(''),
+        d: createCell('知覚'),
+        legs: createCell(''),
+        e: createCell('知覚'),
+        survival: createCell(''),
+      },
+      {
+        number: 5,
+        talent: createCell('知覚'),
+        a: createCell(''),
+        head: createCell('魔法攻撃'),
+        b: createCell(''),
+        arms: createCell('回避'),
+        c: createCell(''),
+        torso: createCell('防御'),
+        d: createCell(''),
+        legs: createCell('知覚'),
+        e: createCell(''),
+        survival: createCell('隠密'),
+      },
+      {
+        number: 6,
+        talent: createCell('隠密'),
+        a: createCell('回避'),
+        head: createCell(''),
+        b: createCell('防御'),
+        arms: createCell(''),
+        c: createCell('知覚'),
+        torso: createCell(''),
+        d: createCell('隠密'),
+        legs: createCell(''),
+        e: createCell('隠密'),
+        survival: createCell(''),
+      },
+      {
+        number: 7,
+        talent: createCell('交渉'),
+        a: createCell(''),
+        head: createCell('回避'),
+        b: createCell(''),
+        arms: createCell('防御'),
+        c: createCell(''),
+        torso: createCell('知覚'),
+        d: createCell(''),
+        legs: createCell('隠密'),
+        e: createCell(''),
+        survival: createCell('交渉'),
+      },
+      {
+        number: 8,
+        talent: createCell('知識'),
+        a: createCell('防御'),
+        head: createCell(''),
+        b: createCell('知覚'),
+        arms: createCell(''),
+        c: createCell('隠密'),
+        torso: createCell(''),
+        d: createCell('交渉'),
+        legs: createCell(''),
+        e: createCell('交渉'),
+        survival: createCell(''),
+      },
+    ];
+  }, [character.specialties, character.damagedSpecialties]);
 
   // 画像変更ハンドラー
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -229,6 +365,36 @@ const CreatePage: React.FC = () => {
       setCharacter({
         ...character,
         specialties: [...character.specialties, specialty],
+      });
+    }
+  };
+
+  // ギャップトグルハンドラー
+  const handleGapToggle = (gap: Gap) => {
+    if (character.gaps.includes(gap)) {
+      setCharacter({
+        ...character,
+        gaps: character.gaps.filter((g) => g !== gap),
+      });
+    } else {
+      setCharacter({
+        ...character,
+        gaps: [...character.gaps, gap],
+      });
+    }
+  };
+
+  // ダメージトグルハンドラー
+  const handleDamageToggle = (specialty: string) => {
+    if (character.damagedSpecialties.includes(specialty)) {
+      setCharacter({
+        ...character,
+        damagedSpecialties: character.damagedSpecialties.filter((s) => s !== specialty),
+      });
+    } else {
+      setCharacter({
+        ...character,
+        damagedSpecialties: [...character.damagedSpecialties, specialty],
       });
     }
   };
@@ -619,24 +785,35 @@ const CreatePage: React.FC = () => {
           </Box>
         </Box>
 
-        {/* 専門特技 */}
+        {/* 専門特技テーブル */}
         <Box my={3}>
           <Typography variant="h6" gutterBottom>
             専門特技
           </Typography>
-          <Box>
-            {SPECIALTY_LIST.map((specialty) => (
-              <FormControlLabel
-                key={specialty}
-                control={
-                  <Checkbox
-                    checked={character.specialties.includes(specialty)}
-                    onChange={() => handleSpecialtyToggle(specialty)}
-                  />
-                }
-                label={specialty}
-              />
-            ))}
+          <SpecialtiesTable
+            rows={specialtiesTableRows}
+            columns={specialtiesTableColumns}
+            gaps={character.gaps}
+            damagedSpecialties={character.damagedSpecialties}
+            onGapChange={handleGapToggle}
+            onSpecialtySelect={handleSpecialtyToggle}
+            onDamageChange={handleDamageToggle}
+          />
+        </Box>
+
+        {/* 選択された専門特技の表示 */}
+        <Box my={3}>
+          <InputLabel>選択された専門特技</InputLabel>
+          <Box display="flex" flexWrap="wrap" gap={1}>
+            {character.specialties.length > 0 ? (
+              character.specialties.map((specialty) => (
+                <Chip key={specialty} label={specialty} color="primary" />
+              ))
+            ) : (
+              <Typography variant="body2" color="text.secondary">
+                専門特技が選択されていません
+              </Typography>
+            )}
           </Box>
         </Box>
 
