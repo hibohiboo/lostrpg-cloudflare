@@ -4,10 +4,10 @@ export const Page = () => (
   <div>
     <ul>
       <li>
-        <Link to="/camp">camp</Link>
+        <Link to="/camp">キャンプ</Link>
       </li>
       <li>
-        <Link to="/camp/create">camp create</Link>
+        <Link to="/character">キャラクター</Link>
       </li>
     </ul>
   </div>

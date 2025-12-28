@@ -1,3 +1,5 @@
+import { classList } from '@lostrpg/core/game-data/character';
+import { items } from '@lostrpg/core/game-data/item';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import {
@@ -26,31 +28,42 @@ interface CharacterClass {
 }
 
 interface Ability {
-  id: string;
   name: string;
-  timing: string;
-  judge: string;
+  group: string;
+  type: string;
+  recoil: string;
+  specialty: string;
   target: string;
-  range: string;
-  cost: string;
-  limit: string;
   effect: string;
 }
 
 interface Item {
-  id: string;
+  id?: string;
   name: string;
-  number: number;
+  number?: number;
+  j: number;
   weight: number;
-  cost: number;
+  type: string;
+  area: string;
+  specialty: string;
+  target: string;
+  trait: string;
+  effect: string;
+  equipedArea?: string;
 }
 
 interface Equipment {
   id: string;
   equipedArea: string;
   name: string;
+  j: number;
   weight: number;
-  cost: number;
+  type: string;
+  area: string;
+  specialty: string;
+  target: string;
+  trait: string;
+  effect: string;
 }
 
 interface Bag {
@@ -69,8 +82,9 @@ interface StatusAilment {
 
 interface Backbone {
   id: string;
-  title: string;
-  content: string;
+  name: string;
+  type: string;
+  effect: string;
 }
 
 interface SpecialtyRow {
@@ -109,15 +123,8 @@ interface CharacterFormData {
   useDragonPlain: boolean;
 }
 
-// ダミーデータ
-const CLASS_LIST = [
-  { name: '戦士' },
-  { name: '魔法使い' },
-  { name: '僧侶' },
-  { name: '盗賊' },
-  { name: '騎士' },
-  { name: '弓使い' },
-];
+// 実際のゲームデータを使用
+const CLASS_LIST = classList;
 
 const SPECIALTY_LIST = [
   '武器攻撃',
@@ -130,12 +137,8 @@ const SPECIALTY_LIST = [
   '知識',
 ];
 
-const ITEM_LIST = [
-  { name: '回復薬', weight: 0.1, cost: 50 },
-  { name: '魔法の石', weight: 0.5, cost: 200 },
-  { name: '保存食', weight: 0.3, cost: 10 },
-  { name: '武器強化石', weight: 0.2, cost: 500 },
-];
+// 実際のゲームデータを使用
+const ITEM_LIST = items;
 
 const CreatePage: React.FC = () => {
   const [character, setCharacter] = useState<CharacterFormData>({
@@ -240,8 +243,14 @@ const CreatePage: React.FC = () => {
         id: `item-${Date.now()}`,
         name: item.name,
         number: 1,
-        weight: item.weight,
-        cost: item.cost,
+        j: item.j,
+        weight: typeof item.weight === 'string' ? parseFloat(item.weight) : item.weight,
+        type: item.type,
+        area: item.area,
+        specialty: item.specialty,
+        target: item.target,
+        trait: item.trait,
+        effect: item.effect,
       };
       setCharacter({ ...character, items: [...character.items, newItem] });
       setItemSelect('');
@@ -274,8 +283,14 @@ const CreatePage: React.FC = () => {
       id: `eq-${Date.now()}`,
       equipedArea: equipmentArea,
       name: '',
+      j: 0,
       weight: 0,
-      cost: 0,
+      type: '',
+      area: '',
+      specialty: '',
+      target: '',
+      trait: '',
+      effect: '',
     };
     setCharacter({ ...character, equipment: [...character.equipment, newEquipment] });
     setEquipmentArea('');
@@ -345,8 +360,9 @@ const CreatePage: React.FC = () => {
   const handleBackboneAdd = () => {
     const newBackbone: Backbone = {
       id: `bb-${Date.now()}`,
-      title: '',
-      content: '',
+      name: '',
+      type: '',
+      effect: '',
     };
     setCharacter({ ...character, backbones: [...character.backbones, newBackbone] });
   };
@@ -407,8 +423,8 @@ const CreatePage: React.FC = () => {
       editable: true,
     },
     {
-      field: 'cost',
-      headerName: '価格',
+      field: 'j',
+      headerName: '価格(J)',
       width: 100,
       type: 'number',
       editable: true,
@@ -442,8 +458,8 @@ const CreatePage: React.FC = () => {
       editable: true,
     },
     {
-      field: 'cost',
-      headerName: '価格',
+      field: 'j',
+      headerName: '価格(J)',
       width: 100,
       type: 'number',
       editable: true,
@@ -467,8 +483,9 @@ const CreatePage: React.FC = () => {
 
   // バックボーンテーブルの列定義
   const backboneColumns: GridColDef[] = [
-    { field: 'title', headerName: 'タイトル', width: 200, editable: true },
-    { field: 'content', headerName: '内容', width: 400, editable: true },
+    { field: 'name', headerName: '名前', width: 200, editable: true },
+    { field: 'type', headerName: '種類', width: 150, editable: true },
+    { field: 'effect', headerName: '効果', width: 300, editable: true },
     {
       field: 'actions',
       headerName: '操作',
@@ -487,12 +504,12 @@ const CreatePage: React.FC = () => {
   ];
 
   const totalWeight = character.items.reduce(
-    (sum, item) => sum + item.weight * item.number,
+    (sum, item) => sum + item.weight * (item.number || 1),
     0,
   );
 
   const totalValue = character.items.reduce(
-    (sum, item) => sum + item.cost * item.number,
+    (sum, item) => sum + item.j * (item.number || 1),
     0,
   );
 
@@ -708,7 +725,7 @@ const CreatePage: React.FC = () => {
             />
             <TextField
               type="number"
-              label="合計価格"
+              label="合計価格(J)"
               value={totalValue}
               slotProps={{
                 input: {
