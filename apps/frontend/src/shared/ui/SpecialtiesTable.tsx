@@ -169,7 +169,21 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
     <TableContainer
       component={Paper}
       elevation={0}
-      sx={{ my: 2, border: 'none' }}
+      sx={{
+        my: 2,
+        border: 'none',
+        ...[3, 5, 7, 9, 11].reduce(
+          (acc, i) => ({
+            ...acc,
+            [`&:has(thead th:nth-of-type(${i}) input:checked) tbody td:nth-of-type(${i})`]:
+              {
+                bgcolor: 'grey.900',
+                color: 'common.white',
+              },
+          }),
+          {},
+        ),
+      }}
     >
       <Table
         sx={{
@@ -198,7 +212,7 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
         </TableHead>
         <TableBody>
           {specialtyRows.map((row, i) => (
-            <TableRow key={i} sx={{ height: '44px' }}>
+            <TableRow key={`row-${i}`} sx={{ height: '44px' }}>
               <TableCell
                 align="center"
                 sx={{
@@ -211,18 +225,53 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
               >
                 {i + 2}
               </TableCell>
-              {rowNums.map((number) => (
-                <>
-                  <Cell
-                    name={row[number]}
-                    damagedSpecialties={damagedSpecialties}
-                    handleSpecialtyClick={handleSpecialtyClick}
-                    handleDamageClick={handleDamageClick}
-                    readOnly={readOnly}
-                  />
-                  {number !== 5 && <GapCell />}
-                </>
-              ))}
+              <Cell
+                name={row[0]}
+                damagedSpecialties={damagedSpecialties}
+                handleSpecialtyClick={handleSpecialtyClick}
+                handleDamageClick={handleDamageClick}
+                readOnly={readOnly}
+              />
+              <GapCell />
+              <Cell
+                name={row[1]}
+                damagedSpecialties={damagedSpecialties}
+                handleSpecialtyClick={handleSpecialtyClick}
+                handleDamageClick={handleDamageClick}
+                readOnly={readOnly}
+              />
+              <GapCell />
+              <Cell
+                name={row[2]}
+                damagedSpecialties={damagedSpecialties}
+                handleSpecialtyClick={handleSpecialtyClick}
+                handleDamageClick={handleDamageClick}
+                readOnly={readOnly}
+              />
+              <GapCell />
+              <Cell
+                name={row[3]}
+                damagedSpecialties={damagedSpecialties}
+                handleSpecialtyClick={handleSpecialtyClick}
+                handleDamageClick={handleDamageClick}
+                readOnly={readOnly}
+              />
+              <GapCell />
+              <Cell
+                name={row[4]}
+                damagedSpecialties={damagedSpecialties}
+                handleSpecialtyClick={handleSpecialtyClick}
+                handleDamageClick={handleDamageClick}
+                readOnly={readOnly}
+              />
+              <GapCell />
+              <Cell
+                name={row[5]}
+                damagedSpecialties={damagedSpecialties}
+                handleSpecialtyClick={handleSpecialtyClick}
+                handleDamageClick={handleDamageClick}
+                readOnly={readOnly}
+              />
             </TableRow>
           ))}
         </TableBody>

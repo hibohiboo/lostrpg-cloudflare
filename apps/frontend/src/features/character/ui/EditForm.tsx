@@ -412,7 +412,6 @@ const EditForm: React.FC<Props> = ({
           専門特技
         </Typography>
         <SpecialtiesTable
-          rows={specialtiesTableRows}
           gaps={character.gaps}
           damagedSpecialties={character.damagedSpecialties}
           onGapChange={handleGapToggle}
