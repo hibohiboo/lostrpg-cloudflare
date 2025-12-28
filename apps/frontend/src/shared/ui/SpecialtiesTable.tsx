@@ -61,9 +61,11 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
   onDamageChange,
   readOnly = false,
 }) => {
-  const isGapSelected = (gapName: string): boolean => gaps.includes(gapName as Gap);
+  const isGapSelected = (gapName: string): boolean =>
+    gaps.includes(gapName as Gap);
 
-  const isDamaged = (specialtyName: string): boolean => damagedSpecialties.includes(specialtyName);
+  const isDamaged = (specialtyName: string): boolean =>
+    damagedSpecialties.includes(specialtyName);
 
   const handleGapClick = (gapName: string) => {
     if (!readOnly && onGapChange) {
@@ -80,7 +82,19 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
   const renderHeaderCell = (col: Column) => {
     const isGap = ['A', 'B', 'C', 'D', 'E'].includes(col.name);
     return (
-      <TableCell key={col.name} align="center" sx={{ p: 0, minWidth: 60 }}>
+      <TableCell
+        key={col.name}
+        align="center"
+        sx={{
+          p: '4px',
+          width: isGap ? '32px' : undefined,
+          minWidth: isGap ? '32px' : '90px',
+          border: '1px solid rgba(224, 224, 224, 1)',
+          fontSize: '14px',
+          fontWeight: 600,
+          color: 'rgba(0, 0, 0, 0.87)',
+        }}
+      >
         {isGap ? (
           <>
             <Checkbox
@@ -88,18 +102,27 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
               checked={isGapSelected(col.name)}
               onChange={() => handleGapClick(col.name)}
               disabled={readOnly}
+              size="small"
             />
             <br />
-            <Typography variant="body2">{col.name}</Typography>
+            <Typography variant="caption" sx={{ fontWeight: 'bold' }}>
+              {col.name}
+            </Typography>
           </>
         ) : (
-          <Typography variant="body2">{col.name}</Typography>
+          <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
+            {col.name}
+          </Typography>
         )}
       </TableCell>
     );
   };
 
-  const renderCell = (cell: SpecialtyCell, key: string) => {
+  const renderCell = (
+    cell: SpecialtyCell,
+    key: string,
+    isGapColumn: boolean,
+  ) => {
     let backgroundColor: string | undefined;
     if (cell.selected) {
       backgroundColor = 'action.selected';
@@ -110,57 +133,99 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
     return (
       <TableCell
         key={key}
-        align="center"
+        align={isGapColumn ? 'center' : 'right'}
         sx={{
-          p: 0.5,
+          p: isGapColumn ? 0 : '0 4px 0 8px',
+          height: '44px',
+          border: '1px solid rgba(224, 224, 224, 1)',
           backgroundColor,
-          cursor: cell.name && !readOnly && onSpecialtySelect ? 'pointer' : 'default',
+          cursor:
+            cell.name && !readOnly && onSpecialtySelect ? 'pointer' : 'default',
         }}
       >
-        <Typography
-          variant="body2"
-          onClick={() => !readOnly && onSpecialtySelect && cell.name && onSpecialtySelect(cell.name)}
-          sx={{ display: 'inline-block', minHeight: '1em' }}
-        >
-          {cell.name}
-        </Typography>
         {cell.name && (
-          <Checkbox
-            sx={{ p: 0.5 }}
-            checked={isDamaged(cell.name)}
-            onChange={() => handleDamageClick(cell.name)}
-            disabled={readOnly}
-          />
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              width: '100%',
+            }}
+          >
+            <Typography
+              variant="body2"
+              onClick={() =>
+                !readOnly &&
+                onSpecialtySelect &&
+                cell.name &&
+                onSpecialtySelect(cell.name)
+              }
+              sx={{
+                fontSize: '13px',
+                marginRight: '4px',
+                flexGrow: 1,
+                textAlign: 'right',
+              }}
+            >
+              {cell.name}
+            </Typography>
+            <Checkbox
+              sx={{ p: 0 }}
+              checked={isDamaged(cell.name)}
+              onChange={() => handleDamageClick(cell.name)}
+              disabled={readOnly}
+              size="small"
+            />
+          </div>
         )}
       </TableCell>
     );
   };
 
   return (
-    <TableContainer component={Paper} sx={{ my: 2 }}>
-      <Table sx={{ minWidth: 650, maxWidth: 800 }} size="small">
+    <TableContainer
+      component={Paper}
+      elevation={0}
+      sx={{ my: 2, border: 'none' }}
+    >
+      <Table
+        sx={{
+          borderCollapse: 'collapse',
+          '& .MuiTableCell-root': { borderColor: 'rgba(224, 224, 224, 1)' },
+        }}
+        size="small"
+      >
         <TableHead>
-          <TableRow>
+          <TableRow sx={{ height: '44px' }}>
             {columns.map((col) => renderHeaderCell(col))}
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row) => (
-            <TableRow key={row.number}>
-              <TableCell align="center" sx={{ p: '0 10px' }}>
+            <TableRow key={row.number} sx={{ height: '44px' }}>
+              <TableCell
+                align="center"
+                sx={{
+                  border: '1px solid rgba(224, 224, 224, 1)',
+                  p: 0,
+                  width: '40px',
+                  backgroundColor: '#fafafa',
+                  fontSize: '13px',
+                }}
+              >
                 {row.number}
               </TableCell>
-              {renderCell(row.talent, 'talent')}
-              {renderCell(row.a, 'a')}
-              {renderCell(row.head, 'head')}
-              {renderCell(row.b, 'b')}
-              {renderCell(row.arms, 'arms')}
-              {renderCell(row.c, 'c')}
-              {renderCell(row.torso, 'torso')}
-              {renderCell(row.d, 'd')}
-              {renderCell(row.legs, 'legs')}
-              {renderCell(row.e, 'e')}
-              {renderCell(row.survival, 'survival')}
+              {renderCell(row.talent, 'talent', false)}
+              {renderCell(row.a, 'a', true)}
+              {renderCell(row.head, 'head', false)}
+              {renderCell(row.b, 'b', true)}
+              {renderCell(row.arms, 'arms', false)}
+              {renderCell(row.c, 'c', true)}
+              {renderCell(row.torso, 'torso', false)}
+              {renderCell(row.d, 'd', true)}
+              {renderCell(row.legs, 'legs', false)}
+              {renderCell(row.e, 'e', true)}
+              {renderCell(row.survival, 'survival', false)}
             </TableRow>
           ))}
         </TableBody>
