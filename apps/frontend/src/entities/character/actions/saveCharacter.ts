@@ -3,37 +3,53 @@ import { characterApi } from '../api/api';
 import type { RootState } from '@lostrpg/frontend/app/store';
 
 /**
- * バリデーションエラー
+ * バリデーションエラーの型定義
  */
-export class ValidationError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'ValidationError';
-  }
-}
+export type ValidationErrorType = {
+  type: 'validation';
+  message: string;
+};
+
+/**
+ * バリデーションエラーの型ガード
+ */
+export const isValidationError = (
+  error: unknown,
+): error is ValidationErrorType =>
+  typeof error === 'object' &&
+  error !== null &&
+  'type' in error &&
+  error.type === 'validation';
 
 /**
  * 新規キャラクター作成Thunk
  */
-export const createCharacterThunk = createAsyncThunk(
+export const createCharacterThunk = createAsyncThunk<
+  { id: string },
+  {
+    handleImageUpload: (
+      id: string,
+      password: string | undefined,
+    ) => Promise<string | null>;
+  },
+  { rejectValue: ValidationErrorType }
+>(
   'character/create',
   async (
     {
       handleImageUpload,
-    }: {
-      handleImageUpload: (
-        id: string,
-        password: string | undefined,
-      ) => Promise<string | null>;
     },
-    { getState, dispatch },
+    { getState, dispatch, rejectWithValue },
   ) => {
     const state = getState() as RootState;
     const { character } = state;
 
     // バリデーション
     if (!character.name) {
-      throw new ValidationError('キャラクター名は必須です');
+      return rejectWithValue({
+        type: 'validation',
+        message: 'キャラクター名は必須です',
+      });
     }
 
     // キャラクター作成
@@ -123,27 +139,34 @@ export const createCharacterThunk = createAsyncThunk(
 /**
  * キャラクター更新Thunk
  */
-export const updateCharacterThunk = createAsyncThunk(
+export const updateCharacterThunk = createAsyncThunk<
+  { id: string },
+  {
+    id: string;
+    handleImageUpload: (
+      id: string,
+      password: string | undefined,
+    ) => Promise<string | null>;
+  },
+  { rejectValue: ValidationErrorType }
+>(
   'character/update',
   async (
     {
       id,
       handleImageUpload,
-    }: {
-      id: string;
-      handleImageUpload: (
-        id: string,
-        password: string | undefined,
-      ) => Promise<string | null>;
     },
-    { getState, dispatch },
+    { getState, dispatch, rejectWithValue },
   ) => {
     const state = getState() as RootState;
     const { character } = state;
 
     // バリデーション
     if (!character.name) {
-      throw new ValidationError('キャラクター名は必須です');
+      return rejectWithValue({
+        type: 'validation',
+        message: 'キャラクター名は必須です',
+      });
     }
 
     // 画像アップロード

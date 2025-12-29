@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import {
   createCharacterThunk,
-  ValidationError,
+  isValidationError,
 } from '@lostrpg/frontend/entities/character';
 import { useEditFormHooks } from '@lostrpg/frontend/features/character';
 import { useAppDispatch } from '@lostrpg/frontend/shared/lib/store';
@@ -21,13 +21,13 @@ export const useCreatePageHooks = () => {
   const handleSave = useCallback(async () => {
     try {
       const { id } = await dispatch(
-        createCharacterThunk({ handleImageUpload })
+        createCharacterThunk({ handleImageUpload }),
       ).unwrap();
 
       navigate(`/character/${id}`);
     } catch (error) {
       // バリデーションエラーの場合はUIステートを更新
-      if (error instanceof ValidationError) {
+      if (isValidationError(error)) {
         setIsValidError(true);
         window.scrollTo(0, 0);
         return;

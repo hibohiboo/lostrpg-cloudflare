@@ -142,8 +142,6 @@ const Cell: React.FC<{
   </TableCell>
 );
 
-const rowNums = [0, 1, 2, 3, 4, 5];
-
 const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
   gaps,
   damagedSpecialties,
