@@ -1,5 +1,12 @@
 import { classList } from '@lostrpg/core/game-data/character';
-import { Box, Chip, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
+import {
+  Box,
+  Chip,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Typography,
+} from '@mui/material';
 import React, { useState } from 'react';
 import {
   useAppDispatch,
@@ -42,11 +49,16 @@ export const ClassesSection: React.FC = () => {
         sx={{ minWidth: 200, mb: 2 }}
       >
         <MenuItem value="">未選択</MenuItem>
-        {classList.map((cls) => (
-          <MenuItem value={cls.name} key={cls.name}>
-            {cls.name}
-          </MenuItem>
-        ))}
+        {classList
+          .filter(
+            (cls) =>
+              !classes.some((selectedClass) => selectedClass.name === cls.name),
+          )
+          .map((cls) => (
+            <MenuItem value={cls.name} key={cls.name}>
+              {cls.name}
+            </MenuItem>
+          ))}
       </Select>
 
       <Box display="flex" flexWrap="wrap" gap={1}>
