@@ -1,3 +1,4 @@
+import { items } from '@lostrpg/core/game-data/item';
 import {
   specialtiesTableGaps,
   bodyParts,
@@ -171,7 +172,12 @@ const initialState: CharacterFormData = {
   willPowerBase: 10,
   willPower: 10,
   carryingCapacity: 5,
-  items: [],
+  items: [
+    {
+      id: 'item-initial-backpack',
+      ...items.find((x) => x.name === 'リュックサック')!,
+    },
+  ],
   equipment: [],
   bags: [
     {
@@ -181,16 +187,7 @@ const initialState: CharacterFormData = {
       items: [
         {
           id: 'item-initial-jerky',
-          name: 'ジャーキー',
-          number: 10,
-          j: 1,
-          weight: 1,
-          type: '支援',
-          area: '-',
-          specialty: '-',
-          target: '自身',
-          trait: '食料',
-          effect: '1日分の食料。【気力】が1点増加する。通貨単位J。',
+          ...items.find((x) => x.name === 'ジャーキー')!,
         },
       ],
     },

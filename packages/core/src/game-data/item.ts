@@ -152,7 +152,7 @@ export const items = [
   {
     name: '農具',
     j: 15,
-    weight: '6',
+    weight: 6,
     type: '装備',
     area: '両手',
     specialty: '《振る》',
@@ -163,7 +163,7 @@ export const items = [
   {
     name: 'ダガーナイフ',
     j: 6,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '片手',
     specialty: '《刺す》',
@@ -201,7 +201,7 @@ export const items = [
   {
     name: '手斧',
     j: 6,
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '片手',
     specialty: '《斬る》《投げる》',
@@ -213,7 +213,7 @@ export const items = [
   {
     name: '杭',
     j: 7,
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '片手',
     specialty: '《刺す》《跳ぶ》',
@@ -742,7 +742,7 @@ export const strangeFieldsItemList = [
   {
     name: '行商人の背負い袋',
     j: 40,
-    weight: '6',
+    weight: 6,
     type: '道具',
     area: '-',
     specialty: '-',
@@ -754,7 +754,7 @@ export const strangeFieldsItemList = [
   {
     name: '猟銃',
     j: 30,
-    weight: '6',
+    weight: 6,
     type: '装備',
     area: '両手',
     specialty: '《撃つ》',
@@ -766,7 +766,7 @@ export const strangeFieldsItemList = [
   {
     name: '弾',
     j: 5,
-    weight: '0',
+    weight: 0,
     type: '道具',
     area: '-',
     specialty: '-',
@@ -778,7 +778,7 @@ export const strangeFieldsItemList = [
   {
     name: '弓',
     j: 5,
-    weight: '3',
+    weight: 3,
     type: '装備',
     area: '両手',
     specialty: '《撃つ》',
@@ -790,7 +790,7 @@ export const strangeFieldsItemList = [
   {
     name: 'ダーツ',
     j: 12,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '片手',
     specialty: '《投げる》',
@@ -802,7 +802,7 @@ export const strangeFieldsItemList = [
   {
     name: '大盾',
     j: 10,
-    weight: '6',
+    weight: 6,
     type: '装備',
     area: '両手',
     specialty: '《走る》',
@@ -814,7 +814,7 @@ export const strangeFieldsItemList = [
   {
     name: 'おしゃれな服',
     j: 1,
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '胴部',
     specialty: '-',
@@ -825,7 +825,7 @@ export const strangeFieldsItemList = [
   {
     name: 'アクセサリ',
     j: 2,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '任意',
     specialty: '-',
@@ -836,7 +836,7 @@ export const strangeFieldsItemList = [
   {
     name: '魚肉',
     j: 1,
-    weight: '1',
+    weight: 1,
     type: '道具',
     area: '-',
     specialty: '-',
@@ -847,7 +847,7 @@ export const strangeFieldsItemList = [
   {
     name: '硬い鱗',
     j: 1,
-    weight: '1',
+    weight: 1,
     type: '道具',
     area: '-',
     specialty: '-',
@@ -858,7 +858,7 @@ export const strangeFieldsItemList = [
   {
     name: '虹色の鱗',
     j: 1,
-    weight: '1',
+    weight: 1,
     type: '道具',
     area: '-',
     specialty: '-',
@@ -871,7 +871,7 @@ export const dragonPlainItemList = [
   {
     name: '抗生物質',
     j: 10,
-    weight: '1',
+    weight: 1,
     type: '割込み',
     area: '-',
     specialty: '-',
@@ -882,7 +882,7 @@ export const dragonPlainItemList = [
   {
     name: '森の恵み',
     j: 15,
-    weight: '2',
+    weight: 2,
     type: '支援',
     area: '-',
     specialty: '-',
@@ -893,7 +893,7 @@ export const dragonPlainItemList = [
   {
     name: '奇跡の雫',
     j: 20,
-    weight: '2',
+    weight: 2,
     type: '支援',
     area: '-',
     specialty: '-',
@@ -904,7 +904,7 @@ export const dragonPlainItemList = [
   {
     name: '銀の矢',
     j: 5,
-    weight: '1',
+    weight: 1,
     type: '道具',
     area: '-',
     specialty: '-',
@@ -916,7 +916,7 @@ export const dragonPlainItemList = [
   {
     name: '毒の矢',
     j: 5,
-    weight: '1',
+    weight: 1,
     type: '道具',
     area: '-',
     specialty: '-',
@@ -928,7 +928,7 @@ export const dragonPlainItemList = [
   {
     name: 'ダウジングツール',
     j: 2,
-    weight: '1',
+    weight: 1,
     type: '支援',
     area: '-',
     specialty: '-',
@@ -940,7 +940,7 @@ export const dragonPlainItemList = [
   {
     name: '爆竹玉',
     j: 5,
-    weight: '1',
+    weight: 1,
     type: '道具',
     area: '-',
     specialty: '-',
@@ -952,7 +952,7 @@ export const dragonPlainItemList = [
   {
     name: '臭い玉',
     j: 5,
-    weight: '1',
+    weight: 1,
     type: '道具',
     area: '-',
     specialty: '-',
@@ -964,7 +964,7 @@ export const dragonPlainItemList = [
   {
     name: 'けむりだま',
     j: 3,
-    weight: '1',
+    weight: 1,
     type: '割込み',
     area: '-',
     specialty: '-',
@@ -976,7 +976,7 @@ export const dragonPlainItemList = [
   {
     name: 'しもふりにく',
     j: 4,
-    weight: '1',
+    weight: 1,
     type: '割込み',
     area: '-',
     specialty: '-',
@@ -988,7 +988,7 @@ export const dragonPlainItemList = [
   {
     name: 'わらにんぎょう',
     j: 5,
-    weight: '1',
+    weight: 1,
     type: '割込み',
     area: '-',
     specialty: '-',
@@ -1000,7 +1000,7 @@ export const dragonPlainItemList = [
   {
     name: '結界符',
     j: 5,
-    weight: '1',
+    weight: 1,
     type: '割込み',
     area: '-',
     specialty: '-',
@@ -1012,7 +1012,7 @@ export const dragonPlainItemList = [
   {
     name: 'いくさ化粧',
     j: 5,
-    weight: '2',
+    weight: 2,
     type: '支援',
     area: '-',
     specialty: '-',
@@ -1025,7 +1025,7 @@ export const dragonPlainItemList = [
   {
     name: '盾',
     j: 20,
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '片手',
     specialty: '《殴る》',
@@ -1036,7 +1036,7 @@ export const dragonPlainItemList = [
   {
     name: '銀の首飾り',
     j: 5,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '頭部',
     specialty: '-',
@@ -1047,7 +1047,7 @@ export const dragonPlainItemList = [
   {
     name: 'ゴーグル',
     j: 10,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '頭部',
     specialty: '-',
@@ -1059,7 +1059,7 @@ export const dragonPlainItemList = [
   {
     name: 'モノクル',
     j: 10,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '頭部',
     specialty: '-',
@@ -1070,7 +1070,7 @@ export const dragonPlainItemList = [
   {
     name: '浄化の聖印',
     j: 15,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '頭部',
     specialty: '-',
@@ -1081,7 +1081,7 @@ export const dragonPlainItemList = [
   {
     name: 'リボン',
     j: 100,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '頭部',
     specialty: '-',
@@ -1093,7 +1093,7 @@ export const dragonPlainItemList = [
   {
     name: '風見鶏のスカーフ',
     j: 20,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '胴部',
     specialty: '-',
@@ -1104,7 +1104,7 @@ export const dragonPlainItemList = [
   {
     name: '赤い服',
     j: 2,
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '胴部',
     specialty: '-',
@@ -1116,7 +1116,7 @@ export const dragonPlainItemList = [
   {
     name: 'サバイバルベスト',
     j: 15,
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '胴部',
     specialty: '-',
@@ -1127,7 +1127,7 @@ export const dragonPlainItemList = [
   {
     name: '快適な下着',
     j: 10,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '胴部',
     specialty: '-',
@@ -1138,7 +1138,7 @@ export const dragonPlainItemList = [
   {
     name: 'もふもふコート',
     j: 10,
-    weight: '4',
+    weight: 4,
     type: '装備',
     area: '胴部',
     specialty: '-',
@@ -1149,7 +1149,7 @@ export const dragonPlainItemList = [
   {
     name: 'トラップツール',
     j: 15,
-    weight: '4',
+    weight: 4,
     type: '装備',
     area: '胴部',
     specialty: '-',
@@ -1161,7 +1161,7 @@ export const dragonPlainItemList = [
   {
     name: 'アイドル衣装',
     j: 15,
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '胴部',
     specialty: '-',
@@ -1174,7 +1174,7 @@ export const dragonPlainItemList = [
   {
     name: 'パワーグラブ',
     j: 10,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '腕部',
     specialty: '-',
@@ -1185,7 +1185,7 @@ export const dragonPlainItemList = [
   {
     name: '投手の手袋',
     j: 10,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '腕部',
     specialty: '-',
@@ -1196,7 +1196,7 @@ export const dragonPlainItemList = [
   {
     name: 'ロンググローブ',
     j: 10,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '腕部',
     specialty: '-',
@@ -1208,7 +1208,7 @@ export const dragonPlainItemList = [
   {
     name: '水かき',
     j: 5,
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '脚部',
     specialty: '-',
@@ -1219,7 +1219,7 @@ export const dragonPlainItemList = [
   {
     name: '俊足スニーカー',
     j: 15,
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '脚部',
     specialty: '-',
@@ -1231,7 +1231,7 @@ export const dragonPlainItemList = [
   {
     name: 'フィットシューズ',
     j: 20,
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '脚部',
     specialty: '-',
@@ -1243,7 +1243,7 @@ export const dragonPlainItemList = [
   {
     name: '忍者の足袋',
     j: 20,
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '脚部',
     specialty: '-',
@@ -1254,7 +1254,7 @@ export const dragonPlainItemList = [
   {
     name: 'ペガサスの靴',
     j: 30,
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '脚部',
     specialty: '-',
@@ -1266,7 +1266,7 @@ export const dragonPlainItemList = [
   {
     name: '星の欠片:赤',
     j: 10,
-    weight: '1',
+    weight: 1,
     type: '道具',
     area: '-',
     specialty: '-',
@@ -1278,7 +1278,7 @@ export const dragonPlainItemList = [
   {
     name: '星の欠片:緑',
     j: 10,
-    weight: '1',
+    weight: 1,
     type: '道具',
     area: '-',
     specialty: '-',
@@ -1289,7 +1289,7 @@ export const dragonPlainItemList = [
   {
     name: '星の欠片:青',
     j: 10,
-    weight: '1',
+    weight: 1,
     type: '道具',
     area: '-',
     specialty: '-',
@@ -1301,7 +1301,7 @@ export const dragonPlainItemList = [
   {
     name: '星の欠片:黄',
     j: 10,
-    weight: '1',
+    weight: 1,
     type: '道具',
     area: '-',
     specialty: '-',
@@ -1313,7 +1313,7 @@ export const dragonPlainItemList = [
   {
     name: '星の欠片:白',
     j: 10,
-    weight: '1',
+    weight: 1,
     type: '道具',
     area: '-',
     specialty: '-',
@@ -1326,7 +1326,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾ほうちょう',
     j: '3',
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '片手',
     specialty: '《斬る》《刺す》',
@@ -1338,7 +1338,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾ナタ',
     j: '6',
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '片手',
     specialty: '《斬る》',
@@ -1349,7 +1349,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾剥ぎ取りナイフ',
     j: '9',
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '片手',
     specialty: '《斬る》《刺す》',
@@ -1360,7 +1360,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾カタナ',
     j: '15',
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '片手',
     specialty: '《斬る》',
@@ -1372,7 +1372,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾槍',
     j: '4',
-    weight: '4',
+    weight: 4,
     type: '装備',
     area: '両手',
     specialty: '《刺す》',
@@ -1383,7 +1383,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾棍棒',
     j: '1',
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '片手',
     specialty: '《殴る》',
@@ -1395,7 +1395,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾バール',
     j: '4',
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '片手',
     specialty: '《殴る》',
@@ -1407,7 +1407,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾ハンマー',
     j: '6',
-    weight: '5',
+    weight: 5,
     type: '装備',
     area: '両手',
     specialty: '《殴る》',
@@ -1418,7 +1418,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾スリング',
     j: '3',
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '両手',
     specialty: '《投げる》',
@@ -1430,7 +1430,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾弓',
     j: '5',
-    weight: '3',
+    weight: 3,
     type: '装備',
     area: '両手',
     specialty: '《撃つ》',
@@ -1442,7 +1442,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾ダーツ',
     j: '12',
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '片手',
     specialty: '《投げる》',
@@ -1454,7 +1454,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾手斧',
     j: '6',
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '片手',
     specialty: '《斬る》《投げる》',
@@ -1465,7 +1465,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾ダガーナイフ',
     j: '6',
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '片手',
     specialty: '《刺す》',
@@ -1477,7 +1477,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾農具',
     j: '15',
-    weight: '6',
+    weight: 6,
     type: '装備',
     area: '両手',
     specialty: '《振る》',
@@ -1489,7 +1489,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾大盾',
     j: '10',
-    weight: '6',
+    weight: 6,
     type: '装備',
     area: '両手',
     specialty: '《走る》',
@@ -1500,7 +1500,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾ツルハシ',
     j: '9',
-    weight: '4',
+    weight: 4,
     type: '装備',
     area: '両手',
     specialty: '《刺す》《振る》',
@@ -1511,7 +1511,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾斧',
     j: '7',
-    weight: '4',
+    weight: 4,
     type: '装備',
     area: '片手',
     specialty: '《斬る》《振る》',
@@ -1522,7 +1522,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾鎖',
     j: '9',
-    weight: '3',
+    weight: 3,
     type: '装備',
     area: '片手',
     specialty: '《振る》《捕らえる》',
@@ -1534,7 +1534,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾杭',
     j: '9',
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '片手',
     specialty: '《刺す》《跳ぶ》',
@@ -1546,7 +1546,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾シャベル',
     j: '12',
-    weight: '4',
+    weight: 4,
     type: '装備',
     area: '両手',
     specialty: '《殴る》',
@@ -1559,7 +1559,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾銀の首飾り',
     j: 5,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '頭部',
     specialty: '-',
@@ -1570,7 +1570,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾ゴーグル',
     j: 10,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '頭部',
     specialty: '-',
@@ -1582,7 +1582,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾モノクル',
     j: 10,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '頭部',
     specialty: '-',
@@ -1593,7 +1593,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾浄化の聖印',
     j: 15,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '頭部',
     specialty: '-',
@@ -1606,7 +1606,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾ポケットジャケット',
     j: 12,
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '胴部',
     specialty: '-',
@@ -1617,7 +1617,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾風見鶏のスカーフ',
     j: 20,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '胴部',
     specialty: '-',
@@ -1628,7 +1628,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾サバイバルベスト',
     j: 15,
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '胴部',
     specialty: '-',
@@ -1639,7 +1639,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾快適な下着',
     j: 10,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '胴部',
     specialty: '-',
@@ -1650,7 +1650,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾もふもふコート',
     j: 10,
-    weight: '4',
+    weight: 4,
     type: '装備',
     area: '胴部',
     specialty: '-',
@@ -1662,7 +1662,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾トラップツール',
     j: 15,
-    weight: '4',
+    weight: 4,
     type: '装備',
     area: '胴部',
     specialty: '-',
@@ -1675,7 +1675,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾パワーグラブ',
     j: 10,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '腕部',
     specialty: '-',
@@ -1686,7 +1686,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾投手の手袋',
     j: 10,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '腕部',
     specialty: '-',
@@ -1697,7 +1697,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾ロンググローブ',
     j: 10,
-    weight: '1',
+    weight: 1,
     type: '装備',
     area: '腕部',
     specialty: '-',
@@ -1709,7 +1709,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾水かき',
     j: 5,
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '脚部',
     specialty: '-',
@@ -1720,7 +1720,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾俊足スニーカー',
     j: 15,
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '脚部',
     specialty: '-',
@@ -1732,7 +1732,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾フィットシューズ',
     j: 20,
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '脚部',
     specialty: '-',
@@ -1744,7 +1744,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾忍者の足袋',
     j: 20,
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '脚部',
     specialty: '-',
@@ -1755,7 +1755,7 @@ export const dragonPlainGreaterItemList = [
   {
     name: '☾ペガサスの靴',
     j: 30,
-    weight: '2',
+    weight: 2,
     type: '装備',
     area: '脚部',
     specialty: '-',
