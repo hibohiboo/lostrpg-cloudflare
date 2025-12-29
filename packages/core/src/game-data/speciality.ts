@@ -117,3 +117,8 @@ export const specialtiesTableColumns = [
   'E',
   '環境',
 ] as const;
+
+export const damageTableRows = bodyParts.map((bodyPart, index) => ({
+  diceNumber: index < 5 ? index + 2 : index + 3,
+  name: bodyPart,
+}));
