@@ -165,7 +165,7 @@ const Cell: React.FC<{
     </TableCell>
   );
 };
-const cols = [0, -1, 1, -1, 2, -1, 4, -1, 5];
+const cols = [0, -1, 1, -1, 2, -1, 3, -1, 4, -1, 5];
 const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
   gaps,
   specialties,
