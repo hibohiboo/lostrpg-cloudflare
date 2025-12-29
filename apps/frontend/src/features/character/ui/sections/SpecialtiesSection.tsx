@@ -15,7 +15,6 @@ import {
 } from '@mui/material';
 import React from 'react';
 
-
 import {
   useAppDispatch,
   useAppSelector,
@@ -45,7 +44,7 @@ const DamageTable: React.FC<DamageTableProps> = ({
   sevenLabel,
 }) => (
   <TableContainer component={Paper}>
-    <Table sx={{ borderCollapse: 'collapse' }} size="small">
+    <Table size="small">
       <TableHead>
         <TableRow>
           {rows.slice(0, 5).map((row, index) => (
@@ -57,6 +56,7 @@ const DamageTable: React.FC<DamageTableProps> = ({
                 bgcolor: 'grey.900',
                 color: 'white',
                 fontWeight: 600,
+                padding: 0,
               }}
             >
               {index + 2}
@@ -67,12 +67,13 @@ const DamageTable: React.FC<DamageTableProps> = ({
       <TableBody>
         <TableRow>
           {rows.slice(0, 5).map((row) => (
-            <TableCell key={row.name} align="center">
+            <TableCell key={row.name} align="center" sx={{ padding: 0 }}>
               {row.name}
               <Checkbox
                 checked={row.damaged}
                 onChange={() => damageHandler(row.name)}
                 size="small"
+                color="error"
               />
             </TableCell>
           ))}
@@ -85,11 +86,12 @@ const DamageTable: React.FC<DamageTableProps> = ({
               bgcolor: 'grey.900',
               color: 'white',
               fontWeight: 600,
+              padding: 0,
             }}
           >
             7
           </TableCell>
-          <TableCell colSpan={4} align="center">
+          <TableCell colSpan={4} align="center" sx={{ padding: 0 }}>
             {sevenLabel}
           </TableCell>
         </TableRow>
@@ -103,6 +105,7 @@ const DamageTable: React.FC<DamageTableProps> = ({
                 bgcolor: 'grey.900',
                 color: 'white',
                 fontWeight: 600,
+                padding: 0,
               }}
             >
               {index + 8}
@@ -111,12 +114,13 @@ const DamageTable: React.FC<DamageTableProps> = ({
         </TableRow>
         <TableRow>
           {rows.slice(5, 10).map((row) => (
-            <TableCell key={row.name} align="center">
+            <TableCell key={row.name} align="center" sx={{ padding: 0 }}>
               {row.name}
               <Checkbox
                 checked={row.damaged}
                 onChange={() => damageHandler(row.name)}
                 size="small"
+                color="error"
               />
             </TableCell>
           ))}
@@ -171,7 +175,7 @@ export const SpecialtiesSection: React.FC = () => {
 
       <Box my={3}>
         <Typography variant="h6" gutterBottom>
-          ダメージ表
+          身体部位決定表
         </Typography>
         <DamageTable
           rows={damageTableRows.map((row) => ({
@@ -181,7 +185,7 @@ export const SpecialtiesSection: React.FC = () => {
           damageHandler={(specialty: string) =>
             dispatch(toggleDamagedSpecialty(specialty))
           }
-          sevenLabel="全ての判定に-1のペナルティ修正"
+          sevenLabel="攻撃したキャラクターの任意の部位"
         />
       </Box>
     </>
