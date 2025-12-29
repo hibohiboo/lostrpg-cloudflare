@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { createValidator } from './helpers';
-import { itemSchema } from './items';
+import { equipmentSchema, itemSchema } from './items';
 
 const characterClassSchema = z.object({
   id: z.string(),
@@ -47,7 +47,7 @@ const baseCharacterFields = {
   gaps: z.array(gapEnum).default([]),
   bags: z.array(bagSchema).default([]),
   items: z.array(itemSchema).default([]),
-  equipments: z.array(itemSchema).default([]),
+  equipments: z.array(equipmentSchema).default([]),
   staminaBase: z.number().int().min(0).default(5),
   willPowerBase: z.number().int().min(0).default(10),
   statusAilments: z.array(z.string()).default([]),

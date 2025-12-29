@@ -1,12 +1,11 @@
 import { items } from '@lostrpg/core/game-data/item';
-import { ItemBase } from '@lostrpg/schemas/validation/items';
+import { Equipment, ItemBase } from '@lostrpg/schemas/validation/items';
 import { AddItemSelectForm } from '@lostrpg/frontend/shared/ui/components/molecules/AddItemSelectForm';
 import { createItem } from '../model/factory';
-import { Item } from '../model/types';
 
 type Props = {
   itemSelect: string;
-  onItemAdd: (item: Item) => void;
+  onItemAdd: (item: Equipment) => void;
 };
 
 export const AddEquipmentForm: React.FC<Props> = ({
@@ -27,7 +26,7 @@ export const AddEquipmentForm: React.FC<Props> = ({
       trait: item.trait,
       effect: item.effect,
     });
-    onItemAdd(newItem);
+    onItemAdd({ ...newItem, equipedArea: item.area });
   };
 
   return (

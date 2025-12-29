@@ -30,8 +30,6 @@ export type {
   Gap,
   CharacterClass,
   Ability,
-  Item,
-  Equipment,
   Bag,
   StatusAilment,
   Backbone,

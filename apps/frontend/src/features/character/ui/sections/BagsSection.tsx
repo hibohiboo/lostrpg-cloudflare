@@ -1,4 +1,5 @@
 import { items } from '@lostrpg/core/game-data/item';
+import { CharacterItem } from '@lostrpg/schemas/validation/items';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { GridRowId } from '@mui/x-data-grid';
 import React, { useState } from 'react';
@@ -13,7 +14,7 @@ import {
 } from '@lostrpg/frontend/shared/lib/store';
 
 import { addBag, updateBag, deleteBag } from '../../model/characterSlice';
-import type { Bag, Item } from '../../model/characterSlice';
+import type { Bag } from '../../model/characterSlice';
 
 export const BagsSection: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -38,7 +39,7 @@ export const BagsSection: React.FC = () => {
     const bag = bags.find((b) => b.id === bagId);
     if (item && bag) {
       const itemId = `item-${bagId}-${bag.items.length}`;
-      const newItem: Item = {
+      const newItem: CharacterItem = {
         id: itemId,
         name: item.name,
         number: 1,

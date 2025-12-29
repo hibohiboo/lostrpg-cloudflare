@@ -1,4 +1,5 @@
 import { items } from '@lostrpg/core/game-data/item';
+import { CharacterItem } from '@lostrpg/schemas/validation/items';
 import { Box, TextField, Typography } from '@mui/material';
 import { GridRowId } from '@mui/x-data-grid';
 import React, { useMemo, useState } from 'react';
@@ -18,7 +19,6 @@ import {
   deleteItem,
   updateCharacter,
 } from '../../model/characterSlice';
-import type { Item } from '../../model/characterSlice';
 
 export const ItemsSection: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -60,7 +60,7 @@ export const ItemsSection: React.FC = () => {
   const handleItemAdd = (itemName: string) => {
     const item = items.find((i) => i.name === itemName);
     if (item) {
-      const newItem: Item = {
+      const newItem: CharacterItem = {
         id: `item-${Date.now()}`,
         name: item.name,
         number: 1,

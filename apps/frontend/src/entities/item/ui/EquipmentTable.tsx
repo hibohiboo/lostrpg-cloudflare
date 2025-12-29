@@ -1,17 +1,17 @@
+import { Equipment } from '@lostrpg/schemas/validation/items';
 import { GridColDef, GridRowId } from '@mui/x-data-grid';
 import { EditableDataGrid } from '@lostrpg/frontend/shared/ui';
-import { Item } from '../model/types';
 
 type Props = {
-  items: Item[];
+  items: Equipment[];
   handleItemDelete: (id: string) => void;
   handleItemUpdate: (
-    newRow: Item,
-    oldRow: Item,
+    newRow: Equipment,
+    oldRow: Equipment,
     params: {
       rowId: GridRowId;
     },
-  ) => Item;
+  ) => Equipment;
 };
 
 export const EquipmentTable: React.FC<Props> = ({
@@ -19,7 +19,7 @@ export const EquipmentTable: React.FC<Props> = ({
   handleItemDelete,
   handleItemUpdate,
 }) => {
-  const columns: GridColDef<Item>[] = [
+  const columns: GridColDef<Equipment>[] = [
     { field: 'area', headerName: '部位', width: 100, editable: true },
     { field: 'name', headerName: '名前', width: 150, editable: true },
     {

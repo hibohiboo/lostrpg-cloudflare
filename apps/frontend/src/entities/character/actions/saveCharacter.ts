@@ -71,19 +71,7 @@ export const createCharacterThunk = createAsyncThunk<
             id: item.id!,
             number: item.number || 1,
           })),
-        equipments: character.equipment.map((eq) => ({
-          id: eq.id,
-          number: 1,
-          name: eq.name,
-          j: eq.j,
-          weight: eq.weight,
-          type: eq.type,
-          area: eq.area,
-          specialty: eq.specialty,
-          target: eq.target,
-          trait: eq.trait,
-          effect: eq.effect,
-        })),
+        equipments: character.equipment,
         bags: character.bags.map((bag) => ({
           ...bag,
           items: bag.items
@@ -187,19 +175,7 @@ export const updateCharacterThunk = createAsyncThunk<
           id: item.id!,
           number: item.number || 1,
         })),
-      equipments: character.equipment.map((eq) => ({
-        id: eq.id,
-        number: 1,
-        name: eq.name,
-        j: eq.j,
-        weight: eq.weight,
-        type: eq.type,
-        area: eq.area,
-        specialty: eq.specialty,
-        target: eq.target,
-        trait: eq.trait,
-        effect: eq.effect,
-      })),
+      equipments: character.equipment,
       bags: character.bags.map((bag) => ({
         ...bag,
         items: bag.items

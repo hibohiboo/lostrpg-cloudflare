@@ -4,6 +4,7 @@ import {
   bodyParts,
   specialtyRows,
 } from '@lostrpg/core/game-data/speciality';
+import { CharacterItem, Equipment } from '@lostrpg/schemas/validation/items';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 // 身体部位の位置を見つける
@@ -76,40 +77,11 @@ export interface Ability {
   effect: string;
 }
 
-export interface Item {
-  id?: string;
-  name: string;
-  number?: number;
-  j: number;
-  weight: number;
-  type: string;
-  area: string;
-  specialty: string;
-  target: string;
-  trait: string;
-  effect: string;
-  equipedArea?: string;
-}
-
-export interface Equipment {
-  id: string;
-  equipedArea: string;
-  name: string;
-  j: number;
-  weight: number;
-  type: string;
-  area: string;
-  specialty: string;
-  target: string;
-  trait: string;
-  effect: string;
-}
-
 export interface Bag {
   id: string;
   name: string;
   capacity: number;
-  items: Item[];
+  items: CharacterItem[];
 }
 
 export interface StatusAilment {
@@ -141,7 +113,7 @@ export interface CharacterFormData {
   willPowerBase: number;
   willPower: number;
   carryingCapacity: number;
-  items: Item[];
+  items: CharacterItem[];
   equipment: Equipment[];
   bags: Bag[];
   statusAilments: StatusAilment[];
@@ -175,6 +147,7 @@ const initialState: CharacterFormData = {
   items: [
     {
       id: 'item-initial-backpack',
+      number: 1,
       ...items.find((x) => x.name === 'リュックサック')!,
     },
   ],
@@ -314,10 +287,10 @@ export const characterSlice = createSlice({
         (a) => a.name !== action.payload.name,
       );
     },
-    addItem: (state, action: PayloadAction<Item>) => {
+    addItem: (state, action: PayloadAction<CharacterItem>) => {
       state.items.push(action.payload);
     },
-    updateItem: (state, action: PayloadAction<Item>) => {
+    updateItem: (state, action: PayloadAction<CharacterItem>) => {
       const index = state.items.findIndex((i) => i.id === action.payload.id);
       if (index !== -1) {
         state.items[index] = action.payload;
