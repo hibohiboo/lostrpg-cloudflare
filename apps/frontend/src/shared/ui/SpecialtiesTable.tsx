@@ -143,7 +143,7 @@ const Cell: React.FC<{
     </div>
   </TableCell>
 );
-
+const cols = [0, -1, 1, -1, 2, -1, 4, -1, 5];
 const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
   gaps,
   damagedSpecialties,
@@ -224,59 +224,21 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
               >
                 {i + 2}
               </TableCell>
-              <Cell
-                name={row[0].name}
-                isBodyParts={row[0].isBodyParts}
-                damagedSpecialties={damagedSpecialties}
-                handleSpecialtyClick={handleSpecialtyClick}
-                handleDamageClick={handleDamageClick}
-                readOnly={readOnly}
-              />
-              <GapCell />
-              <Cell
-                name={row[1].name}
-                isBodyParts={row[1].isBodyParts}
-                damagedSpecialties={damagedSpecialties}
-                handleSpecialtyClick={handleSpecialtyClick}
-                handleDamageClick={handleDamageClick}
-                readOnly={readOnly}
-              />
-              <GapCell />
-              <Cell
-                name={row[2].name}
-                isBodyParts={row[2].isBodyParts}
-                damagedSpecialties={damagedSpecialties}
-                handleSpecialtyClick={handleSpecialtyClick}
-                handleDamageClick={handleDamageClick}
-                readOnly={readOnly}
-              />
-              <GapCell />
-              <Cell
-                name={row[3].name}
-                isBodyParts={row[3].isBodyParts}
-                damagedSpecialties={damagedSpecialties}
-                handleSpecialtyClick={handleSpecialtyClick}
-                handleDamageClick={handleDamageClick}
-                readOnly={readOnly}
-              />
-              <GapCell />
-              <Cell
-                name={row[4].name}
-                isBodyParts={row[4].isBodyParts}
-                damagedSpecialties={damagedSpecialties}
-                handleSpecialtyClick={handleSpecialtyClick}
-                handleDamageClick={handleDamageClick}
-                readOnly={readOnly}
-              />
-              <GapCell />
-              <Cell
-                name={row[5].name}
-                isBodyParts={row[5].isBodyParts}
-                damagedSpecialties={damagedSpecialties}
-                handleSpecialtyClick={handleSpecialtyClick}
-                handleDamageClick={handleDamageClick}
-                readOnly={readOnly}
-              />
+              {cols.map((c, rowIndex) =>
+                c < 0 ? (
+                  <GapCell key={`cell-${rowIndex}`} />
+                ) : (
+                  <Cell
+                    key={`cell-${rowIndex}`}
+                    name={row[c].name}
+                    isBodyParts={row[c].isBodyParts}
+                    damagedSpecialties={damagedSpecialties}
+                    handleSpecialtyClick={handleSpecialtyClick}
+                    handleDamageClick={handleDamageClick}
+                    readOnly={readOnly}
+                  />
+                ),
+              )}
             </TableRow>
           ))}
         </TableBody>
