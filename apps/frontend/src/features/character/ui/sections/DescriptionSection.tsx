@@ -33,7 +33,7 @@ export const DescriptionSection: React.FC = () => {
           fullWidth
           multiline
           rows={3}
-          label="外見"
+          label="容姿"
           value={appearance}
           onChange={(e) =>
             dispatch(updateCharacter({ appearance: e.target.value }))
@@ -46,7 +46,7 @@ export const DescriptionSection: React.FC = () => {
           fullWidth
           multiline
           rows={5}
-          label="メモ"
+          label="設定"
           value={freeWriting}
           onChange={(e) =>
             dispatch(updateCharacter({ freeWriting: e.target.value }))
@@ -57,7 +57,7 @@ export const DescriptionSection: React.FC = () => {
       <Box my={2}>
         <TextField
           fullWidth
-          label="名言"
+          label="セリフ"
           value={quote}
           onChange={(e) => dispatch(updateCharacter({ quote: e.target.value }))}
         />
