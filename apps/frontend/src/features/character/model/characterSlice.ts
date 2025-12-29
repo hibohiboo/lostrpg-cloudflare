@@ -187,6 +187,7 @@ const initialState: CharacterFormData = {
       items: [
         {
           id: 'item-initial-jerky',
+          number: 10,
           ...items.find((x) => x.name === 'ジャーキー')!,
         },
       ],

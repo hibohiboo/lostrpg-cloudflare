@@ -29,6 +29,7 @@ import type { Item } from '../../model/characterSlice';
 export const ItemsSection: React.FC = () => {
   const dispatch = useAppDispatch();
   const characterItems = useAppSelector((state) => state.character.items);
+  const bags = useAppSelector((state) => state.character.bags);
   const carryingCapacity = useAppSelector(
     (state) => state.character.carryingCapacity,
   );
@@ -43,14 +44,24 @@ export const ItemsSection: React.FC = () => {
     [characterItems],
   );
 
-  const totalValue = useMemo(
-    () =>
-      characterItems.reduce(
-        (sum, item) => sum + item.j * (item.number || 1),
+  const totalValue = useMemo(() => {
+    // アイテムリストの合計
+    const itemsTotal = characterItems.reduce(
+      (sum, item) => sum + item.j * (item.number || 1),
+      0,
+    );
+
+    // 袋の中のアイテムの合計
+    const bagsTotal = bags.reduce((bagSum, bag) => {
+      const bagItemsTotal = bag.items.reduce(
+        (itemSum, item) => itemSum + item.j * (item.number || 1),
         0,
-      ),
-    [characterItems],
-  );
+      );
+      return bagSum + bagItemsTotal;
+    }, 0);
+
+    return itemsTotal + bagsTotal;
+  }, [characterItems, bags]);
 
   const handleItemAdd = (itemName: string) => {
     const item = items.find((i) => i.name === itemName);
