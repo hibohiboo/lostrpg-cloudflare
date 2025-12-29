@@ -1,15 +1,9 @@
 import { items } from '@lostrpg/core/game-data/item';
-import {
-  Box,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box, TextField, Typography } from '@mui/material';
 import { GridRowId } from '@mui/x-data-grid';
 import React, { useMemo, useState } from 'react';
 import {
+  AddItemForm,
   ItemTable,
   type Item as EntityItem,
 } from '@lostrpg/frontend/entities/item';
@@ -141,25 +135,12 @@ export const ItemsSection: React.FC = () => {
         />
       </Box>
 
-      <Select
-        value={itemSelect}
-        label="アイテム追加"
-        onChange={(e: SelectChangeEvent) => {
-          const { value } = e.target;
-          setItemSelect(value);
-          if (value) {
-            handleItemAdd(value);
-          }
+      <AddItemForm
+        itemSelect={itemSelect}
+        onItemAdd={(value) => {
+          handleItemAdd(value.name);
         }}
-        sx={{ minWidth: 200, mb: 2 }}
-      >
-        <MenuItem value="">未選択</MenuItem>
-        {items.map((item) => (
-          <MenuItem value={item.name} key={item.name}>
-            {item.name}
-          </MenuItem>
-        ))}
-      </Select>
+      />
 
       <Box sx={{ height: 400, width: '100%' }}>
         <ItemTable

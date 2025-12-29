@@ -1,13 +1,3 @@
-export interface Item {
-  id: string;
-  number: number;
-  name: string;
-  j: number;
-  weight: number;
-  type: string;
-  area: string;
-  specialty: string;
-  target: string;
-  trait: string;
-  effect: string;
-}
+import { CharacterItem } from '@lostrpg/schemas/validation/items';
+
+export type Item = CharacterItem;

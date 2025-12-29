@@ -13,3 +13,5 @@ export const itemSchema = z.object({
   trait: z.string(),
   effect: z.string(),
 });
+export type CharacterItem = z.infer<typeof itemSchema>;
+export type ItemBase = Omit<CharacterItem, 'id' | 'number'>;
