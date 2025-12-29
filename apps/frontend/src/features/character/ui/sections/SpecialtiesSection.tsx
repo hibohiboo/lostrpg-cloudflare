@@ -1,4 +1,5 @@
 import { damageTableRows } from '@lostrpg/core/game-data/speciality';
+import { HelpOutline } from '@mui/icons-material';
 import {
   Box,
   Chip,
@@ -13,6 +14,8 @@ import {
   Paper,
   Checkbox,
   Button,
+  Tooltip,
+  IconButton,
 } from '@mui/material';
 import React from 'react';
 
@@ -143,9 +146,17 @@ export const SpecialtiesSection: React.FC = () => {
   return (
     <>
       <Box my={3}>
-        <Typography variant="h6" gutterBottom>
-          特技
-        </Typography>
+        <Box display="flex" alignItems="center" gap={1} mb={2}>
+          <Typography variant="h6">特技</Typography>
+          <Tooltip
+            title="特技取得はテキスト部分クリック。ダメージはチェック。"
+            arrow
+          >
+            <IconButton size="small" sx={{ padding: 0 }}>
+              <HelpOutline fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        </Box>
         <SpecialtiesTable
           gaps={gaps}
           specialties={specialties}
