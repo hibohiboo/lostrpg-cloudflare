@@ -1,0 +1,225 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { characterApi } from '../api/api';
+import type { RootState } from '@lostrpg/frontend/app/store';
+
+/**
+ * バリデーションエラー
+ */
+export class ValidationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'ValidationError';
+  }
+}
+
+/**
+ * 新規キャラクター作成Thunk
+ */
+export const createCharacterThunk = createAsyncThunk(
+  'character/create',
+  async (
+    {
+      handleImageUpload,
+    }: {
+      handleImageUpload: (
+        id: string,
+        password: string | undefined,
+      ) => Promise<string | null>;
+    },
+    { getState, dispatch },
+  ) => {
+    const state = getState() as RootState;
+    const { character } = state;
+
+    // バリデーション
+    if (!character.name) {
+      throw new ValidationError('キャラクター名は必須です');
+    }
+
+    // キャラクター作成
+    const result = await dispatch(
+      characterApi.endpoints.createCharacter.initiate({
+        playerName: character.playerName,
+        name: character.name,
+        campId: character.campId,
+        imageUrl: character.imageUrl,
+        classes: character.classes,
+        specialties: character.specialties,
+        gaps: character.gaps,
+        damagedSpecialties: character.damagedSpecialties,
+        abilities: character.abilities,
+        staminaBase: character.staminaBase,
+        stamina: character.stamina,
+        willPowerBase: character.willPowerBase,
+        willPower: character.willPower,
+        carryingCapacity: character.carryingCapacity,
+        items: character.items
+          .filter((item) => item.id)
+          .map((item) => ({
+            ...item,
+            id: item.id!,
+            number: item.number || 1,
+          })),
+        equipments: character.equipment.map((eq) => ({
+          id: eq.id,
+          number: 1,
+          name: eq.name,
+          j: eq.j,
+          weight: eq.weight,
+          type: eq.type,
+          area: eq.area,
+          specialty: eq.specialty,
+          target: eq.target,
+          trait: eq.trait,
+          effect: eq.effect,
+        })),
+        bags: character.bags.map((bag) => ({
+          ...bag,
+          items: bag.items
+            .filter((item) => item.id)
+            .map((item) => ({
+              ...item,
+              id: item.id!,
+              number: item.number || 1,
+            })),
+        })),
+        statusAilments: character.statusAilments
+          .filter((ailment) => ailment.isChecked)
+          .map((ailment) => ailment.name),
+        backbones: character.backbones,
+        unusedExperience: character.unusedExperience,
+        totalExperience: character.totalExperience,
+        summary: character.summary,
+        appearance: character.appearance,
+        freeWriting: character.freeWriting,
+        quote: character.quote,
+        subbliments: {
+          useStrangeField: character.useStrangeField,
+          useDragonPlain: character.useDragonPlain,
+        },
+        password: character.password,
+      }),
+    ).unwrap();
+
+    const { id } = result;
+
+    // 画像アップロード
+    const imageUrl = await handleImageUpload(id, character.password);
+
+    // 画像URLがある場合は更新
+    if (imageUrl) {
+      await dispatch(
+        characterApi.endpoints.updateCharacter.initiate({
+          id,
+          data: { imageUrl },
+        }),
+      ).unwrap();
+    }
+
+    return { id };
+  },
+);
+
+/**
+ * キャラクター更新Thunk
+ */
+export const updateCharacterThunk = createAsyncThunk(
+  'character/update',
+  async (
+    {
+      id,
+      handleImageUpload,
+    }: {
+      id: string;
+      handleImageUpload: (
+        id: string,
+        password: string | undefined,
+      ) => Promise<string | null>;
+    },
+    { getState, dispatch },
+  ) => {
+    const state = getState() as RootState;
+    const { character } = state;
+
+    // バリデーション
+    if (!character.name) {
+      throw new ValidationError('キャラクター名は必須です');
+    }
+
+    // 画像アップロード
+    const imageUrl = await handleImageUpload(id, character.password);
+
+    // キャラクター更新データを準備
+    const updateData = {
+      playerName: character.playerName,
+      name: character.name,
+      campId: character.campId,
+      imageUrl: imageUrl || character.imageUrl,
+      classes: character.classes,
+      specialties: character.specialties,
+      gaps: character.gaps,
+      damagedSpecialties: character.damagedSpecialties,
+      abilities: character.abilities,
+      staminaBase: character.staminaBase,
+      stamina: character.stamina,
+      willPowerBase: character.willPowerBase,
+      willPower: character.willPower,
+      carryingCapacity: character.carryingCapacity,
+      items: character.items
+        .filter((item) => item.id)
+        .map((item) => ({
+          ...item,
+          id: item.id!,
+          number: item.number || 1,
+        })),
+      equipments: character.equipment.map((eq) => ({
+        id: eq.id,
+        number: 1,
+        name: eq.name,
+        j: eq.j,
+        weight: eq.weight,
+        type: eq.type,
+        area: eq.area,
+        specialty: eq.specialty,
+        target: eq.target,
+        trait: eq.trait,
+        effect: eq.effect,
+      })),
+      bags: character.bags.map((bag) => ({
+        ...bag,
+        items: bag.items
+          .filter((item) => item.id)
+          .map((item) => ({
+            ...item,
+            id: item.id!,
+            number: item.number || 1,
+          })),
+      })),
+      statusAilments: character.statusAilments
+        .filter((ailment) => ailment.isChecked)
+        .map((ailment) => ailment.name),
+      backbones: character.backbones,
+      unusedExperience: character.unusedExperience,
+      totalExperience: character.totalExperience,
+      summary: character.summary,
+      appearance: character.appearance,
+      freeWriting: character.freeWriting,
+      quote: character.quote,
+      subbliments: {
+        useStrangeField: character.useStrangeField,
+        useDragonPlain: character.useDragonPlain,
+      },
+      password: character.password,
+    };
+
+    // キャラクター更新
+    await dispatch(
+      characterApi.endpoints.updateCharacter.initiate({
+        id,
+        data: updateData,
+      }),
+    ).unwrap();
+
+    return { id };
+  },
+);
