@@ -139,6 +139,7 @@ const Cell: React.FC<{
         onChange={() => handleDamageClick(name)}
         disabled={readOnly}
         size="small"
+        color="error"
       />
     </div>
   </TableCell>
