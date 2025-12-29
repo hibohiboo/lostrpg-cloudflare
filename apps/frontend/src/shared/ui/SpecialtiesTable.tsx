@@ -91,8 +91,9 @@ const GapCell: React.FC = () => (
 
 const Cell: React.FC<{
   name: string;
-  handleSpecialtyClick: (s: string) => void;
+  isBodyParts: boolean;
   damagedSpecialties: string[];
+  handleSpecialtyClick: (s: string) => void;
   handleDamageClick: (s: string) => void;
   readOnly?: boolean;
 }> = ({
@@ -100,6 +101,7 @@ const Cell: React.FC<{
   damagedSpecialties,
   handleSpecialtyClick,
   handleDamageClick,
+  isBodyParts,
   readOnly,
 }) => (
   <TableCell
@@ -107,7 +109,7 @@ const Cell: React.FC<{
     sx={{
       p: '0 4px 0 8px',
       height: '44px',
-      border: '1px solid rgba(224, 224, 224, 1)',
+      border: `${isBodyParts ? 'thick double' : '1px solid'} rgba(224, 224, 224, 1)`,
       cursor: 'pointer',
     }}
   >
@@ -223,7 +225,8 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
                 {i + 2}
               </TableCell>
               <Cell
-                name={row[0]}
+                name={row[0].name}
+                isBodyParts={row[0].isBodyParts}
                 damagedSpecialties={damagedSpecialties}
                 handleSpecialtyClick={handleSpecialtyClick}
                 handleDamageClick={handleDamageClick}
@@ -231,7 +234,8 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
               />
               <GapCell />
               <Cell
-                name={row[1]}
+                name={row[1].name}
+                isBodyParts={row[1].isBodyParts}
                 damagedSpecialties={damagedSpecialties}
                 handleSpecialtyClick={handleSpecialtyClick}
                 handleDamageClick={handleDamageClick}
@@ -239,7 +243,8 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
               />
               <GapCell />
               <Cell
-                name={row[2]}
+                name={row[2].name}
+                isBodyParts={row[2].isBodyParts}
                 damagedSpecialties={damagedSpecialties}
                 handleSpecialtyClick={handleSpecialtyClick}
                 handleDamageClick={handleDamageClick}
@@ -247,7 +252,8 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
               />
               <GapCell />
               <Cell
-                name={row[3]}
+                name={row[3].name}
+                isBodyParts={row[3].isBodyParts}
                 damagedSpecialties={damagedSpecialties}
                 handleSpecialtyClick={handleSpecialtyClick}
                 handleDamageClick={handleDamageClick}
@@ -255,7 +261,8 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
               />
               <GapCell />
               <Cell
-                name={row[4]}
+                name={row[4].name}
+                isBodyParts={row[4].isBodyParts}
                 damagedSpecialties={damagedSpecialties}
                 handleSpecialtyClick={handleSpecialtyClick}
                 handleDamageClick={handleDamageClick}
@@ -263,7 +270,8 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
               />
               <GapCell />
               <Cell
-                name={row[5]}
+                name={row[5].name}
+                isBodyParts={row[5].isBodyParts}
                 damagedSpecialties={damagedSpecialties}
                 handleSpecialtyClick={handleSpecialtyClick}
                 handleDamageClick={handleDamageClick}
