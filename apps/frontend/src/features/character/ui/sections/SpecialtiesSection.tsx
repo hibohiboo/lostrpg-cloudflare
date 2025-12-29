@@ -12,6 +12,7 @@ import {
   TableRow,
   Paper,
   Checkbox,
+  Button,
 } from '@mui/material';
 import React from 'react';
 
@@ -24,6 +25,7 @@ import {
   toggleSpecialty,
   toggleGap,
   toggleDamagedSpecialty,
+  clearAllDamage,
 } from '../../model/characterSlice';
 import type { Gap } from '../../model/characterSlice';
 
@@ -174,9 +176,18 @@ export const SpecialtiesSection: React.FC = () => {
       </Box>
 
       <Box my={3}>
-        <Typography variant="h6" gutterBottom>
-          身体部位決定表
-        </Typography>
+        <Box display="flex" gap={2} alignItems="center" mb={2}>
+          <Typography variant="h6">身体部位決定表</Typography>
+          <Button
+            variant="outlined"
+            color="primary"
+            size="small"
+            onClick={() => dispatch(clearAllDamage())}
+            disabled={damagedSpecialties.length === 0}
+          >
+            ダメージを全て回復
+          </Button>
+        </Box>
         <DamageTable
           rows={damageTableRows.map((row) => ({
             name: row.name,

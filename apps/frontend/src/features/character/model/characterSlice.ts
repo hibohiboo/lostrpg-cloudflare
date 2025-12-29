@@ -353,6 +353,9 @@ export const characterSlice = createSlice({
     deleteBackbone: (state, action: PayloadAction<string>) => {
       state.backbones = state.backbones.filter((b) => b.id !== action.payload);
     },
+    clearAllDamage: (state) => {
+      state.damagedSpecialties = [];
+    },
     resetCharacter: () => initialState,
   },
 });
@@ -365,6 +368,7 @@ export const {
   toggleSpecialty,
   toggleGap,
   toggleDamagedSpecialty,
+  clearAllDamage,
   addAbility,
   updateAbility,
   deleteAbility,
