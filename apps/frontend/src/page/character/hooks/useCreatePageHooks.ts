@@ -1,4 +1,6 @@
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router';
+import { store } from '@lostrpg/frontend/app/store';
 import {
   useCreateCharacterMutation,
   useUpdateCharacterMutation,
@@ -15,9 +17,12 @@ export const useCreatePageHooks = () => {
   const [createCharacter] = useCreateCharacterMutation();
   const [updateCharacter] = useUpdateCharacterMutation();
   const editForm = useEditFormHooks();
-  const { character, setIsValidError, handleImageUpload } = editForm;
+  const { setIsValidError, handleImageUpload } = editForm;
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
+    // 最新のstateを取得（クロージャーに閉じ込めない）
+    const { character } = store.getState();
+
     if (!character.name) {
       setIsValidError(true);
       window.scrollTo(0, 0);
@@ -105,7 +110,7 @@ export const useCreatePageHooks = () => {
     } catch (error) {
       handleCreateError(error);
     }
-  };
+  }, [createCharacter, updateCharacter, navigate, setIsValidError, handleImageUpload]);
 
   const handleDelete = undefined;
 

@@ -1,4 +1,6 @@
+import { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router';
+import { store } from '@lostrpg/frontend/app/store';
 import {
   useDeleteCharacterMutation,
   useUpdateCharacterMutation,
@@ -25,9 +27,12 @@ export const useEditPageHooks = () => {
   const [updateCharacter] = useUpdateCharacterMutation();
   const [deleteCharacter] = useDeleteCharacterMutation();
   const editForm = useEditFormHooks();
-  const { character, setIsValidError, handleImageUpload } = editForm;
+  const { setIsValidError, handleImageUpload } = editForm;
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
+    // 最新のstateを取得（クロージャーに閉じ込めない）
+    const { character } = store.getState();
+
     if (!character.name) {
       setIsValidError(true);
       window.scrollTo(0, 0);
@@ -112,15 +117,15 @@ export const useEditPageHooks = () => {
     } catch (error) {
       handleUpdateError(error);
     }
-  };
+  }, [id, updateCharacter, navigate, setIsValidError, handleImageUpload]);
 
-  const handleDelete = async () => {
+  const handleDelete = useCallback(async () => {
     if (!id) return;
     if (!window.confirm('本当に削除しますか？')) return;
 
     await deleteCharacter(id).unwrap();
     navigate('/character');
-  };
+  }, [id, deleteCharacter, navigate]);
 
   return {
     ...editForm,

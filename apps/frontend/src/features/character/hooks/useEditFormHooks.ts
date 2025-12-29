@@ -1,12 +1,8 @@
 import { useState } from 'react';
 import { useUploadCharacterImageMutation } from '@lostrpg/frontend/entities/character';
-import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 
 export const useEditFormHooks = () => {
   const [uploadImage] = useUploadCharacterImageMutation();
-
-  // Redux stateからcharacterを取得（ページレベルのhooksで使用される）
-  const character = useAppSelector((state) => state.character);
 
   // 画像管理
   const [isValidError, setIsValidError] = useState(false);
@@ -42,7 +38,6 @@ export const useEditFormHooks = () => {
   };
 
   return {
-    character,
     isValidError,
     previewUrl,
     setIsValidError,
