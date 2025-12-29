@@ -241,11 +241,26 @@ export const characterSlice = createSlice({
         // 身体部位の場合、周囲8マスの特技からもダメージを削除
         if (isBodyPart) {
           const surrounding = getSurroundingSpecialties(specialtyName);
+
+          // 他のダメージを受けている身体部位の周囲8マスを集計
+          const otherDamagedBodyParts = state.damagedSpecialties.filter(
+            (s) => bodyParts.includes(s) && s !== specialtyName,
+          );
+          const protectedSpecialties = new Set<string>();
+          otherDamagedBodyParts.forEach((bodyPart) => {
+            getSurroundingSpecialties(bodyPart).forEach((s) =>
+              protectedSpecialties.add(s),
+            );
+          });
+
+          // 他の身体部位の影響を受けていない特技のみダメージを削除
           surrounding.forEach((surroundingSpecialty) => {
-            const surroundingIndex =
-              state.damagedSpecialties.indexOf(surroundingSpecialty);
-            if (surroundingIndex !== -1) {
-              state.damagedSpecialties.splice(surroundingIndex, 1);
+            if (!protectedSpecialties.has(surroundingSpecialty)) {
+              const surroundingIndex =
+                state.damagedSpecialties.indexOf(surroundingSpecialty);
+              if (surroundingIndex !== -1) {
+                state.damagedSpecialties.splice(surroundingIndex, 1);
+              }
             }
           });
         }
