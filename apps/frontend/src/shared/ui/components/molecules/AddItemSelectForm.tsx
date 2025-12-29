@@ -24,6 +24,9 @@ export function AddItemSelectForm<T>({
 }: AddItemSelectFormProps<T>): React.ReactElement {
   const handleChange = (event: SelectChangeEvent) => {
     const selectedName = event.target.value;
+    if (!selectedName) {
+      return;
+    }
     const item = items.find((i) => getItemName(i) === selectedName);
     if (item) {
       onAdd(item);
@@ -33,7 +36,7 @@ export function AddItemSelectForm<T>({
   return (
     <FormControl sx={{ minWidth: 200 }}>
       <InputLabel>{label}</InputLabel>
-      <Select value={value} label={label} onChange={handleChange}>
+      <Select value={value || ''} label={label} onChange={handleChange}>
         <MenuItem value="">未選択</MenuItem>
         {items.map((item) => {
           const name = getItemName(item);
