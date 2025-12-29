@@ -1,20 +1,23 @@
 import { items } from '@lostrpg/core/game-data/item';
-import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Box,
-  Button,
   MenuItem,
   Select,
   SelectChangeEvent,
   TextField,
   Typography,
 } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { GridRowId } from '@mui/x-data-grid';
 import React, { useMemo, useState } from 'react';
+import {
+  ItemTable,
+  type Item as EntityItem,
+} from '@lostrpg/frontend/entities/item';
 import {
   useAppDispatch,
   useAppSelector,
 } from '@lostrpg/frontend/shared/lib/store';
+
 import {
   addItem,
   updateItem,
@@ -73,45 +76,18 @@ export const ItemsSection: React.FC = () => {
     }
   };
 
-  const itemColumns: GridColDef[] = [
-    { field: 'name', headerName: '名前', width: 200, editable: true },
-    {
-      field: 'number',
-      headerName: '個数',
-      width: 100,
-      type: 'number',
-      editable: true,
-    },
-    {
-      field: 'weight',
-      headerName: '重量',
-      width: 100,
-      type: 'number',
-      editable: true,
-    },
-    {
-      field: 'j',
-      headerName: '価格(J)',
-      width: 100,
-      type: 'number',
-      editable: true,
-    },
-    {
-      field: 'actions',
-      headerName: '操作',
-      width: 80,
-      sortable: false,
-      renderCell: (params) => (
-        <Button
-          size="small"
-          color="error"
-          onClick={() => dispatch(deleteItem(params.row.id))}
-        >
-          <DeleteIcon fontSize="small" />
-        </Button>
-      ),
-    },
-  ];
+  const handleItemUpdate = (
+    newRow: EntityItem,
+    _oldRow: EntityItem,
+    _params: { rowId: GridRowId },
+  ): EntityItem => {
+    dispatch(updateItem(newRow));
+    return newRow;
+  };
+
+  const handleItemDelete = (id: string) => {
+    dispatch(deleteItem(id));
+  };
 
   return (
     <Box my={3}>
@@ -175,18 +151,16 @@ export const ItemsSection: React.FC = () => {
       </Select>
 
       <Box sx={{ height: 400, width: '100%' }}>
-        <DataGrid
-          rows={characterItems}
-          columns={itemColumns}
-          processRowUpdate={(updatedRow: Item) => {
-            dispatch(updateItem(updatedRow));
-            return updatedRow;
-          }}
-          hideFooter
-          disableRowSelectionOnClick
-          localeText={{
-            noRowsLabel: 'アイテムがありません',
-          }}
+        <ItemTable
+          items={characterItems
+            .filter((item) => item.id !== undefined)
+            .map((item) => ({
+              ...item,
+              id: item.id!,
+              number: item.number ?? 1,
+            }))}
+          handleItemDelete={handleItemDelete}
+          handleItemUpdate={handleItemUpdate}
         />
       </Box>
     </Box>
