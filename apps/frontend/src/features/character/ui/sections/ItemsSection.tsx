@@ -24,6 +24,7 @@ export const ItemsSection: React.FC = () => {
   const dispatch = useAppDispatch();
   const characterItems = useAppSelector((state) => state.character.items);
   const bags = useAppSelector((state) => state.character.bags);
+  const equipment = useAppSelector((state) => state.character.equipment);
   const carryingCapacity = useAppSelector(
     (state) => state.character.carryingCapacity,
   );
@@ -54,8 +55,14 @@ export const ItemsSection: React.FC = () => {
       return bagSum + bagItemsTotal;
     }, 0);
 
-    return itemsTotal + bagsTotal;
-  }, [characterItems, bags]);
+    // 装備の合計
+    const equipmentTotal = equipment.reduce(
+      (sum, item) => sum + item.j,
+      0,
+    );
+
+    return itemsTotal + bagsTotal + equipmentTotal;
+  }, [characterItems, bags, equipment]);
 
   const handleItemAdd = (itemName: string) => {
     const item = items.find((i) => i.name === itemName);
