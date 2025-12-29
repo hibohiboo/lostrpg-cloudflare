@@ -1,20 +1,33 @@
 import { items } from '@lostrpg/core/game-data/item';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Box, Button, MenuItem, Select, SelectChangeEvent, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import React, { useMemo, useState } from 'react';
 import {
   useAppDispatch,
   useAppSelector,
 } from '@lostrpg/frontend/shared/lib/store';
-import { addItem, updateItem, deleteItem, updateCharacter } from '../../model/characterSlice';
+import {
+  addItem,
+  updateItem,
+  deleteItem,
+  updateCharacter,
+} from '../../model/characterSlice';
 import type { Item } from '../../model/characterSlice';
 
 export const ItemsSection: React.FC = () => {
   const dispatch = useAppDispatch();
   const characterItems = useAppSelector((state) => state.character.items);
   const carryingCapacity = useAppSelector(
-    (state) => state.character.carryingCapacity
+    (state) => state.character.carryingCapacity,
   );
   const [itemSelect, setItemSelect] = useState('');
 
@@ -22,15 +35,18 @@ export const ItemsSection: React.FC = () => {
     () =>
       characterItems.reduce(
         (sum, item) => sum + item.weight * (item.number || 1),
-        0
+        0,
       ),
-    [characterItems]
+    [characterItems],
   );
 
   const totalValue = useMemo(
     () =>
-      characterItems.reduce((sum, item) => sum + item.j * (item.number || 1), 0),
-    [characterItems]
+      characterItems.reduce(
+        (sum, item) => sum + item.j * (item.number || 1),
+        0,
+      ),
+    [characterItems],
   );
 
   const handleItemAdd = (itemName: string) => {
@@ -105,19 +121,19 @@ export const ItemsSection: React.FC = () => {
       <Box display="flex" gap={2} mb={2}>
         <TextField
           type="number"
-          label="運搬能力"
+          label="所持限界"
           value={carryingCapacity}
           onChange={(e) =>
             dispatch(
-              updateCharacter({ carryingCapacity: Number(e.target.value) })
+              updateCharacter({ carryingCapacity: Number(e.target.value) }),
             )
           }
           sx={{ width: 150 }}
         />
         <TextField
           type="number"
-          label="合計重量"
-          value={totalWeight.toFixed(1)}
+          label="アイテム重量"
+          value={totalWeight}
           slotProps={{
             input: {
               readOnly: true,

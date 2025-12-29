@@ -10,7 +10,9 @@ export const AbilitySection: React.FC = () => {
   const dispatch = useAppDispatch();
   const staminaBase = useAppSelector((state) => state.character.staminaBase);
   const stamina = useAppSelector((state) => state.character.stamina);
-  const willPowerBase = useAppSelector((state) => state.character.willPowerBase);
+  const willPowerBase = useAppSelector(
+    (state) => state.character.willPowerBase,
+  );
   const willPower = useAppSelector((state) => state.character.willPower);
 
   return (
@@ -21,7 +23,7 @@ export const AbilitySection: React.FC = () => {
       <Box display="flex" gap={2} flexWrap="wrap">
         <TextField
           type="number"
-          label="スタミナ基本値"
+          label="生命力"
           value={staminaBase}
           onChange={(e) =>
             dispatch(updateCharacter({ staminaBase: Number(e.target.value) }))
@@ -30,7 +32,7 @@ export const AbilitySection: React.FC = () => {
         />
         <TextField
           type="number"
-          label="現在スタミナ"
+          label="体力"
           value={stamina}
           onChange={(e) =>
             dispatch(updateCharacter({ stamina: Number(e.target.value) }))
@@ -39,7 +41,7 @@ export const AbilitySection: React.FC = () => {
         />
         <TextField
           type="number"
-          label="意志力基本値"
+          label="精神力"
           value={willPowerBase}
           onChange={(e) =>
             dispatch(updateCharacter({ willPowerBase: Number(e.target.value) }))
@@ -48,7 +50,7 @@ export const AbilitySection: React.FC = () => {
         />
         <TextField
           type="number"
-          label="現在意志力"
+          label="気力"
           value={willPower}
           onChange={(e) =>
             dispatch(updateCharacter({ willPower: Number(e.target.value) }))

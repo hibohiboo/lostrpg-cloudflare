@@ -35,12 +35,7 @@ export const createCharacterThunk = createAsyncThunk<
   { rejectValue: ValidationErrorType }
 >(
   'character/create',
-  async (
-    {
-      handleImageUpload,
-    },
-    { getState, dispatch, rejectWithValue },
-  ) => {
+  async ({ handleImageUpload }, { getState, dispatch, rejectWithValue }) => {
     const state = getState() as RootState;
     const { character } = state;
 
@@ -61,7 +56,7 @@ export const createCharacterThunk = createAsyncThunk<
         imageUrl: character.imageUrl,
         classes: character.classes,
         specialties: character.specialties,
-        gaps: character.gaps,
+        gaps: character.gaps as ('A' | 'B' | 'C' | 'D' | 'E')[],
         damagedSpecialties: character.damagedSpecialties,
         abilities: character.abilities,
         staminaBase: character.staminaBase,
@@ -152,10 +147,7 @@ export const updateCharacterThunk = createAsyncThunk<
 >(
   'character/update',
   async (
-    {
-      id,
-      handleImageUpload,
-    },
+    { id, handleImageUpload },
     { getState, dispatch, rejectWithValue },
   ) => {
     const state = getState() as RootState;
@@ -180,7 +172,7 @@ export const updateCharacterThunk = createAsyncThunk<
       imageUrl: imageUrl || character.imageUrl,
       classes: character.classes,
       specialties: character.specialties,
-      gaps: character.gaps,
+      gaps: character.gaps as ('A' | 'B' | 'C' | 'D' | 'E')[],
       damagedSpecialties: character.damagedSpecialties,
       abilities: character.abilities,
       staminaBase: character.staminaBase,
