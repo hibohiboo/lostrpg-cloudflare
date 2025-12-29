@@ -173,7 +173,28 @@ const initialState: CharacterFormData = {
   carryingCapacity: 10,
   items: [],
   equipment: [],
-  bags: [],
+  bags: [
+    {
+      id: 'bag-initial',
+      name: 'リュックサック',
+      capacity: 10,
+      items: [
+        {
+          id: 'item-initial-jerky',
+          name: 'ジャーキー',
+          number: 10,
+          j: 1,
+          weight: 1,
+          type: '支援',
+          area: '-',
+          specialty: '-',
+          target: '自身',
+          trait: '食料',
+          effect: '1日分の食料。【気力】が1点増加する。通貨単位J。',
+        },
+      ],
+    },
+  ],
   statusAilments: [
     {
       id: '1',
