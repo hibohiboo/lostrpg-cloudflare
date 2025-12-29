@@ -145,7 +145,12 @@ const Cell: React.FC<{
           sx={{
             p: 0,
             ...(isSelected && {
+              color: 'white',
+
               '&.Mui-checked': {
+                color: 'error.main',
+              },
+              '&.Mui-checked svg': {
                 bgcolor: 'white',
               },
             }),
