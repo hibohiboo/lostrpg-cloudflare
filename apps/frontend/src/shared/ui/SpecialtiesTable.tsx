@@ -195,7 +195,6 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
         <TableHead>
           <TableRow sx={{ height: '44px' }}>
             {specialtiesTableColumns.map((c) => {
-              console.log(c);
               if (specialtiesTableGaps.includes(c)) {
                 return (
                   <HeaderGapCell
