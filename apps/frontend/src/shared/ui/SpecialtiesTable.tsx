@@ -31,7 +31,6 @@ const HeaderCell: React.FC<{ col: string }> = ({ col }) => (
     align="center"
     sx={{
       p: '4px',
-      minWidth: '90px',
       border: '1px solid rgba(224, 224, 224, 1)',
       fontSize: '14px',
       fontWeight: 600,
@@ -218,7 +217,7 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
                 sx={{
                   border: '1px solid rgba(224, 224, 224, 1)',
                   p: 0,
-                  width: '40px',
+                  width: '20px',
                   backgroundColor: '#fafafa',
                   fontSize: '13px',
                 }}
