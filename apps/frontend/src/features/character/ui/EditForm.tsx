@@ -15,7 +15,7 @@ import {
   Typography,
 } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { SpecialtiesTable } from '@lostrpg/frontend/shared/ui';
 import type { EditFormViewModel } from '../hooks/useEditFormHooks';
 
@@ -194,17 +194,6 @@ const EditForm: React.FC<Props> = ({
   handleSave,
   handleDelete,
 }) => {
-  // 特技テーブルのデータ構造を生成
-
-  const specialtiesTableRows = useMemo(
-    () =>
-      createSpecialtiesTableRows(
-        character.specialties,
-        character.damagedSpecialties,
-      ),
-    [character.specialties, character.damagedSpecialties],
-  );
-
   // アイテムテーブルの列定義
   const itemColumns: GridColDef[] = [
     { field: 'name', headerName: '名前', width: 200, editable: true },
@@ -406,10 +395,10 @@ const EditForm: React.FC<Props> = ({
         </Box>
       </Box>
 
-      {/* 専門特技テーブル */}
+      {/* 特技テーブル */}
       <Box my={3}>
         <Typography variant="h6" gutterBottom>
-          専門特技
+          特技
         </Typography>
         <SpecialtiesTable
           gaps={character.gaps}
@@ -420,9 +409,8 @@ const EditForm: React.FC<Props> = ({
         />
       </Box>
 
-      {/* 選択された専門特技の表示 */}
       <Box my={3}>
-        <InputLabel>選択された専門特技</InputLabel>
+        <InputLabel>習得特技</InputLabel>
         <Box display="flex" flexWrap="wrap" gap={1}>
           {character.specialties.length > 0 ? (
             character.specialties.map((specialty) => (
