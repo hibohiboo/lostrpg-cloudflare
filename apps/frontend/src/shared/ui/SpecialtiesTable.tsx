@@ -106,49 +106,60 @@ const Cell: React.FC<{
   handleDamageClick,
   isBodyParts,
   readOnly,
-}) => (
-  <TableCell
-    align={'center'}
-    sx={{
-      p: '0 4px 0 8px',
-      height: '44px',
-      border: `${isBodyParts ? 'thick double' : '1px solid'} rgba(224, 224, 224, 1)`,
-      cursor: 'pointer',
-      bgcolor: specialties.includes(name) ? 'grey.900' : undefined,
-      color: specialties.includes(name) ? 'common.white' : undefined,
-    }}
-  >
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        width: '100%',
+}) => {
+  const isSelected = specialties.includes(name);
+
+  return (
+    <TableCell
+      align={'center'}
+      sx={{
+        p: '0 4px 0 8px',
+        height: '44px',
+        border: `${isBodyParts ? 'thick double' : '1px solid'} rgba(224, 224, 224, 1)`,
+        cursor: 'pointer',
+        bgcolor: isSelected ? 'grey.900' : undefined,
+        color: isSelected ? 'common.white' : undefined,
       }}
     >
-      <Typography
-        variant="body2"
-        onClick={() => handleSpecialtyClick(name)}
-        sx={{
-          fontSize: '13px',
-          marginRight: '4px',
-          flexGrow: 1,
-          textAlign: 'right',
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          width: '100%',
         }}
       >
-        {name}
-      </Typography>
-      <Checkbox
-        sx={{ p: 0 }}
-        checked={damagedSpecialties.includes(name)}
-        onChange={() => handleDamageClick(name)}
-        disabled={readOnly}
-        size="small"
-        color="error"
-      />
-    </div>
-  </TableCell>
-);
+        <Typography
+          variant="body2"
+          onClick={() => handleSpecialtyClick(name)}
+          sx={{
+            fontSize: '13px',
+            marginRight: '4px',
+            flexGrow: 1,
+            textAlign: 'right',
+          }}
+        >
+          {name}
+        </Typography>
+        <Checkbox
+          sx={{
+            p: 0,
+            ...(isSelected && {
+              '&.Mui-checked': {
+                bgcolor: 'white',
+              },
+            }),
+          }}
+          checked={damagedSpecialties.includes(name)}
+          onChange={() => handleDamageClick(name)}
+          disabled={readOnly}
+          size="small"
+          color="error"
+        />
+      </div>
+    </TableCell>
+  );
+};
 const cols = [0, -1, 1, -1, 2, -1, 4, -1, 5];
 const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
   gaps,
