@@ -18,6 +18,7 @@ import React from 'react';
 
 interface SpecialtiesTableProps {
   gaps: string[];
+  specialties: string[];
   damagedSpecialties: string[];
   onGapChange?: (gap: string) => void;
   onSpecialtySelect?: (name: string) => void;
@@ -92,12 +93,14 @@ const GapCell: React.FC = () => (
 const Cell: React.FC<{
   name: string;
   isBodyParts: boolean;
+  specialties: string[];
   damagedSpecialties: string[];
   handleSpecialtyClick: (s: string) => void;
   handleDamageClick: (s: string) => void;
   readOnly?: boolean;
 }> = ({
   name,
+  specialties,
   damagedSpecialties,
   handleSpecialtyClick,
   handleDamageClick,
@@ -111,6 +114,8 @@ const Cell: React.FC<{
       height: '44px',
       border: `${isBodyParts ? 'thick double' : '1px solid'} rgba(224, 224, 224, 1)`,
       cursor: 'pointer',
+      bgcolor: specialties.includes(name) ? 'grey.900' : undefined,
+      color: specialties.includes(name) ? 'common.white' : undefined,
     }}
   >
     <div
@@ -147,6 +152,7 @@ const Cell: React.FC<{
 const cols = [0, -1, 1, -1, 2, -1, 4, -1, 5];
 const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
   gaps,
+  specialties,
   damagedSpecialties,
   onGapChange,
   onSpecialtySelect,
@@ -231,6 +237,7 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
                   <Cell
                     key={`cell-${rowIndex}`}
                     name={row[c].name}
+                    specialties={specialties}
                     isBodyParts={row[c].isBodyParts}
                     damagedSpecialties={damagedSpecialties}
                     handleSpecialtyClick={handleSpecialtyClick}

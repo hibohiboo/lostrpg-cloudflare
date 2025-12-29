@@ -17,7 +17,7 @@ export const SpecialtiesSection: React.FC = () => {
   const gaps = useAppSelector((state) => state.character.gaps);
   const specialties = useAppSelector((state) => state.character.specialties);
   const damagedSpecialties = useAppSelector(
-    (state) => state.character.damagedSpecialties
+    (state) => state.character.damagedSpecialties,
   );
 
   return (
@@ -28,6 +28,7 @@ export const SpecialtiesSection: React.FC = () => {
         </Typography>
         <SpecialtiesTable
           gaps={gaps}
+          specialties={specialties}
           damagedSpecialties={damagedSpecialties}
           onGapChange={(gap: Gap) => dispatch(toggleGap(gap))}
           onSpecialtySelect={(specialty: string) =>
