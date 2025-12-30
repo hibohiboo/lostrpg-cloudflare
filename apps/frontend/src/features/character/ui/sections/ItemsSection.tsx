@@ -82,7 +82,6 @@ export const ItemsSection: React.FC = () => {
         effect: item.effect,
       };
       dispatch(addItem(newItem));
-      setItemSelect('');
     }
   };
 

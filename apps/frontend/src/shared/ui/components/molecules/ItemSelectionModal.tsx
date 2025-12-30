@@ -1,14 +1,13 @@
+import { ItemBase } from '@lostrpg/schemas/validation/items';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   TextField,
-  Grid,
   IconButton,
   Box,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import { ItemBase } from '@lostrpg/schemas/validation/items';
 import React, { useState } from 'react';
 import { ItemCard } from './ItemCard';
 
@@ -53,7 +52,13 @@ export const ItemSelectionModal: React.FC<ItemSelectionModalProps> = ({
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth>
       <DialogTitle>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
           {title}
           <IconButton onClick={handleClose} size="small">
             <CloseIcon />
@@ -70,13 +75,21 @@ export const ItemSelectionModal: React.FC<ItemSelectionModalProps> = ({
           sx={{ mb: 2 }}
           autoFocus
         />
-        <Grid container spacing={2}>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: '1fr',
+              sm: 'repeat(2, 1fr)',
+              md: 'repeat(3, 1fr)',
+            },
+            gap: 2,
+          }}
+        >
           {filteredItems.map((item) => (
-            <Grid item xs={12} sm={6} md={4} key={item.name}>
-              <ItemCard item={item} onSelect={handleSelect} />
-            </Grid>
+            <ItemCard key={item.name} item={item} onSelect={handleSelect} />
           ))}
-        </Grid>
+        </Box>
       </DialogContent>
     </Dialog>
   );
