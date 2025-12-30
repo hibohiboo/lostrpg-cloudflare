@@ -94,3 +94,6 @@ export type UpdateCharacterRequest = z.infer<typeof updateCharacterSchema>;
 // バリデーション実行関数
 export const validateCreateCharacter = createValidator(createCharacterSchema);
 export const validateUpdateCharacter = createValidator(updateCharacterSchema);
+
+// キャラクター取得スキーマ
+export const getCharacterSchema = z.object(baseCharacterFields);

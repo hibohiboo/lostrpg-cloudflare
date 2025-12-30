@@ -20,7 +20,7 @@ import { equipmentCatalogSelector } from '../../model/selectors';
 
 export const EquipmentSection: React.FC = () => {
   const dispatch = useAppDispatch();
-  const equipment = useAppSelector((state) => state.character.equipment);
+  const equipment = useAppSelector((state) => state.character.equipments);
   const catalog = useAppSelector(equipmentCatalogSelector);
 
   const handleEquipmentAdd = (itemName: string) => {

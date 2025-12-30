@@ -93,10 +93,10 @@ export interface StatusAilment {
 }
 
 export interface CharacterFormData {
-  playerName: string;
+  playerName?: string;
   name: string;
-  campId: string;
-  imageUrl: string;
+  campId?: string;
+  imageUrl?: string;
   classes: CharacterClass[];
   specialties: string[];
   gaps: Gap[];
@@ -108,7 +108,7 @@ export interface CharacterFormData {
   willPower: number;
   carryingCapacity: number;
   items: CharacterItem[];
-  equipment: Equipment[];
+  equipments: Equipment[];
   bags: Bag[];
   statusAilments: StatusAilment[];
   backbones: Backbone[];
@@ -146,7 +146,7 @@ const initialState: CharacterFormData = {
       ...items.find((x) => x.name === 'リュックサック')!,
     },
   ],
-  equipment: [],
+  equipments: [],
   bags: [
     {
       id: 'bag-initial',
@@ -161,16 +161,7 @@ const initialState: CharacterFormData = {
       ],
     },
   ],
-  statusAilments: [
-    {
-      id: '1',
-      name: '毒',
-      effect: 'ラウンド終了時に2D6ダメージ',
-      isChecked: false,
-    },
-    { id: '2', name: '呪い', effect: '判定-1D6', isChecked: false },
-    { id: '3', name: '気絶', effect: '行動不能', isChecked: false },
-  ],
+  statusAilments: [],
   backbones: [],
   trophies: [],
   unusedExperience: 0,
@@ -184,23 +175,25 @@ const initialState: CharacterFormData = {
 };
 
 // APIから取得したデータにデフォルト値を適用
-const applyDefaults = (data: Partial<CharacterFormData>): CharacterFormData => {
-  const defaults = {
-    classes: [],
-    specialties: [],
-    gaps: [],
-    damagedSpecialties: [],
-    abilities: [],
-    equipment: [],
-    backbones: [],
-    trophies: [],
-    items: initialState.items,
-    bags: initialState.bags,
-    statusAilments: initialState.statusAilments,
-  };
 
-  return { ...initialState, ...data, ...defaults, ...data };
-};
+const applyDefaults = (
+  data: Partial<CharacterFormData>,
+  // eslint-disable-next-line complexity
+): CharacterFormData => ({
+  ...initialState,
+  ...data,
+  classes: data.classes ?? [],
+  specialties: data.specialties ?? [],
+  gaps: data.gaps ?? [],
+  damagedSpecialties: data.damagedSpecialties ?? [],
+  abilities: data.abilities ?? [],
+  equipments: data.equipments ?? [],
+  backbones: data.backbones ?? [],
+  trophies: data.trophies ?? [],
+  items: data.items ?? initialState.items,
+  bags: data.bags ?? initialState.bags,
+  statusAilments: data.statusAilments ?? initialState.statusAilments,
+});
 
 export const characterSlice = createSlice({
   name: 'character',
@@ -315,18 +308,20 @@ export const characterSlice = createSlice({
       state.items = state.items.filter((i) => i.id !== action.payload);
     },
     addEquipment: (state, action: PayloadAction<Equipment>) => {
-      state.equipment.push(action.payload);
+      state.equipments.push(action.payload);
     },
     updateEquipment: (state, action: PayloadAction<Equipment>) => {
-      const index = state.equipment.findIndex(
+      const index = state.equipments.findIndex(
         (e) => e.id === action.payload.id,
       );
       if (index !== -1) {
-        state.equipment[index] = action.payload;
+        state.equipments[index] = action.payload;
       }
     },
     deleteEquipment: (state, action: PayloadAction<string>) => {
-      state.equipment = state.equipment.filter((e) => e.id !== action.payload);
+      state.equipments = state.equipments.filter(
+        (e) => e.id !== action.payload,
+      );
     },
     addBag: (state, action: PayloadAction<Bag>) => {
       state.bags.push(action.payload);

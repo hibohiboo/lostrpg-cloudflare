@@ -25,7 +25,7 @@ export const ItemsSection: React.FC = () => {
   const dispatch = useAppDispatch();
   const characterItems = useAppSelector((state) => state.character.items);
   const bags = useAppSelector((state) => state.character.bags);
-  const equipment = useAppSelector((state) => state.character.equipment);
+  const equipment = useAppSelector((state) => state.character.equipments);
   const catalog = useAppSelector(itemCatalogSelector);
   const carryingCapacity = useAppSelector(
     (state) => state.character.carryingCapacity,

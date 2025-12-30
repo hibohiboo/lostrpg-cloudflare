@@ -1,39 +1,29 @@
+import { characterApi } from '@lostrpg/frontend/entities/character';
 import { setCharacter } from '@lostrpg/frontend/features/character';
 import type { LoaderFunctionArgs } from 'react-router';
 
-const getCharacter = async (id?: string) => {
-  if (!id) {
-    throw new Error('IDが指定されていません');
-  }
-
-  // RTK Queryを使用する場合、loaderではなくコンポーネント内でuseGetCharacterQueryを使用することを推奨
-  // ここでは仮実装として、fetchを使用してデータを取得します
-  const response = await fetch(`/api/characters/${id}`);
-
-  if (!response.ok) {
-    throw new Error('データが見つかりません');
-  }
-
-  const character = await response.json();
-
-  return character;
-};
-
-export const createCharacterDetailLoader =
+export const createCharacterLoader =
   (dispatch: AppDispatch) =>
   async ({ params }: LoaderFunctionArgs) => {
     const { id } = params;
-    const character = await getCharacter(id);
-    dispatch(setCharacter(character));
-    return character;
-  };
-
-export const createCharacterEditLoader =
-  (dispatch: AppDispatch) =>
-  async ({ params }: LoaderFunctionArgs) => {
-    const { id } = params;
-    const character = await getCharacter(id);
-    dispatch(setCharacter(character));
-    console.log(id, character);
+    if (!id) throw new Error('id が指定されていません');
+    const ret = await dispatch(
+      characterApi.endpoints.getCharacter.initiate(id),
+    );
+    if (ret.error) {
+      throw new Error('データが見つかりません');
+    }
+    const { data } = ret;
+    if (!data) {
+      throw new Error('データが見つかりません');
+    }
+    const character = data.data;
+    dispatch(
+      setCharacter({
+        ...character,
+        useDragonPlain: character.supplements.useDragonPlain,
+        useStrangeField: character.supplements.useStrangeField,
+      }),
+    );
     return character;
   };

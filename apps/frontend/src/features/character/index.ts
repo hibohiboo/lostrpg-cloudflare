@@ -32,7 +32,6 @@ export type {
   Ability,
   Bag,
   StatusAilment,
-  Backbone,
 } from './model/characterSlice';
 export { default as characterReducer } from './model/characterSlice';
 

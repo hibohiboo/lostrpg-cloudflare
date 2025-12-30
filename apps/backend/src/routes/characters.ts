@@ -1,5 +1,9 @@
 import { zValidator } from '@hono/zod-validator';
-import { createCharacterSchema, updateCharacterSchema } from '@lostrpg/schemas';
+import {
+  createCharacterSchema,
+  getCharacterSchema,
+  updateCharacterSchema,
+} from '@lostrpg/schemas';
 import bcrypt from 'bcryptjs';
 import { desc, eq } from 'drizzle-orm';
 import { Hono } from 'hono';
@@ -84,7 +88,7 @@ export const charactersRouter = new Hono<{ Bindings: Env }>()
         throw new HTTPException(404, { message: 'Character not found' });
       }
 
-      const data = character.data as object;
+      const data = getCharacterSchema.parse(character.data);
 
       return c.json({
         id: character.id,

@@ -3,7 +3,7 @@ import { InferRequestType, InferResponseType } from 'hono/client';
 import { baseQuery } from '@lostrpg/frontend/shared/lib/store/api';
 import type { ApiType } from '@lostrpg/frontend/shared/lib/api/client';
 
-type CharacterDetailType = ApiType['characters'][':id'];
+export type CharacterDetailType = ApiType['characters'][':id'];
 type CharacterDetailData = InferResponseType<CharacterDetailType['$get']>;
 type UploadImageType = ApiType['characters'][':id']['upload-image'];
 type UploadImageResponse = InferResponseType<UploadImageType['$post']>;
@@ -75,9 +75,7 @@ export const characterApi = createApi({
           body: formData,
         };
       },
-      invalidatesTags: (_result, _error, { id }) => [
-        { type: 'Character', id },
-      ],
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'Character', id }],
     }),
   }),
 });
