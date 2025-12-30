@@ -79,16 +79,7 @@ const HeaderGapCell: React.FC<{
   </TableCell>
 );
 
-const GapCell: React.FC = () => (
-  <TableCell
-    align={'right'}
-    sx={{
-      p: 0,
-      height: '44px',
-      border: '1px solid rgba(224, 224, 224, 1)',
-    }}
-  ></TableCell>
-);
+const GapCell: React.FC = () => <TableCell></TableCell>;
 
 const Cell: React.FC<{
   name: string;
@@ -115,7 +106,7 @@ const Cell: React.FC<{
       sx={{
         p: '0 4px 0 8px',
         height: '44px',
-        border: `${isBodyParts ? 'thick double' : '1px solid'} rgba(224, 224, 224, 1)`,
+        border: `${isBodyParts ? 'thick double' : '1px solid'}`,
         cursor: 'pointer',
         bgcolor: isSelected ? 'grey.900' : undefined,
         color: isSelected ? 'common.white' : undefined,
