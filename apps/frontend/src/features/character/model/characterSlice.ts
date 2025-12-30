@@ -7,7 +7,6 @@ import {
   CharacterClass,
   CreateCharacterRequest,
   Gap,
-  Supplement,
 } from '@lostrpg/schemas/validation/character';
 import { CharacterItem, Equipment } from '@lostrpg/schemas/validation/items';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
@@ -65,18 +64,7 @@ const getSurroundingSpecialties = (bodyPartName: string): string[] => {
   return surrounding;
 };
 
-export interface StatusAilment {
-  id: string;
-  name: string;
-  effect: string;
-  isChecked: boolean;
-}
-
-export interface CharacterFormData
-  extends Omit<CreateCharacterRequest, 'supplements'> {
-  statusAilments: StatusAilment[];
-  supplements: Supplement;
-}
+export type CharacterFormData = CreateCharacterRequest;
 
 const initialState: CharacterFormData = {
   playerName: '',
@@ -293,9 +281,11 @@ export const characterSlice = createSlice({
       state.bags = state.bags.filter((b) => b.id !== action.payload);
     },
     toggleStatusAilment: (state, action: PayloadAction<string>) => {
-      const ailment = state.statusAilments.find((a) => a.id === action.payload);
-      if (ailment) {
-        ailment.isChecked = !ailment.isChecked;
+      const index = state.statusAilments.indexOf(action.payload);
+      if (index !== -1) {
+        state.statusAilments.splice(index, 1);
+      } else {
+        state.statusAilments.push(action.payload);
       }
     },
     addBackbone: (state, action: PayloadAction<Backbone>) => {

@@ -82,9 +82,7 @@ export const createCharacterThunk = createAsyncThunk<
               number: item.number || 1,
             })),
         })),
-        statusAilments: character.statusAilments
-          .filter((ailment) => ailment.isChecked)
-          .map((ailment) => ailment.name),
+        statusAilments: character.statusAilments,
         backbones: character.backbones,
         trophies: character.trophies,
         unusedExperience: character.unusedExperience,
@@ -184,9 +182,7 @@ export const updateCharacterThunk = createAsyncThunk<
             number: item.number || 1,
           })),
       })),
-      statusAilments: character.statusAilments
-        .filter((ailment) => ailment.isChecked)
-        .map((ailment) => ailment.name),
+      statusAilments: character.statusAilments,
       backbones: character.backbones,
       trophies: character.trophies,
       unusedExperience: character.unusedExperience,

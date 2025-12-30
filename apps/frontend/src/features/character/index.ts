@@ -25,14 +25,13 @@ export {
   deleteBackbone,
   resetCharacter,
 } from './model/characterSlice';
+export type { CharacterFormData } from './model/characterSlice';
 export type {
-  CharacterFormData,
   Gap,
   CharacterClass,
   Ability,
   Bag,
-  StatusAilment,
-} from './model/characterSlice';
+} from '@lostrpg/schemas/validation/character';
 export { default as characterReducer } from './model/characterSlice';
 
 export * from './hooks/useEditFormHooks';

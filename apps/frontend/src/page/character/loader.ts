@@ -18,11 +18,6 @@ export const createCharacterLoader =
       throw new Error('データが見つかりません');
     }
     const character = data.data;
-    dispatch(
-      setCharacter({
-        ...character,
-        statusAilments: [],
-      }),
-    );
+    dispatch(setCharacter(character));
     return character;
   };
