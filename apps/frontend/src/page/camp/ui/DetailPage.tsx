@@ -111,7 +111,7 @@ const DetailPage: React.FC = () => {
           <Typography variant="h6" gutterBottom>
             施設
           </Typography>
-          <Box sx={{ height: 400, width: '100%' }}>
+          <Box sx={{ width: '100%' }}>
             <FacilityTable
               facilities={camp.facilities}
               handleFacilityDelete={() => {}}
@@ -125,7 +125,7 @@ const DetailPage: React.FC = () => {
           <Typography variant="h6" gutterBottom>
             倉庫
           </Typography>
-          <Box sx={{ height: 400, width: '100%' }}>
+          <Box sx={{ width: '100%' }}>
             <ItemTable
               items={camp.items}
               handleItemDelete={() => {}}
