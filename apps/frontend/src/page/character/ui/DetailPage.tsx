@@ -1,5 +1,6 @@
 /* eslint-disable complexity */
 import { CreateCharacterRequest } from '@lostrpg/schemas';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import EditIcon from '@mui/icons-material/Edit';
 import {
   Box,
@@ -15,12 +16,13 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { AbilityTable } from '@lostrpg/frontend/entities/ability';
 import { BackboneTable } from '@lostrpg/frontend/entities/backbone';
 import { useGetCampQuery } from '@lostrpg/frontend/entities/camp';
 import { ItemTable, EquipmentTable } from '@lostrpg/frontend/entities/item';
+import { copyCharacterToCcfolia } from '@lostrpg/frontend/features/character/utils/exportCcfolia';
 import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 import { SpecialtiesTable } from '@lostrpg/frontend/shared/ui';
 
@@ -431,6 +433,17 @@ const DetailPage: React.FC = () => {
   const { data: camp } = useGetCampQuery(campId, {
     skip: !campId,
   });
+  const [copySuccess, setCopySuccess] = useState(false);
+
+  const handleCopyToCcfolia = async () => {
+    try {
+      await copyCharacterToCcfolia(character, id || '');
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000);
+    } catch (error) {
+      console.error('クリップボードへのコピーに失敗しました:', error);
+    }
+  };
 
   return (
     <Container maxWidth="lg">
@@ -470,6 +483,28 @@ const DetailPage: React.FC = () => {
             </Typography>
           </Box>
         )}
+
+        {/* エクスポートボタン */}
+        <Box my={3}>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<ContentCopyIcon />}
+            onClick={handleCopyToCcfolia}
+          >
+            ココフォリア用クリップボードコピー
+          </Button>
+          {copySuccess && (
+            <Typography
+              variant="body2"
+              color="success.main"
+              sx={{ mt: 1, display: 'inline-block', ml: 2 }}
+            >
+              コピーしました！
+            </Typography>
+          )}
+        </Box>
+
         {/* 戻るリンク */}
         <Box mt={4}>
           <MuiLink href="/character/" underline="hover">
