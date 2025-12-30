@@ -23,11 +23,13 @@ export const CharacterBasicSection: React.FC<{
   isValidError: boolean;
   onImageChange: (file: File | null) => void;
   previewUrl: string;
+  // eslint-disable-next-line complexity
 }> = ({ isValidError, onImageChange, previewUrl }) => {
   const dispatch = useAppDispatch();
   const playerName = useAppSelector((state) => state.character.playerName);
   const campId = useAppSelector((state) => state.character.campId);
   const name = useAppSelector((state) => state.character.name);
+  const imageUrl = useAppSelector((state) => state.character.imageUrl);
   const { data: camps = [] } = useGetCampListQuery();
   const useStrangeField = useAppSelector(
     (state) => state.character.supplements.useStrangeField,
@@ -145,9 +147,9 @@ export const CharacterBasicSection: React.FC<{
           mt={1}
           sx={{ maxWidth: 480, minHeight: 100, overflow: 'hidden' }}
         >
-          {previewUrl ? (
+          {previewUrl || imageUrl ? (
             <img
-              src={previewUrl}
+              src={previewUrl || imageUrl}
               alt="プレビュー"
               style={{ width: '100%', display: 'block' }}
             />

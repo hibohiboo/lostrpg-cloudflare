@@ -41,6 +41,7 @@ const EditForm: React.FC<Props> = ({
   handleItemUpdate,
   handleSave,
   handleDelete,
+  // eslint-disable-next-line complexity
 }) => (
   <Box>
     {/* プレイヤー名 */}
