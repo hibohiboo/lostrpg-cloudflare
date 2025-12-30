@@ -21,7 +21,7 @@ export const BackbonesSection: React.FC = () => {
   const dispatch = useAppDispatch();
   const backbones = useAppSelector((state) => state.character.backbones);
   const useStrangeField = useAppSelector(
-    (state) => state.character.useStrangeField,
+    (state) => state.character.supplements.useStrangeField,
   );
 
   const handleBackboneAdd = (backbone: Backbone) => {

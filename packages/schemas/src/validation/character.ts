@@ -7,12 +7,16 @@ const characterClassSchema = z.object({
   name: z.string(),
 });
 
+export type CharacterClass = z.infer<typeof characterClassSchema>;
+
 const bagSchema = z.object({
   name: z.string(),
   capacity: z.number().int().min(1),
   items: z.array(itemSchema),
   id: z.string(),
 });
+
+export type Bag = z.infer<typeof bagSchema>;
 
 const backboneSchema = z.object({
   name: z.string(),
@@ -38,10 +42,14 @@ export type Ability = z.infer<typeof abilitySchema>;
 // ギャップの列挙型
 const gapEnum = z.enum(['A', 'B', 'C', 'D', 'E']);
 
+export type Gap = z.infer<typeof gapEnum>;
+
 const supplementSchema = z.object({
   useStrangeField: z.boolean().optional().default(false),
   useDragonPlain: z.boolean().optional().default(false),
 });
+
+export type Supplement = z.infer<typeof supplementSchema>;
 
 // 基本キャラクターフィールドスキーマ
 const baseCharacterFields = {

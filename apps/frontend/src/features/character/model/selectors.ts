@@ -16,8 +16,8 @@ import { createSelector } from '@reduxjs/toolkit';
 
 export const itemCatalogSelector = createSelector(
   [
-    (state: RootState) => state.character.useStrangeField,
-    (state: RootState) => state.character.useDragonPlain,
+    (state: RootState) => state.character.supplements.useStrangeField,
+    (state: RootState) => state.character.supplements.useDragonPlain,
   ],
   (useStrangeField, useDragonPlain) => {
     const ret = [...items];
@@ -36,8 +36,8 @@ export const equipmentCatalogSelector = createSelector(
 export const abilityCatalogSelector = createSelector(
   [
     (state: RootState) => state.character.classes,
-    (state: RootState) => state.character.useStrangeField,
-    (state: RootState) => state.character.useDragonPlain,
+    (state: RootState) => state.character.supplements.useStrangeField,
+    (state: RootState) => state.character.supplements.useDragonPlain,
     (state: RootState) => state.character.trophies,
   ],
   (classes, useStrangeField, useDragonPlain, trophies) => {
@@ -91,8 +91,8 @@ export const abilityCatalogSelector = createSelector(
 );
 export const classCatalogSelector = createSelector(
   [
-    (state: RootState) => state.character.useStrangeField,
-    (state: RootState) => state.character.useDragonPlain,
+    (state: RootState) => state.character.supplements.useStrangeField,
+    (state: RootState) => state.character.supplements.useDragonPlain,
     (state: RootState) => state.character.classes,
   ],
   (useStrangeField, useDragonPlain, classes) => {

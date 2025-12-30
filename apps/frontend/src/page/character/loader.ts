@@ -21,8 +21,7 @@ export const createCharacterLoader =
     dispatch(
       setCharacter({
         ...character,
-        useDragonPlain: character.supplements.useDragonPlain,
-        useStrangeField: character.supplements.useStrangeField,
+        statusAilments: [],
       }),
     );
     return character;

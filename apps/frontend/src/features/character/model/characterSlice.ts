@@ -1,10 +1,14 @@
 import { items } from '@lostrpg/core/game-data/item';
+import { bodyParts, specialtyRows } from '@lostrpg/core/game-data/speciality';
 import {
-  specialtiesTableGaps,
-  bodyParts,
-  specialtyRows,
-} from '@lostrpg/core/game-data/speciality';
-import { Backbone } from '@lostrpg/schemas/validation/character';
+  Ability,
+  Backbone,
+  Bag,
+  CharacterClass,
+  CreateCharacterRequest,
+  Gap,
+  Supplement,
+} from '@lostrpg/schemas/validation/character';
 import { CharacterItem, Equipment } from '@lostrpg/schemas/validation/items';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
@@ -61,30 +65,6 @@ const getSurroundingSpecialties = (bodyPartName: string): string[] => {
   return surrounding;
 };
 
-export type Gap = (typeof specialtiesTableGaps)[number];
-
-export interface CharacterClass {
-  id: string;
-  name: string;
-}
-
-export interface Ability {
-  name: string;
-  group: string;
-  type: string;
-  recoil: string;
-  specialty: string;
-  target: string;
-  effect: string;
-}
-
-export interface Bag {
-  id: string;
-  name: string;
-  capacity: number;
-  items: CharacterItem[];
-}
-
 export interface StatusAilment {
   id: string;
   name: string;
@@ -92,36 +72,10 @@ export interface StatusAilment {
   isChecked: boolean;
 }
 
-export interface CharacterFormData {
-  playerName?: string;
-  name: string;
-  campId?: string;
-  imageUrl?: string;
-  classes: CharacterClass[];
-  specialties: string[];
-  gaps: Gap[];
-  damagedSpecialties: string[];
-  abilities: Ability[];
-  staminaBase: number;
-  stamina: number;
-  willPowerBase: number;
-  willPower: number;
-  carryingCapacity: number;
-  items: CharacterItem[];
-  equipments: Equipment[];
-  bags: Bag[];
+export interface CharacterFormData
+  extends Omit<CreateCharacterRequest, 'supplements'> {
   statusAilments: StatusAilment[];
-  backbones: Backbone[];
-  trophies: string[];
-  unusedExperience: number;
-  totalExperience: number;
-  summary: string;
-  appearance: string;
-  freeWriting: string;
-  quote: string;
-  useStrangeField: boolean;
-  useDragonPlain: boolean;
-  password?: string;
+  supplements: Supplement;
 }
 
 const initialState: CharacterFormData = {
@@ -170,8 +124,10 @@ const initialState: CharacterFormData = {
   appearance: '',
   freeWriting: '',
   quote: '',
-  useStrangeField: false,
-  useDragonPlain: false,
+  supplements: {
+    useStrangeField: false,
+    useDragonPlain: false,
+  },
 };
 
 // APIから取得したデータにデフォルト値を適用
@@ -193,6 +149,7 @@ const applyDefaults = (
   items: data.items ?? initialState.items,
   bags: data.bags ?? initialState.bags,
   statusAilments: data.statusAilments ?? initialState.statusAilments,
+  supplements: data.supplements ?? initialState.supplements,
 });
 
 export const characterSlice = createSlice({

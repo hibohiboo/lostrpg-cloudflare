@@ -23,7 +23,7 @@ export const TrophiesSection: React.FC = () => {
   const dispatch = useAppDispatch();
   const trophies = useAppSelector((state) => state.character.trophies);
   const useStrangeField = useAppSelector(
-    (state) => state.character.useStrangeField,
+    (state) => state.character.supplements.useStrangeField,
   );
   const [modalOpen, setModalOpen] = useState(false);
   const handleAdd = (trophy: Trophy) => {

@@ -23,10 +23,10 @@ export const CharacterBasicSection: React.FC<{
   const playerName = useAppSelector((state) => state.character.playerName);
   const name = useAppSelector((state) => state.character.name);
   const useStrangeField = useAppSelector(
-    (state) => state.character.useStrangeField,
+    (state) => state.character.supplements.useStrangeField,
   );
   const useDragonPlain = useAppSelector(
-    (state) => state.character.useDragonPlain,
+    (state) => state.character.supplements.useDragonPlain,
   );
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,7 +61,12 @@ export const CharacterBasicSection: React.FC<{
                 checked={useStrangeField}
                 onChange={(e) =>
                   dispatch(
-                    updateCharacter({ useStrangeField: e.target.checked }),
+                    updateCharacter({
+                      supplements: {
+                        useStrangeField: e.target.checked,
+                        useDragonPlain,
+                      },
+                    }),
                   )
                 }
               />
@@ -74,7 +79,12 @@ export const CharacterBasicSection: React.FC<{
                 checked={useDragonPlain}
                 onChange={(e) =>
                   dispatch(
-                    updateCharacter({ useDragonPlain: e.target.checked }),
+                    updateCharacter({
+                      supplements: {
+                        useStrangeField,
+                        useDragonPlain: e.target.checked,
+                      },
+                    }),
                   )
                 }
               />
