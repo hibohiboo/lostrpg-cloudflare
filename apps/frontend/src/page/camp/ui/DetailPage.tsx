@@ -12,13 +12,17 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { Link, useParams } from 'react-router';
+import { useGetCampCharactersQuery } from '@lostrpg/frontend/entities/camp';
 import { FacilityTable } from '@lostrpg/frontend/entities/facility';
 import { ItemTable } from '@lostrpg/frontend/entities/item';
 import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 
+// eslint-disable-next-line complexity
 const DetailPage: React.FC = () => {
   const { id } = useParams();
-  const members = [] as { characterId: string; characterName: string }[];
+  if (!id) throw new Error('id is empty');
+  const { data: members = [] } = useGetCampCharactersQuery(id);
+
   const camp = useAppSelector((state) => state.camp);
 
   return (
@@ -85,15 +89,14 @@ const DetailPage: React.FC = () => {
           <InputLabel sx={{ mb: 1 }}>メンバー</InputLabel>
           <Box display="flex" flexWrap="wrap" gap={1}>
             {members.map((member) => (
-              <Chip
-                key={member.characterId}
-                label={member.characterName}
-                component="a"
-                href={`/lostrpg/public/ja/characters/${member.characterId}`}
-                clickable
-                color="primary"
-                variant="outlined"
-              />
+              <Link key={member.id} to={`/character/${member.id}`}>
+                <Chip
+                  label={member.name}
+                  clickable
+                  color="primary"
+                  variant="outlined"
+                />
+              </Link>
             ))}
             {members.length === 0 && (
               <Typography variant="body2" color="text.secondary">
