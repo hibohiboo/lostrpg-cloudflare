@@ -2,7 +2,7 @@ import { items } from '@lostrpg/core/game-data/item';
 import { Equipment } from '@lostrpg/schemas/validation/items';
 import { Box, Typography } from '@mui/material';
 import { GridRowId } from '@mui/x-data-grid';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   AddEquipmentForm,
   EquipmentTable,
@@ -22,7 +22,7 @@ export const EquipmentSection: React.FC = () => {
   const dispatch = useAppDispatch();
   const equipment = useAppSelector((state) => state.character.equipment);
   const catalog = useAppSelector(equipmentCatalogSelector);
-  const [itemSelect, setItemSelect] = useState('');
+
   const handleEquipmentAdd = (itemName: string) => {
     const item = items.find((i) => i.name === itemName);
     if (item) {
@@ -43,7 +43,6 @@ export const EquipmentSection: React.FC = () => {
         effect: item.effect,
       };
       dispatch(addEquipment(newEquipment));
-      setItemSelect('');
     }
   };
   const handleItemUpdate = (
@@ -65,7 +64,6 @@ export const EquipmentSection: React.FC = () => {
       </Typography>
       <AddEquipmentForm
         catalog={catalog}
-        itemSelect={itemSelect}
         onItemAdd={(value) => {
           handleEquipmentAdd(value.name);
         }}

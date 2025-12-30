@@ -1,18 +1,18 @@
 import { Equipment, ItemBase } from '@lostrpg/schemas/validation/items';
+import AddIcon from '@mui/icons-material/Add';
+import { Button } from '@mui/material';
+import { useState } from 'react';
 import { createItem } from '../model/factory';
-import { AddItemSelectForm } from './molecules/AddItemSelectForm';
+import { ItemSelectionModal } from './molecules/ItemSelectionModal';
 
 type Props = {
-  itemSelect: string;
   onItemAdd: (item: Equipment) => void;
   catalog: ItemBase[];
 };
 
-export const AddEquipmentForm: React.FC<Props> = ({
-  itemSelect,
-  onItemAdd,
-  catalog,
-}) => {
+export const AddEquipmentForm: React.FC<Props> = ({ onItemAdd, catalog }) => {
+  const [modalOpen, setModalOpen] = useState(false);
+
   const handleAdd = (item: ItemBase) => {
     const weight =
       typeof item.weight === 'string' ? Number(item.weight) : item.weight;
@@ -31,12 +31,21 @@ export const AddEquipmentForm: React.FC<Props> = ({
   };
 
   return (
-    <AddItemSelectForm
-      label="装備追加"
-      value={itemSelect}
-      items={catalog}
-      getItemName={(item) => item.name}
-      onAdd={handleAdd}
-    />
+    <>
+      <Button
+        variant="outlined"
+        startIcon={<AddIcon />}
+        onClick={() => setModalOpen(true)}
+      >
+        装備追加
+      </Button>
+      <ItemSelectionModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        items={catalog}
+        onSelect={handleAdd}
+        title="装備を選択"
+      />
+    </>
   );
 };
