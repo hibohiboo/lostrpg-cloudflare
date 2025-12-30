@@ -1,3 +1,4 @@
+import { trophyList } from '@lostrpg/core/game-data/character';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
@@ -10,14 +11,13 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { trophyList } from '@lostrpg/core/game-data/character';
 import {
   useAppDispatch,
   useAppSelector,
 } from '@lostrpg/frontend/shared/lib/store';
 import { TrophySelectionModal } from '@lostrpg/frontend/shared/ui/components/molecules/TrophySelectionModal';
-import type { Trophy } from '@lostrpg/frontend/shared/ui/components/molecules/TrophyCard';
 import { addTrophy, deleteTrophy } from '../../model/characterSlice';
+import type { Trophy } from '@lostrpg/frontend/shared/ui/components/molecules/TrophyCard';
 
 export const TrophiesSection: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -35,7 +35,7 @@ export const TrophiesSection: React.FC = () => {
   return (
     <Box my={3}>
       <Typography variant="h6" gutterBottom>
-        トロフィー
+        称号
       </Typography>
       <Button
         variant="outlined"
@@ -68,7 +68,7 @@ export const TrophiesSection: React.FC = () => {
         </List>
       ) : (
         <Typography variant="body2" color="text.secondary">
-          トロフィーがありません
+          なし
         </Typography>
       )}
 
