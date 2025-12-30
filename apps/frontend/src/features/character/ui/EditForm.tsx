@@ -9,7 +9,6 @@ import {
   ItemsSection,
   EquipmentSection,
   BagsSection,
-  StatusAilmentsSection,
   BackbonesSection,
   ExperienceSection,
   DescriptionSection,
@@ -45,7 +44,6 @@ const EditForm: React.FC<Props> = ({
     <ItemsSection />
     <EquipmentSection />
     <BagsSection />
-    <StatusAilmentsSection />
     <BackbonesSection />
     <ExperienceSection />
     <DescriptionSection />
