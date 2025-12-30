@@ -36,7 +36,7 @@ export const abilityCatalogSelector = createSelector(
     (state: RootState) => state.character.useDragonPlain,
   ],
   (classes, useStrangeField, useDragonPlain) => {
-    const classIds = classes.map((c) => c.id);
+    const classNames = classes.map((c) => c.name);
     const ret: typeof abilityList = [];
 
     // 基本アビリティリスト
@@ -47,7 +47,7 @@ export const abilityCatalogSelector = createSelector(
         return;
       }
       // クラスを取得している場合のみ追加
-      if (classIds.includes(group.id)) {
+      if (classNames.includes(group.name)) {
         ret.push(group);
       }
     });
@@ -59,7 +59,7 @@ export const abilityCatalogSelector = createSelector(
           ret.push(group);
           return;
         }
-        if (classIds.includes(group.id)) {
+        if (classNames.includes(group.name)) {
           ret.push(group);
         }
       });
@@ -68,7 +68,7 @@ export const abilityCatalogSelector = createSelector(
     // ドラゴンプレインのアビリティ
     if (useDragonPlain) {
       dragonPlainAbilityList.forEach((group) => {
-        if (classIds.includes(group.id)) {
+        if (classNames.includes(group.name)) {
           ret.push(group);
         }
       });
