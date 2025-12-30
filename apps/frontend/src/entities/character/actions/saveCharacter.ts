@@ -86,6 +86,7 @@ export const createCharacterThunk = createAsyncThunk<
           .filter((ailment) => ailment.isChecked)
           .map((ailment) => ailment.name),
         backbones: character.backbones,
+        trophies: character.trophies,
         unusedExperience: character.unusedExperience,
         totalExperience: character.totalExperience,
         summary: character.summary,
@@ -190,6 +191,7 @@ export const updateCharacterThunk = createAsyncThunk<
         .filter((ailment) => ailment.isChecked)
         .map((ailment) => ailment.name),
       backbones: character.backbones,
+      trophies: character.trophies,
       unusedExperience: character.unusedExperience,
       totalExperience: character.totalExperience,
       summary: character.summary,
