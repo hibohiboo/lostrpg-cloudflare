@@ -23,7 +23,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, onSelect }) => (
         </Typography>
 
         <Box sx={{ display: 'flex', gap: 0.5, mb: 1, flexWrap: 'wrap' }}>
-          <Chip label={`種別: ${item.type}`} size="small" />
+          <Chip label={`タイプ: ${item.type}`} size="small" />
           <Chip label={`J: ${item.j}`} size="small" color="primary" />
           <Chip label={`重量: ${item.weight}`} size="small" />
         </Box>
@@ -36,7 +36,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, onSelect }) => (
 
         {item.specialty && (
           <Typography variant="body2" color="text.secondary" gutterBottom>
-            <strong>特技:</strong> {item.specialty}
+            <strong>指定特技:</strong> {item.specialty}
           </Typography>
         )}
 
