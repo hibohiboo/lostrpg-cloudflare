@@ -83,22 +83,6 @@ const CharacterInfo: React.FC<{
     )}
     <CharacterClasses character={character} />
 
-    {/* サプリメント */}
-    {(character.supplements?.useStrangeField ||
-      character.supplements?.useDragonPlain) && (
-      <Box mb={3}>
-        <InputLabel sx={{ mb: 1 }}>使用サプリメント</InputLabel>
-        <Box display="flex" flexWrap="wrap" gap={1}>
-          {character.supplements.useStrangeField && (
-            <Chip label="終末列島百景" variant="outlined" />
-          )}
-          {character.supplements.useDragonPlain && (
-            <Chip label="関ヶ原暴竜平原" variant="outlined" />
-          )}
-        </Box>
-      </Box>
-    )}
-
     {/* 画像と概要 */}
     <Box display="flex" flexWrap="wrap" gap={2} mb={3}>
       {character.imageUrl && (
@@ -464,6 +448,21 @@ const DetailPage: React.FC = () => {
         <CharacterTrophies character={character} />
         <CharacterStatusAilments character={character} />
         <CharacterNotes character={character} />
+        {(character.supplements?.useStrangeField ||
+          character.supplements?.useDragonPlain) && (
+          <Box mb={3}>
+            <InputLabel sx={{ mb: 1 }}>使用サプリメント</InputLabel>
+            <Box display="flex" flexWrap="wrap" gap={1}>
+              {character.supplements.useStrangeField && (
+                <Chip label="終末列島百景" variant="outlined" />
+              )}
+              {character.supplements.useDragonPlain && (
+                <Chip label="関ヶ原暴竜平原" variant="outlined" />
+              )}
+            </Box>
+          </Box>
+        )}
+
         {character.playerName && (
           <Box mb={3}>
             <Typography variant="body1" color="text.secondary">
