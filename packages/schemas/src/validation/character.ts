@@ -17,17 +17,16 @@ const bagSchema = z.object({
 });
 
 export type Bag = z.infer<typeof bagSchema>;
-
-const backboneSchema = z.object({
+const backBoneBase = {
   name: z.string(),
   cp: z.number(),
   type: z.string(),
   effect: z.string(),
-});
+};
+const backboneSchema = z.object(backBoneBase);
 
 export type Backbone = z.infer<typeof backboneSchema>;
-
-const abilitySchema = z.object({
+const abilityBase = {
   name: z.string(),
   group: z.string(),
   type: z.string(),
@@ -35,6 +34,10 @@ const abilitySchema = z.object({
   specialty: z.string(),
   target: z.string(),
   effect: z.string(),
+};
+const abilitySchema = z.object({
+  id: z.string(),
+  ...abilityBase,
 });
 
 export type Ability = z.infer<typeof abilitySchema>;

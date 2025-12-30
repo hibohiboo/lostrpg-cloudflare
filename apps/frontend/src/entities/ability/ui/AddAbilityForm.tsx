@@ -1,6 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 import React, { useState } from 'react';
+import { createAbility } from '../model/factory';
 import { AbilitySelectionModal } from './molecules/AbilitySelectionModal';
 import type { Ability, AbilityGroup } from '../model/types';
 
@@ -15,8 +16,9 @@ export const AddAbilityForm: React.FC<Props> = ({
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
-  const handleAdd = (ability: Ability) => {
-    onAbilityAdd(ability);
+  const handleAdd = (ability: Omit<Ability, 'id'>) => {
+    const newAbility = createAbility(ability);
+    onAbilityAdd(newAbility);
   };
 
   return (

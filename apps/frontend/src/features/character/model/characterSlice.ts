@@ -229,16 +229,14 @@ export const characterSlice = createSlice({
     },
     updateAbility: (state, action: PayloadAction<Ability>) => {
       const index = state.abilities.findIndex(
-        (a) => a.name === action.payload.name,
+        (a) => a.id === action.payload.id,
       );
       if (index !== -1) {
         state.abilities[index] = action.payload;
       }
     },
-    deleteAbility: (state, action: PayloadAction<Ability>) => {
-      state.abilities = state.abilities.filter(
-        (a) => a.name !== action.payload.name,
-      );
+    deleteAbility: (state, action: PayloadAction<string>) => {
+      state.abilities = state.abilities.filter((a) => a.id !== action.payload);
     },
     addItem: (state, action: PayloadAction<CharacterItem>) => {
       state.items.push(action.payload);

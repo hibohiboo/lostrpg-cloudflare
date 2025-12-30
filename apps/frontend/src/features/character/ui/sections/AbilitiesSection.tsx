@@ -35,8 +35,8 @@ export const AbilitiesSection: React.FC = () => {
     return newRow;
   };
 
-  const handleAbilityDelete = (ability: Ability) => {
-    dispatch(deleteAbility(ability));
+  const handleAbilityDelete = (id: string) => {
+    dispatch(deleteAbility(id));
   };
 
   return (
