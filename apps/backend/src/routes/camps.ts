@@ -6,48 +6,10 @@ import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 import { z } from 'zod';
 import { getDb } from '../lib/db/connection';
-import { camps } from '../lib/db/schema';
+import { camps, campCharacters, characters } from '../lib/db/schema';
+import { validateImageFile, uploadImageToR2 } from '../lib/r2/image-upload';
 import { requirePasswordAuth } from '../middleware/auth';
 import type { Env } from '../types/cloudflare';
-import type { R2Bucket } from '@cloudflare/workers-types';
-
-// 画像ファイルのバリデーション
-function validateImageFile(imageFile: File | null) {
-  if (!imageFile) {
-    throw new HTTPException(400, { message: 'No image file provided' });
-  }
-
-  // ファイルサイズチェック (5MB制限)
-  const maxSize = 5 * 1024 * 1024;
-  if (imageFile.size > maxSize) {
-    throw new HTTPException(400, { message: 'File size exceeds 5MB limit' });
-  }
-
-  // ファイルタイプチェック
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-  if (!allowedTypes.includes(imageFile.type)) {
-    throw new HTTPException(400, {
-      message: 'Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed',
-    });
-  }
-
-  return imageFile;
-}
-
-// R2へ画像をアップロード
-async function uploadToR2(bucket: R2Bucket, id: string, imageFile: File) {
-  const ext = imageFile.type.split('/')[1];
-  const fileName = `camps/${id}.${ext}`;
-
-  const buffer = await imageFile.arrayBuffer();
-  await bucket.put(fileName, buffer, {
-    httpMetadata: {
-      contentType: imageFile.type,
-    },
-  });
-
-  return `${process.env.BUCKET_PUBLIC_URL}/${fileName}`;
-}
 
 export const campsRouter = new Hono<{ Bindings: Env }>()
   // Get all camps
@@ -138,10 +100,7 @@ export const campsRouter = new Hono<{ Bindings: Env }>()
       const { id } = c.req.valid('param');
       const requestBody = c.req.valid('json');
 
-      const [camp] = await getDb()
-        .select()
-        .from(camps)
-        .where(eq(camps.id, id));
+      const [camp] = await getDb().select().from(camps).where(eq(camps.id, id));
 
       if (!camp) {
         throw new HTTPException(404, { message: 'Camp not found' });
@@ -211,10 +170,7 @@ export const campsRouter = new Hono<{ Bindings: Env }>()
       const { id } = c.req.valid('param');
       const { password } = c.req.valid('json');
 
-      const [camp] = await getDb()
-        .select()
-        .from(camps)
-        .where(eq(camps.id, id));
+      const [camp] = await getDb().select().from(camps).where(eq(camps.id, id));
 
       if (!camp) {
         throw new HTTPException(404, { message: 'Camp not found' });
@@ -246,10 +202,7 @@ export const campsRouter = new Hono<{ Bindings: Env }>()
       }
 
       // キャンプの存在確認
-      const [camp] = await getDb()
-        .select()
-        .from(camps)
-        .where(eq(camps.id, id));
+      const [camp] = await getDb().select().from(camps).where(eq(camps.id, id));
 
       if (!camp) {
         throw new HTTPException(404, { message: 'Camp not found' });
@@ -267,8 +220,9 @@ export const campsRouter = new Hono<{ Bindings: Env }>()
       const validatedFile = validateImageFile(imageFile);
 
       // R2にアップロード
-      const imageUrl = await uploadToR2(
+      const imageUrl = await uploadImageToR2(
         c.env.IMAGES_BUCKET,
+        'camps',
         id,
         validatedFile,
       );
@@ -289,5 +243,41 @@ export const campsRouter = new Hono<{ Bindings: Env }>()
         .where(eq(camps.id, id));
 
       return c.json({ imageUrl }, 200);
+    },
+  )
+
+  // Get characters by camp ID
+  .get(
+    '/:id/characters',
+    zValidator(
+      'param',
+      z.object({
+        id: z.uuid('Invalid ID format'),
+      }),
+    ),
+    async (c) => {
+      const { id } = c.req.valid('param');
+
+      // キャンプの存在確認
+      const [camp] = await getDb()
+        .select()
+        .from(camps)
+        .where(eq(camps.id, id));
+
+      if (!camp) {
+        throw new HTTPException(404, { message: 'Camp not found' });
+      }
+
+      // camp_charactersとcharactersをJOINしてキャラクター一覧を取得
+      const characterList = await getDb()
+        .select({
+          id: characters.id,
+          name: characters.name,
+        })
+        .from(campCharacters)
+        .innerJoin(characters, eq(campCharacters.characterId, characters.id))
+        .where(eq(campCharacters.campId, id));
+
+      return c.json(characterList);
     },
   );

@@ -2,12 +2,18 @@ import { Link } from 'react-router';
 
 export const Page = () => (
   <div>
+    <p style={{ marginBottom: '1rem' }}>
+      <a href="https://lostrpg-751c1.firebaseapp.com/lost/" target="_blank">
+        ルールブック
+      </a>
+    </p>
+
     <ul>
       <li>
-        <Link to="/camp">camp</Link>
+        <Link to="/camp">キャンプ</Link>
       </li>
       <li>
-        <Link to="/camp/create">camp create</Link>
+        <Link to="/character">キャラクター</Link>
       </li>
     </ul>
   </div>

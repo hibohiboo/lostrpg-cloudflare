@@ -26,18 +26,18 @@ export const Layout: React.FC<LayoutProps> = ({
             </li>
             <li>
               <Link
-                to="/rules"
+                to="/camp"
                 className="block py-1 hover:text-blue-200 transition-colors"
               >
-                ルール
+                キャンプ
               </Link>
             </li>
             <li>
               <Link
-                to="/character-list"
+                to="/character"
                 className="block py-1 hover:text-blue-200 transition-colors"
               >
-                キャラクター一覧
+                キャラクター
               </Link>
             </li>
             {/* <li><Link to="/world" className="block py-1 hover:text-blue-200 transition-colors">ワールド</Link></li>
@@ -53,7 +53,7 @@ export const Layout: React.FC<LayoutProps> = ({
 
     <footer className="bg-gray-800 text-white py-6 sm:py-8 mt-12 sm:mt-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <p className="text-sm sm:text-base">&copy; 2025 Age of Hero TRPG</p>
+        <p className="text-sm sm:text-base">&copy; 2025 LOSTRPG</p>
       </div>
     </footer>
   </div>

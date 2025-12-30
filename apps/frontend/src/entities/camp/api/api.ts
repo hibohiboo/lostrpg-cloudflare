@@ -34,6 +34,12 @@ export const campApi = createApi({
       query: (id) => `/camps/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Camp', id }],
     }),
+    getCampCharacters: builder.query<
+      InferResponseType<CampDetailType['characters']['$get']>,
+      string
+    >({
+      query: (id) => `/camps/${id}/characters`,
+    }),
     updateCamp: builder.mutation<
       void,
       { id: string; data: InferRequestType<CampDetailType['$put']>['json'] }
@@ -79,4 +85,5 @@ export const {
   useGetCampListQuery,
   useGetCampQuery,
   useUploadCampImageMutation,
+  useGetCampCharactersQuery,
 } = campApi;

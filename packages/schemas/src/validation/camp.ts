@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { createValidator } from './helpers';
+import { itemSchema } from './items';
 
 // 施設スキーマ
 const facilitySchema = z.object({
@@ -8,21 +9,6 @@ const facilitySchema = z.object({
   type: z.string(),
   specialty: z.string(),
   level: z.number().int().min(1),
-  effect: z.string(),
-});
-
-// アイテムスキーマ
-const itemSchema = z.object({
-  id: z.string(),
-  number: z.number().int().min(1),
-  name: z.string(),
-  price: z.number().min(0),
-  weight: z.number().min(0),
-  type: z.string(),
-  area: z.string(),
-  specialty: z.string(),
-  target: z.string(),
-  trait: z.string(),
   effect: z.string(),
 });
 

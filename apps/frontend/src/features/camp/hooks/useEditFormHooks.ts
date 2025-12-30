@@ -27,7 +27,6 @@ export const useEditFormHooks = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [equipmentSelect, setEquipmentSelect] = useState('');
   const [personalitySelect, setPersonalitySelect] = useState('');
-  const [itemSelect, setItemSelect] = useState('');
 
   // 画像変更ハンドラー
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +56,6 @@ export const useEditFormHooks = () => {
   // アイテム追加ハンドラー
   const handleItemAdd = (item: Item) => {
     dispatch(addItem(item));
-    setItemSelect('');
   };
 
   // 施設削除ハンドラー
@@ -105,7 +103,6 @@ export const useEditFormHooks = () => {
     imageFile,
     equipmentSelect,
     personalitySelect,
-    itemSelect,
     setIsValidError,
     setCamp: (data: typeof camp) => dispatch(setCamp(data)),
     handleImageChange,

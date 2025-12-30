@@ -3,6 +3,7 @@ import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { errorHandler } from './middleware/errorHandler';
 import { campsRouter } from './routes/camps';
+import { charactersRouter } from './routes/characters';
 import { imagesRouter } from './routes/images';
 import type { Env } from './types/cloudflare';
 
@@ -35,7 +36,9 @@ app.get('/health', (c) =>
 
 // API routes
 // eslint-disable-next-line no-underscore-dangle
-const _routes = app.route('/api/camps', campsRouter);
+const _routes = app
+  .route('/api/camps', campsRouter)
+  .route('/api/characters', charactersRouter);
 app.route('/api/images', imagesRouter);
 
 const port = Number(process.env.PORT) || 3001;

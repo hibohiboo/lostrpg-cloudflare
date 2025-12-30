@@ -1,32 +1,25 @@
-import { items } from '@lostrpg/core/game-data/lostrpg';
-import { AddItemSelectForm } from '@lostrpg/frontend/shared/ui/components/molecules/AddItemSelectForm';
+import { ItemBase } from '@lostrpg/schemas/validation/items';
+import AddIcon from '@mui/icons-material/Add';
+import { Button } from '@mui/material';
+import React, { useState } from 'react';
 import { createItem } from '../model/factory';
 import { Item } from '../model/types';
+import { ItemSelectionModal } from './molecules/ItemSelectionModal';
 
 type Props = {
-  itemSelect: string;
   onItemAdd: (item: Item) => void;
+  catalog: ItemBase[];
 };
 
-type GameDataItem = {
-  name: string;
-  j: number;
-  weight: number | string;
-  type: string;
-  area: string;
-  specialty: string;
-  target: string;
-  trait: string;
-  effect: string;
-};
+export const AddItemForm: React.FC<Props> = ({ onItemAdd, catalog }) => {
+  const [modalOpen, setModalOpen] = useState(false);
 
-export const AddItemForm: React.FC<Props> = ({ itemSelect, onItemAdd }) => {
-  const handleAdd = (item: GameDataItem) => {
+  const handleAdd = (item: ItemBase) => {
     const weight =
       typeof item.weight === 'string' ? Number(item.weight) : item.weight;
     const newItem = createItem({
       name: item.name,
-      price: item.j,
+      j: item.j,
       weight,
       type: item.type,
       area: item.area,
@@ -39,12 +32,21 @@ export const AddItemForm: React.FC<Props> = ({ itemSelect, onItemAdd }) => {
   };
 
   return (
-    <AddItemSelectForm
-      label="アイテム追加"
-      value={itemSelect}
-      items={items}
-      getItemName={(item) => item.name}
-      onAdd={handleAdd}
-    />
+    <>
+      <Button
+        variant="outlined"
+        startIcon={<AddIcon />}
+        onClick={() => setModalOpen(true)}
+      >
+        アイテム追加
+      </Button>
+      <ItemSelectionModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        items={catalog}
+        onSelect={handleAdd}
+        title="アイテムを選択"
+      />
+    </>
   );
 };
