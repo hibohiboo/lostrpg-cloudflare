@@ -3,6 +3,9 @@ import {
   strangeFieldsAbilityList,
   dragonPlainAbilityList,
   trophyAbilityList,
+  classList,
+  strangeFieldsClassList,
+  dragonPlainClassList,
 } from '@lostrpg/core/game-data/character';
 import {
   dragonPlainItemList,
@@ -84,5 +87,23 @@ export const abilityCatalogSelector = createSelector(
     });
 
     return ret;
+  },
+);
+export const classCatalogSelector = createSelector(
+  [
+    (state: RootState) => state.character.useStrangeField,
+    (state: RootState) => state.character.useDragonPlain,
+    (state: RootState) => state.character.classes,
+  ],
+  (useStrangeField, useDragonPlain, classes) => {
+    const ret = [...classList];
+
+    if (useStrangeField) ret.push(...strangeFieldsClassList);
+    if (useDragonPlain) ret.push(...dragonPlainClassList);
+
+    return ret.filter(
+      (cls) =>
+        !classes.some((selectedClass) => selectedClass.name === cls.name),
+    );
   },
 );

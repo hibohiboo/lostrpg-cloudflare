@@ -1993,7 +1993,7 @@ export const trophyAbilityList = [
     ],
   },
 ];
-
+export const dragonPlainClassList = [{ name: 'ハヤテ', id: 'gale' }];
 export const dragonPlainAbilityList = [
   {
     name: 'ビッグ',
@@ -2055,6 +2055,89 @@ export const dragonPlainAbilityList = [
         specialty: '《作る》',
         target: 'アイテム',
         effect: '指定特技の判定に成功すると、装備の強化を行うことができる。',
+      },
+    ],
+  },
+  {
+    name: 'ハヤテ',
+    id: 'gale',
+    list: [
+      {
+        name: 'スーパーマルチドライバー',
+        group: 'ハヤテ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect:
+          'あなたの《走る》は使用不能にならない。《指定特技》が「脚部分野」か「環境分野」の場合、判定直前に燃料として任意のアイテムを1つ消費すると、《走る》で目標値6として代用判定を行える。',
+      },
+      {
+        name: '渡り鳥',
+        group: 'ハヤテ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect: '突破判定の達成値にプラス2の修正がつく。',
+      },
+      {
+        name: '突撃',
+        group: 'ハヤテ',
+        type: '攻撃',
+        recoil: '3',
+        specialty: '《走る》',
+        target: '単体',
+        effect:
+          '指定特技の判定に成功すると、2点のダメージを与える。先行の場合、成功したときの効果に「燃料として任意のアイテムを1つ消費すると追加行動を得る」を加える。',
+      },
+      {
+        name: 'レーンの魔術師',
+        group: 'ハヤテ',
+        type: '割込み',
+        recoil: '4',
+        specialty: '《かわす》',
+        target: '全体',
+        effect:
+          'ランダムエンカウントの表を振る直前に使用する。指定特技の判定に成功すると、表を振らずに次のチェックポイントに移動する。',
+      },
+      {
+        name: '運び屋',
+        group: 'ハヤテ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '自身',
+        effect: '所持限界を5増やす。',
+      },
+      {
+        name: 'カザミドリ',
+        group: 'ハヤテ',
+        type: '割込み',
+        recoil: '3',
+        specialty: '《待つ》',
+        target: '単体',
+        effect:
+          '指定特技の判定に成功すると、その時ふったサイコロのうち1つを対象に渡す。対象はその後の判定でサイコロ1つの出目をその出目にしてもよい。そうしたらサイコロを返す。',
+      },
+      {
+        name: '早耳',
+        group: 'ハヤテ',
+        type: '支援',
+        recoil: '5',
+        specialty: '《閃く》',
+        target: '単体',
+        effect: 'ヌシに『暴露』の変調を与える。戦闘中以外にも使用可能。',
+      },
+      {
+        name: 'スピードスター',
+        group: 'ハヤテ',
+        type: '割込み',
+        recoil: '6',
+        specialty: '《走る》',
+        target: '自身',
+        effect:
+          '先制判定に成功したときに使用する。指定特技の判定に成功した場合、「後攻」のタイミングにも行動を行ってよい。',
       },
     ],
   },

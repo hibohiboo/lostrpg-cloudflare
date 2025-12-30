@@ -1,4 +1,3 @@
-import { classList } from '@lostrpg/core/game-data/character';
 import {
   Box,
   Chip,
@@ -13,11 +12,13 @@ import {
   useAppSelector,
 } from '@lostrpg/frontend/shared/lib/store';
 import { addClass, deleteClass } from '../../model/characterSlice';
+import { classCatalogSelector } from '../../model/selectors';
 import type { CharacterClass } from '../../model/characterSlice';
 
 export const ClassesSection: React.FC = () => {
   const dispatch = useAppDispatch();
   const classes = useAppSelector((state) => state.character.classes);
+  const catalog = useAppSelector(classCatalogSelector);
   const [classSelect, setClassSelect] = useState('');
 
   const handleClassAdd = (value: string) => {
@@ -49,16 +50,11 @@ export const ClassesSection: React.FC = () => {
         sx={{ minWidth: 200, mb: 2 }}
       >
         <MenuItem value="">未選択</MenuItem>
-        {classList
-          .filter(
-            (cls) =>
-              !classes.some((selectedClass) => selectedClass.name === cls.name),
-          )
-          .map((cls) => (
-            <MenuItem value={cls.name} key={cls.name}>
-              {cls.name}
-            </MenuItem>
-          ))}
+        {catalog.map((cls) => (
+          <MenuItem value={cls.name} key={cls.name}>
+            {cls.name}
+          </MenuItem>
+        ))}
       </Select>
 
       <Box display="flex" flexWrap="wrap" gap={1}>
