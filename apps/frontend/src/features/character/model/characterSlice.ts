@@ -183,12 +183,31 @@ const initialState: CharacterFormData = {
   useDragonPlain: false,
 };
 
+// APIから取得したデータにデフォルト値を適用
+const applyDefaults = (data: Partial<CharacterFormData>): CharacterFormData => {
+  const defaults = {
+    classes: [],
+    specialties: [],
+    gaps: [],
+    damagedSpecialties: [],
+    abilities: [],
+    equipment: [],
+    backbones: [],
+    trophies: [],
+    items: initialState.items,
+    bags: initialState.bags,
+    statusAilments: initialState.statusAilments,
+  };
+
+  return { ...initialState, ...data, ...defaults, ...data };
+};
+
 export const characterSlice = createSlice({
   name: 'character',
   initialState,
   reducers: {
     setCharacter: (_, action: PayloadAction<CharacterFormData>) =>
-      action.payload,
+      applyDefaults(action.payload),
     updateCharacter: (
       state,
       action: PayloadAction<Partial<CharacterFormData>>,
