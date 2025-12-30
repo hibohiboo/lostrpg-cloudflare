@@ -1,3 +1,5 @@
+/* eslint-disable complexity */
+import { CreateCharacterRequest } from '@lostrpg/schemas';
 import EditIcon from '@mui/icons-material/Edit';
 import {
   Box,
@@ -6,22 +8,30 @@ import {
   Container,
   InputLabel,
   Link as MuiLink,
+  List,
+  ListItem,
+  ListItemText,
   Paper,
   TextField,
   Typography,
 } from '@mui/material';
 import React from 'react';
 import { Link, useParams } from 'react-router';
-import { useGetCharacterQuery } from '@lostrpg/frontend/entities/character';
+import { AbilityTable } from '@lostrpg/frontend/entities/ability';
+import { BackboneTable } from '@lostrpg/frontend/entities/backbone';
+import { useGetCampQuery } from '@lostrpg/frontend/entities/camp';
+import { ItemTable, EquipmentTable } from '@lostrpg/frontend/entities/item';
+import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 import { SpecialtiesTable } from '@lostrpg/frontend/shared/ui';
 
-type Character = NonNullable<ReturnType<typeof useGetCharacterQuery>['data']>;
+type Character = CreateCharacterRequest;
 
 // CharacterInfo表示コンポーネント
-const CharacterInfo: React.FC<{ character: Character; id: string }> = ({
-  character,
-  id,
-}) => (
+const CharacterInfo: React.FC<{
+  character: Character;
+  id: string;
+  campName?: string;
+}> = ({ character, id, campName }) => (
   <>
     {/* タイトルと編集ボタン */}
     <Box mb={2} display="flex" alignItems="center" gap={2}>
@@ -41,6 +51,31 @@ const CharacterInfo: React.FC<{ character: Character; id: string }> = ({
         <Typography variant="body1" color="text.secondary">
           プレイヤー: {character.playerName}
         </Typography>
+      </Box>
+    )}
+
+    {/* キャンプ */}
+    {campName && (
+      <Box mb={3}>
+        <Typography variant="body1" color="text.secondary">
+          キャンプ: {campName}
+        </Typography>
+      </Box>
+    )}
+
+    {/* サプリメント */}
+    {(character.supplements?.useStrangeField ||
+      character.supplements?.useDragonPlain) && (
+      <Box mb={3}>
+        <InputLabel sx={{ mb: 1 }}>使用サプリメント</InputLabel>
+        <Box display="flex" flexWrap="wrap" gap={1}>
+          {character.supplements.useStrangeField && (
+            <Chip label="終末列島百景" variant="outlined" />
+          )}
+          {character.supplements.useDragonPlain && (
+            <Chip label="関ヶ原暴竜平原" variant="outlined" />
+          )}
+        </Box>
       </Box>
     )}
 
@@ -191,6 +226,184 @@ const CharacterStats: React.FC<{ character: Character }> = ({ character }) => (
   </>
 );
 
+// CharacterAbilities表示コンポーネント
+const CharacterAbilities: React.FC<{ character: Character }> = ({
+  character,
+}) => (
+  <>
+    {character.abilities && character.abilities.length > 0 && (
+      <Box my={3}>
+        <Typography variant="h6" gutterBottom>
+          アビリティ
+        </Typography>
+        <Box sx={{ width: '100%' }}>
+          <AbilityTable
+            abilities={character.abilities}
+            handleAbilityDelete={() => {}}
+            handleAbilityUpdate={(row) => row}
+          />
+        </Box>
+      </Box>
+    )}
+  </>
+);
+
+// CharacterItems表示コンポーネント
+const CharacterItems: React.FC<{ character: Character }> = ({ character }) => (
+  <>
+    {character.items && character.items.length > 0 && (
+      <Box my={3}>
+        <Typography variant="h6" gutterBottom>
+          アイテム
+        </Typography>
+        <Box sx={{ width: '100%' }}>
+          <ItemTable
+            items={character.items.map((item) => ({
+              ...item,
+              number: item.number ?? 1,
+            }))}
+            handleItemDelete={() => {}}
+            handleItemUpdate={(row) => row}
+          />
+        </Box>
+      </Box>
+    )}
+
+    {character.equipments && character.equipments.length > 0 && (
+      <Box my={3}>
+        <Typography variant="h6" gutterBottom>
+          装備
+        </Typography>
+        <Box sx={{ width: '100%' }}>
+          <EquipmentTable
+            items={character.equipments}
+            handleItemDelete={() => {}}
+            handleItemUpdate={(row) => row}
+          />
+        </Box>
+      </Box>
+    )}
+
+    {character.bags && character.bags.length > 0 && (
+      <Box my={3}>
+        <Typography variant="h6" gutterBottom>
+          袋
+        </Typography>
+        {character.bags.map((bag) => (
+          <Box
+            key={bag.id}
+            my={2}
+            p={2}
+            component={Paper}
+            sx={{ borderRadius: 1 }}
+          >
+            <Typography variant="subtitle1" gutterBottom>
+              {bag.name}
+            </Typography>
+            <Box display="flex" gap={2} mb={2}>
+              <TextField
+                label="袋容量"
+                value={bag.capacity}
+                size="small"
+                slotProps={{ input: { readOnly: true } }}
+                sx={{ width: 150 }}
+              />
+            </Box>
+            {bag.items && bag.items.length > 0 && (
+              <ItemTable
+                items={bag.items.map((item) => ({
+                  ...item,
+                  number: item.number ?? 1,
+                }))}
+                handleItemDelete={() => {}}
+                handleItemUpdate={(row) => row}
+              />
+            )}
+          </Box>
+        ))}
+      </Box>
+    )}
+  </>
+);
+
+// CharacterBackbones表示コンポーネント
+const CharacterBackbones: React.FC<{ character: Character }> = ({
+  character,
+}) => {
+  if (
+    !character.supplements?.useStrangeField ||
+    !character.backbones ||
+    character.backbones.length === 0
+  ) {
+    return null;
+  }
+
+  return (
+    <Box my={3}>
+      <Typography variant="h6" gutterBottom>
+        背景
+      </Typography>
+      <Box sx={{ width: '100%' }}>
+        <BackboneTable
+          backbones={character.backbones}
+          handleBackboneDelete={() => {}}
+          handleBackboneUpdate={(row) => row}
+        />
+      </Box>
+    </Box>
+  );
+};
+
+// CharacterTrophies表示コンポーネント
+const CharacterTrophies: React.FC<{ character: Character }> = ({
+  character,
+}) => {
+  if (
+    !character.supplements?.useStrangeField ||
+    !character.trophies ||
+    character.trophies.length === 0
+  ) {
+    return null;
+  }
+
+  return (
+    <Box my={3}>
+      <Typography variant="h6" gutterBottom>
+        称号
+      </Typography>
+      <List>
+        {character.trophies.map((trophy, index) => (
+          <ListItem key={index}>
+            <ListItemText primary={trophy} />
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+};
+
+// CharacterStatusAilments表示コンポーネント
+const CharacterStatusAilments: React.FC<{ character: Character }> = ({
+  character,
+}) => {
+  if (!character.statusAilments || character.statusAilments.length === 0) {
+    return null;
+  }
+
+  return (
+    <Box my={3}>
+      <Typography variant="h6" gutterBottom>
+        状態異常
+      </Typography>
+      <Box display="flex" flexWrap="wrap" gap={1}>
+        {character.statusAilments.map((ailment, index) => (
+          <Chip key={index} label={ailment} color="warning" />
+        ))}
+      </Box>
+    </Box>
+  );
+};
+
 // CharacterNotes表示コンポーネント
 const CharacterNotes: React.FC<{ character: Character }> = ({ character }) => (
   <>
@@ -239,23 +452,22 @@ const CharacterNotes: React.FC<{ character: Character }> = ({ character }) => (
 
 const DetailPage: React.FC = () => {
   const { id } = useParams();
-  const { data: character, isLoading } = useGetCharacterQuery(id!);
-
-  if (isLoading || !character) {
-    return (
-      <Container maxWidth="lg">
-        <Box my={4}>
-          <Typography>読み込み中...</Typography>
-        </Box>
-      </Container>
-    );
-  }
+  const character = useAppSelector((state) => state.character);
+  const campId = character?.campId || '';
+  const { data: camp } = useGetCampQuery(campId, {
+    skip: !campId,
+  });
 
   return (
     <Container maxWidth="lg">
       <Box my={4}>
-        <CharacterInfo character={character} id={id!} />
+        <CharacterInfo character={character} id={id!} campName={camp?.name} />
         <CharacterStats character={character} />
+        <CharacterAbilities character={character} />
+        <CharacterItems character={character} />
+        <CharacterBackbones character={character} />
+        <CharacterTrophies character={character} />
+        <CharacterStatusAilments character={character} />
         <CharacterNotes character={character} />
 
         {/* 戻るリンク */}
