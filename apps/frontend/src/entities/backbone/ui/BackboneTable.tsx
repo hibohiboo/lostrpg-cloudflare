@@ -15,12 +15,14 @@ type Props = {
       rowId: GridRowId;
     },
   ) => Backbone;
+  hideActions?: boolean;
 };
 
 export const BackboneTable: React.FC<Props> = ({
   backbones,
   handleBackboneDelete,
   handleBackboneUpdate,
+  hideActions = false,
 }) => {
   // nameをIDとして使用
   const backbonesWithId: BackboneWithId[] = backbones.map((backbone) => ({
@@ -62,6 +64,7 @@ export const BackboneTable: React.FC<Props> = ({
       columns={columns}
       processRowUpdate={handleUpdate}
       onDelete={handleDelete}
+      hideActions={hideActions}
       hideFooter
       disableRowSelectionOnClick
       localeText={{

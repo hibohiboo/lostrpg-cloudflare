@@ -13,12 +13,14 @@ type Props = {
       rowId: GridRowId;
     },
   ) => Ability;
+  hideActions?: boolean;
 };
 
 export const AbilityTable: React.FC<Props> = ({
   abilities,
   handleAbilityDelete,
   handleAbilityUpdate,
+  hideActions = false,
 }) => {
   const columns: GridColDef<Ability>[] = [
     { field: 'name', headerName: '名前', width: 180, editable: true },
@@ -36,6 +38,7 @@ export const AbilityTable: React.FC<Props> = ({
       columns={columns}
       processRowUpdate={handleAbilityUpdate}
       onDelete={(id: GridRowId) => handleAbilityDelete(String(id))}
+      hideActions={hideActions}
       hideFooter
       disableRowSelectionOnClick
       localeText={{

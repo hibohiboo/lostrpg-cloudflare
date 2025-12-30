@@ -25,13 +25,31 @@ import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 import { SpecialtiesTable } from '@lostrpg/frontend/shared/ui';
 
 type Character = CreateCharacterRequest;
-
+const CharacterClasses: React.FC<{ character: Character }> = ({
+  character,
+}) => (
+  <Box my={3}>
+    <InputLabel sx={{ mb: 1 }}>クラス</InputLabel>
+    <Box display="flex" flexWrap="wrap" gap={1}>
+      {character.classes && character.classes.length > 0 ? (
+        character.classes.map((cls: { name: string }, index: number) => (
+          <Chip key={index} label={cls.name} color="primary" />
+        ))
+      ) : (
+        <Typography variant="body2" color="text.secondary">
+          クラスが設定されていません
+        </Typography>
+      )}
+    </Box>
+  </Box>
+);
 // CharacterInfo表示コンポーネント
 const CharacterInfo: React.FC<{
   character: Character;
   id: string;
   campName?: string;
-}> = ({ character, id, campName }) => (
+  campId?: string;
+}> = ({ character, id, campName, campId }) => (
   <>
     {/* タイトルと編集ボタン */}
     <Box mb={2} display="flex" alignItems="center" gap={2}>
@@ -44,24 +62,26 @@ const CharacterInfo: React.FC<{
         </Button>
       </Link>
     </Box>
-
-    {/* プレイヤー名 */}
-    {character.playerName && (
-      <Box mb={3}>
-        <Typography variant="body1" color="text.secondary">
-          プレイヤー: {character.playerName}
-        </Typography>
-      </Box>
-    )}
-
-    {/* キャンプ */}
     {campName && (
       <Box mb={3}>
         <Typography variant="body1" color="text.secondary">
-          キャンプ: {campName}
+          キャンプ:
+          <Link to={`/camp/${campId}`} style={{ color: '#00f' }}>
+            {campName}
+          </Link>
         </Typography>
       </Box>
     )}
+    {character.quote && (
+      <Box my={3}>
+        <Box p={2}>
+          <Typography fontSize={'1.5rem'} variant="body1" fontStyle="italic">
+            「{character.quote}」
+          </Typography>
+        </Box>
+      </Box>
+    )}
+    <CharacterClasses character={character} />
 
     {/* サプリメント */}
     {(character.supplements?.useStrangeField ||
@@ -117,24 +137,6 @@ const CharacterInfo: React.FC<{
 );
 
 // CharacterClasses表示コンポーネント
-const CharacterClasses: React.FC<{ character: Character }> = ({
-  character,
-}) => (
-  <Box my={3}>
-    <InputLabel sx={{ mb: 1 }}>クラス</InputLabel>
-    <Box display="flex" flexWrap="wrap" gap={1}>
-      {character.classes && character.classes.length > 0 ? (
-        character.classes.map((cls: { name: string }, index: number) => (
-          <Chip key={index} label={cls.name} color="primary" />
-        ))
-      ) : (
-        <Typography variant="body2" color="text.secondary">
-          クラスが設定されていません
-        </Typography>
-      )}
-    </Box>
-  </Box>
-);
 
 // CharacterSpecialties表示コンポーネント
 const CharacterSpecialties: React.FC<{ character: Character }> = ({
@@ -142,7 +144,7 @@ const CharacterSpecialties: React.FC<{ character: Character }> = ({
 }) => (
   <>
     <Box my={3}>
-      <InputLabel sx={{ mb: 1 }}>専門特技</InputLabel>
+      <InputLabel sx={{ mb: 1 }}>特技</InputLabel>
       <SpecialtiesTable
         specialties={character.specialties || []}
         gaps={character.gaps || []}
@@ -152,7 +154,7 @@ const CharacterSpecialties: React.FC<{ character: Character }> = ({
     </Box>
 
     <Box my={3}>
-      <InputLabel sx={{ mb: 1 }}>選択された専門特技</InputLabel>
+      <InputLabel sx={{ mb: 1 }}>習得特技</InputLabel>
       <Box display="flex" flexWrap="wrap" gap={1}>
         {character.specialties && character.specialties.length > 0 ? (
           character.specialties.map((specialty: string, index: number) => (
@@ -171,34 +173,33 @@ const CharacterSpecialties: React.FC<{ character: Character }> = ({
 // CharacterStats表示コンポーネント
 const CharacterStats: React.FC<{ character: Character }> = ({ character }) => (
   <>
-    <CharacterClasses character={character} />
     <CharacterSpecialties character={character} />
 
     {/* 能力値 */}
     <Box display="flex" gap={2} my={3} maxWidth={600} flexWrap="wrap">
       <TextField
-        label="スタミナ基本値"
+        label="生命力"
         value={character.staminaBase}
         type="number"
         slotProps={{ input: { readOnly: true } }}
         sx={{ flex: 1, minWidth: 120 }}
       />
       <TextField
-        label="現在スタミナ"
+        label="体力"
         value={character.stamina}
         type="number"
         slotProps={{ input: { readOnly: true } }}
         sx={{ flex: 1, minWidth: 120 }}
       />
       <TextField
-        label="意志力基本値"
+        label="精神力"
         value={character.willPowerBase}
         type="number"
         slotProps={{ input: { readOnly: true } }}
         sx={{ flex: 1, minWidth: 120 }}
       />
       <TextField
-        label="現在意志力"
+        label="気力"
         value={character.willPower}
         type="number"
         slotProps={{ input: { readOnly: true } }}
@@ -206,17 +207,16 @@ const CharacterStats: React.FC<{ character: Character }> = ({ character }) => (
       />
     </Box>
 
-    {/* 経験値 */}
     <Box display="flex" gap={2} my={3} maxWidth={400}>
       <TextField
-        label="未使用経験値"
+        label="未使用経験点"
         value={character.unusedExperience}
         type="number"
         slotProps={{ input: { readOnly: true } }}
         sx={{ flex: 1 }}
       />
       <TextField
-        label="合計経験値"
+        label="合計経験点"
         value={character.totalExperience}
         type="number"
         slotProps={{ input: { readOnly: true } }}
@@ -241,6 +241,7 @@ const CharacterAbilities: React.FC<{ character: Character }> = ({
             abilities={character.abilities}
             handleAbilityDelete={() => {}}
             handleAbilityUpdate={(row) => row}
+            hideActions={true}
           />
         </Box>
       </Box>
@@ -264,6 +265,7 @@ const CharacterItems: React.FC<{ character: Character }> = ({ character }) => (
             }))}
             handleItemDelete={() => {}}
             handleItemUpdate={(row) => row}
+            hideActions={true}
           />
         </Box>
       </Box>
@@ -279,6 +281,7 @@ const CharacterItems: React.FC<{ character: Character }> = ({ character }) => (
             items={character.equipments}
             handleItemDelete={() => {}}
             handleItemUpdate={(row) => row}
+            hideActions={true}
           />
         </Box>
       </Box>
@@ -317,6 +320,7 @@ const CharacterItems: React.FC<{ character: Character }> = ({ character }) => (
                 }))}
                 handleItemDelete={() => {}}
                 handleItemUpdate={(row) => row}
+                hideActions={true}
               />
             )}
           </Box>
@@ -348,6 +352,7 @@ const CharacterBackbones: React.FC<{ character: Character }> = ({
           backbones={character.backbones}
           handleBackboneDelete={() => {}}
           handleBackboneUpdate={(row) => row}
+          hideActions={true}
         />
       </Box>
     </Box>
@@ -409,7 +414,7 @@ const CharacterNotes: React.FC<{ character: Character }> = ({ character }) => (
   <>
     {character.appearance && (
       <Box my={3}>
-        <InputLabel sx={{ mb: 1 }}>外見</InputLabel>
+        <InputLabel sx={{ mb: 1 }}>容姿</InputLabel>
         <Box
           component={Paper}
           p={2}
@@ -422,28 +427,13 @@ const CharacterNotes: React.FC<{ character: Character }> = ({ character }) => (
 
     {character.freeWriting && (
       <Box my={3}>
-        <InputLabel sx={{ mb: 1 }}>メモ</InputLabel>
+        <InputLabel sx={{ mb: 1 }}>詳細</InputLabel>
         <Box
           component={Paper}
           p={2}
           sx={{ whiteSpace: 'pre-wrap', minWidth: 320 }}
         >
           <Typography variant="body1">{character.freeWriting}</Typography>
-        </Box>
-      </Box>
-    )}
-
-    {character.quote && (
-      <Box my={3}>
-        <InputLabel sx={{ mb: 1 }}>名言</InputLabel>
-        <Box
-          component={Paper}
-          p={2}
-          sx={{ whiteSpace: 'pre-wrap', minWidth: 320 }}
-        >
-          <Typography variant="body1" fontStyle="italic">
-            「{character.quote}」
-          </Typography>
         </Box>
       </Box>
     )}
@@ -461,7 +451,12 @@ const DetailPage: React.FC = () => {
   return (
     <Container maxWidth="lg">
       <Box my={4}>
-        <CharacterInfo character={character} id={id!} campName={camp?.name} />
+        <CharacterInfo
+          character={character}
+          id={id!}
+          campName={camp?.name}
+          campId={camp?.id}
+        />
         <CharacterStats character={character} />
         <CharacterAbilities character={character} />
         <CharacterItems character={character} />
@@ -469,7 +464,13 @@ const DetailPage: React.FC = () => {
         <CharacterTrophies character={character} />
         <CharacterStatusAilments character={character} />
         <CharacterNotes character={character} />
-
+        {character.playerName && (
+          <Box mb={3}>
+            <Typography variant="body1" color="text.secondary">
+              プレイヤー: {character.playerName}
+            </Typography>
+          </Box>
+        )}
         {/* 戻るリンク */}
         <Box mt={4}>
           <MuiLink href="/character/" underline="hover">

@@ -12,12 +12,14 @@ type Props = {
       rowId: GridRowId;
     },
   ) => Equipment;
+  hideActions?: boolean;
 };
 
 export const EquipmentTable: React.FC<Props> = ({
   items,
   handleItemDelete,
   handleItemUpdate,
+  hideActions = false,
 }) => {
   const columns: GridColDef<Equipment>[] = [
     { field: 'area', headerName: '部位', width: 100, editable: true },
@@ -49,6 +51,7 @@ export const EquipmentTable: React.FC<Props> = ({
       columns={columns}
       processRowUpdate={handleItemUpdate}
       onDelete={(id: GridRowId) => handleItemDelete(String(id))}
+      hideActions={hideActions}
       hideFooter
       disableRowSelectionOnClick
       localeText={{
