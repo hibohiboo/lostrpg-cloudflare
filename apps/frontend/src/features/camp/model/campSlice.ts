@@ -1,3 +1,4 @@
+import { defaultFacilities } from '@lostrpg/core/game-data/camp';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { Camp } from '@lostrpg/frontend/entities/camp';
 import type { Facility } from '@lostrpg/frontend/entities/facility';
@@ -9,7 +10,10 @@ const initialState: CampFormData = {
   playerName: '',
   name: '',
   imageUrl: '',
-  facilities: [],
+  facilities: defaultFacilities.map((f, i) => ({
+    ...f,
+    id: `facility-initial-${i}`,
+  })),
   items: [],
   unusedCampPoint: 0,
   totalCampPoint: 0,
