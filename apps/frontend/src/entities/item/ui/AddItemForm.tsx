@@ -2,9 +2,9 @@ import { ItemBase } from '@lostrpg/schemas/validation/items';
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 import React, { useState } from 'react';
-import { ItemSelectionModal } from '@lostrpg/frontend/shared/ui/components/molecules/ItemSelectionModal';
 import { createItem } from '../model/factory';
 import { Item } from '../model/types';
+import { ItemSelectionModal } from './molecules/ItemSelectionModal';
 
 type Props = {
   onItemAdd: (item: Item) => void;

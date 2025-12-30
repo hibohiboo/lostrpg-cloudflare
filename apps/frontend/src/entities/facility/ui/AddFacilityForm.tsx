@@ -1,5 +1,5 @@
 import { equipmentList } from '@lostrpg/core/game-data/camp';
-import { AddItemSelectForm } from '@lostrpg/frontend/shared/ui/components/molecules/AddItemSelectForm';
+import { AddItemSelectForm } from '@lostrpg/frontend/entities/item/ui/molecules/AddItemSelectForm';
 import { createFacility } from '../model/factory';
 import { Facility } from '../model/types';
 

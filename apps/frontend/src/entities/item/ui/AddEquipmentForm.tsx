@@ -1,6 +1,6 @@
 import { Equipment, ItemBase } from '@lostrpg/schemas/validation/items';
-import { AddItemSelectForm } from '@lostrpg/frontend/shared/ui/components/molecules/AddItemSelectForm';
 import { createItem } from '../model/factory';
+import { AddItemSelectForm } from './molecules/AddItemSelectForm';
 
 type Props = {
   itemSelect: string;
