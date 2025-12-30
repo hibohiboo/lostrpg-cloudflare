@@ -148,7 +148,6 @@ const Cell: React.FC<{
           }}
           checked={damagedSpecialties.includes(name)}
           onChange={() => handleDamageClick(name)}
-          disabled={readOnly}
           size="small"
           color="error"
         />
