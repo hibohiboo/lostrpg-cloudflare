@@ -77,9 +77,9 @@ const EditForm: React.FC<Props> = ({
         mt={1}
         sx={{ maxWidth: 480, height: 320, overflow: 'hidden' }}
       >
-        {previewUrl ? (
+        {previewUrl || camp.imageUrl ? (
           <img
-            src={previewUrl}
+            src={previewUrl || camp.imageUrl}
             alt="プレビュー"
             style={{ width: '100%', height: '100%', objectFit: 'contain' }}
           />
