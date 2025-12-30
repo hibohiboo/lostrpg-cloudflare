@@ -107,6 +107,7 @@ const Cell: React.FC<{
         p: '0 4px 0 8px',
         height: '44px',
         border: `${isBodyParts ? 'thick double' : '1px solid'}`,
+        // outline: isBodyParts ? undefined : '1px solid rgba(224, 224, 224, 1)',
         cursor: readOnly ? 'cursor' : 'pointer',
         bgcolor: isSelected ? 'grey.900' : undefined,
         color: isSelected ? 'common.white' : undefined,
