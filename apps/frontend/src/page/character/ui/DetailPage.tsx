@@ -1,6 +1,7 @@
 /* eslint-disable complexity */
 import { CreateCharacterRequest } from '@lostrpg/schemas';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import DownloadIcon from '@mui/icons-material/Download';
 import EditIcon from '@mui/icons-material/Edit';
 import {
   Box,
@@ -23,6 +24,7 @@ import { BackboneTable } from '@lostrpg/frontend/entities/backbone';
 import { useGetCampQuery } from '@lostrpg/frontend/entities/camp';
 import { ItemTable, EquipmentTable } from '@lostrpg/frontend/entities/item';
 import { copyCharacterToCcfolia } from '@lostrpg/frontend/features/character/utils/exportCcfolia';
+import { exportCharacterToUdonarium } from '@lostrpg/frontend/features/character/utils/exportUdonarium';
 import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 import { SpecialtiesTable } from '@lostrpg/frontend/shared/ui';
 
@@ -434,6 +436,7 @@ const DetailPage: React.FC = () => {
     skip: !campId,
   });
   const [copySuccess, setCopySuccess] = useState(false);
+  const [exportSuccess, setExportSuccess] = useState(false);
 
   const handleCopyToCcfolia = async () => {
     try {
@@ -442,6 +445,16 @@ const DetailPage: React.FC = () => {
       setTimeout(() => setCopySuccess(false), 2000);
     } catch (error) {
       console.error('クリップボードへのコピーに失敗しました:', error);
+    }
+  };
+
+  const handleExportToUdonarium = async () => {
+    try {
+      await exportCharacterToUdonarium(character, id || '');
+      setExportSuccess(true);
+      setTimeout(() => setExportSuccess(false), 2000);
+    } catch (error) {
+      console.error('ユドナリウムへのエクスポートに失敗しました:', error);
     }
   };
 
@@ -485,7 +498,7 @@ const DetailPage: React.FC = () => {
         )}
 
         {/* エクスポートボタン */}
-        <Box my={3}>
+        <Box my={3} display="flex" flexWrap="wrap" gap={2} alignItems="center">
           <Button
             variant="contained"
             color="primary"
@@ -495,12 +508,21 @@ const DetailPage: React.FC = () => {
             ココフォリア用クリップボードコピー
           </Button>
           {copySuccess && (
-            <Typography
-              variant="body2"
-              color="success.main"
-              sx={{ mt: 1, display: 'inline-block', ml: 2 }}
-            >
+            <Typography variant="body2" color="success.main">
               コピーしました！
+            </Typography>
+          )}
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<DownloadIcon />}
+            onClick={handleExportToUdonarium}
+          >
+            ユドナリウムコマ出力
+          </Button>
+          {exportSuccess && (
+            <Typography variant="body2" color="success.main">
+              ダウンロードしました！
             </Typography>
           )}
         </Box>
