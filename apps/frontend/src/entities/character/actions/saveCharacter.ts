@@ -92,7 +92,7 @@ export const createCharacterThunk = createAsyncThunk<
         appearance: character.appearance,
         freeWriting: character.freeWriting,
         quote: character.quote,
-        subbliments: {
+        supplements: {
           useStrangeField: character.useStrangeField,
           useDragonPlain: character.useDragonPlain,
         },
@@ -196,7 +196,7 @@ export const updateCharacterThunk = createAsyncThunk<
       appearance: character.appearance,
       freeWriting: character.freeWriting,
       quote: character.quote,
-      subbliments: {
+      supplements: {
         useStrangeField: character.useStrangeField,
         useDragonPlain: character.useDragonPlain,
       },

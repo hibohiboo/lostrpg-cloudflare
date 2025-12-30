@@ -1,4 +1,12 @@
-import { Box, Button, InputLabel, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  InputLabel,
+  TextField,
+  Typography,
+} from '@mui/material';
 import React from 'react';
 import {
   useAppDispatch,
@@ -14,6 +22,12 @@ export const CharacterBasicSection: React.FC<{
   const dispatch = useAppDispatch();
   const playerName = useAppSelector((state) => state.character.playerName);
   const name = useAppSelector((state) => state.character.name);
+  const useStrangeField = useAppSelector(
+    (state) => state.character.useStrangeField,
+  );
+  const useDragonPlain = useAppSelector(
+    (state) => state.character.useDragonPlain,
+  );
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -36,6 +50,40 @@ export const CharacterBasicSection: React.FC<{
         />
       </Box>
 
+      <Box my={3}>
+        <Typography variant="h6" gutterBottom>
+          使用サプリメント
+        </Typography>
+        <Box>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={useStrangeField}
+                onChange={(e) =>
+                  dispatch(
+                    updateCharacter({ useStrangeField: e.target.checked }),
+                  )
+                }
+              />
+            }
+            label="終末列島百景"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={useDragonPlain}
+                onChange={(e) =>
+                  dispatch(
+                    updateCharacter({ useDragonPlain: e.target.checked }),
+                  )
+                }
+              />
+            }
+            label="関ヶ原暴竜平原"
+          />
+        </Box>
+      </Box>
+
       {/* キャラクター名（必須） */}
       <Box my={2}>
         <TextField
@@ -45,9 +93,7 @@ export const CharacterBasicSection: React.FC<{
           error={!name && isValidError}
           helperText={!name && isValidError ? 'キャラクター名は必須です' : ''}
           value={name}
-          onChange={(e) =>
-            dispatch(updateCharacter({ name: e.target.value }))
-          }
+          onChange={(e) => dispatch(updateCharacter({ name: e.target.value }))}
         />
       </Box>
 

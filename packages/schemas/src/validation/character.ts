@@ -66,7 +66,7 @@ const baseCharacterFields = {
   playerName: z.string().optional(),
   imageUrl: z.string().optional(),
   backbones: z.array(backboneSchema).default([]),
-  subbliments: supplementSchema,
+  supplements: supplementSchema,
   password: z.string().nullable().optional(),
 };
 
