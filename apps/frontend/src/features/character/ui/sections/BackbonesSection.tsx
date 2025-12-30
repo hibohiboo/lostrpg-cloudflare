@@ -6,14 +6,18 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '@lostrpg/frontend/shared/lib/store';
-import { addBackbone, updateBackbone, deleteBackbone } from '../../model/characterSlice';
+import {
+  addBackbone,
+  updateBackbone,
+  deleteBackbone,
+} from '../../model/characterSlice';
 import type { Backbone } from '../../model/characterSlice';
 
 export const BackbonesSection: React.FC = () => {
   const dispatch = useAppDispatch();
   const backbones = useAppSelector((state) => state.character.backbones);
   const useStrangeField = useAppSelector(
-    (state) => state.character.useStrangeField
+    (state) => state.character.useStrangeField,
   );
 
   const handleBackboneAdd = () => {
@@ -54,12 +58,12 @@ export const BackbonesSection: React.FC = () => {
   return (
     <Box my={3}>
       <Typography variant="h6" gutterBottom>
-        バックボーン
+        背景
       </Typography>
       <Button variant="outlined" onClick={handleBackboneAdd} sx={{ mb: 2 }}>
         追加
       </Button>
-      <Box sx={{ height: 300, width: '100%' }}>
+      <Box sx={{ width: '100%' }}>
         <DataGrid
           rows={backbones}
           columns={backboneColumns}
@@ -70,7 +74,7 @@ export const BackbonesSection: React.FC = () => {
           hideFooter
           disableRowSelectionOnClick
           localeText={{
-            noRowsLabel: 'バックボーンがありません',
+            noRowsLabel: '背景がありません',
           }}
         />
       </Box>
