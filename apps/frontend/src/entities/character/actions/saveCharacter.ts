@@ -29,7 +29,7 @@ export const createCharacterThunk = createAsyncThunk<
   {
     handleImageUpload: (
       id: string,
-      password: string | undefined,
+      password: string | undefined | null,
     ) => Promise<string | null>;
   },
   { rejectValue: ValidationErrorType }
@@ -124,7 +124,7 @@ export const updateCharacterThunk = createAsyncThunk<
     id: string;
     handleImageUpload: (
       id: string,
-      password: string | undefined,
+      password: string | undefined | null,
     ) => Promise<string | null>;
   },
   { rejectValue: ValidationErrorType }

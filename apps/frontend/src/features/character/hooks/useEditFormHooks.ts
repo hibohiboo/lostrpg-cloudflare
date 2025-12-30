@@ -24,7 +24,7 @@ export const useEditFormHooks = () => {
   // 画像アップロードハンドラー
   const handleImageUpload = async (
     id: string,
-    password: string | undefined,
+    password: string | undefined | null,
   ): Promise<string | null> => {
     if (!imageFile) return null;
 

@@ -41,6 +41,7 @@ const abilitySchema = z.object({
 });
 
 export type Ability = z.infer<typeof abilitySchema>;
+export type AbilityBase = Omit<Ability, 'id'>;
 
 // ギャップの列挙型
 const gapEnum = z.enum(['A', 'B', 'C', 'D', 'E']);

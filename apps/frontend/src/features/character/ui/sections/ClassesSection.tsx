@@ -13,7 +13,7 @@ import {
 } from '@lostrpg/frontend/shared/lib/store';
 import { addClass, deleteClass } from '../../model/characterSlice';
 import { classCatalogSelector } from '../../model/selectors';
-import type { CharacterClass } from '../../model/characterSlice';
+import type { CharacterClass } from '@lostrpg/schemas';
 
 export const ClassesSection: React.FC = () => {
   const dispatch = useAppDispatch();

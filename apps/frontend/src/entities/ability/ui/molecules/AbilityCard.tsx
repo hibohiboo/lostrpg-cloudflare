@@ -1,3 +1,4 @@
+import { AbilityBase } from '@lostrpg/schemas';
 import {
   Box,
   Card,
@@ -7,11 +8,10 @@ import {
   Typography,
 } from '@mui/material';
 import React from 'react';
-import type { Ability } from '../../model/types';
 
 type AbilityCardProps = {
-  ability: Ability;
-  onSelect: (ability: Ability) => void;
+  ability: AbilityBase;
+  onSelect: (ability: AbilityBase) => void;
 };
 
 export const AbilityCard: React.FC<AbilityCardProps> = ({

@@ -1,52 +1,45 @@
-import { AbilityBase } from '@lostrpg/schemas';
 import CloseIcon from '@mui/icons-material/Close';
 import {
-  Box,
   Dialog,
-  DialogContent,
   DialogTitle,
-  IconButton,
+  DialogContent,
   TextField,
+  IconButton,
+  Box,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { AbilityCard } from './AbilityCard';
-import type { AbilityGroup } from '../../model/types';
+import { ItemCard } from './ItemCard';
+import type { ItemBase } from '@lostrpg/schemas/validation/items';
 
-type NewType = AbilityBase;
-
-type AbilitySelectionModalProps = {
+type ItemSelectionModalProps = {
   open: boolean;
   onClose: () => void;
-  abilityGroups: readonly AbilityGroup[];
-  onSelect: (ability: NewType) => void;
+  items: readonly ItemBase[];
+  onSelect: (item: ItemBase) => void;
   title?: string;
 };
 
-export const AbilitySelectionModal: React.FC<AbilitySelectionModalProps> = ({
+export const ItemSelectionModal: React.FC<ItemSelectionModalProps> = ({
   open,
   onClose,
-  abilityGroups,
+  items,
   onSelect,
-  title = 'アビリティ選択',
+  title = 'アイテム選択',
 }) => {
   const [searchText, setSearchText] = useState('');
 
-  // 全アビリティをフラットに展開
-  const allAbilities = abilityGroups.flatMap((group) => group.list);
-
-  const filteredAbilities = allAbilities.filter((ability) => {
+  const filteredItems = items.filter((item) => {
     const search = searchText.toLowerCase();
     return (
-      ability.name.toLowerCase().includes(search) ||
-      ability.group.toLowerCase().includes(search) ||
-      ability.type.toLowerCase().includes(search) ||
-      ability.effect.toLowerCase().includes(search) ||
-      ability.specialty.toLowerCase().includes(search)
+      item.name.toLowerCase().includes(search) ||
+      item.type.toLowerCase().includes(search) ||
+      item.effect.toLowerCase().includes(search) ||
+      item.trait.toLowerCase().includes(search)
     );
   });
 
-  const handleSelect = (ability: AbilityBase) => {
-    onSelect(ability);
+  const handleSelect = (item: ItemBase) => {
+    onSelect(item);
     onClose();
     setSearchText('');
   };
@@ -75,7 +68,7 @@ export const AbilitySelectionModal: React.FC<AbilitySelectionModalProps> = ({
       <DialogContent>
         <TextField
           fullWidth
-          label="アビリティを検索"
+          label="アイテムを検索"
           variant="outlined"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
@@ -93,12 +86,8 @@ export const AbilitySelectionModal: React.FC<AbilitySelectionModalProps> = ({
             gap: 2,
           }}
         >
-          {filteredAbilities.map((ability, index) => (
-            <AbilityCard
-              key={`${ability.name}-${index}`}
-              ability={ability}
-              onSelect={handleSelect}
-            />
+          {filteredItems.map((item) => (
+            <ItemCard key={item.name} item={item} onSelect={handleSelect} />
           ))}
         </Box>
       </DialogContent>

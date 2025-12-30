@@ -1,4 +1,5 @@
 import { damageTableRows } from '@lostrpg/core/game-data/speciality';
+import { Gap } from '@lostrpg/schemas';
 import { HelpOutline } from '@mui/icons-material';
 import {
   Box,
@@ -18,7 +19,6 @@ import {
   IconButton,
 } from '@mui/material';
 import React from 'react';
-
 import {
   useAppDispatch,
   useAppSelector,
@@ -30,7 +30,6 @@ import {
   toggleDamagedSpecialty,
   clearAllDamage,
 } from '../../model/characterSlice';
-import type { Gap } from '../../model/characterSlice';
 
 interface DamageRow {
   name: string;
@@ -161,7 +160,7 @@ export const SpecialtiesSection: React.FC = () => {
           gaps={gaps}
           specialties={specialties}
           damagedSpecialties={damagedSpecialties}
-          onGapChange={(gap: Gap) => dispatch(toggleGap(gap))}
+          onGapChange={(gap: string) => dispatch(toggleGap(gap as Gap))}
           onSpecialtySelect={(specialty: string) =>
             dispatch(toggleSpecialty(specialty))
           }

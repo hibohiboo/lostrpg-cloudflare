@@ -15,7 +15,7 @@ import {
 
 import { addBag, updateBag, deleteBag } from '../../model/characterSlice';
 import { itemCatalogSelector } from '../../model/selectors';
-import type { Bag } from '../../model/characterSlice';
+import type { Bag } from '@lostrpg/schemas';
 
 export const BagsSection: React.FC = () => {
   const dispatch = useAppDispatch();

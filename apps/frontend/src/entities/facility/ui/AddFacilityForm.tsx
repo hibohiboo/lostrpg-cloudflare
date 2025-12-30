@@ -1,7 +1,7 @@
 import { equipmentList } from '@lostrpg/core/game-data/camp';
-import { AddItemSelectForm } from '@lostrpg/frontend/entities/item/ui/molecules/AddItemSelectForm';
 import { createFacility } from '../model/factory';
 import { Facility } from '../model/types';
+import { AddItemSelectForm } from './molecules/AddItemSelectForm';
 
 type Props = {
   equipmentSelect: string;

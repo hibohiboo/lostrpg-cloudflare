@@ -1,3 +1,4 @@
+import { AbilityBase } from '@lostrpg/schemas';
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 import React, { useState } from 'react';
@@ -16,7 +17,7 @@ export const AddAbilityForm: React.FC<Props> = ({
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
-  const handleAdd = (ability: Omit<Ability, 'id'>) => {
+  const handleAdd = (ability: AbilityBase) => {
     const newAbility = createAbility(ability);
     onAbilityAdd(newAbility);
   };
