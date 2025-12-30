@@ -900,27 +900,14 @@ export const abilityList = [
   },
 ];
 
-export const itemsColumns = [
-  { title: '名前', field: 'name' },
-  { title: '個数', field: 'number', type: 'numeric' as const },
-  { title: '価格', field: 'j', type: 'numeric' as const },
-  { title: '重量', field: 'weight', type: 'numeric' as const },
-  { title: 'タイプ', field: 'type' },
-  { title: '部位', field: 'area' },
-  { title: '特技', field: 'specialty' },
-  { title: '対象', field: 'target' },
-  { title: '特性', field: 'trait' },
-  { title: '効果', field: 'effect' },
+// サプリメント1
+export const strangeFieldsClassList = [
+  { name: 'アキンド', id: 'merchant' },
+  { name: 'カイヌシ', id: 'tamer' },
+  { name: 'オガミヤ', id: 'sherman' },
+  { name: 'アイドル', id: 'idol' },
+  { name: 'ヤセイジ', id: 'wild' },
 ];
-
-export const equipmentColumns = [
-  { title: 'タイプ', field: 'type' },
-  { title: '特技', field: 'specialty' },
-  { title: '対象', field: 'target' },
-  { title: '特性', field: 'trait' },
-  { title: '効果', field: 'effect' },
-];
-
 export const statusAilments = [
   {
     name: '毒',
@@ -953,15 +940,6 @@ export const statusAilments = [
     effect:
       'キャラクターのデータが公開されます。また、攻撃により受けるダメージが 1点増加します。',
   },
-];
-
-// サプリメント1
-export const strangeFieldsClassList = [
-  { name: 'アキンド', id: 'merchant' },
-  { name: 'カイヌシ', id: 'tamer' },
-  { name: 'オガミヤ', id: 'sherman' },
-  { name: 'アイドル', id: 'idol' },
-  { name: 'ヤセイジ', id: 'wild' },
 ];
 
 export const strangeFieldsAbilityList = [

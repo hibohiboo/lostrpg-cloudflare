@@ -30,6 +30,8 @@ const abilitySchema = z.object({
   effect: z.string(),
 });
 
+export type Ability = z.infer<typeof abilitySchema>;
+
 // ギャップの列挙型
 const gapEnum = z.enum(['A', 'B', 'C', 'D', 'E']);
 

@@ -5,6 +5,7 @@ import {
   ClassesSection,
   SpecialtiesSection,
   AbilitySection,
+  AbilitiesSection,
   ItemsSection,
   EquipmentSection,
   BagsSection,
@@ -40,6 +41,7 @@ const EditForm: React.FC<Props> = ({
     <ClassesSection />
     <SpecialtiesSection />
     <AbilitySection />
+    <AbilitiesSection />
     <ItemsSection />
     <EquipmentSection />
     <BagsSection />
