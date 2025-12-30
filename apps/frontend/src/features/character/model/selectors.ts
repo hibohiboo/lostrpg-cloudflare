@@ -5,16 +5,17 @@ import {
 } from '@lostrpg/core/game-data/item';
 import { createSelector } from '@reduxjs/toolkit';
 
-const characterState = (state: RootState) => state.character;
-
 export const itemCatalogSelector = createSelector(
-  [characterState],
-  (character) => {
+  [
+    (state: RootState) => state.character.useStrangeField,
+    (state: RootState) => state.character.useDragonPlain,
+  ],
+  (useStrangeField, useDragonPlain) => {
     const ret = [...items];
 
-    if (character.useStrangeField) ret.push(...strangeFieldsItemList);
-    if (character.useDragonPlain) ret.push(...dragonPlainItemList);
-    console.log(ret);
+    if (useStrangeField) ret.push(...strangeFieldsItemList);
+    if (useDragonPlain) ret.push(...dragonPlainItemList);
+
     return ret;
   },
 );
