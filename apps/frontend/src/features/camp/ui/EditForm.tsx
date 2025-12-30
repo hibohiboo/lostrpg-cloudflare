@@ -29,7 +29,6 @@ const EditForm: React.FC<Props> = ({
   previewUrl,
   equipmentSelect,
   personalitySelect,
-  itemSelect,
   prevPath,
   setCamp,
   handleImageChange,
@@ -134,11 +133,7 @@ const EditForm: React.FC<Props> = ({
       </Typography>
 
       <Box mb={2}>
-        <AddItemForm
-          catalog={items}
-          itemSelect={itemSelect}
-          onItemAdd={handleItemAdd}
-        />
+        <AddItemForm catalog={items} onItemAdd={handleItemAdd} />
       </Box>
 
       <Box sx={{ height: 400, width: '100%' }}>

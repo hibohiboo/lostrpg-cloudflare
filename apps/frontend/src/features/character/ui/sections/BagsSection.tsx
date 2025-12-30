@@ -2,7 +2,7 @@ import { items } from '@lostrpg/core/game-data/item';
 import { CharacterItem } from '@lostrpg/schemas/validation/items';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { GridRowId } from '@mui/x-data-grid';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   AddItemForm,
   ItemTable,
@@ -21,8 +21,7 @@ export const BagsSection: React.FC = () => {
   const dispatch = useAppDispatch();
   const bags = useAppSelector((state) => state.character.bags);
   const catalog = useAppSelector(itemCatalogSelector);
-  const [bagName, setBagName] = useState('');
-  const [itemSelects, setItemSelects] = useState<Record<string, string>>({});
+  const [bagName, setBagName] = React.useState('');
 
   const handleBagAdd = () => {
     if (!bagName) return;
@@ -58,7 +57,6 @@ export const BagsSection: React.FC = () => {
         effect: item.effect,
       };
       dispatch(updateBag({ ...bag, items: [...bag.items, newItem] }));
-      setItemSelects({ ...itemSelects, [bagId]: '' });
     }
   };
 
@@ -156,7 +154,6 @@ export const BagsSection: React.FC = () => {
 
           <AddItemForm
             catalog={catalog}
-            itemSelect={itemSelects[bag.id]}
             onItemAdd={(value) => {
               handleItemAdd(bag.id, value.name);
             }}

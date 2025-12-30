@@ -2,7 +2,7 @@ import { items } from '@lostrpg/core/game-data/item';
 import { CharacterItem } from '@lostrpg/schemas/validation/items';
 import { Box, TextField, Typography } from '@mui/material';
 import { GridRowId } from '@mui/x-data-grid';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   AddItemForm,
   ItemTable,
@@ -30,7 +30,6 @@ export const ItemsSection: React.FC = () => {
   const carryingCapacity = useAppSelector(
     (state) => state.character.carryingCapacity,
   );
-  const [itemSelect, setItemSelect] = useState('');
 
   const totalWeight = useMemo(
     () =>
@@ -143,7 +142,6 @@ export const ItemsSection: React.FC = () => {
 
       <AddItemForm
         catalog={catalog}
-        itemSelect={itemSelect}
         onItemAdd={(value) => {
           handleItemAdd(value.name);
         }}

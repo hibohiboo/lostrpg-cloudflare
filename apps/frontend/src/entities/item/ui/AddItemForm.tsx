@@ -1,19 +1,19 @@
 import { ItemBase } from '@lostrpg/schemas/validation/items';
-import { AddItemSelectForm } from '@lostrpg/frontend/shared/ui/components/molecules/AddItemSelectForm';
+import AddIcon from '@mui/icons-material/Add';
+import { Button } from '@mui/material';
+import React, { useState } from 'react';
+import { ItemSelectionModal } from '@lostrpg/frontend/shared/ui/components/molecules/ItemSelectionModal';
 import { createItem } from '../model/factory';
 import { Item } from '../model/types';
 
 type Props = {
-  itemSelect: string;
   onItemAdd: (item: Item) => void;
   catalog: ItemBase[];
 };
 
-export const AddItemForm: React.FC<Props> = ({
-  itemSelect,
-  onItemAdd,
-  catalog,
-}) => {
+export const AddItemForm: React.FC<Props> = ({ onItemAdd, catalog }) => {
+  const [modalOpen, setModalOpen] = useState(false);
+
   const handleAdd = (item: ItemBase) => {
     const weight =
       typeof item.weight === 'string' ? Number(item.weight) : item.weight;
@@ -32,12 +32,21 @@ export const AddItemForm: React.FC<Props> = ({
   };
 
   return (
-    <AddItemSelectForm
-      label="アイテム追加"
-      value={itemSelect}
-      items={catalog}
-      getItemName={(item) => item.name}
-      onAdd={handleAdd}
-    />
+    <>
+      <Button
+        variant="outlined"
+        startIcon={<AddIcon />}
+        onClick={() => setModalOpen(true)}
+      >
+        アイテム追加
+      </Button>
+      <ItemSelectionModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        items={catalog}
+        onSelect={handleAdd}
+        title="アイテムを選択"
+      />
+    </>
   );
 };
