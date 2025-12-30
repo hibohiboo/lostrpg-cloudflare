@@ -25,6 +25,18 @@ export const FormActionsSection: React.FC<Props> = ({
   const [copySuccess, setCopySuccess] = useState(false);
   const [exportSuccess, setExportSuccess] = useState(false);
   const [trpgStudioSuccess, setTrpgStudioSuccess] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleSaveClick = async () => {
+    if (isSaving) return;
+    setIsSaving(true);
+    try {
+      await Promise.resolve(handleSave());
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const handleCopyToCcfolia = async () => {
     try {
       await copyCharacterToCcfolia(character, id || '');
@@ -62,9 +74,10 @@ export const FormActionsSection: React.FC<Props> = ({
           variant="contained"
           color="primary"
           startIcon={<SaveIcon />}
-          onClick={handleSave}
+          onClick={handleSaveClick}
+          disabled={isSaving}
         >
-          保存
+          {isSaving ? '保存中...' : '保存'}
         </Button>
       </Box>
 
