@@ -40,6 +40,7 @@ const equipmentColumns = ['タイプ', '特技', '対象', '特性', '効果'];
 const itemsColumns = [
   '名前',
   '個数',
+  '価格',
   '重量',
   'タイプ',
   '部位',
@@ -155,6 +156,7 @@ export const characterToTRPGStudioDoc = (
         array_tr: (character.items || []).map((a) => [
           a.name,
           a.number || 1,
+          a.j,
           a.weight,
           a.type,
           a.area || '',
@@ -176,6 +178,7 @@ export const characterToTRPGStudioDoc = (
       array_tr: (bag.items || []).map((a) => [
         a.name,
         a.number || 1,
+        a.j,
         a.weight,
         a.type,
         a.area || '',
