@@ -310,6 +310,9 @@ export const characterSlice = createSlice({
     deleteTrophy: (state, action: PayloadAction<string>) => {
       state.trophies = state.trophies.filter((t) => t !== action.payload);
     },
+    setCampId: (state, action: PayloadAction<string | undefined>) => {
+      state.campId = action.payload;
+    },
     clearAllDamage: (state) => {
       state.damagedSpecialties = [];
     },
@@ -343,6 +346,7 @@ export const {
   updateBackbone,
   deleteBackbone,
   addTrophy,
+  setCampId,
   deleteTrophy,
   resetCharacter,
 } = characterSlice.actions;

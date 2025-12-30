@@ -2,17 +2,22 @@ import {
   Box,
   Button,
   Checkbox,
+  FormControl,
   FormControlLabel,
   InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   TextField,
   Typography,
 } from '@mui/material';
 import React from 'react';
+import { useGetCampListQuery } from '@lostrpg/frontend/entities/camp';
 import {
   useAppDispatch,
   useAppSelector,
 } from '@lostrpg/frontend/shared/lib/store';
-import { updateCharacter } from '../../model/characterSlice';
+import { setCampId, updateCharacter } from '../../model/characterSlice';
 
 export const CharacterBasicSection: React.FC<{
   isValidError: boolean;
@@ -21,7 +26,9 @@ export const CharacterBasicSection: React.FC<{
 }> = ({ isValidError, onImageChange, previewUrl }) => {
   const dispatch = useAppDispatch();
   const playerName = useAppSelector((state) => state.character.playerName);
+  const campId = useAppSelector((state) => state.character.campId);
   const name = useAppSelector((state) => state.character.name);
+  const { data: camps = [] } = useGetCampListQuery();
   const useStrangeField = useAppSelector(
     (state) => state.character.supplements.useStrangeField,
   );
@@ -93,6 +100,26 @@ export const CharacterBasicSection: React.FC<{
           />
         </Box>
       </Box>
+      <FormControl>
+        <InputLabel id="camp-select-label">キャンプ</InputLabel>
+        <Select
+          value={campId}
+          labelId="camp-select-label"
+          label="キャンプ"
+          onChange={(e: SelectChangeEvent) => {
+            const { value } = e.target;
+            dispatch(setCampId(value));
+          }}
+          sx={{ minWidth: 200, mb: 2 }}
+        >
+          <MenuItem value={''}>未選択</MenuItem>
+          {camps.map((c) => (
+            <MenuItem value={c.id} key={c.id}>
+              {c.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
       {/* キャラクター名（必須） */}
       <Box my={2}>
