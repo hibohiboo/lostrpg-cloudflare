@@ -1,7 +1,12 @@
-import DeleteIcon from '@mui/icons-material/Delete';
-import { Box, Button, Typography } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { backboneList } from '@lostrpg/core/game-data/character';
+import { Box, Typography } from '@mui/material';
+import { GridRowId } from '@mui/x-data-grid';
 import React from 'react';
+import {
+  AddBackboneForm,
+  BackboneTable,
+  type Backbone,
+} from '@lostrpg/frontend/entities/backbone';
 import {
   useAppDispatch,
   useAppSelector,
@@ -11,7 +16,6 @@ import {
   updateBackbone,
   deleteBackbone,
 } from '../../model/characterSlice';
-import type { Backbone } from '../../model/characterSlice';
 
 export const BackbonesSection: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -20,36 +24,22 @@ export const BackbonesSection: React.FC = () => {
     (state) => state.character.useStrangeField,
   );
 
-  const handleBackboneAdd = () => {
-    const newBackbone: Backbone = {
-      id: `bb-${Date.now()}`,
-      name: '',
-      type: '',
-      effect: '',
-    };
-    dispatch(addBackbone(newBackbone));
+  const handleBackboneAdd = (backbone: Backbone) => {
+    dispatch(addBackbone(backbone));
   };
 
-  const backboneColumns: GridColDef[] = [
-    { field: 'name', headerName: '名前', width: 200, editable: true },
-    { field: 'type', headerName: '種類', width: 150, editable: true },
-    { field: 'effect', headerName: '効果', width: 300, editable: true },
-    {
-      field: 'actions',
-      headerName: '操作',
-      width: 80,
-      sortable: false,
-      renderCell: (params) => (
-        <Button
-          size="small"
-          color="error"
-          onClick={() => dispatch(deleteBackbone(params.row.id))}
-        >
-          <DeleteIcon fontSize="small" />
-        </Button>
-      ),
-    },
-  ];
+  const handleBackboneUpdate = (
+    newRow: Backbone,
+    _oldRow: Backbone,
+    _params: { rowId: GridRowId },
+  ): Backbone => {
+    dispatch(updateBackbone(newRow));
+    return newRow;
+  };
+
+  const handleBackboneDelete = (backbone: Backbone) => {
+    dispatch(deleteBackbone(backbone));
+  };
 
   if (!useStrangeField) {
     return null;
@@ -60,22 +50,17 @@ export const BackbonesSection: React.FC = () => {
       <Typography variant="h6" gutterBottom>
         背景
       </Typography>
-      <Button variant="outlined" onClick={handleBackboneAdd} sx={{ mb: 2 }}>
-        追加
-      </Button>
-      <Box sx={{ width: '100%' }}>
-        <DataGrid
-          rows={backbones}
-          columns={backboneColumns}
-          processRowUpdate={(updatedRow: Backbone) => {
-            dispatch(updateBackbone(updatedRow));
-            return updatedRow;
-          }}
-          hideFooter
-          disableRowSelectionOnClick
-          localeText={{
-            noRowsLabel: '背景がありません',
-          }}
+
+      <AddBackboneForm
+        backbones={backboneList}
+        onBackboneAdd={handleBackboneAdd}
+      />
+
+      <Box sx={{ height: 400, width: '100%', mt: 2 }}>
+        <BackboneTable
+          backbones={backbones}
+          handleBackboneDelete={handleBackboneDelete}
+          handleBackboneUpdate={handleBackboneUpdate}
         />
       </Box>
     </Box>

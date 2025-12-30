@@ -4,6 +4,7 @@ import {
   bodyParts,
   specialtyRows,
 } from '@lostrpg/core/game-data/speciality';
+import { Backbone } from '@lostrpg/schemas/validation/character';
 import { CharacterItem, Equipment } from '@lostrpg/schemas/validation/items';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
@@ -89,13 +90,6 @@ export interface StatusAilment {
   name: string;
   effect: string;
   isChecked: boolean;
-}
-
-export interface Backbone {
-  id: string;
-  name: string;
-  type: string;
-  effect: string;
 }
 
 export interface CharacterFormData {
@@ -338,14 +332,16 @@ export const characterSlice = createSlice({
     },
     updateBackbone: (state, action: PayloadAction<Backbone>) => {
       const index = state.backbones.findIndex(
-        (b) => b.id === action.payload.id,
+        (b) => b.name === action.payload.name,
       );
       if (index !== -1) {
         state.backbones[index] = action.payload;
       }
     },
-    deleteBackbone: (state, action: PayloadAction<string>) => {
-      state.backbones = state.backbones.filter((b) => b.id !== action.payload);
+    deleteBackbone: (state, action: PayloadAction<Backbone>) => {
+      state.backbones = state.backbones.filter(
+        (b) => b.name !== action.payload.name,
+      );
     },
     addTrophy: (state, action: PayloadAction<string>) => {
       if (!state.trophies.includes(action.payload)) {

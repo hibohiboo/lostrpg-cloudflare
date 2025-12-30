@@ -1,15 +1,15 @@
-import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { GridRowId } from '@mui/x-data-grid';
-import {
-  useAppDispatch,
-  useAppSelector,
-} from '@lostrpg/frontend/shared/lib/store';
+import React from 'react';
 import {
   AddAbilityForm,
   AbilityTable,
   type Ability,
 } from '@lostrpg/frontend/entities/ability';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '@lostrpg/frontend/shared/lib/store';
 import {
   addAbility,
   updateAbility,

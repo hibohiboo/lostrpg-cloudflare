@@ -16,9 +16,12 @@ const bagSchema = z.object({
 
 const backboneSchema = z.object({
   name: z.string(),
+  cp: z.number(),
   type: z.string(),
   effect: z.string(),
 });
+
+export type Backbone = z.infer<typeof backboneSchema>;
 
 const abilitySchema = z.object({
   name: z.string(),
