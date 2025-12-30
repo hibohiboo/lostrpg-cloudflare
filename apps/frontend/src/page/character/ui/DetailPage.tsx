@@ -81,37 +81,41 @@ const CharacterInfo: React.FC<{ character: Character; id: string }> = ({
   </>
 );
 
-// CharacterStats表示コンポーネント
-const CharacterStats: React.FC<{ character: Character }> = ({ character }) => (
-  <>
-    {/* クラス */}
-    <Box my={3}>
-      <InputLabel sx={{ mb: 1 }}>クラス</InputLabel>
-      <Box display="flex" flexWrap="wrap" gap={1}>
-        {character.classes && character.classes.length > 0 ? (
-          character.classes.map((cls: { name: string }, index: number) => (
-            <Chip key={index} label={cls.name} color="primary" />
-          ))
-        ) : (
-          <Typography variant="body2" color="text.secondary">
-            クラスが設定されていません
-          </Typography>
-        )}
-      </Box>
+// CharacterClasses表示コンポーネント
+const CharacterClasses: React.FC<{ character: Character }> = ({
+  character,
+}) => (
+  <Box my={3}>
+    <InputLabel sx={{ mb: 1 }}>クラス</InputLabel>
+    <Box display="flex" flexWrap="wrap" gap={1}>
+      {character.classes && character.classes.length > 0 ? (
+        character.classes.map((cls: { name: string }, index: number) => (
+          <Chip key={index} label={cls.name} color="primary" />
+        ))
+      ) : (
+        <Typography variant="body2" color="text.secondary">
+          クラスが設定されていません
+        </Typography>
+      )}
     </Box>
+  </Box>
+);
 
-    {/* 専門特技テーブル */}
+// CharacterSpecialties表示コンポーネント
+const CharacterSpecialties: React.FC<{ character: Character }> = ({
+  character,
+}) => (
+  <>
     <Box my={3}>
       <InputLabel sx={{ mb: 1 }}>専門特技</InputLabel>
       <SpecialtiesTable
-        specialties={character.specialties}
+        specialties={character.specialties || []}
         gaps={character.gaps || []}
         damagedSpecialties={character.damagedSpecialties || []}
         readOnly
       />
     </Box>
 
-    {/* 選択された専門特技 */}
     <Box my={3}>
       <InputLabel sx={{ mb: 1 }}>選択された専門特技</InputLabel>
       <Box display="flex" flexWrap="wrap" gap={1}>
@@ -126,6 +130,15 @@ const CharacterStats: React.FC<{ character: Character }> = ({ character }) => (
         )}
       </Box>
     </Box>
+  </>
+);
+
+// CharacterStats表示コンポーネント
+const CharacterStats: React.FC<{ character: Character }> = ({ character }) => (
+  <>
+    <CharacterClasses character={character} />
+    <CharacterSpecialties character={character} />
+
     {/* 能力値 */}
     <Box display="flex" gap={2} my={3} maxWidth={600} flexWrap="wrap">
       <TextField
