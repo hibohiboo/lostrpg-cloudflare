@@ -16,10 +16,12 @@ import {
   deleteEquipment,
   updateEquipment,
 } from '../../model/characterSlice';
+import { equipmentCatalogSelector } from '../../model/selectors';
 
 export const EquipmentSection: React.FC = () => {
   const dispatch = useAppDispatch();
   const equipment = useAppSelector((state) => state.character.equipment);
+  const catalog = useAppSelector(equipmentCatalogSelector);
   const [itemSelect, setItemSelect] = useState('');
   const handleEquipmentAdd = (itemName: string) => {
     const item = items.find((i) => i.name === itemName);
@@ -62,6 +64,7 @@ export const EquipmentSection: React.FC = () => {
         装備
       </Typography>
       <AddEquipmentForm
+        catalog={catalog}
         itemSelect={itemSelect}
         onItemAdd={(value) => {
           handleEquipmentAdd(value.name);

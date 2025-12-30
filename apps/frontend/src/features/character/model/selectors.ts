@@ -19,3 +19,7 @@ export const itemCatalogSelector = createSelector(
     return ret;
   },
 );
+export const equipmentCatalogSelector = createSelector(
+  [itemCatalogSelector],
+  (ret) => ret.filter((i) => i.area !== '-'),
+);

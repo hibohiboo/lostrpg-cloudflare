@@ -1,4 +1,3 @@
-import { items } from '@lostrpg/core/game-data/item';
 import { Equipment, ItemBase } from '@lostrpg/schemas/validation/items';
 import { AddItemSelectForm } from '@lostrpg/frontend/shared/ui/components/molecules/AddItemSelectForm';
 import { createItem } from '../model/factory';
@@ -6,11 +5,13 @@ import { createItem } from '../model/factory';
 type Props = {
   itemSelect: string;
   onItemAdd: (item: Equipment) => void;
+  catalog: ItemBase[];
 };
 
 export const AddEquipmentForm: React.FC<Props> = ({
   itemSelect,
   onItemAdd,
+  catalog,
 }) => {
   const handleAdd = (item: ItemBase) => {
     const weight =
@@ -33,7 +34,7 @@ export const AddEquipmentForm: React.FC<Props> = ({
     <AddItemSelectForm
       label="装備追加"
       value={itemSelect}
-      items={items.filter((i) => i.area !== '-')}
+      items={catalog}
       getItemName={(item) => item.name}
       onAdd={handleAdd}
     />
