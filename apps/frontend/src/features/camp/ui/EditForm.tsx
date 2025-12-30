@@ -92,7 +92,7 @@ const EditForm: React.FC<Props> = ({
         />
       </Box>
 
-      <Box sx={{ height: 400, width: '100%' }}>
+      <Box sx={{ width: '100%' }}>
         <FacilityTable
           facilities={camp.facilities}
           handleFacilityDelete={handleFacilityDelete}
@@ -111,7 +111,7 @@ const EditForm: React.FC<Props> = ({
         <AddItemForm catalog={items} onItemAdd={handleItemAdd} />
       </Box>
 
-      <Box sx={{ height: 400, width: '100%' }}>
+      <Box sx={{ width: '100%' }}>
         <ItemTable
           items={camp.items}
           handleItemDelete={handleItemDelete}
