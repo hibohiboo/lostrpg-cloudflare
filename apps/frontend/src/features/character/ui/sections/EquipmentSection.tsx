@@ -1,4 +1,3 @@
-import { items } from '@lostrpg/core/game-data/item';
 import { Equipment } from '@lostrpg/schemas/validation/items';
 import { Box, Typography } from '@mui/material';
 import { GridRowId } from '@mui/x-data-grid';
@@ -24,7 +23,7 @@ export const EquipmentSection: React.FC = () => {
   const catalog = useAppSelector(equipmentCatalogSelector);
 
   const handleEquipmentAdd = (itemName: string) => {
-    const item = items.find((i) => i.name === itemName);
+    const item = catalog.find((i) => i.name === itemName);
     if (item) {
       const newEquipment: Equipment = {
         id: `equipment-${Date.now()}`,
