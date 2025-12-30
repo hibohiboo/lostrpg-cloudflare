@@ -14,11 +14,13 @@ import {
 } from '@lostrpg/frontend/shared/lib/store';
 
 import { addBag, updateBag, deleteBag } from '../../model/characterSlice';
+import { itemCatalogSelector } from '../../model/selectors';
 import type { Bag } from '../../model/characterSlice';
 
 export const BagsSection: React.FC = () => {
   const dispatch = useAppDispatch();
   const bags = useAppSelector((state) => state.character.bags);
+  const catalog = useAppSelector(itemCatalogSelector);
   const [bagName, setBagName] = useState('');
   const [itemSelects, setItemSelects] = useState<Record<string, string>>({});
 
@@ -153,6 +155,7 @@ export const BagsSection: React.FC = () => {
           </Box>
 
           <AddItemForm
+            catalog={catalog}
             itemSelect={itemSelects[bag.id]}
             onItemAdd={(value) => {
               handleItemAdd(bag.id, value.name);

@@ -19,12 +19,14 @@ import {
   deleteItem,
   updateCharacter,
 } from '../../model/characterSlice';
+import { itemCatalogSelector } from '../../model/selectors';
 
 export const ItemsSection: React.FC = () => {
   const dispatch = useAppDispatch();
   const characterItems = useAppSelector((state) => state.character.items);
   const bags = useAppSelector((state) => state.character.bags);
   const equipment = useAppSelector((state) => state.character.equipment);
+  const catalog = useAppSelector(itemCatalogSelector);
   const carryingCapacity = useAppSelector(
     (state) => state.character.carryingCapacity,
   );
@@ -56,10 +58,7 @@ export const ItemsSection: React.FC = () => {
     }, 0);
 
     // 装備の合計
-    const equipmentTotal = equipment.reduce(
-      (sum, item) => sum + item.j,
-      0,
-    );
+    const equipmentTotal = equipment.reduce((sum, item) => sum + item.j, 0);
 
     return itemsTotal + bagsTotal + equipmentTotal;
   }, [characterItems, bags, equipment]);
@@ -143,6 +142,7 @@ export const ItemsSection: React.FC = () => {
       </Box>
 
       <AddItemForm
+        catalog={catalog}
         itemSelect={itemSelect}
         onItemAdd={(value) => {
           handleItemAdd(value.name);

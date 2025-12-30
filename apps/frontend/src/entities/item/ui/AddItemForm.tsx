@@ -1,4 +1,4 @@
-import { items } from '@lostrpg/core/game-data/item';
+import { ItemBase } from '@lostrpg/schemas/validation/items';
 import { AddItemSelectForm } from '@lostrpg/frontend/shared/ui/components/molecules/AddItemSelectForm';
 import { createItem } from '../model/factory';
 import { Item } from '../model/types';
@@ -6,22 +6,15 @@ import { Item } from '../model/types';
 type Props = {
   itemSelect: string;
   onItemAdd: (item: Item) => void;
+  catalog: ItemBase[];
 };
 
-type GameDataItem = {
-  name: string;
-  j: number;
-  weight: number | string;
-  type: string;
-  area: string;
-  specialty: string;
-  target: string;
-  trait: string;
-  effect: string;
-};
-
-export const AddItemForm: React.FC<Props> = ({ itemSelect, onItemAdd }) => {
-  const handleAdd = (item: GameDataItem) => {
+export const AddItemForm: React.FC<Props> = ({
+  itemSelect,
+  onItemAdd,
+  catalog,
+}) => {
+  const handleAdd = (item: ItemBase) => {
     const weight =
       typeof item.weight === 'string' ? Number(item.weight) : item.weight;
     const newItem = createItem({
@@ -42,7 +35,7 @@ export const AddItemForm: React.FC<Props> = ({ itemSelect, onItemAdd }) => {
     <AddItemSelectForm
       label="アイテム追加"
       value={itemSelect}
-      items={items}
+      items={catalog}
       getItemName={(item) => item.name}
       onAdd={handleAdd}
     />

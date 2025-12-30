@@ -1,3 +1,4 @@
+import { items } from '@lostrpg/core/game-data/item';
 import SaveIcon from '@mui/icons-material/Save';
 import {
   Box,
@@ -133,7 +134,11 @@ const EditForm: React.FC<Props> = ({
       </Typography>
 
       <Box mb={2}>
-        <AddItemForm itemSelect={itemSelect} onItemAdd={handleItemAdd} />
+        <AddItemForm
+          catalog={items}
+          itemSelect={itemSelect}
+          onItemAdd={handleItemAdd}
+        />
       </Box>
 
       <Box sx={{ height: 400, width: '100%' }}>
