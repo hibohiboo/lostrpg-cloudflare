@@ -50,7 +50,7 @@ export const AbilitiesSection: React.FC = () => {
         onAbilityAdd={handleAbilityAdd}
       />
 
-      <Box sx={{ height: 400, width: '100%', mt: 2 }}>
+      <Box sx={{ width: '100%', mt: 2 }}>
         <AbilityTable
           abilities={abilities}
           handleAbilityDelete={handleAbilityDelete}

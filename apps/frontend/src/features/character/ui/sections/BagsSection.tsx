@@ -159,7 +159,7 @@ export const BagsSection: React.FC = () => {
             }}
           />
 
-          <Box sx={{ height: 400, width: '100%' }}>
+          <Box sx={{ width: '100%' }}>
             <ItemTable
               items={bag.items
                 .filter((item) => item.id !== undefined)

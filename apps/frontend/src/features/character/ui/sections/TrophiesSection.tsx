@@ -22,8 +22,10 @@ import type { Trophy } from '@lostrpg/frontend/shared/ui/components/molecules/Tr
 export const TrophiesSection: React.FC = () => {
   const dispatch = useAppDispatch();
   const trophies = useAppSelector((state) => state.character.trophies);
+  const useStrangeField = useAppSelector(
+    (state) => state.character.useStrangeField,
+  );
   const [modalOpen, setModalOpen] = useState(false);
-
   const handleAdd = (trophy: Trophy) => {
     dispatch(addTrophy(trophy.name));
   };
@@ -31,7 +33,9 @@ export const TrophiesSection: React.FC = () => {
   const handleDelete = (trophy: string) => {
     dispatch(deleteTrophy(trophy));
   };
-
+  if (!useStrangeField) {
+    return null;
+  }
   return (
     <Box my={3}>
       <Typography variant="h6" gutterBottom>

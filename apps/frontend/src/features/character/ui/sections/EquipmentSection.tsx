@@ -68,7 +68,7 @@ export const EquipmentSection: React.FC = () => {
           handleEquipmentAdd(value.name);
         }}
       />
-      <Box sx={{ height: 400, width: '100%' }}>
+      <Box sx={{ width: '100%' }}>
         <EquipmentTable
           items={equipment}
           handleItemDelete={handleItemDelete}

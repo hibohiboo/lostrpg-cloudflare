@@ -146,7 +146,7 @@ export const ItemsSection: React.FC = () => {
         }}
       />
 
-      <Box sx={{ height: 400, width: '100%' }}>
+      <Box sx={{ width: '100%' }}>
         <ItemTable
           items={characterItems
             .filter((item) => item.id !== undefined)
