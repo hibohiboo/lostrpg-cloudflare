@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Checkbox,
   FormControl,
   FormControlLabel,
@@ -17,13 +16,13 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '@lostrpg/frontend/shared/lib/store';
+import { ImageUploadField } from '@lostrpg/frontend/shared/ui';
 import { setCampId, updateCharacter } from '../../model/characterSlice';
 
 export const CharacterBasicSection: React.FC<{
   isValidError: boolean;
   onImageChange: (file: File | null) => void;
   previewUrl: string;
-  // eslint-disable-next-line complexity
 }> = ({ isValidError, onImageChange, previewUrl }) => {
   const dispatch = useAppDispatch();
   const playerName = useAppSelector((state) => state.character.playerName);
@@ -137,36 +136,13 @@ export const CharacterBasicSection: React.FC<{
       </Box>
 
       {/* 画像アップロード */}
-      <Box my={2}>
-        <InputLabel>画像</InputLabel>
-        <Box
-          border={1}
-          borderColor="grey.300"
-          borderRadius={1}
-          p={2}
-          mt={1}
-          sx={{ maxWidth: 480, minHeight: 100, overflow: 'hidden' }}
-        >
-          {previewUrl || imageUrl ? (
-            <img
-              src={previewUrl || imageUrl}
-              alt="プレビュー"
-              style={{ width: '100%', display: 'block' }}
-            />
-          ) : (
-            <Typography color="text.secondary">画像未選択</Typography>
-          )}
-        </Box>
-        <Button component="label" variant="outlined" sx={{ mt: 1 }}>
-          画像を選択
-          <input
-            type="file"
-            hidden
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-        </Button>
-      </Box>
+      <ImageUploadField
+        previewUrl={previewUrl}
+        currentImageUrl={imageUrl}
+        onImageChange={handleImageChange}
+        containerHeight="auto"
+        imageStyle={{ width: '100%', display: 'block' }}
+      />
     </>
   );
 };

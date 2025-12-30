@@ -3,7 +3,6 @@ import SaveIcon from '@mui/icons-material/Save';
 import {
   Box,
   Button,
-  InputLabel,
   Link as MuiLink,
   TextField,
   Typography,
@@ -15,6 +14,7 @@ import {
   FacilityTable,
 } from '@lostrpg/frontend/entities/facility';
 import { AddItemForm, ItemTable } from '@lostrpg/frontend/entities/item';
+import { ImageUploadField } from '@lostrpg/frontend/shared/ui';
 import { EditFormViewModel } from '../hooks/useEditFormHooks';
 
 type Props = EditFormViewModel & {
@@ -41,7 +41,6 @@ const EditForm: React.FC<Props> = ({
   handleItemUpdate,
   handleSave,
   handleDelete,
-  // eslint-disable-next-line complexity
 }) => (
   <Box>
     {/* プレイヤー名 */}
@@ -68,36 +67,11 @@ const EditForm: React.FC<Props> = ({
     </Box>
 
     {/* 画像アップロード */}
-    <Box my={2}>
-      <InputLabel>画像</InputLabel>
-      <Box
-        border={1}
-        borderColor="grey.300"
-        borderRadius={1}
-        p={2}
-        mt={1}
-        sx={{ maxWidth: 480, height: 320, overflow: 'hidden' }}
-      >
-        {previewUrl || camp.imageUrl ? (
-          <img
-            src={previewUrl || camp.imageUrl}
-            alt="プレビュー"
-            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-          />
-        ) : (
-          <Typography color="text.secondary">画像未選択</Typography>
-        )}
-      </Box>
-      <Button component="label" variant="outlined" sx={{ mt: 1 }}>
-        画像を選択
-        <input
-          type="file"
-          hidden
-          accept="image/*"
-          onChange={handleImageChange}
-        />
-      </Button>
-    </Box>
+    <ImageUploadField
+      previewUrl={previewUrl}
+      currentImageUrl={camp.imageUrl}
+      onImageChange={handleImageChange}
+    />
 
     {/* 施設テーブル */}
     <Box my={3}>
