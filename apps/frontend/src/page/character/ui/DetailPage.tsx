@@ -24,6 +24,7 @@ import { BackboneTable } from '@lostrpg/frontend/entities/backbone';
 import { useGetCampQuery } from '@lostrpg/frontend/entities/camp';
 import { ItemTable, EquipmentTable } from '@lostrpg/frontend/entities/item';
 import { copyCharacterToCcfolia } from '@lostrpg/frontend/features/character/utils/exportCcfolia';
+import { exportCharacterToTRPGStudio } from '@lostrpg/frontend/features/character/utils/exportTRPGStudio';
 import { exportCharacterToUdonarium } from '@lostrpg/frontend/features/character/utils/exportUdonarium';
 import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 import { SpecialtiesTable } from '@lostrpg/frontend/shared/ui';
@@ -437,6 +438,7 @@ const DetailPage: React.FC = () => {
   });
   const [copySuccess, setCopySuccess] = useState(false);
   const [exportSuccess, setExportSuccess] = useState(false);
+  const [trpgStudioSuccess, setTrpgStudioSuccess] = useState(false);
 
   const handleCopyToCcfolia = async () => {
     try {
@@ -455,6 +457,16 @@ const DetailPage: React.FC = () => {
       setTimeout(() => setExportSuccess(false), 2000);
     } catch (error) {
       console.error('ユドナリウムへのエクスポートに失敗しました:', error);
+    }
+  };
+
+  const handleExportToTRPGStudio = () => {
+    try {
+      exportCharacterToTRPGStudio(character);
+      setTrpgStudioSuccess(true);
+      setTimeout(() => setTrpgStudioSuccess(false), 2000);
+    } catch (error) {
+      console.error('TRPGスタジオへのエクスポートに失敗しました:', error);
     }
   };
 
@@ -521,6 +533,19 @@ const DetailPage: React.FC = () => {
             ユドナリウムコマ出力
           </Button>
           {exportSuccess && (
+            <Typography variant="body2" color="success.main">
+              ダウンロードしました！
+            </Typography>
+          )}
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<DownloadIcon />}
+            onClick={handleExportToTRPGStudio}
+          >
+            TRPGスタジオ用テキスト出力
+          </Button>
+          {trpgStudioSuccess && (
             <Typography variant="body2" color="success.main">
               ダウンロードしました！
             </Typography>
