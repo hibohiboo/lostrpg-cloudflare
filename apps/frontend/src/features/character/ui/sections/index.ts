@@ -8,6 +8,7 @@ export { EquipmentSection } from './EquipmentSection';
 export { BagsSection } from './BagsSection';
 export { StatusAilmentsSection } from './StatusAilmentsSection';
 export { BackbonesSection } from './BackbonesSection';
+export { TrophiesSection } from './TrophiesSection';
 export { ExperienceSection } from './ExperienceSection';
 export { DescriptionSection } from './DescriptionSection';
 export { SettingsSection } from './SettingsSection';

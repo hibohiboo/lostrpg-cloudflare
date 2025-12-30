@@ -118,6 +118,7 @@ export interface CharacterFormData {
   bags: Bag[];
   statusAilments: StatusAilment[];
   backbones: Backbone[];
+  trophies: string[];
   unusedExperience: number;
   totalExperience: number;
   summary: string;
@@ -177,6 +178,7 @@ const initialState: CharacterFormData = {
     { id: '3', name: '気絶', effect: '行動不能', isChecked: false },
   ],
   backbones: [],
+  trophies: [],
   unusedExperience: 0,
   totalExperience: 0,
   summary: '',
@@ -345,6 +347,14 @@ export const characterSlice = createSlice({
     deleteBackbone: (state, action: PayloadAction<string>) => {
       state.backbones = state.backbones.filter((b) => b.id !== action.payload);
     },
+    addTrophy: (state, action: PayloadAction<string>) => {
+      if (!state.trophies.includes(action.payload)) {
+        state.trophies.push(action.payload);
+      }
+    },
+    deleteTrophy: (state, action: PayloadAction<string>) => {
+      state.trophies = state.trophies.filter((t) => t !== action.payload);
+    },
     clearAllDamage: (state) => {
       state.damagedSpecialties = [];
     },
@@ -377,6 +387,8 @@ export const {
   addBackbone,
   updateBackbone,
   deleteBackbone,
+  addTrophy,
+  deleteTrophy,
   resetCharacter,
 } = characterSlice.actions;
 

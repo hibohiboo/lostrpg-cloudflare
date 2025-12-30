@@ -2,6 +2,7 @@ import {
   abilityList,
   strangeFieldsAbilityList,
   dragonPlainAbilityList,
+  trophyAbilityList,
 } from '@lostrpg/core/game-data/character';
 import {
   dragonPlainItemList,
@@ -34,8 +35,9 @@ export const abilityCatalogSelector = createSelector(
     (state: RootState) => state.character.classes,
     (state: RootState) => state.character.useStrangeField,
     (state: RootState) => state.character.useDragonPlain,
+    (state: RootState) => state.character.trophies,
   ],
-  (classes, useStrangeField, useDragonPlain) => {
+  (classes, useStrangeField, useDragonPlain, trophies) => {
     const classNames = classes.map((c) => c.name);
     const ret: typeof abilityList = [];
 
@@ -73,6 +75,13 @@ export const abilityCatalogSelector = createSelector(
         }
       });
     }
+
+    // トロフィーアビリティ
+    trophyAbilityList.forEach((group) => {
+      if (trophies.includes(group.name)) {
+        ret.push(group);
+      }
+    });
 
     return ret;
   },

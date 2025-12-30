@@ -10,6 +10,7 @@ import {
   EquipmentSection,
   BagsSection,
   BackbonesSection,
+  TrophiesSection,
   ExperienceSection,
   DescriptionSection,
   SettingsSection,
@@ -45,6 +46,7 @@ const EditForm: React.FC<Props> = ({
     <EquipmentSection />
     <BagsSection />
     <BackbonesSection />
+    <TrophiesSection />
     <ExperienceSection />
     <DescriptionSection />
     <SettingsSection />

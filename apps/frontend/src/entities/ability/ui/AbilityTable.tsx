@@ -44,7 +44,9 @@ export const AbilityTable: React.FC<Props> = ({
     params: { rowId: GridRowId },
   ): AbilityWithId => {
     // idを除いてAbilityとして渡す
+    // eslint-disable-next-line sonarjs/no-unused-vars
     const { id: _newId, ...newAbility } = newRow;
+    // eslint-disable-next-line sonarjs/no-unused-vars
     const { id: _oldId, ...oldAbility } = oldRow;
     const updated = handleAbilityUpdate(newAbility, oldAbility, params);
     return { ...updated, id: updated.name };
