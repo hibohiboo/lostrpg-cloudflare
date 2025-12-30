@@ -96,7 +96,8 @@ describe('GET /api/camps/:id/characters', () => {
     unusedExperience: 0,
     totalExperience: 0,
     backbones: [],
-    subbliments: {
+    trophies: [],
+    supplements: {
       useStrangeField: false,
       useDragonPlain: false,
     },
@@ -141,6 +142,7 @@ describe('GET /api/camps/:id/characters', () => {
       };
       const charRes = await createCharacter(characterData);
       const charData = (await charRes.json()) as any;
+
       expect(charRes.status).toBe(201);
 
       // 3. キャラクターのcampIdを削除（nullまたは未設定にする）

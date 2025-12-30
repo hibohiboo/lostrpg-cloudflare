@@ -223,7 +223,7 @@ export const charactersRouter = new Hono<{ Bindings: Env }>()
     zValidator(
       'param',
       z.object({
-        id: z.string().uuid('Invalid ID format'),
+        id: z.string(),
       }),
     ),
     async (c) => {
