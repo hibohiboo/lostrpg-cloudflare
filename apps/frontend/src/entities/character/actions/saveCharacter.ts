@@ -46,54 +46,54 @@ export const createCharacterThunk = createAsyncThunk<
         message: 'キャラクター名は必須です',
       });
     }
-
-    // キャラクター作成
-    const result = await dispatch(
-      characterApi.endpoints.createCharacter.initiate({
-        playerName: character.playerName,
-        name: character.name,
-        campId: character.campId,
-        imageUrl: character.imageUrl,
-        classes: character.classes,
-        specialties: character.specialties,
-        gaps: character.gaps as ('A' | 'B' | 'C' | 'D' | 'E')[],
-        damagedSpecialties: character.damagedSpecialties,
-        abilities: character.abilities,
-        staminaBase: character.staminaBase,
-        stamina: character.stamina,
-        willPowerBase: character.willPowerBase,
-        willPower: character.willPower,
-        carryingCapacity: character.carryingCapacity,
-        items: character.items
+    const createCharacterData = {
+      playerName: character.playerName,
+      name: character.name,
+      campId: character.campId,
+      imageUrl: character.imageUrl,
+      classes: character.classes,
+      specialties: character.specialties,
+      gaps: character.gaps as ('A' | 'B' | 'C' | 'D' | 'E')[],
+      damagedSpecialties: character.damagedSpecialties,
+      abilities: character.abilities,
+      staminaBase: character.staminaBase,
+      stamina: character.stamina,
+      willPowerBase: character.willPowerBase,
+      willPower: character.willPower,
+      carryingCapacity: character.carryingCapacity,
+      items: character.items
+        .filter((item) => item.id)
+        .map((item) => ({
+          ...item,
+          id: item.id!,
+          number: item.number || 1,
+        })),
+      equipments: character.equipments,
+      bags: character.bags.map((bag) => ({
+        ...bag,
+        items: bag.items
           .filter((item) => item.id)
           .map((item) => ({
             ...item,
             id: item.id!,
             number: item.number || 1,
           })),
-        equipments: character.equipments,
-        bags: character.bags.map((bag) => ({
-          ...bag,
-          items: bag.items
-            .filter((item) => item.id)
-            .map((item) => ({
-              ...item,
-              id: item.id!,
-              number: item.number || 1,
-            })),
-        })),
-        statusAilments: character.statusAilments,
-        backbones: character.backbones,
-        trophies: character.trophies,
-        unusedExperience: character.unusedExperience,
-        totalExperience: character.totalExperience,
-        summary: character.summary,
-        appearance: character.appearance,
-        freeWriting: character.freeWriting,
-        quote: character.quote,
-        supplements: character.supplements,
-        password: character.password,
-      }),
+      })),
+      statusAilments: character.statusAilments,
+      backbones: character.backbones,
+      trophies: character.trophies,
+      unusedExperience: character.unusedExperience,
+      totalExperience: character.totalExperience,
+      summary: character.summary,
+      appearance: character.appearance,
+      freeWriting: character.freeWriting,
+      quote: character.quote,
+      supplements: character.supplements,
+      password: character.password,
+    };
+    // キャラクター作成
+    const result = await dispatch(
+      characterApi.endpoints.createCharacter.initiate(createCharacterData),
     ).unwrap();
 
     const { id } = result;
@@ -106,7 +106,7 @@ export const createCharacterThunk = createAsyncThunk<
       await dispatch(
         characterApi.endpoints.updateCharacter.initiate({
           id,
-          data: { imageUrl },
+          data: { ...createCharacterData, imageUrl },
         }),
       ).unwrap();
     }
