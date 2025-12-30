@@ -107,7 +107,7 @@ const Cell: React.FC<{
         p: '0 4px 0 8px',
         height: '44px',
         border: `${isBodyParts ? 'thick double' : '1px solid'}`,
-        cursor: 'pointer',
+        cursor: readOnly ? 'cursor' : 'pointer',
         bgcolor: isSelected ? 'grey.900' : undefined,
         color: isSelected ? 'common.white' : undefined,
       }}
@@ -137,7 +137,6 @@ const Cell: React.FC<{
             p: 0,
             ...(isSelected && {
               color: 'white',
-
               '&.Mui-checked': {
                 color: 'error.main',
               },
