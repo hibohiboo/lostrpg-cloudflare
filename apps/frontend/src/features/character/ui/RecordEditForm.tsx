@@ -2,18 +2,11 @@ import { Box } from '@mui/material';
 import React from 'react';
 import { CharacterBasicSection } from './recordSections';
 import {
-  ClassesSection,
   SpecialtiesSection,
   AbilitySection,
-  AbilitiesSection,
   ItemsSection,
   EquipmentSection,
   BagsSection,
-  BackbonesSection,
-  TrophiesSection,
-  ExperienceSection,
-  DescriptionSection,
-  SettingsSection,
   FormActionsSection,
 } from './sections';
 import type { EditFormViewModel } from '../hooks/useEditFormHooks';
@@ -38,18 +31,11 @@ const EditForm: React.FC<Props> = ({
       onImageChange={handleImageChange}
       previewUrl={previewUrl}
     />
-    <ClassesSection />
     <SpecialtiesSection />
     <AbilitySection />
-    <AbilitiesSection />
     <ItemsSection />
     <EquipmentSection />
     <BagsSection />
-    <BackbonesSection />
-    <TrophiesSection />
-    <ExperienceSection />
-    <DescriptionSection />
-    <SettingsSection />
     <FormActionsSection
       handleSave={handleSave}
       handleDelete={handleDelete}
