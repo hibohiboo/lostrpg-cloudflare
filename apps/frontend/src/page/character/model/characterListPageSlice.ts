@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface Character {
   id: string;
   name: string;
+  imageUrl?: string;
 }
 
 export interface CharacterListPageState {

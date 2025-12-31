@@ -20,11 +20,23 @@ export const campsRouter = new Hono<{ Bindings: Env }>()
         name: camps.name,
         createdAt: camps.createdAt,
         updatedAt: camps.updatedAt,
+        data: camps.data,
       })
       .from(camps)
       .orderBy(desc(camps.updatedAt));
 
-    return c.json(campList);
+    const formattedList = campList.map((camp) => {
+      const data = camp.data as Record<string, unknown>;
+      return {
+        id: camp.id,
+        name: camp.name,
+        createdAt: camp.createdAt,
+        updatedAt: camp.updatedAt,
+        imageUrl: data?.imageUrl as string | undefined,
+      };
+    });
+
+    return c.json(formattedList);
   })
   // Create new camp
   .post('/', zValidator('json', createCampSchema), async (c) => {
@@ -259,10 +271,7 @@ export const campsRouter = new Hono<{ Bindings: Env }>()
       const { id } = c.req.valid('param');
 
       // キャンプの存在確認
-      const [camp] = await getDb()
-        .select()
-        .from(camps)
-        .where(eq(camps.id, id));
+      const [camp] = await getDb().select().from(camps).where(eq(camps.id, id));
 
       if (!camp) {
         throw new HTTPException(404, { message: 'Camp not found' });
