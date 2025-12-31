@@ -551,7 +551,12 @@ const DetailPage: React.FC = () => {
             </Typography>
           )}
         </Box>
-
+        {/* 戻るリンク */}
+        <Box mt={4}>
+          <MuiLink href={`/character/${id}/record`} underline="hover">
+            レコードシート新規作成
+          </MuiLink>
+        </Box>
         {/* 戻るリンク */}
         <Box mt={4}>
           <MuiLink href="/character/" underline="hover">

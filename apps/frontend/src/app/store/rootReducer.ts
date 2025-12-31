@@ -1,6 +1,7 @@
 import { combineReducers, type UnknownAction } from '@reduxjs/toolkit';
 import { campApi } from '@lostrpg/frontend/entities/camp';
 import { characterApi } from '@lostrpg/frontend/entities/character';
+import { recordSlice } from '@lostrpg/frontend/entities/record';
 import { campSlice } from '@lostrpg/frontend/features/camp';
 import { characterSlice } from '@lostrpg/frontend/features/character';
 import { campListPageSlice } from '@lostrpg/frontend/page/camp/model';
@@ -13,6 +14,7 @@ const combinedReducer = combineReducers({
   [characterSlice.reducerPath]: characterSlice.reducer,
   [campListPageSlice.reducerPath]: campListPageSlice.reducer,
   [characterListPageSlice.reducerPath]: characterListPageSlice.reducer,
+  [recordSlice.reducerPath]: recordSlice.reducer,
 });
 
 type CombinedState = ReturnType<typeof combinedReducer>;
