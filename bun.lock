@@ -30,7 +30,7 @@
         "zod": "^4.2.1",
       },
       "devDependencies": {
-        "@cloudflare/workers-types": "^4.20251230.0",
+        "@cloudflare/workers-types": "^4.20251231.0",
         "@lostrpg/eslint-config-custom": "workspace:*",
         "@lostrpg/typescript-config": "workspace:*",
         "@testcontainers/postgresql": "^11.11.0",
@@ -236,7 +236,7 @@
 
     "@cloudflare/workerd-windows-64": ["@cloudflare/workerd-windows-64@1.20251217.0", "", { "os": "win32", "cpu": "x64" }, "sha512-rP6USX+7ctynz3AtmKi+EvlLP3Xdr1ETrSdcnv693/I5QdUwBxq4yE1Lj6CV7GJizX6opXKYg8QMq0Q4eB9zRQ=="],
 
-    "@cloudflare/workers-types": ["@cloudflare/workers-types@4.20251230.0", "", {}, "sha512-mTpeOLyC088fqC0hDMFFErq0C/4tLFTDgYgkBhpbM7YeoASVErhnR5irvnHFarvJ5NWXa8jY08bSaRIG8V8PAA=="],
+    "@cloudflare/workers-types": ["@cloudflare/workers-types@4.20251231.0", "", {}, "sha512-XOP7h2y9Nu3ECuZM9S7w3g4GSliTgj6SEEkYj6G6d3TEQtOiV/cHXuI/fKiLj8Z9+qJK/RLLcKkX14NxajrXCw=="],
 
     "@conarti/eslint-plugin-feature-sliced": ["@conarti/eslint-plugin-feature-sliced@2.0.0-rc.3", "", { "dependencies": { "@typescript-eslint/utils": "^8.45.0", "eslint-flat-config-utils": "^0.4.0", "eslint-plugin-import-x": "^4.16.1", "picomatch": "^2.3.1" }, "peerDependencies": { "eslint": ">=9" } }, "sha512-k+IfysuKELhwFz6SAnJJqFjj1jCxn1BpNoZl2a+mSi/xsTJvBfVTcXAsmblHZuZn58N+cuFPHuaXgwCEBdebLw=="],
 
