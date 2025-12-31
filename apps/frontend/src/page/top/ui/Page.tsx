@@ -1,5 +1,4 @@
 import { Link } from 'react-router';
-// @ts-expect-error assets alias might not be configured in tsconfig, but vite handles it. Using relative path just in case.
 import bgImage from '../../../assets/ruins_forest_bg.png';
 
 export const Page = () => (
