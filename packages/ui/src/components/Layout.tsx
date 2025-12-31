@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaGithub } from 'react-icons/fa';
 import { Link } from 'react-router';
 
 export interface LayoutProps {
@@ -75,11 +76,20 @@ export const Layout: React.FC<LayoutProps> = ({
     </main>
 
     <footer className="bg-slate-900 text-slate-400 border-t border-slate-800 py-8 mt-auto">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center bg-slate-900">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center space-y-4">
         <p className="text-sm font-mono tracking-wider">
-          &copy; 2025 LOSTRPG / SYSTEM ONLINE
+          &copy; 2025 LOSTRPG / hibo
         </p>
       </div>
+      <a
+        href="https://github.com/hibohiboo/lostrpg-cloudflare"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-2xl hover:text-white transition-colors duration-300"
+        aria-label="GitHub Repository"
+      >
+        <FaGithub />
+      </a>
     </footer>
   </div>
 );
