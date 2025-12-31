@@ -70,7 +70,7 @@ export const Page = () => (
           className="group block p-8 rounded-2xl bg-black/30 backdrop-blur-md border border-white/10 hover:bg-black/40 hover:border-sky-400/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-sky-900/20 hover:shadow-2xl"
         >
           <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
-            👤
+            🧢
           </div>
           <h2 className="text-2xl font-bold mb-3 text-sky-300 group-hover:text-sky-200">
             キャラクター
