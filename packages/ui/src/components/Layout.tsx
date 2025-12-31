@@ -53,8 +53,11 @@ export const Layout: React.FC<LayoutProps> = ({
                   to="/character"
                   className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-sky-400 transition-all duration-300 group"
                 >
-                  <span className="text-xl group-hover:scale-110 transition-transform">
-                    🧢
+                  <span
+                    className="text-xl group-hover:scale-110 transition-transform"
+                    style={{ filter: 'hue-rotate(120deg)' }}
+                  >
+                    🎒
                   </span>
                   <span className="hidden sm:inline font-medium">
                     キャラクター
