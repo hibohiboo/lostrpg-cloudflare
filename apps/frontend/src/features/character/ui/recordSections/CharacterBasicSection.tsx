@@ -1,9 +1,10 @@
 /* eslint-disable complexity */
-import { Box, TextField, Typography } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import React from 'react';
-import { Link } from 'react-router';
-import { useGetCampQuery } from '@lostrpg/frontend/entities/camp';
-import { setRecordTitle } from '@lostrpg/frontend/entities/record';
+import {
+  setRecordTitle,
+  updateRecord,
+} from '@lostrpg/frontend/entities/record';
 import {
   useAppDispatch,
   useAppSelector,
@@ -17,36 +18,13 @@ export const CharacterBasicSection: React.FC<{
 }> = ({ isValidError }) => {
   const dispatch = useAppDispatch();
   const playerName = useAppSelector((state) => state.character.playerName);
-  const campId = useAppSelector((state) => state.character.campId);
   const name = useAppSelector((state) => state.character.name);
   const title = useAppSelector((state) => state.record.title);
-  const { data: camp } = useGetCampQuery(campId || '', {
-    skip: !campId,
-  });
+  const date = useAppSelector((state) => state.record.date);
+  const gm = useAppSelector((state) => state.record.gm);
 
   return (
     <>
-      {playerName && (
-        <Box my={2}>
-          <TextField
-            disabled
-            fullWidth
-            label="プレイヤー名"
-            value={playerName}
-          />
-        </Box>
-      )}
-      {camp?.name && (
-        <Box mb={3}>
-          <Typography variant="body1" color="text.secondary">
-            キャンプ:
-            <Link to={`/camp/${campId}`} style={{ color: '#00f' }}>
-              {camp.name}
-            </Link>
-          </Typography>
-        </Box>
-      )}
-
       <Box my={2}>
         <TextField
           fullWidth
@@ -58,17 +36,42 @@ export const CharacterBasicSection: React.FC<{
           onChange={(e) => dispatch(updateCharacter({ name: e.target.value }))}
         />
       </Box>
+      {playerName && (
+        <Box my={2}>
+          <TextField
+            disabled
+            fullWidth
+            label="プレイヤー名"
+            value={playerName}
+          />
+        </Box>
+      )}
+
       <Box my={2}>
         <TextField
           fullWidth
           required
-          label="シナリオタイトル"
+          label="シナリオ名"
           error={!title && isValidError}
-          helperText={
-            !title && isValidError ? 'シナリオタイトルは必須です' : ''
-          }
+          helperText={!title && isValidError ? 'シナリオ名は必須です' : ''}
           value={title}
           onChange={(e) => dispatch(setRecordTitle(e.target.value))}
+        />
+      </Box>
+      <Box my={2}>
+        <TextField
+          fullWidth
+          label="ゲームマスター名"
+          value={gm}
+          onChange={(e) => dispatch(updateRecord({ gm: e.target.value }))}
+        />
+      </Box>
+      <Box my={2}>
+        <TextField
+          fullWidth
+          label="日付"
+          value={date}
+          onChange={(e) => dispatch(updateRecord({ date: e.target.value }))}
         />
       </Box>
     </>

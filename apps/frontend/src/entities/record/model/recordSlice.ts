@@ -1,8 +1,11 @@
 import { Record } from '@lostrpg/schemas';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { format } from 'date-fns';
 
 const initialState: Record = {
   title: '',
+  date: format(new Date(), 'yyyy-MM-dd'),
+  gm: '',
 };
 
 export const recordSlice = createSlice({
