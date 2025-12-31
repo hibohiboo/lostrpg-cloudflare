@@ -1,8 +1,7 @@
 import { Box } from '@mui/material';
 import React from 'react';
-import { CharacterBasicSection } from './recordSections';
+import { CharacterBasicSection, SpecialtiesSection } from './recordSections';
 import {
-  SpecialtiesSection,
   AbilitySection,
   ItemsSection,
   EquipmentSection,

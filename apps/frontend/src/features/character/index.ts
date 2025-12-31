@@ -37,3 +37,4 @@ export { default as characterReducer } from './model/characterSlice';
 export * from './hooks/useEditFormHooks';
 export { default as CharacterEditForm } from './ui/EditForm';
 export { default as RecordEditForm } from './ui/RecordEditForm';
+export { characterFormSlice } from './model/characterFormSlice';
