@@ -19,12 +19,10 @@ export const Page = () => (
     <div className="relative z-10 container mx-auto px-4 text-center">
       {/* Hero Section */}
       <h1 className="text-5xl md:text-7xl font-bold mb-6 drop-shadow-lg tracking-tight font-serif">
-        Lost RPG
+        LOSTRPG
       </h1>
       <p className="text-xl md:text-2xl mb-12 max-w-2xl mx-auto drop-shadow-md text-gray-200 leading-relaxed">
-        文明崩壊後の世界で、新たな冒険が始まる。
-        <br />
-        廃墟と森の奥深く、子供たちのサバイバル。
+        自分たちだけのサバイバル。これは、文明崩壊から５年後の物語。
       </p>
 
       {/* Navigation Cards */}
@@ -41,11 +39,7 @@ export const Page = () => (
           <h2 className="text-2xl font-bold mb-3 text-emerald-300 group-hover:text-emerald-200">
             ルールブック
           </h2>
-          <p className="text-sm text-gray-300 leading-relaxed">
-            この世界の掟と
-            <br />
-            生存のための知識を確認する
-          </p>
+          <p className="text-sm text-gray-300 leading-relaxed">外部サイトへ</p>
         </a>
 
         <Link
@@ -58,11 +52,7 @@ export const Page = () => (
           <h2 className="text-2xl font-bold mb-3 text-amber-300 group-hover:text-amber-200">
             キャンプ
           </h2>
-          <p className="text-sm text-gray-300 leading-relaxed">
-            仲間との休息、
-            <br />
-            次の探索への準備を整える
-          </p>
+          <p className="text-sm text-gray-300 leading-relaxed">みんなの拠点</p>
         </Link>
 
         <Link
@@ -78,16 +68,8 @@ export const Page = () => (
           <h2 className="text-2xl font-bold mb-3 text-sky-300 group-hover:text-sky-200">
             キャラクター
           </h2>
-          <p className="text-sm text-gray-300 leading-relaxed">
-            自身の能力を確認し、
-            <br />
-            生き残る術を磨く
-          </p>
+          <p className="text-sm text-gray-300 leading-relaxed">特技や持ち物</p>
         </Link>
-      </div>
-
-      <div className="mt-20 text-xs text-gray-500 font-mono tracking-widest uppercase">
-        System Operational // Connected
       </div>
     </div>
   </div>
