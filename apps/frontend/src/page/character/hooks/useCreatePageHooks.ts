@@ -5,12 +5,8 @@ import {
   isValidationError,
 } from '@lostrpg/frontend/entities/character';
 import { useEditFormHooks } from '@lostrpg/frontend/features/character';
+import { handleSaveError } from '@lostrpg/frontend/shared/lib/error';
 import { useAppDispatch } from '@lostrpg/frontend/shared/lib/store';
-
-const handleCreateError = (error: unknown) => {
-  console.warn(error);
-  alert('保存中にエラーが発生しました。もう一度お試しください。');
-};
 
 export const useCreatePageHooks = () => {
   const navigate = useNavigate();
@@ -32,7 +28,7 @@ export const useCreatePageHooks = () => {
         window.scrollTo(0, 0);
         return;
       }
-      handleCreateError(error);
+      handleSaveError(error);
     }
   }, [dispatch, navigate, setIsValidError, handleImageUpload]);
 

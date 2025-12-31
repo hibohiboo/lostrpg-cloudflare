@@ -1,21 +1,8 @@
 import { useNavigate, useParams } from 'react-router';
 import { deleteCampAction, updateCampAction } from '@lostrpg/frontend/entities/camp';
 import { useEditFormHooks } from '@lostrpg/frontend/features/camp';
+import { handleSaveError } from '@lostrpg/frontend/shared/lib/error';
 import { useAppDispatch } from '@lostrpg/frontend/shared/lib/store';
-
-const handleUpdateError = (error: unknown) => {
-  console.warn(error);
-  if (error) {
-    const err = error as { originalStatus?: number };
-    if (err.originalStatus === 401) {
-      alert('パスワードが正しくありません。もう一度お試しください。');
-      return;
-    }
-  }
-
-  // その他のエラー
-  alert('保存中にエラーが発生しました。もう一度お試しください。');
-};
 
 export const useEditPageHooks = () => {
   const dispatch = useAppDispatch();
@@ -43,7 +30,7 @@ export const useEditPageHooks = () => {
 
       navigate(`/camp/${id}`);
     } catch (error) {
-      handleUpdateError(error);
+      handleSaveError(error);
     }
   };
 

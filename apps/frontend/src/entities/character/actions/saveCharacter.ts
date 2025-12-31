@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { characterApi } from '../api/api';
 import type { RootState } from '@lostrpg/frontend/app/store';
 
@@ -127,7 +128,7 @@ export const updateCharacterThunk = createAsyncThunk<
       password: string | undefined | null,
     ) => Promise<string | null>;
   },
-  { rejectValue: ValidationErrorType }
+  { rejectValue: ValidationErrorType | FetchBaseQueryError }
 >(
   'character/update',
   async (
@@ -194,14 +195,17 @@ export const updateCharacterThunk = createAsyncThunk<
       supplements: character.supplements,
       password: character.password,
     };
-
-    // キャラクター更新
-    await dispatch(
-      characterApi.endpoints.updateCharacter.initiate({
-        id,
-        data: updateData,
-      }),
-    ).unwrap();
+    try {
+      // キャラクター更新
+      await dispatch(
+        characterApi.endpoints.updateCharacter.initiate({
+          id,
+          data: updateData,
+        }),
+      ).unwrap();
+    } catch (e) {
+      return rejectWithValue(e as FetchBaseQueryError);
+    }
 
     return { id };
   },

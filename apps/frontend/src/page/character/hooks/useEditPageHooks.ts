@@ -6,21 +6,8 @@ import {
   isValidationError,
 } from '@lostrpg/frontend/entities/character';
 import { useEditFormHooks } from '@lostrpg/frontend/features/character';
+import { handleSaveError } from '@lostrpg/frontend/shared/lib/error';
 import { useAppDispatch } from '@lostrpg/frontend/shared/lib/store';
-
-const handleUpdateError = (error: unknown) => {
-  console.warn(error);
-  if (error) {
-    const err = error as { originalStatus?: number };
-    if (err.originalStatus === 401) {
-      alert('パスワードが正しくありません。もう一度お試しください。');
-      return;
-    }
-  }
-
-  // その他のエラー
-  alert('保存中にエラーが発生しました。もう一度お試しください。');
-};
 
 export const useEditPageHooks = () => {
   const navigate = useNavigate();
@@ -44,7 +31,7 @@ export const useEditPageHooks = () => {
         window.scrollTo(0, 0);
         return;
       }
-      handleUpdateError(error);
+      handleSaveError(error);
     }
   }, [id, dispatch, navigate, setIsValidError, handleImageUpload]);
 

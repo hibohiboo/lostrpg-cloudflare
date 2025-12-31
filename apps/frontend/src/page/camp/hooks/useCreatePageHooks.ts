@@ -4,12 +4,8 @@ import {
   updateCampAction,
 } from '@lostrpg/frontend/entities/camp';
 import { useEditFormHooks } from '@lostrpg/frontend/features/camp';
+import { handleSaveError } from '@lostrpg/frontend/shared/lib/error';
 import { useAppDispatch } from '@lostrpg/frontend/shared/lib/store';
-
-const handleCreateError = (error: unknown) => {
-  console.warn(error);
-  alert('保存中にエラーが発生しました。もう一度お試しください。');
-};
 
 export const useCreatePageHooks = () => {
   const dispatch = useAppDispatch();
@@ -40,7 +36,7 @@ export const useCreatePageHooks = () => {
 
       navigate(`/camp/${id}`);
     } catch (error) {
-      handleCreateError(error);
+      handleSaveError(error);
     }
   };
 
