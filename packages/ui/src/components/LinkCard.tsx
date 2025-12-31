@@ -20,32 +20,32 @@ export const LinkCard: React.FC<LinkCardProps> = ({
 }) => {
   const colorClasses = {
     blue: {
-      title: 'text-blue-600',
-      button: 'bg-blue-600 hover:bg-blue-700',
+      title: 'text-blue-700',
+      button: 'bg-blue-600 hover:bg-blue-700 text-white',
     },
     green: {
-      title: 'text-green-600',
-      button: 'bg-green-600 hover:bg-green-700',
+      title: 'text-emerald-700',
+      button: 'bg-emerald-600 hover:bg-emerald-700 text-white',
     },
     purple: {
-      title: 'text-purple-600',
-      button: 'bg-purple-600 hover:bg-purple-700',
+      title: 'text-purple-700',
+      button: 'bg-purple-600 hover:bg-purple-700 text-white',
     },
     red: {
-      title: 'text-red-600',
-      button: 'bg-red-600 hover:bg-red-700',
+      title: 'text-red-700',
+      button: 'bg-red-600 hover:bg-red-700 text-white',
     },
     orange: {
-      title: 'text-orange-600',
-      button: 'bg-orange-600 hover:bg-orange-700',
+      title: 'text-orange-700',
+      button: 'bg-orange-600 hover:bg-orange-700 text-white',
     },
     yellow: {
-      title: 'text-yellow-600',
-      button: 'bg-yellow-600 hover:bg-yellow-700',
+      title: 'text-amber-700',
+      button: 'bg-amber-600 hover:bg-amber-700 text-white',
     },
     teal: {
-      title: 'text-teal-600',
-      button: 'bg-teal-600 hover:bg-teal-700',
+      title: 'text-teal-700',
+      button: 'bg-teal-600 hover:bg-teal-700 text-white',
     },
   };
 
@@ -53,7 +53,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
 
   return (
     <div
-      className={`bg-white rounded-lg shadow-md p-4 sm:p-6 hover:shadow-lg transition-shadow ${className}`}
+      className={`bg-white border border-gray-200 rounded-lg shadow-sm p-4 sm:p-6 hover:shadow-md hover:border-gray-300 transition-all duration-300 ${className}`}
     >
       <h3
         className={`text-lg sm:text-xl font-semibold mb-3 sm:mb-4 break-words ${colors.title}`}
@@ -61,11 +61,13 @@ export const LinkCard: React.FC<LinkCardProps> = ({
         {title}
       </h3>
       {description && (
-        <p className="text-gray-600 mb-4 text-sm sm:text-base">{description}</p>
+        <p className="text-gray-600 mb-4 text-sm sm:text-base leading-relaxed">
+          {description}
+        </p>
       )}
       <Link
         to={href}
-        className={`inline-block text-white px-4 py-2 rounded transition-colors text-sm sm:text-base w-full sm:w-auto text-center ${colors.button}`}
+        className={`inline-block px-4 py-2 rounded transition-colors text-sm sm:text-base w-full sm:w-auto text-center font-medium ${colors.button}`}
       >
         {buttonText}
       </Link>

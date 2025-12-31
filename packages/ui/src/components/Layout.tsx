@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaGithub } from 'react-icons/fa';
 import { Link } from 'react-router';
 
 export interface LayoutProps {
@@ -10,51 +11,85 @@ export const Layout: React.FC<LayoutProps> = ({
   children,
   title = 'LOSTRPGサポートツール',
 }) => (
-  <div className="min-h-screen bg-gray-50">
-    <header className="bg-blue-600 text-white shadow-lg">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-        <h1 className="text-2xl sm:text-3xl font-bold break-words">{title}</h1>
-        <nav className="mt-4">
-          <ul className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6">
-            <li>
-              <Link
-                to="/"
-                className="block py-1 hover:text-blue-200 transition-colors"
-              >
-                ホーム
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/camp"
-                className="block py-1 hover:text-blue-200 transition-colors"
-              >
-                キャンプ
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/character"
-                className="block py-1 hover:text-blue-200 transition-colors"
-              >
-                キャラクター
-              </Link>
-            </li>
-            {/* <li><Link to="/world" className="block py-1 hover:text-blue-200 transition-colors">ワールド</Link></li>
-              <li><Link to="/character" className="block py-1 hover:text-blue-200 transition-colors text-sm sm:text-base">キャラクター作成</Link></li> */}
-          </ul>
-        </nav>
+  <div className="min-h-screen bg-gray-50 text-gray-900 font-sans flex flex-col">
+    <header className="bg-slate-900 text-white sticky top-0 z-50 border-b border-slate-800 shadow-md">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="flex flex-col sm:flex-row items-center justify-between">
+          <Link
+            to="/"
+            className="text-2xl font-bold tracking-tight hover:text-emerald-400 transition-colors duration-300 font-serif"
+          >
+            {title}
+          </Link>
+          <nav className="mt-4 sm:mt-0">
+            <ul className="flex space-x-1 sm:space-x-4 overflow-x-auto w-full justify-center sm:justify-end pb-2 sm:pb-0">
+              <li>
+                <a
+                  href="https://lostrpg-751c1.firebaseapp.com/lost/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-emerald-400 transition-all duration-300 group"
+                >
+                  <span className="text-xl group-hover:scale-110 transition-transform">
+                    📓
+                  </span>
+                  <span className="hidden sm:inline font-medium">
+                    ルールブック
+                  </span>
+                </a>
+              </li>
+              <li>
+                <Link
+                  to="/camp"
+                  className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-amber-400 transition-all duration-300 group"
+                >
+                  <span className="text-xl group-hover:scale-110 transition-transform">
+                    ⛺
+                  </span>
+                  <span className="hidden sm:inline font-medium">キャンプ</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/character"
+                  className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-sky-400 transition-all duration-300 group"
+                >
+                  <span
+                    className="text-xl group-hover:scale-110 transition-transform"
+                    style={{ filter: 'hue-rotate(120deg)' }}
+                  >
+                    🎒
+                  </span>
+                  <span className="hidden sm:inline font-medium">
+                    キャラクター
+                  </span>
+                </Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
     </header>
 
-    <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-grow">
       {children}
     </main>
 
-    <footer className="bg-gray-800 text-white py-6 sm:py-8 mt-12 sm:mt-16">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <p className="text-sm sm:text-base">&copy; 2025 LOSTRPG</p>
+    <footer className="bg-slate-900 text-slate-400 border-t border-slate-800 py-8 mt-auto">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center space-y-4">
+        <p className="text-sm font-mono tracking-wider">
+          &copy; 2025 LOSTRPG / hibo
+        </p>
       </div>
+      <a
+        href="https://github.com/hibohiboo/lostrpg-cloudflare"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-2xl hover:text-white transition-colors duration-300"
+        aria-label="GitHub Repository"
+      >
+        <FaGithub />
+      </a>
     </footer>
   </div>
 );
