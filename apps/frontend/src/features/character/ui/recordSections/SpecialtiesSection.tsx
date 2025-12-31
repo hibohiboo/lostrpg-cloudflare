@@ -28,6 +28,7 @@ import {
   toggleDamagedSpecialty,
   clearAllDamage,
 } from '../../model/characterSlice';
+import { checkSpecialties } from '../../utils/checkSpecialties';
 
 interface DamageRow {
   name: string;
@@ -163,9 +164,13 @@ export const SpecialtiesSection: React.FC = () => {
           damagedSpecialties={damagedSpecialties}
           selectedSpecialty={selectedSpecialty}
           onGapChange={() => {}}
-          onSpecialtySelect={(specialty: string) =>
-            dispatch(updateCharacterForm({ selectedSpecialty: specialty }))
-          }
+          onSpecialtySelect={(specialty: string) => {
+            if (selectedSpecialty === specialty) {
+              dispatch(updateCharacterForm({ selectedSpecialty: '' }));
+              return;
+            }
+            dispatch(updateCharacterForm({ selectedSpecialty: specialty }));
+          }}
           onDamageChange={(specialty: string) =>
             dispatch(toggleDamagedSpecialty(specialty))
           }
@@ -181,7 +186,36 @@ export const SpecialtiesSection: React.FC = () => {
             ))
           ) : (
             <Typography variant="body2" color="text.secondary">
-              専門特技が選択されていません
+              特技が選択されていません
+            </Typography>
+          )}
+        </Box>
+      </Box>
+      <Box my={3}>
+        <InputLabel>判定特技:{selectedSpecialty}</InputLabel>
+        <Box display="flex" flexWrap="wrap" gap={1}>
+          {selectedSpecialty ? (
+            <table>
+              <thead>
+                <tr>
+                  <th>習得特技</th>
+                  <th>目標値</th>
+                </tr>
+              </thead>
+              <tbody>
+                {specialties.map((specialty) => (
+                  <tr>
+                    <td>{specialty}</td>
+                    <td>
+                      {checkSpecialties(specialty, selectedSpecialty, gaps)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <Typography variant="body2" color="text.secondary">
+              判定特技が選択されていません
             </Typography>
           )}
         </Box>

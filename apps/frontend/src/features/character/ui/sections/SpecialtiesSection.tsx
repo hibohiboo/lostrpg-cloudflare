@@ -179,7 +179,7 @@ export const SpecialtiesSection: React.FC = () => {
             ))
           ) : (
             <Typography variant="body2" color="text.secondary">
-              専門特技が選択されていません
+              特技が選択されていません
             </Typography>
           )}
         </Box>
