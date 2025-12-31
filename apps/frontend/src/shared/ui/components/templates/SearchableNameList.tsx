@@ -2,20 +2,21 @@ import SearchIcon from '@mui/icons-material/Search';
 import {
   Box,
   Button,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
   CircularProgress,
   Container,
+  Grid,
   Link as MuiLink,
-  List,
-  ListItemButton,
-  ListItemText,
-  ListSubheader,
   TextField,
   Typography,
 } from '@mui/material';
 import React from 'react';
 
 interface Prop {
-  list: { name: string; id: string }[];
+  list: { name: string; id: string; imageUrl?: string }[];
   isLoading: boolean;
   searchName: string;
   setSearchName: (name: string) => void;
@@ -25,7 +26,7 @@ interface Prop {
   title: string;
   createPath: string;
   detailPathPrefix: string;
-  listName: string;
+  fallbackIcon?: string;
 }
 
 const ListPage: React.FC<Prop> = (props) => {
@@ -40,7 +41,7 @@ const ListPage: React.FC<Prop> = (props) => {
     title,
     createPath,
     detailPathPrefix,
-    listName,
+    fallbackIcon = '❓',
   } = props;
 
   return (
@@ -86,38 +87,84 @@ const ListPage: React.FC<Prop> = (props) => {
 
           {!isLoading && (
             <>
-              <List
-                sx={{
-                  width: '100%',
-                  maxWidth: 360,
-                  bgcolor: 'background.paper',
-                }}
-                subheader={
-                  <ListSubheader component="div">{listName}</ListSubheader>
-                }
-              >
-                {list.map((camp) => (
-                  <ListItemButton
-                    key={camp.id}
-                    component="a"
-                    href={`${detailPathPrefix}/${camp.id}`}
-                  >
-                    <ListItemText primary={camp.name} />
-                  </ListItemButton>
-                ))}
-              </List>
-
-              {/* もっと読み込むボタン */}
-              {hasMore && (
-                <Box mt={2}>
-                  <Button variant="outlined" onClick={handleLoadMore}>
-                    次の{itemsPerPage}件
-                  </Button>
-                </Box>
-              )}
-
-              {/* 結果が0件の場合 */}
-              {list.length === 0 && !isLoading && (
+              {list.length > 0 ? (
+                <Grid container spacing={3}>
+                  {list.map((camp) => (
+                    <Grid size={{ xs: 12, sm: 6, md: 4 }} key={camp.id}>
+                      <Card
+                        sx={{
+                          height: '100%',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          transition: 'transform 0.2s',
+                          '&:hover': {
+                            transform: 'translateY(-4px)',
+                            boxShadow: 4,
+                          },
+                        }}
+                      >
+                        <CardActionArea
+                          component="a"
+                          href={`${detailPathPrefix}/${camp.id}`}
+                          sx={{
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'stretch',
+                            justifyContent: 'flex-start',
+                          }}
+                        >
+                          {camp.imageUrl ? (
+                            <CardMedia
+                              component="img"
+                              height="140"
+                              image={camp.imageUrl}
+                              alt={camp.name}
+                              sx={{ objectFit: 'cover' }}
+                            />
+                          ) : (
+                            <Box
+                              height={140}
+                              display="flex"
+                              alignItems="center"
+                              justifyContent="center"
+                              bgcolor="grey.100"
+                              color="grey.400"
+                            >
+                              <Typography
+                                variant="h3"
+                                sx={{
+                                  filter:
+                                    fallbackIcon === '🎒'
+                                      ? 'hue-rotate(120deg)'
+                                      : undefined,
+                                }}
+                              >
+                                {fallbackIcon}
+                              </Typography>
+                            </Box>
+                          )}
+                          <CardContent>
+                            <Typography
+                              gutterBottom
+                              variant="h6"
+                              component="div"
+                              sx={{
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                                color: 'text.primary',
+                              }}
+                            >
+                              {camp.name}
+                            </Typography>
+                          </CardContent>
+                        </CardActionArea>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              ) : (
                 <Typography
                   variant="body2"
                   color="text.secondary"
@@ -125,6 +172,15 @@ const ListPage: React.FC<Prop> = (props) => {
                 >
                   データが見つかりませんでした
                 </Typography>
+              )}
+
+              {/* もっと読み込むボタン */}
+              {hasMore && (
+                <Box mt={4} display="flex" justifyContent="center">
+                  <Button variant="outlined" onClick={handleLoadMore}>
+                    次の{itemsPerPage}件
+                  </Button>
+                </Box>
               )}
             </>
           )}

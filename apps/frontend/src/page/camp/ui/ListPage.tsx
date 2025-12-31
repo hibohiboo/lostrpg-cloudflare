@@ -8,9 +8,9 @@ const ListPage: React.FC = () => {
     <SearchableNameList
       {...vm}
       title="キャンプ一覧"
-      listName="キャンプリスト"
       createPath="/camp/create"
       detailPathPrefix="/camp"
+      fallbackIcon="⛺"
     />
   );
 };

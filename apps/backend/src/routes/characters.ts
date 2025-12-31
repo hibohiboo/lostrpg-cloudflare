@@ -24,11 +24,23 @@ export const charactersRouter = new Hono<{ Bindings: Env }>()
         name: characters.name,
         createdAt: characters.createdAt,
         updatedAt: characters.updatedAt,
+        data: characters.data,
       })
       .from(characters)
       .orderBy(desc(characters.updatedAt));
 
-    return c.json(characterList);
+    const formattedList = characterList.map((character) => {
+      const data = character.data as Record<string, unknown>;
+      return {
+        id: character.id,
+        name: character.name,
+        createdAt: character.createdAt,
+        updatedAt: character.updatedAt,
+        imageUrl: data?.imageUrl as string | undefined,
+      };
+    });
+
+    return c.json(formattedList);
   })
   // Create new character
   .post('/', zValidator('json', createCharacterSchema), async (c) => {
