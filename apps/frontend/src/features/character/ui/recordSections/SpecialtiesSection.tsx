@@ -150,7 +150,7 @@ export const SpecialtiesSection: React.FC = () => {
         <Box display="flex" alignItems="center" gap={1} mb={2}>
           <Typography variant="h6">特技</Typography>
           <Tooltip
-            title="特技取得はテキスト部分クリック。ダメージはチェック。"
+            title="判定特技指定はテキスト部分クリック。ダメージはチェック。"
             arrow
           >
             <IconButton size="small" sx={{ padding: 0 }}>
@@ -195,24 +195,57 @@ export const SpecialtiesSection: React.FC = () => {
         <InputLabel>判定特技:{selectedSpecialty}</InputLabel>
         <Box display="flex" flexWrap="wrap" gap={1}>
           {selectedSpecialty ? (
-            <table>
-              <thead>
-                <tr>
-                  <th>習得特技</th>
-                  <th>目標値</th>
-                </tr>
-              </thead>
-              <tbody>
-                {specialties.map((specialty) => (
-                  <tr>
-                    <td>{specialty}</td>
-                    <td>
-                      {checkSpecialties(specialty, selectedSpecialty, gaps)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <TableContainer component={Paper} sx={{ width: 'auto' }}>
+              <Table
+                size="small"
+                sx={{ border: 1, borderColor: 'divider', width: 'auto' }}
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell
+                      sx={{
+                        border: 1,
+                        borderColor: 'divider',
+                        fontWeight: 600,
+                      }}
+                    >
+                      習得特技
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        border: 1,
+                        borderColor: 'divider',
+                        fontWeight: 600,
+                      }}
+                    >
+                      目標値
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {specialties
+                    .map((specialty) => ({
+                      specialty,
+                      target: checkSpecialties(
+                        specialty,
+                        selectedSpecialty,
+                        gaps,
+                      ),
+                    }))
+                    .sort((a, b) => a.target - b.target)
+                    .map(({ specialty, target }) => (
+                      <TableRow key={specialty}>
+                        <TableCell sx={{ border: 1, borderColor: 'divider' }}>
+                          {specialty}
+                        </TableCell>
+                        <TableCell sx={{ border: 1, borderColor: 'divider' }}>
+                          {target}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           ) : (
             <Typography variant="body2" color="text.secondary">
               判定特技が選択されていません
