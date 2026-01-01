@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { recordApi } from '../api/api';
@@ -27,7 +26,7 @@ export const isValidationError = (
  * 新規レコード作成Thunk
  */
 export const createRecordThunk = createAsyncThunk<
-  void,
+  { success: true },
   { characterId: string },
   { rejectValue: ValidationErrorType }
 >(
@@ -64,6 +63,8 @@ export const createRecordThunk = createAsyncThunk<
         },
       }),
     ).unwrap();
+
+    return { success: true };
   },
 );
 
@@ -71,7 +72,7 @@ export const createRecordThunk = createAsyncThunk<
  * レコード更新Thunk
  */
 export const updateRecordThunk = createAsyncThunk<
-  void,
+  { success: true },
   { characterId: string; recordId: string },
   { rejectValue: ValidationErrorType | FetchBaseQueryError }
 >(
@@ -116,5 +117,7 @@ export const updateRecordThunk = createAsyncThunk<
     } catch (e) {
       return rejectWithValue(e as FetchBaseQueryError);
     }
+
+    return { success: true };
   },
 );
