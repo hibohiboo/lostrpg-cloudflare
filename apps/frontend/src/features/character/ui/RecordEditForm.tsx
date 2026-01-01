@@ -6,6 +6,7 @@ import {
   ExpCheckSection,
   PartySection,
   RecordSummarySection,
+  InitiativeSpecialtiesSection,
 } from './recordSections';
 import {
   AbilitySection,
@@ -39,6 +40,7 @@ const EditForm: React.FC<Props> = ({
     />
 
     <AbilitySection />
+    <InitiativeSpecialtiesSection />
     <SpecialtiesSection />
     <PartySection />
     <ExpCheckSection />
