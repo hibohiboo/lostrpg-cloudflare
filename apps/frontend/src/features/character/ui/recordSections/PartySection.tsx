@@ -79,6 +79,8 @@ export const PartySection: React.FC = () => {
                   <TextField
                     fullWidth
                     size="small"
+                    multiline
+                    minRows={3}
                     value={member.memo || ''}
                     onChange={(e) =>
                       dispatch(
