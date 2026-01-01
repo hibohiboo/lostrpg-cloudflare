@@ -31,7 +31,7 @@ export const useCreatePageHooks = () => {
     }
 
     try {
-      const result = await createRecord({
+      await createRecord({
         characterId: id,
         data: {
           name: record.title, // シナリオ名をレコード名として使用
@@ -41,13 +41,21 @@ export const useCreatePageHooks = () => {
         },
       }).unwrap();
 
-      // 作成されたレコードのページに遷移
-      navigate(result.url);
+      // キャラクターページに戻る
+      navigate(`/character/${id}`);
     } catch (error) {
       // エラーハンドリング
       handleSaveError(error);
     }
-  }, [createRecord, id, character, record, password, navigate, setIsValidError]);
+  }, [
+    createRecord,
+    id,
+    character,
+    record,
+    password,
+    navigate,
+    setIsValidError,
+  ]);
 
   const handleDelete = undefined;
 
