@@ -28,7 +28,7 @@ import {
   toggleDamagedSpecialty,
   clearAllDamage,
 } from '../../model/characterSlice';
-import { checkSpecialties } from '../../utils/checkSpecialties';
+import { specialtiesWithTargetSelector } from '../../model/selectors';
 
 interface DamageRow {
   name: string;
@@ -143,7 +143,7 @@ export const SpecialtiesSection: React.FC = () => {
   const selectedSpecialty = useAppSelector(
     (state) => state.characterForm.selectedSpecialty,
   );
-
+  const specialtiesWithTarget = useAppSelector(specialtiesWithTargetSelector);
   return (
     <>
       <Box my={3}>
@@ -223,26 +223,16 @@ export const SpecialtiesSection: React.FC = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {specialties
-                    .map((specialty) => ({
-                      specialty,
-                      target: checkSpecialties(
-                        specialty,
-                        selectedSpecialty,
-                        gaps,
-                      ),
-                    }))
-                    .sort((a, b) => a.target - b.target)
-                    .map(({ specialty, target }) => (
-                      <TableRow key={specialty}>
-                        <TableCell sx={{ border: 1, borderColor: 'divider' }}>
-                          {specialty}
-                        </TableCell>
-                        <TableCell sx={{ border: 1, borderColor: 'divider' }}>
-                          {target}
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                  {specialtiesWithTarget.map(({ specialty, target }) => (
+                    <TableRow key={specialty}>
+                      <TableCell sx={{ border: 1, borderColor: 'divider' }}>
+                        {specialty}
+                      </TableCell>
+                      <TableCell sx={{ border: 1, borderColor: 'divider' }}>
+                        {target}
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </TableContainer>
