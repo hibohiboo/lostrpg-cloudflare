@@ -24,6 +24,7 @@ interface SpecialtiesTableProps {
   onSpecialtySelect?: (name: string) => void;
   onDamageChange?: (name: string) => void;
   readOnly?: boolean;
+  selectedSpecialty?: string;
 }
 
 const HeaderCell: React.FC<{ col: string }> = ({ col }) => (
@@ -89,6 +90,7 @@ const Cell: React.FC<{
   handleSpecialtyClick: (s: string) => void;
   handleDamageClick: (s: string) => void;
   readOnly?: boolean;
+  selectedSpecialty?: string;
 }> = ({
   name,
   specialties,
@@ -97,6 +99,7 @@ const Cell: React.FC<{
   handleDamageClick,
   isBodyParts,
   readOnly,
+  selectedSpecialty,
 }) => {
   const isSelected = specialties.includes(name);
 
@@ -111,6 +114,7 @@ const Cell: React.FC<{
         cursor: readOnly ? 'cursor' : 'pointer',
         bgcolor: isSelected ? 'grey.900' : undefined,
         color: isSelected ? 'common.white' : undefined,
+        outline: selectedSpecialty === name ? '3px solid blue' : undefined,
       }}
     >
       <div
@@ -164,6 +168,7 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
   onSpecialtySelect,
   onDamageChange,
   readOnly = false,
+  selectedSpecialty,
 }) => {
   const handleDamageClick = (specialtyName: string) => {
     if (!readOnly && onDamageChange && specialtyName) {
@@ -249,6 +254,7 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
                     handleSpecialtyClick={handleSpecialtyClick}
                     handleDamageClick={handleDamageClick}
                     readOnly={readOnly}
+                    selectedSpecialty={selectedSpecialty}
                   />
                 ),
               )}

@@ -2,7 +2,8 @@ import { items } from '@lostrpg/core/game-data/item';
 import { CharacterItem } from '@lostrpg/schemas/validation/items';
 import { Box, TextField, Typography } from '@mui/material';
 import { GridRowId } from '@mui/x-data-grid';
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
+import { shallowEqual } from 'react-redux';
 import {
   AddItemForm,
   ItemTable,
@@ -23,10 +24,10 @@ import { itemCatalogSelector } from '../../model/selectors';
 
 export const ItemsSection: React.FC = () => {
   const dispatch = useAppDispatch();
-  const characterItems = useAppSelector((state) => state.character.items);
-  const bags = useAppSelector((state) => state.character.bags);
-  const equipment = useAppSelector((state) => state.character.equipments);
-  const catalog = useAppSelector(itemCatalogSelector);
+  const characterItems = useAppSelector((state) => state.character.items, shallowEqual);
+  const bags = useAppSelector((state) => state.character.bags, shallowEqual);
+  const equipment = useAppSelector((state) => state.character.equipments, shallowEqual);
+  const catalog = useAppSelector(itemCatalogSelector, shallowEqual);
   const carryingCapacity = useAppSelector(
     (state) => state.character.carryingCapacity,
   );
@@ -62,7 +63,7 @@ export const ItemsSection: React.FC = () => {
     return itemsTotal + bagsTotal + equipmentTotal;
   }, [characterItems, bags, equipment]);
 
-  const handleItemAdd = (itemName: string) => {
+  const handleItemAdd = useCallback((itemName: string) => {
     const item = items.find((i) => i.name === itemName);
     if (item) {
       const newItem: CharacterItem = {
@@ -83,20 +84,37 @@ export const ItemsSection: React.FC = () => {
       };
       dispatch(addItem(newItem));
     }
-  };
+  }, [dispatch]);
 
-  const handleItemUpdate = (
+  const handleItemUpdate = useCallback((
     newRow: EntityItem,
     _oldRow: EntityItem,
     _params: { rowId: GridRowId },
   ): EntityItem => {
     dispatch(updateItem(newRow));
     return newRow;
-  };
+  }, [dispatch]);
 
-  const handleItemDelete = (id: string) => {
+  const handleItemDelete = useCallback((id: string) => {
     dispatch(deleteItem(id));
-  };
+  }, [dispatch]);
+
+  const handleCarryingCapacityChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(updateCharacter({ carryingCapacity: Number(e.target.value) }));
+  }, [dispatch]);
+
+  // アイテムテーブル用のデータをメモ化
+  const tableItems = useMemo(
+    () =>
+      characterItems
+        .filter((item) => item.id !== undefined)
+        .map((item) => ({
+          ...item,
+          id: item.id!,
+          number: item.number ?? 1,
+        })),
+    [characterItems],
+  );
 
   return (
     <Box my={3}>
@@ -108,11 +126,7 @@ export const ItemsSection: React.FC = () => {
           type="number"
           label="所持限界"
           value={carryingCapacity}
-          onChange={(e) =>
-            dispatch(
-              updateCharacter({ carryingCapacity: Number(e.target.value) }),
-            )
-          }
+          onChange={handleCarryingCapacityChange}
           sx={{ width: 150 }}
         />
         <TextField
@@ -148,13 +162,7 @@ export const ItemsSection: React.FC = () => {
 
       <Box sx={{ width: '100%' }}>
         <ItemTable
-          items={characterItems
-            .filter((item) => item.id !== undefined)
-            .map((item) => ({
-              ...item,
-              id: item.id!,
-              number: item.number ?? 1,
-            }))}
+          items={tableItems}
           handleItemDelete={handleItemDelete}
           handleItemUpdate={handleItemUpdate}
         />

@@ -13,6 +13,7 @@ import {
   strangeFieldsItemList,
 } from '@lostrpg/core/game-data/item';
 import { createSelector } from '@reduxjs/toolkit';
+import { checkSpecialties } from '../utils/checkSpecialties';
 
 export const itemCatalogSelector = createSelector(
   [
@@ -106,4 +107,19 @@ export const classCatalogSelector = createSelector(
         !classes.some((selectedClass) => selectedClass.name === cls.name),
     );
   },
+);
+
+export const specialtiesWithTargetSelector = createSelector(
+  [
+    (state: RootState) => state.character.specialties,
+    (state: RootState) => state.character.gaps,
+    (state: RootState) => state.characterForm.selectedSpecialty,
+  ],
+  (specialties, gaps, selectedSpecialty) =>
+    specialties
+      .map((specialty) => ({
+        specialty,
+        target: checkSpecialties(specialty, selectedSpecialty, gaps),
+      }))
+      .sort((a, b) => a.target - b.target),
 );

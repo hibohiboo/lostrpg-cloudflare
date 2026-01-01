@@ -1,5 +1,4 @@
 import { damageTableRows } from '@lostrpg/core/game-data/speciality';
-import { Gap } from '@lostrpg/schemas';
 import { HelpOutline } from '@mui/icons-material';
 import {
   Box,
@@ -18,18 +17,19 @@ import {
   Tooltip,
   IconButton,
 } from '@mui/material';
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
+import { shallowEqual } from 'react-redux';
 import {
   useAppDispatch,
   useAppSelector,
 } from '@lostrpg/frontend/shared/lib/store';
 import { SpecialtiesTable } from '@lostrpg/frontend/shared/ui';
+import { updateCharacterForm } from '../../model/characterFormSlice';
 import {
-  toggleSpecialty,
-  toggleGap,
   toggleDamagedSpecialty,
   clearAllDamage,
 } from '../../model/characterSlice';
+import { specialtiesWithTargetSelector } from '../../model/selectors';
 
 interface DamageRow {
   name: string;
@@ -136,19 +136,56 @@ const DamageTable: React.FC<DamageTableProps> = ({
 
 export const SpecialtiesSection: React.FC = () => {
   const dispatch = useAppDispatch();
-  const gaps = useAppSelector((state) => state.character.gaps);
-  const specialties = useAppSelector((state) => state.character.specialties);
+  const gaps = useAppSelector((state) => state.character.gaps, shallowEqual);
+  const specialties = useAppSelector((state) => state.character.specialties, shallowEqual);
   const damagedSpecialties = useAppSelector(
     (state) => state.character.damagedSpecialties,
+    shallowEqual,
+  );
+  const selectedSpecialty = useAppSelector(
+    (state) => state.characterForm.selectedSpecialty,
+  );
+  const specialtiesWithTarget = useAppSelector(specialtiesWithTargetSelector, shallowEqual);
+
+  // イベントハンドラをメモ化
+  const handleSpecialtySelect = useCallback(
+    (specialty: string) => {
+      if (selectedSpecialty === specialty) {
+        dispatch(updateCharacterForm({ selectedSpecialty: '' }));
+        return;
+      }
+      dispatch(updateCharacterForm({ selectedSpecialty: specialty }));
+    },
+    [dispatch, selectedSpecialty],
   );
 
+  const handleDamageChange = useCallback(
+    (specialty: string) => {
+      dispatch(toggleDamagedSpecialty(specialty));
+    },
+    [dispatch],
+  );
+
+  const handleClearAllDamage = useCallback(() => {
+    dispatch(clearAllDamage());
+  }, [dispatch]);
+
+  // DamageTableのrows配列をメモ化
+  const damageRows = useMemo(
+    () =>
+      damageTableRows.map((row) => ({
+        name: row.name,
+        damaged: damagedSpecialties.includes(row.name),
+      })),
+    [damagedSpecialties],
+  );
   return (
     <>
       <Box my={3}>
         <Box display="flex" alignItems="center" gap={1} mb={2}>
           <Typography variant="h6">特技</Typography>
           <Tooltip
-            title="特技取得はテキスト部分クリック。ダメージはチェック。"
+            title="判定特技指定はテキスト部分クリック。ダメージはチェック。"
             arrow
           >
             <IconButton size="small" sx={{ padding: 0 }}>
@@ -160,13 +197,10 @@ export const SpecialtiesSection: React.FC = () => {
           gaps={gaps}
           specialties={specialties}
           damagedSpecialties={damagedSpecialties}
-          onGapChange={(gap: string) => dispatch(toggleGap(gap as Gap))}
-          onSpecialtySelect={(specialty: string) =>
-            dispatch(toggleSpecialty(specialty))
-          }
-          onDamageChange={(specialty: string) =>
-            dispatch(toggleDamagedSpecialty(specialty))
-          }
+          selectedSpecialty={selectedSpecialty}
+          onGapChange={() => {}}
+          onSpecialtySelect={handleSpecialtySelect}
+          onDamageChange={handleDamageChange}
         />
       </Box>
 
@@ -184,6 +218,58 @@ export const SpecialtiesSection: React.FC = () => {
           )}
         </Box>
       </Box>
+      <Box my={3}>
+        <InputLabel>判定特技:{selectedSpecialty}</InputLabel>
+        <Box display="flex" flexWrap="wrap" gap={1}>
+          {selectedSpecialty ? (
+            <TableContainer component={Paper} sx={{ width: 'auto' }}>
+              <Table
+                size="small"
+                sx={{ border: 1, borderColor: 'divider', width: 'auto' }}
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell
+                      sx={{
+                        border: 1,
+                        borderColor: 'divider',
+                        fontWeight: 600,
+                      }}
+                    >
+                      習得特技
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        border: 1,
+                        borderColor: 'divider',
+                        fontWeight: 600,
+                      }}
+                    >
+                      目標値
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {specialtiesWithTarget.map(({ specialty, target }) => (
+                    <TableRow key={specialty}>
+                      <TableCell sx={{ border: 1, borderColor: 'divider' }}>
+                        {specialty}
+                      </TableCell>
+                      <TableCell sx={{ border: 1, borderColor: 'divider' }}>
+                        {target}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          ) : (
+            <Typography variant="body2" color="text.secondary">
+              判定特技が選択されていません
+            </Typography>
+          )}
+        </Box>
+      </Box>
 
       <Box my={3}>
         <Box display="flex" gap={2} alignItems="center" mb={2}>
@@ -192,20 +278,15 @@ export const SpecialtiesSection: React.FC = () => {
             variant="outlined"
             color="primary"
             size="small"
-            onClick={() => dispatch(clearAllDamage())}
+            onClick={handleClearAllDamage}
             disabled={damagedSpecialties.length === 0}
           >
             ダメージを全て回復
           </Button>
         </Box>
         <DamageTable
-          rows={damageTableRows.map((row) => ({
-            name: row.name,
-            damaged: damagedSpecialties.includes(row.name),
-          }))}
-          damageHandler={(specialty: string) =>
-            dispatch(toggleDamagedSpecialty(specialty))
-          }
+          rows={damageRows}
+          damageHandler={handleDamageChange}
           sevenLabel="攻撃したキャラクターの任意の部位"
         />
       </Box>

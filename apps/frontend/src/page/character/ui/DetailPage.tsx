@@ -14,6 +14,12 @@ import {
   ListItem,
   ListItemText,
   Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   TextField,
   Typography,
 } from '@mui/material';
@@ -22,6 +28,7 @@ import { Link, useParams } from 'react-router';
 import { AbilityTable } from '@lostrpg/frontend/entities/ability';
 import { BackboneTable } from '@lostrpg/frontend/entities/backbone';
 import { useGetCampQuery } from '@lostrpg/frontend/entities/camp';
+import { useGetCharacterRecordsQuery } from '@lostrpg/frontend/entities/character';
 import { ItemTable, EquipmentTable } from '@lostrpg/frontend/entities/item';
 import { copyCharacterToCcfolia } from '@lostrpg/frontend/features/character/utils/exportCcfolia';
 import { exportCharacterToTRPGStudio } from '@lostrpg/frontend/features/character/utils/exportTRPGStudio';
@@ -30,6 +37,47 @@ import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 import { SpecialtiesTable } from '@lostrpg/frontend/shared/ui';
 
 type Character = CreateCharacterRequest;
+const CharacterRecords: React.FC<{ characterId: string }> = ({
+  characterId,
+}) => {
+  const { data: records, isLoading } = useGetCharacterRecordsQuery(characterId);
+
+  if (isLoading) return <Typography>レコード読み込み中...</Typography>;
+  if (!records || records.length === 0) return null;
+
+  return (
+    <Box my={3}>
+      <Typography variant="h6" gutterBottom>
+        セッション履歴
+      </Typography>
+      <TableContainer component={Paper}>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>シナリオ名</TableCell>
+              <TableCell align="right">経験点</TableCell>
+              <TableCell>取得称号</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {records.map((record) => (
+              <TableRow key={record.id}>
+                <TableCell>
+                  <Link to={`/character/${characterId}/record/${record.id}`}>
+                    {record.name}
+                  </Link>
+                </TableCell>
+                <TableCell align="right">{`${record.exp}`}</TableCell>
+                <TableCell>{record.trophy || '-'}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
+  );
+};
+
 const CharacterClasses: React.FC<{ character: Character }> = ({
   character,
 }) => (
@@ -486,6 +534,17 @@ const DetailPage: React.FC = () => {
         <CharacterTrophies character={character} />
         <CharacterStatusAilments character={character} />
         <CharacterNotes character={character} />
+        <Box mt={4}>
+          <MuiLink
+            component={Link}
+            to={`/character/${id}/record`}
+            underline="hover"
+          >
+            レコードシート新規作成
+          </MuiLink>{' '}
+          ... 目標値自動計算などができます
+        </Box>
+        <CharacterRecords characterId={id!} />
         {(character.supplements?.useStrangeField ||
           character.supplements?.useDragonPlain) && (
           <Box mb={3}>
@@ -554,7 +613,7 @@ const DetailPage: React.FC = () => {
 
         {/* 戻るリンク */}
         <Box mt={4}>
-          <MuiLink href="/character/" underline="hover">
+          <MuiLink component={Link} to="/character/" underline="hover">
             戻る
           </MuiLink>
         </Box>
