@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import bgImage from '../../../assets/ruins_forest_bg.png';
+import bgImage from '../../../assets/takibi.png';
 
 export const Page = () => (
   <div className="min-h-screen relative flex flex-col items-center justify-center text-white overflow-hidden font-sans">
@@ -21,7 +21,7 @@ export const Page = () => (
         LOSTRPG
       </h1>
       <p className="text-xl md:text-2xl mb-12 max-w-2xl mx-auto drop-shadow-md text-gray-200 leading-relaxed">
-        自分たちだけのサバイバル。これは、文明崩壊から５年後の物語。
+        これは、文明崩壊から５年後の物語。
       </p>
 
       {/* Navigation Cards */}
