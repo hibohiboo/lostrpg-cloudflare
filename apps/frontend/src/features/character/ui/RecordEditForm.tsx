@@ -5,6 +5,7 @@ import {
   SpecialtiesSection,
   ExpCheckSection,
   PartySection,
+  RecordSummarySection,
 } from './recordSections';
 import {
   AbilitySection,
@@ -12,6 +13,7 @@ import {
   EquipmentSection,
   BagsSection,
   FormActionsSection,
+  AbilitiesSection,
 } from './sections';
 import type { EditFormViewModel } from '../hooks/useEditFormHooks';
 
@@ -35,13 +37,17 @@ const EditForm: React.FC<Props> = ({
       onImageChange={handleImageChange}
       previewUrl={previewUrl}
     />
-    <SpecialtiesSection />
-    <ExpCheckSection />
-    <PartySection />
+
     <AbilitySection />
+    <SpecialtiesSection />
+    <PartySection />
+    <ExpCheckSection />
+    <RecordSummarySection />
+
     <ItemsSection />
     <EquipmentSection />
     <BagsSection />
+    <AbilitiesSection />
     <FormActionsSection
       handleSave={handleSave}
       handleDelete={handleDelete}

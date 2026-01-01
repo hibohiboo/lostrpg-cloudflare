@@ -28,8 +28,11 @@ export const ExpCheckSection: React.FC = () => {
       <Typography variant="h6" gutterBottom>
         経験点チェック表
       </Typography>
-      <TableContainer component={Paper}>
-        <Table size="small">
+      <TableContainer component={Paper} sx={{ width: 'auto' }}>
+        <Table
+          size="small"
+          sx={{ border: 1, borderColor: 'divider', width: 'auto' }}
+        >
           <TableHead>
             <TableRow>
               <TableCell padding="checkbox">{/* Checkbox column */}</TableCell>

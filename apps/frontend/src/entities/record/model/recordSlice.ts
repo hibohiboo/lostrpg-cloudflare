@@ -8,6 +8,9 @@ const initialState: Record = {
   gm: '',
   expCheckPoints: [],
   parties: [],
+  memo: '',
+  exp: 0,
+  trophy: '',
 };
 
 export const recordSlice = createSlice({

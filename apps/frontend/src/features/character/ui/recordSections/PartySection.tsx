@@ -38,7 +38,7 @@ export const PartySection: React.FC = () => {
         alignItems="center"
         mb={2}
       >
-        <Typography variant="h6">パーティ</Typography>
+        <Typography variant="h6">共に挑んだ仲間</Typography>
         <Button
           variant="outlined"
           color="primary"

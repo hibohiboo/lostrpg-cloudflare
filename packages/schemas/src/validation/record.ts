@@ -13,6 +13,9 @@ const recordDataSchema = z.object({
       trophy: z.string().optional(),
     }),
   ),
+  memo: z.string().optional(),
+  exp: z.number().optional(),
+  trophy: z.string().optional(),
 });
 export type Record = z.infer<typeof recordDataSchema>;
 
