@@ -7,6 +7,7 @@ const initialState: Record = {
   date: format(new Date(), 'yyyy-MM-dd'),
   gm: '',
   expCheckPoints: [],
+  parties: [],
 };
 
 export const recordSlice = createSlice({
@@ -30,9 +31,33 @@ export const recordSlice = createSlice({
         state.expCheckPoints?.splice(index, 1);
       }
     },
+    addPartyMember: (state) => {
+      state.parties.push({ name: '', memo: '', trophy: '' });
+    },
+    removePartyMember: (state, action: PayloadAction<number>) => {
+      state.parties.splice(action.payload, 1);
+    },
+    updatePartyMember: (
+      state,
+      action: PayloadAction<{
+        index: number;
+        data: Partial<Record['parties'][0]>;
+      }>,
+    ) => {
+      const { index, data } = action.payload;
+      if (state.parties[index]) {
+        state.parties[index] = { ...state.parties[index], ...data };
+      }
+    },
     resetRecord: () => initialState,
   },
 });
 
-export const { setRecordTitle, updateRecord, toggleExpCheckPoint } =
-  recordSlice.actions;
+export const {
+  setRecordTitle,
+  updateRecord,
+  toggleExpCheckPoint,
+  addPartyMember,
+  removePartyMember,
+  updatePartyMember,
+} = recordSlice.actions;
