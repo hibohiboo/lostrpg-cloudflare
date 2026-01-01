@@ -17,7 +17,8 @@ import {
   Tooltip,
   IconButton,
 } from '@mui/material';
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
+import { shallowEqual } from 'react-redux';
 import {
   useAppDispatch,
   useAppSelector,
@@ -135,15 +136,49 @@ const DamageTable: React.FC<DamageTableProps> = ({
 
 export const SpecialtiesSection: React.FC = () => {
   const dispatch = useAppDispatch();
-  const gaps = useAppSelector((state) => state.character.gaps);
-  const specialties = useAppSelector((state) => state.character.specialties);
+  const gaps = useAppSelector((state) => state.character.gaps, shallowEqual);
+  const specialties = useAppSelector((state) => state.character.specialties, shallowEqual);
   const damagedSpecialties = useAppSelector(
     (state) => state.character.damagedSpecialties,
+    shallowEqual,
   );
   const selectedSpecialty = useAppSelector(
     (state) => state.characterForm.selectedSpecialty,
   );
-  const specialtiesWithTarget = useAppSelector(specialtiesWithTargetSelector);
+  const specialtiesWithTarget = useAppSelector(specialtiesWithTargetSelector, shallowEqual);
+
+  // イベントハンドラをメモ化
+  const handleSpecialtySelect = useCallback(
+    (specialty: string) => {
+      if (selectedSpecialty === specialty) {
+        dispatch(updateCharacterForm({ selectedSpecialty: '' }));
+        return;
+      }
+      dispatch(updateCharacterForm({ selectedSpecialty: specialty }));
+    },
+    [dispatch, selectedSpecialty],
+  );
+
+  const handleDamageChange = useCallback(
+    (specialty: string) => {
+      dispatch(toggleDamagedSpecialty(specialty));
+    },
+    [dispatch],
+  );
+
+  const handleClearAllDamage = useCallback(() => {
+    dispatch(clearAllDamage());
+  }, [dispatch]);
+
+  // DamageTableのrows配列をメモ化
+  const damageRows = useMemo(
+    () =>
+      damageTableRows.map((row) => ({
+        name: row.name,
+        damaged: damagedSpecialties.includes(row.name),
+      })),
+    [damagedSpecialties],
+  );
   return (
     <>
       <Box my={3}>
@@ -164,16 +199,8 @@ export const SpecialtiesSection: React.FC = () => {
           damagedSpecialties={damagedSpecialties}
           selectedSpecialty={selectedSpecialty}
           onGapChange={() => {}}
-          onSpecialtySelect={(specialty: string) => {
-            if (selectedSpecialty === specialty) {
-              dispatch(updateCharacterForm({ selectedSpecialty: '' }));
-              return;
-            }
-            dispatch(updateCharacterForm({ selectedSpecialty: specialty }));
-          }}
-          onDamageChange={(specialty: string) =>
-            dispatch(toggleDamagedSpecialty(specialty))
-          }
+          onSpecialtySelect={handleSpecialtySelect}
+          onDamageChange={handleDamageChange}
         />
       </Box>
 
@@ -251,20 +278,15 @@ export const SpecialtiesSection: React.FC = () => {
             variant="outlined"
             color="primary"
             size="small"
-            onClick={() => dispatch(clearAllDamage())}
+            onClick={handleClearAllDamage}
             disabled={damagedSpecialties.length === 0}
           >
             ダメージを全て回復
           </Button>
         </Box>
         <DamageTable
-          rows={damageTableRows.map((row) => ({
-            name: row.name,
-            damaged: damagedSpecialties.includes(row.name),
-          }))}
-          damageHandler={(specialty: string) =>
-            dispatch(toggleDamagedSpecialty(specialty))
-          }
+          rows={damageRows}
+          damageHandler={handleDamageChange}
           sevenLabel="攻撃したキャラクターの任意の部位"
         />
       </Box>

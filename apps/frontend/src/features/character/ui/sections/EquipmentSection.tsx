@@ -1,7 +1,8 @@
 import { Equipment } from '@lostrpg/schemas/validation/items';
 import { Box, Typography } from '@mui/material';
 import { GridRowId } from '@mui/x-data-grid';
-import React from 'react';
+import React, { useCallback } from 'react';
+import { shallowEqual } from 'react-redux';
 import {
   AddEquipmentForm,
   EquipmentTable,
@@ -19,10 +20,10 @@ import { equipmentCatalogSelector } from '../../model/selectors';
 
 export const EquipmentSection: React.FC = () => {
   const dispatch = useAppDispatch();
-  const equipment = useAppSelector((state) => state.character.equipments);
-  const catalog = useAppSelector(equipmentCatalogSelector);
+  const equipment = useAppSelector((state) => state.character.equipments, shallowEqual);
+  const catalog = useAppSelector(equipmentCatalogSelector, shallowEqual);
 
-  const handleEquipmentAdd = (itemName: string) => {
+  const handleEquipmentAdd = useCallback((itemName: string) => {
     const item = catalog.find((i) => i.name === itemName);
     if (item) {
       const newEquipment: Equipment = {
@@ -43,19 +44,20 @@ export const EquipmentSection: React.FC = () => {
       };
       dispatch(addEquipment(newEquipment));
     }
-  };
-  const handleItemUpdate = (
+  }, [catalog, dispatch]);
+
+  const handleItemUpdate = useCallback((
     newRow: Equipment,
     _oldRow: Equipment,
     _params: { rowId: GridRowId },
   ): Equipment => {
     dispatch(updateEquipment(newRow));
     return newRow;
-  };
+  }, [dispatch]);
 
-  const handleItemDelete = (id: string) => {
+  const handleItemDelete = useCallback((id: string) => {
     dispatch(deleteEquipment(id));
-  };
+  }, [dispatch]);
   return (
     <Box my={3}>
       <Typography variant="h6" gutterBottom>

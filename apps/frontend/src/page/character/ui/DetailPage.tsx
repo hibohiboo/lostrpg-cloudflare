@@ -60,24 +60,17 @@ const CharacterRecords: React.FC<{ characterId: string }> = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {records.map(
-              (record: {
-                id: string;
-                name: string;
-                exp: number;
-                trophy: string;
-              }) => (
-                <TableRow key={record.id}>
-                  <TableCell>
-                    <Link to={`/character/${characterId}/record/${record.id}`}>
-                      {record.name}
-                    </Link>
-                  </TableCell>
-                  <TableCell align="right">{record.exp}</TableCell>
-                  <TableCell>{record.trophy || '-'}</TableCell>
-                </TableRow>
-              ),
-            )}
+            {records.map((record) => (
+              <TableRow key={record.id}>
+                <TableCell>
+                  <Link to={`/character/${characterId}/record/${record.id}`}>
+                    {record.name}
+                  </Link>
+                </TableCell>
+                <TableCell align="right">{`${record.exp}`}</TableCell>
+                <TableCell>{record.trophy || '-'}</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>

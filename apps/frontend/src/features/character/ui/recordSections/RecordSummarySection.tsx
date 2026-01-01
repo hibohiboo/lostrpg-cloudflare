@@ -1,6 +1,6 @@
 import { trophyList } from '@lostrpg/core/game-data/character';
 import { Box, MenuItem, TextField, Typography } from '@mui/material';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { updateRecord } from '@lostrpg/frontend/entities/record';
 import {
   useAppDispatch,
@@ -13,6 +13,18 @@ export const RecordSummarySection: React.FC = () => {
   const exp = useAppSelector((state) => state.record.exp);
   const trophy = useAppSelector((state) => state.record.trophy);
 
+  const handleExpChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(updateRecord({ exp: Number(e.target.value) }));
+  }, [dispatch]);
+
+  const handleTrophyChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(updateRecord({ trophy: e.target.value }));
+  }, [dispatch]);
+
+  const handleMemoChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(updateRecord({ memo: e.target.value }));
+  }, [dispatch]);
+
   return (
     <Box my={3}>
       <Typography variant="h6" gutterBottom>
@@ -23,16 +35,14 @@ export const RecordSummarySection: React.FC = () => {
           type="number"
           label="獲得経験点"
           value={exp}
-          onChange={(e) =>
-            dispatch(updateRecord({ exp: Number(e.target.value) }))
-          }
+          onChange={handleExpChange}
           sx={{ width: 150 }}
         />
         <TextField
           select
           label="取得称号"
           value={trophy || ''}
-          onChange={(e) => dispatch(updateRecord({ trophy: e.target.value }))}
+          onChange={handleTrophyChange}
           sx={{ minWidth: 200 }}
           helperText={trophyList.find((t) => t.name === trophy)?.description}
         >
@@ -51,7 +61,7 @@ export const RecordSummarySection: React.FC = () => {
           minRows={4}
           label="メモ・感想"
           value={memo || ''}
-          onChange={(e) => dispatch(updateRecord({ memo: e.target.value }))}
+          onChange={handleMemoChange}
         />
       </Box>
     </Box>
