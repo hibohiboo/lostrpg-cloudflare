@@ -109,8 +109,15 @@ export const PartySection: React.FC = () => {
                   >
                     <MenuItem value="">設定なし</MenuItem>
                     {trophyList.map((trophy) => (
-                      <MenuItem key={trophy.id} value={trophy.name}>
-                        {trophy.name}
+                      <MenuItem
+                        key={trophy.id}
+                        value={trophy.name}
+                        sx={{ display: 'block' }}
+                      >
+                        <Typography variant="body1">{trophy.name}</Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          {trophy.description}
+                        </Typography>
                       </MenuItem>
                     ))}
                   </TextField>
