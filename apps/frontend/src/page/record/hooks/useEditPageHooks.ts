@@ -2,7 +2,8 @@ import { useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import {
   useGetRecordQuery,
-  useUpdateRecordMutation,
+  updateRecordThunk,
+  isValidationError,
   setRecord,
 } from '@lostrpg/frontend/entities/record';
 import {
@@ -10,10 +11,7 @@ import {
   useEditFormHooks,
 } from '@lostrpg/frontend/features/character';
 import { handleSaveError } from '@lostrpg/frontend/shared/lib/error';
-import {
-  useAppDispatch,
-  useAppSelector,
-} from '@lostrpg/frontend/shared/lib/store';
+import { useAppDispatch } from '@lostrpg/frontend/shared/lib/store';
 
 export const useEditPageHooks = () => {
   const navigate = useNavigate();
@@ -21,7 +19,6 @@ export const useEditPageHooks = () => {
   const editForm = useEditFormHooks();
   const { setIsValidError } = editForm;
   const { id: characterId, recordId } = useParams();
-  const [updateRecord] = useUpdateRecordMutation();
 
   // レコードデータを取得
   const { data: recordData, isLoading } = useGetRecordQuery(recordId!, {
@@ -42,52 +39,29 @@ export const useEditPageHooks = () => {
     }
   }, [recordData, dispatch]);
 
-  // Reduxストアからキャラクターデータとレコードデータを取得
-  const character = useAppSelector((state) => state.character);
-  const record = useAppSelector((state) => state.record);
-  const password = useAppSelector((state) => state.characterForm.password);
-
   const handleSave = useCallback(async () => {
     if (!characterId || !recordId) {
       handleSaveError(new Error('Character ID and Record ID are required'));
       return;
     }
 
-    // バリデーション: 必須フィールドをチェック
-    if (!character.name || !record.title) {
-      setIsValidError(true);
-      window.scrollTo(0, 0);
-      return;
-    }
-
     try {
-      await updateRecord({
-        characterId,
-        id: recordId,
-        data: {
-          name: record.title, // シナリオ名をレコード名として使用
-          character,
-          record,
-          password: password || undefined,
-        },
-      }).unwrap();
+      await dispatch(
+        updateRecordThunk({ characterId, recordId }),
+      ).unwrap();
 
       // キャラクターページに戻る
       navigate(`/character/${characterId}`);
     } catch (error) {
-      // エラーハンドリング
+      // バリデーションエラーの場合はUIステートを更新
+      if (isValidationError(error)) {
+        setIsValidError(true);
+        window.scrollTo(0, 0);
+        return;
+      }
       handleSaveError(error);
     }
-  }, [
-    updateRecord,
-    characterId,
-    recordId,
-    character,
-    record,
-    password,
-    navigate,
-    setIsValidError,
-  ]);
+  }, [dispatch, characterId, recordId, navigate, setIsValidError]);
 
   const handleDelete = undefined;
   return {

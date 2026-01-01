@@ -1,21 +1,19 @@
 import { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { useCreateRecordMutation } from '@lostrpg/frontend/entities/record';
+import {
+  createRecordThunk,
+  isValidationError,
+} from '@lostrpg/frontend/entities/record';
 import { useEditFormHooks } from '@lostrpg/frontend/features/character';
 import { handleSaveError } from '@lostrpg/frontend/shared/lib/error';
-import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
+import { useAppDispatch } from '@lostrpg/frontend/shared/lib/store';
 
 export const useCreatePageHooks = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const editForm = useEditFormHooks();
   const { setIsValidError } = editForm;
   const { id } = useParams();
-  const [createRecord] = useCreateRecordMutation();
-
-  // Reduxストアからキャラクターデータとレコードデータを取得
-  const character = useAppSelector((state) => state.character);
-  const record = useAppSelector((state) => state.record);
-  const password = useAppSelector((state) => state.characterForm.password);
 
   const handleSave = useCallback(async () => {
     if (!id) {
@@ -23,39 +21,21 @@ export const useCreatePageHooks = () => {
       return;
     }
 
-    // バリデーション: 必須フィールドをチェック
-    if (!character.name || !record.title) {
-      setIsValidError(true);
-      window.scrollTo(0, 0);
-      return;
-    }
-
     try {
-      await createRecord({
-        characterId: id,
-        data: {
-          name: record.title, // シナリオ名をレコード名として使用
-          character,
-          record,
-          password: password || undefined,
-        },
-      }).unwrap();
+      await dispatch(createRecordThunk({ characterId: id })).unwrap();
 
       // キャラクターページに戻る
       navigate(`/character/${id}`);
     } catch (error) {
-      // エラーハンドリング
+      // バリデーションエラーの場合はUIステートを更新
+      if (isValidationError(error)) {
+        setIsValidError(true);
+        window.scrollTo(0, 0);
+        return;
+      }
       handleSaveError(error);
     }
-  }, [
-    createRecord,
-    id,
-    character,
-    record,
-    password,
-    navigate,
-    setIsValidError,
-  ]);
+  }, [dispatch, id, navigate, setIsValidError]);
 
   const handleDelete = undefined;
 
