@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import {
   createCharacterThunk,
   isValidationError,
@@ -13,12 +13,10 @@ export const useCreatePageHooks = () => {
   const dispatch = useAppDispatch();
   const editForm = useEditFormHooks();
   const { setIsValidError, handleImageUpload } = editForm;
-
+  const { id } = useParams();
   const handleSave = useCallback(async () => {
     try {
-      const { id } = await dispatch(
-        createCharacterThunk({ handleImageUpload }),
-      ).unwrap();
+      await dispatch(createCharacterThunk({ handleImageUpload })).unwrap();
 
       navigate(`/character/${id}`);
     } catch (error) {
@@ -30,7 +28,7 @@ export const useCreatePageHooks = () => {
       }
       handleSaveError(error);
     }
-  }, [dispatch, navigate, setIsValidError, handleImageUpload]);
+  }, [dispatch, handleImageUpload, navigate, id, setIsValidError]);
 
   const handleDelete = undefined;
 
@@ -38,5 +36,6 @@ export const useCreatePageHooks = () => {
     ...editForm,
     handleSave,
     handleDelete,
+    prevPath: `/character/${id}`,
   };
 };

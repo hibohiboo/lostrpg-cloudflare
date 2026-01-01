@@ -8,7 +8,7 @@ const CreatePage: React.FC = () => {
   const vm = useCreatePageHooks();
   return (
     <EditPageWrapper title="レコードシート作成">
-      <RecordEditForm {...vm} prevPath="/character" />
+      <RecordEditForm {...vm} />
     </EditPageWrapper>
   );
 };
