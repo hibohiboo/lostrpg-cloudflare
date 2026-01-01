@@ -5,6 +5,7 @@ const recordDataSchema = z.object({
   title: z.string(),
   date: z.string().optional(),
   gm: z.string().optional(),
+  expCheckPoints: z.array(z.string()).optional(),
 });
 export type Record = z.infer<typeof recordDataSchema>;
 

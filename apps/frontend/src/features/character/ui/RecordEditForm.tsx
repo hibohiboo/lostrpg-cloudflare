@@ -1,6 +1,10 @@
 import { Box } from '@mui/material';
 import React from 'react';
-import { CharacterBasicSection, SpecialtiesSection } from './recordSections';
+import {
+  CharacterBasicSection,
+  SpecialtiesSection,
+  ExpCheckSection,
+} from './recordSections';
 import {
   AbilitySection,
   ItemsSection,
@@ -31,6 +35,7 @@ const EditForm: React.FC<Props> = ({
       previewUrl={previewUrl}
     />
     <SpecialtiesSection />
+    <ExpCheckSection />
     <AbilitySection />
     <ItemsSection />
     <EquipmentSection />
