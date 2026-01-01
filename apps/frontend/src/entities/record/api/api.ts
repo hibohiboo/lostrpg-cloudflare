@@ -6,6 +6,7 @@ import type { ApiType } from '@lostrpg/frontend/shared/lib/api/client';
 type RecordsEndpointType = ApiType['characters'][':characterId']['records'];
 type RecordEndpointType =
   ApiType['characters'][':characterId']['records'][':id'];
+type RecordGetEndpointType = ApiType['characters']['records'][':id'];
 
 export const recordApi = createApi({
   reducerPath: 'recordApi',
@@ -13,12 +14,11 @@ export const recordApi = createApi({
   tagTypes: ['Record', 'RecordList'],
   endpoints: (builder) => ({
     getRecord: builder.query<
-      InferResponseType<RecordEndpointType['$get']>,
-      { characterId: string; id: string }
+      InferResponseType<RecordGetEndpointType['$get']>,
+      string
     >({
-      query: ({ characterId, id }) =>
-        `/characters/${characterId}/records/${id}`,
-      providesTags: (_result, _error, { id }) => [{ type: 'Record', id }],
+      query: (id) => `/characters/records/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Record', id }],
     }),
     createRecord: builder.mutation<
       InferResponseType<RecordsEndpointType['$post']>,

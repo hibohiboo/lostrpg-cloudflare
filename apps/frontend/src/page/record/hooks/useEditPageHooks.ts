@@ -24,21 +24,20 @@ export const useEditPageHooks = () => {
   const [updateRecord] = useUpdateRecordMutation();
 
   // レコードデータを取得
-  const { data: recordData, isLoading } = useGetRecordQuery(
-    { characterId: characterId!, id: recordId! },
-    { skip: !characterId || !recordId },
-  );
+  const { data: recordData, isLoading } = useGetRecordQuery(recordId!, {
+    skip: !recordId,
+  });
 
   // レコードデータをReduxストアに設定
   useEffect(() => {
-    if (recordData) {
+    if (recordData?.data) {
       // characterデータをストアに設定
-      if (recordData.character) {
-        dispatch(setCharacter(recordData.character));
+      if (recordData.data.character) {
+        dispatch(setCharacter(recordData.data.character));
       }
       // recordデータをストアに設定
-      if (recordData.record) {
-        dispatch(setRecord(recordData.record));
+      if (recordData.data.record) {
+        dispatch(setRecord(recordData.data.record));
       }
     }
   }, [recordData, dispatch]);
