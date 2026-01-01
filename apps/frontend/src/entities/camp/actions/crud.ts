@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import { CreateCampRequest, UpdateCampRequest } from '@lostrpg/schemas';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
@@ -38,29 +39,23 @@ export const deleteCampAction = createAsyncThunk<
   void,
   { id: string },
   { rejectValue: FetchBaseQueryError }
->(
-  'camp/delete',
-  async ({ id }, { dispatch, rejectWithValue }) => {
-    try {
-      await dispatch(campApi.endpoints.deleteCamp.initiate(id)).unwrap();
-    } catch (e) {
-      return rejectWithValue(e as FetchBaseQueryError);
-    }
-  },
-);
+>('camp/delete', async ({ id }, { dispatch, rejectWithValue }) => {
+  try {
+    await dispatch(campApi.endpoints.deleteCamp.initiate(id)).unwrap();
+  } catch (e) {
+    return rejectWithValue(e as FetchBaseQueryError);
+  }
+});
 export const getCampAction = createAsyncThunk<
   Camp | undefined,
   { id: string },
   { rejectValue: FetchBaseQueryError }
->(
-  'camp/get',
-  async ({ id }, { dispatch, rejectWithValue }) => {
-    try {
-      const { data } = await dispatch(campApi.endpoints.getCamp.initiate(id));
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return (data as any).data;
-    } catch (e) {
-      return rejectWithValue(e as FetchBaseQueryError);
-    }
-  },
-);
+>('camp/get', async ({ id }, { dispatch, rejectWithValue }) => {
+  try {
+    const { data } = await dispatch(campApi.endpoints.getCamp.initiate(id));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (data as any).data;
+  } catch (e) {
+    return rejectWithValue(e as FetchBaseQueryError);
+  }
+});

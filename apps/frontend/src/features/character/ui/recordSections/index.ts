@@ -4,3 +4,4 @@ export { ExpCheckSection } from './ExpCheckSection';
 export { PartySection } from './PartySection';
 export { RecordSummarySection } from './RecordSummarySection';
 export { InitiativeSpecialtiesSection } from './InitiativeSpecialtiesSection';
+export { PasswordSection } from './PasswordSection';

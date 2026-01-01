@@ -2,6 +2,7 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 const initialState = {
   selectedSpecialty: '',
+  password: '',
 };
 
 export const characterFormSlice = createSlice({
@@ -14,8 +15,11 @@ export const characterFormSlice = createSlice({
     ) => {
       Object.assign(state, action.payload);
     },
+    setPassword: (state, action: PayloadAction<string>) => {
+      state.password = action.payload;
+    },
     resetRecord: () => initialState,
   },
 });
 
-export const { updateCharacterForm } = characterFormSlice.actions;
+export const { updateCharacterForm, setPassword } = characterFormSlice.actions;

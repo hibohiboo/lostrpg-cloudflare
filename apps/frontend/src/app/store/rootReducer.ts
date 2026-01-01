@@ -1,7 +1,7 @@
 import { combineReducers, type UnknownAction } from '@reduxjs/toolkit';
 import { campApi } from '@lostrpg/frontend/entities/camp';
 import { characterApi } from '@lostrpg/frontend/entities/character';
-import { recordSlice } from '@lostrpg/frontend/entities/record';
+import { recordSlice, recordApi } from '@lostrpg/frontend/entities/record';
 import { campSlice } from '@lostrpg/frontend/features/camp';
 import {
   characterFormSlice,
@@ -14,6 +14,7 @@ const combinedReducer = combineReducers({
   [campSlice.reducerPath]: campSlice.reducer,
   [campApi.reducerPath]: campApi.reducer,
   [characterApi.reducerPath]: characterApi.reducer,
+  [recordApi.reducerPath]: recordApi.reducer,
   [characterSlice.reducerPath]: characterSlice.reducer,
   [campListPageSlice.reducerPath]: campListPageSlice.reducer,
   [characterListPageSlice.reducerPath]: characterListPageSlice.reducer,

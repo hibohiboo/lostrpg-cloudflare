@@ -7,6 +7,7 @@ import {
   PartySection,
   RecordSummarySection,
   InitiativeSpecialtiesSection,
+  PasswordSection,
 } from './recordSections';
 import {
   AbilitySection,
@@ -50,6 +51,7 @@ const EditForm: React.FC<Props> = ({
     <EquipmentSection />
     <BagsSection />
     <AbilitiesSection />
+    <PasswordSection />
     <FormActionsSection
       handleSave={handleSave}
       handleDelete={handleDelete}
