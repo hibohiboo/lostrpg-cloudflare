@@ -534,6 +534,16 @@ const DetailPage: React.FC = () => {
         <CharacterTrophies character={character} />
         <CharacterStatusAilments character={character} />
         <CharacterNotes character={character} />
+        <Box mt={4}>
+          <MuiLink
+            component={Link}
+            to={`/character/${id}/record`}
+            underline="hover"
+          >
+            レコードシート新規作成
+          </MuiLink>{' '}
+          ... 目標値自動計算などができます
+        </Box>
         <CharacterRecords characterId={id!} />
         {(character.supplements?.useStrangeField ||
           character.supplements?.useDragonPlain) && (
@@ -600,17 +610,10 @@ const DetailPage: React.FC = () => {
             </Typography>
           )}
         </Box>
-        <CharacterRecords characterId={id!} />
+
         {/* 戻るリンク */}
         <Box mt={4}>
-          <MuiLink href={`/character/${id}/record`} underline="hover">
-            レコードシート新規作成
-          </MuiLink>{' '}
-          ... 目標値自動計算などができます
-        </Box>
-        {/* 戻るリンク */}
-        <Box mt={4}>
-          <MuiLink href="/character/" underline="hover">
+          <MuiLink component={Link} to="/character/" underline="hover">
             戻る
           </MuiLink>
         </Box>
