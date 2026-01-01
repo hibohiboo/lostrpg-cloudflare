@@ -57,6 +57,7 @@ export const recordSlice = createSlice({
 });
 
 export const {
+  setRecord,
   setRecordTitle,
   updateRecord,
   toggleExpCheckPoint,
