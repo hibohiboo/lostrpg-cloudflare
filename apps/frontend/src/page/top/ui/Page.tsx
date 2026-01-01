@@ -38,7 +38,7 @@ export const Page = () => (
           <h2 className="text-2xl font-bold mb-3 text-emerald-300 group-hover:text-emerald-200">
             ルールブック
           </h2>
-          <p className="text-sm text-gray-300 leading-relaxed">外部サイトへ</p>
+          <p className="text-sm text-gray-300 leading-relaxed"></p>
         </a>
 
         <Link

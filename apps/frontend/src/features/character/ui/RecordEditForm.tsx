@@ -16,6 +16,7 @@ import {
   BagsSection,
   FormActionsSection,
   AbilitiesSection,
+  StatusAilmentsSection,
 } from './sections';
 import type { EditFormViewModel } from '../hooks/useEditFormHooks';
 
@@ -43,6 +44,8 @@ const EditForm: React.FC<Props> = ({
     <AbilitySection />
     <InitiativeSpecialtiesSection />
     <SpecialtiesSection />
+
+    <StatusAilmentsSection />
     <PartySection />
     <ExpCheckSection />
     <RecordSummarySection />

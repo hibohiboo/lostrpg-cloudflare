@@ -1,24 +1,26 @@
 import { statusAilments } from '@lostrpg/core/game-data/character';
 import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material';
 import React from 'react';
+import { shallowEqual } from 'react-redux';
 import {
   useAppDispatch,
   useAppSelector,
 } from '@lostrpg/frontend/shared/lib/store';
 import { toggleStatusAilment } from '../../model/characterSlice';
 
-export const StatusAilmentsSection: React.FC = () => {
+export const StatusAilmentsSection = React.memo(() => {
   const dispatch = useAppDispatch();
   const selectedStatusAilments = useAppSelector(
     (state) => state.character.statusAilments,
+    shallowEqual,
   );
 
   return (
     <Box my={3}>
       <Typography variant="h6" gutterBottom>
-        状態異常
+        変調
       </Typography>
-      <Box>
+      <Box display="flex" flexDirection="column" flexWrap="wrap" gap={1}>
         {statusAilments.map((ailment) => (
           <FormControlLabel
             key={ailment.name}
@@ -34,4 +36,4 @@ export const StatusAilmentsSection: React.FC = () => {
       </Box>
     </Box>
   );
-};
+});
