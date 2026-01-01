@@ -77,6 +77,13 @@ export const characterApi = createApi({
       },
       invalidatesTags: (_result, _error, { id }) => [{ type: 'Character', id }],
     }),
+    getCharacterRecords: builder.query<
+      InferResponseType<CharacterDetailType['records']['$get']>,
+      string
+    >({
+      query: (id) => `/characters/${id}/records`,
+      providesTags: (_result, _error, id) => [{ type: 'Character', id }],
+    }),
   }),
 });
 
@@ -87,4 +94,5 @@ export const {
   useUpdateCharacterMutation,
   useDeleteCharacterMutation,
   useUploadCharacterImageMutation,
+  useGetCharacterRecordsQuery,
 } = characterApi;

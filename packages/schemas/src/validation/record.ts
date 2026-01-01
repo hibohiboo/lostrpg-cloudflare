@@ -25,6 +25,7 @@ export const recordSchema = z.object({
   record: recordDataSchema,
   password: z.string().nullable().optional(),
 });
+
 export const updateRecordSchema = recordSchema
   .omit({ name: true })
   .extend({

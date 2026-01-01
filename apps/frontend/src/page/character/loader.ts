@@ -25,9 +25,12 @@ export const createCharacterLoader =
 export const createRecordLoader =
   (dispatch: AppDispatch) =>
   async ({ params }: LoaderFunctionArgs) => {
-    const { chracterId, id } = params;
-    if (!id || chracterId) throw new Error('id が指定されていません');
-    const ret = await dispatch(recordApi.endpoints.getRecord.initiate(id));
+    const { id: chracterId, recordId } = params;
+    if (!chracterId) throw new Error('id が指定されていません');
+    if (!recordId) throw new Error('recordId が指定されていません');
+    const ret = await dispatch(
+      recordApi.endpoints.getRecord.initiate(recordId),
+    );
     if (ret.error) {
       throw new Error('データが見つかりません');
     }

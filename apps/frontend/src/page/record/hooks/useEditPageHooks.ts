@@ -90,7 +90,6 @@ export const useEditPageHooks = () => {
   ]);
 
   const handleDelete = undefined;
-
   return {
     ...editForm,
     handleSave,

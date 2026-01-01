@@ -325,12 +325,22 @@ export const charactersRouter = new Hono<{ Bindings: Env }>()
         .select({
           id: records.id,
           name: records.name,
+          data: records.data,
         })
         .from(characterRecords)
         .innerJoin(records, eq(characterRecords.recordId, records.id))
         .where(eq(characterRecords.characterId, id));
-
-      return c.json(recordList);
+      return c.json(
+        recordList.map((r) => {
+          const data = recordSchema.parse(r.data);
+          return {
+            id: r.id,
+            name: r.name,
+            exp: data.record.exp,
+            trophy: data.record.trophy,
+          };
+        }),
+      );
     },
   )
   // Create new record
