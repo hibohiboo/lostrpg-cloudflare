@@ -2,7 +2,6 @@ import { damageTableRows } from '@lostrpg/core/game-data/speciality';
 import { HelpOutline } from '@mui/icons-material';
 import {
   Box,
-  Chip,
   InputLabel,
   Typography,
   Table,
@@ -137,7 +136,10 @@ const DamageTable: React.FC<DamageTableProps> = ({
 export const SpecialtiesSection: React.FC = () => {
   const dispatch = useAppDispatch();
   const gaps = useAppSelector((state) => state.character.gaps, shallowEqual);
-  const specialties = useAppSelector((state) => state.character.specialties, shallowEqual);
+  const specialties = useAppSelector(
+    (state) => state.character.specialties,
+    shallowEqual,
+  );
   const damagedSpecialties = useAppSelector(
     (state) => state.character.damagedSpecialties,
     shallowEqual,
@@ -145,7 +147,10 @@ export const SpecialtiesSection: React.FC = () => {
   const selectedSpecialty = useAppSelector(
     (state) => state.characterForm.selectedSpecialty,
   );
-  const specialtiesWithTarget = useAppSelector(specialtiesWithTargetSelector, shallowEqual);
+  const specialtiesWithTarget = useAppSelector(
+    specialtiesWithTargetSelector,
+    shallowEqual,
+  );
 
   // イベントハンドラをメモ化
   const handleSpecialtySelect = useCallback(
@@ -181,8 +186,8 @@ export const SpecialtiesSection: React.FC = () => {
   );
   return (
     <>
-      <Box my={3}>
-        <Box display="flex" alignItems="center" gap={1} mb={2}>
+      <Box my={1}>
+        <Box display="flex" alignItems="center" gap={1}>
           <Typography variant="h6">特技</Typography>
           <Tooltip
             title="判定特技指定はテキスト部分クリック。ダメージはチェック。"
@@ -198,27 +203,13 @@ export const SpecialtiesSection: React.FC = () => {
           specialties={specialties}
           damagedSpecialties={damagedSpecialties}
           selectedSpecialty={selectedSpecialty}
-          onGapChange={() => {}}
+          onGapChange={undefined}
           onSpecialtySelect={handleSpecialtySelect}
           onDamageChange={handleDamageChange}
         />
       </Box>
 
-      <Box my={3}>
-        <InputLabel>習得特技</InputLabel>
-        <Box display="flex" flexWrap="wrap" gap={1}>
-          {specialties.length > 0 ? (
-            specialties.map((specialty) => (
-              <Chip key={specialty} label={specialty} color="primary" />
-            ))
-          ) : (
-            <Typography variant="body2" color="text.secondary">
-              特技が選択されていません
-            </Typography>
-          )}
-        </Box>
-      </Box>
-      <Box my={3}>
+      <Box my={1}>
         <InputLabel>判定特技:{selectedSpecialty}</InputLabel>
         <Box display="flex" flexWrap="wrap" gap={1}>
           {selectedSpecialty ? (

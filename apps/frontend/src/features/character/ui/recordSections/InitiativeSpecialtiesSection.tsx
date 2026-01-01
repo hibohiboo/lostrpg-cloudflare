@@ -24,7 +24,7 @@ export const InitiativeSpecialtiesSection: React.FC = () => {
   );
 
   return (
-    <Box my={3}>
+    <Box my={1}>
       <Typography variant="h6" gutterBottom>
         先制判定
       </Typography>

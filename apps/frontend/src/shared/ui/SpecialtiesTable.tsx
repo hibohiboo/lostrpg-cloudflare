@@ -72,8 +72,9 @@ const HeaderGapCell: React.FC<{
       }}
       disabled={readOnly}
       size="small"
+      style={{ display: onGapChange ? undefined : 'none' }}
     />
-    <br />
+    <br style={{ display: onGapChange ? undefined : 'none' }} />
     <Typography variant="caption" sx={{ fontWeight: 'bold' }}>
       {col}
     </Typography>
@@ -187,7 +188,6 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
       component={Paper}
       elevation={0}
       sx={{
-        my: 2,
         border: 'none',
         ...[3, 5, 7, 9, 11].reduce(
           (acc, i) => ({
