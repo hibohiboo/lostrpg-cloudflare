@@ -17,7 +17,7 @@
     "eslint-plugin-sonarjs": "^3.0.5",
     "eslint-plugin-unused-imports": "^4.3.0",
     "globals": "^17.0.0",
-    "typescript-eslint": "^8.52.0"
+    "typescript-eslint": "^8.53.0"
   },
   "scripts": {
     "ncu": "ncu -u",
