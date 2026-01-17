@@ -40,13 +40,13 @@
     "zod": "^4.3.5"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260114.0",
+    "@cloudflare/workers-types": "^4.20260117.0",
     "@lostrpg/eslint-config-custom": "workspace:*",
     "@lostrpg/typescript-config": "workspace:*",
     "@testcontainers/postgresql": "^11.11.0",
     "drizzle-kit": "^0.31.8",
     "eslint": "^9.39.2",
     "typescript": "^5.9.3",
-    "wrangler": "^4.59.1"
+    "wrangler": "^4.59.2"
   }
 }

@@ -35,14 +35,14 @@
     }
   },
   "devDependencies": {
-    "@types/node": "^25.0.8",
+    "@types/node": "^25.0.9",
     "concurrently": "^9.2.1",
     "dependency-cruiser": "^17.3.6",
-    "prettier": "^3.7.4",
-    "turbo": "^2.7.4",
+    "prettier": "^3.8.0",
+    "turbo": "^2.7.5",
     "vite-tsconfig-paths": "^6.0.4",
     "vitest": "^4.0.17",
-    "wrangler": "^4.59.1"
+    "wrangler": "^4.59.2"
   },
   "workspaces": [
     "packages/*",
