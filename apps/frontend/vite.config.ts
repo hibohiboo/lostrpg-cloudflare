@@ -31,7 +31,6 @@ export default defineConfig({
           redux: ['@reduxjs/toolkit', 'react-redux'],
           icons: ['@mui/icons-material'],
           mui: ['@mui/material'],
-          emotion: ['@emotion/react', '@emotion/styled'],
           datatable: ['@mui/x-data-grid'],
           datefns: ['date-fns'],
           zipjs: ['@zip.js/zip.js'],
