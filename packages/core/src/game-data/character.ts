@@ -1566,6 +1566,12 @@ export const trophyList = [
     id: 'thrust',
     description: 'ボケに流されず軌道修正をきちんとしたものに与えられる称号。',
   },
+  {
+    name: 'グンシ',
+    id: 'tactician',
+    description:
+      '支援や閃きなどでうまく他人をサポートしたものに与えられる称号。',
+  },
 ];
 
 export const trophyAbilityList = [
