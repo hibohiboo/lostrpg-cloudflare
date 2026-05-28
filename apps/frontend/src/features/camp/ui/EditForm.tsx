@@ -1,4 +1,8 @@
 import {
+  dragonPlainEquipmentList,
+  equipmentList,
+} from '@lostrpg/core/game-data/camp';
+import {
   dragonPlainItemList,
   items,
   strangeFieldsItemList,
@@ -55,6 +59,12 @@ const EditForm: React.FC<Props> = ({
     if (camp.supplements?.useDragonPlain) catalog.push(...dragonPlainItemList);
     return catalog;
   }, [camp.supplements?.useStrangeField, camp.supplements?.useDragonPlain]);
+
+  const facilityCatalog = useMemo(() => {
+    const catalog = [...equipmentList];
+    if (camp.supplements?.useDragonPlain) catalog.push(...dragonPlainEquipmentList);
+    return catalog;
+  }, [camp.supplements?.useDragonPlain]);
 
   return (
   <Box>
@@ -142,6 +152,7 @@ const EditForm: React.FC<Props> = ({
         <AddFacilityForm
           equipmentSelect={equipmentSelect}
           onEquipmentAdd={handleEquipmentAdd}
+          catalog={facilityCatalog}
         />
 
         <AddPersonalityForm

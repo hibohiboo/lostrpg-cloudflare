@@ -262,6 +262,36 @@ export const equipmentList = [
     effect: '全員の【生命力】をプラス２する。',
   },
 ];
+export const dragonPlainEquipmentList = [
+  {
+    name: '映画館',
+    cp: '2',
+    type: '常駐',
+    specialty: 'なし',
+    maxLv: '10',
+    precondition: '',
+    effect: 'キャンプを出発するとき、全員の【体力】を[Lv]点増加する。',
+  },
+  {
+    name: '砦',
+    cp: '3',
+    type: '常駐',
+    specialty: 'なし',
+    maxLv: '5',
+    precondition: '物見やぐら',
+    effect: '＜ヌシ＞の回避判定にマイナス[レベル]の修正を与える。',
+  },
+  {
+    name: 'ドラムカン砲',
+    cp: '5',
+    type: '支援',
+    specialty: 'なし',
+    maxLv: '5',
+    precondition: '物見やぐら',
+    effect: '使用すると、セッション中に1回、割込みでキャンプの「ドラムカン」を破壊して、＜ヌシ＞に[レベル]×3点のダメージを与える効果を使えるようになる',
+  },
+];
+
 export const campPersonalityList = [
   {
     name: '商人',

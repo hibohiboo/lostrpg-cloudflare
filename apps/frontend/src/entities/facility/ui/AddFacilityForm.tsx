@@ -3,11 +3,6 @@ import { createFacility } from '../model/factory';
 import { Facility } from '../model/types';
 import { AddItemSelectForm } from './molecules/AddItemSelectForm';
 
-type Props = {
-  equipmentSelect: string;
-  onEquipmentAdd: (item: Facility) => void;
-};
-
 type EquipmentItem = {
   name: string;
   type: string;
@@ -15,9 +10,16 @@ type EquipmentItem = {
   effect: string;
 };
 
+type Props = {
+  equipmentSelect: string;
+  onEquipmentAdd: (item: Facility) => void;
+  catalog?: EquipmentItem[];
+};
+
 export const AddFacilityForm: React.FC<Props> = ({
   equipmentSelect,
   onEquipmentAdd,
+  catalog = equipmentList,
 }) => {
   const handleAdd = (item: EquipmentItem) => {
     const newFacility = createFacility(item, 'facility');
@@ -28,7 +30,7 @@ export const AddFacilityForm: React.FC<Props> = ({
     <AddItemSelectForm
       label="設備追加"
       value={equipmentSelect}
-      items={equipmentList}
+      items={catalog}
       getItemName={(item) => item.name}
       onAdd={handleAdd}
     />
