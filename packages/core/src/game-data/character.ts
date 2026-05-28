@@ -1102,13 +1102,13 @@ export const strangeFieldsAbilityList = [
       },
     ],
   },
-  //- {
-  //-   "name": "ショクニン",
-  //-   "id": "worker",
-  //-   "list": [
+  // - {
+  // -   "name": "ショクニン",
+  // -   "id": "worker",
+  // -   "list": [
 
-  //-   ]
-  //- },
+  // -   ]
+  // - },
   {
     name: 'ホープ',
     id: 'hope',
@@ -1125,12 +1125,12 @@ export const strangeFieldsAbilityList = [
       },
     ],
   },
-  //- {
-  //-   "name": "ママ",
-  //-   "id": "mama",
-  //-   "list": [
-  //-   ]
-  //- },
+  // - {
+  // -   "name": "ママ",
+  // -   "id": "mama",
+  // -   "list": [
+  // -   ]
+  // - },
   {
     name: 'アキンド',
     id: 'merchant',

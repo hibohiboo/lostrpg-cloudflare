@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { supplementSchema } from './character';
 import { createValidator } from './helpers';
 import { itemSchema } from './items';
 
@@ -24,6 +25,7 @@ const baseCampFields = {
   summary: z.string().optional(),
   freeWriting: z.string().optional(),
   password: z.string().nullable().optional(),
+  supplements: supplementSchema.optional().default({ useStrangeField: false, useDragonPlain: false }),
 };
 
 // Camp作成リクエストスキーマ

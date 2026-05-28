@@ -48,7 +48,7 @@ const gapEnum = z.enum(['A', 'B', 'C', 'D', 'E']);
 
 export type Gap = z.infer<typeof gapEnum>;
 
-const supplementSchema = z.object({
+export const supplementSchema = z.object({
   useStrangeField: z.boolean().optional().default(false),
   useDragonPlain: z.boolean().optional().default(false),
 });

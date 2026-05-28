@@ -19,6 +19,10 @@ const initialState: CampFormData = {
   totalCampPoint: 0,
   summary: '',
   freeWriting: '',
+  supplements: {
+    useStrangeField: false,
+    useDragonPlain: false,
+  },
 };
 
 export const campSlice = createSlice({

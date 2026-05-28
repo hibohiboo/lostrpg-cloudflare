@@ -1,13 +1,20 @@
-import { items } from '@lostrpg/core/game-data/item';
+import {
+  dragonPlainItemList,
+  items,
+  strangeFieldsItemList,
+} from '@lostrpg/core/game-data/item';
 import SaveIcon from '@mui/icons-material/Save';
 import {
   Box,
   Button,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
   Link as MuiLink,
   TextField,
   Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   AddFacilityForm,
   AddPersonalityForm,
@@ -41,7 +48,15 @@ const EditForm: React.FC<Props> = ({
   handleItemUpdate,
   handleSave,
   handleDelete,
-}) => (
+}) => {
+  const itemCatalog = useMemo(() => {
+    const catalog = [...items];
+    if (camp.supplements?.useStrangeField) catalog.push(...strangeFieldsItemList);
+    if (camp.supplements?.useDragonPlain) catalog.push(...dragonPlainItemList);
+    return catalog;
+  }, [camp.supplements?.useStrangeField, camp.supplements?.useDragonPlain]);
+
+  return (
   <Box>
     {/* プレイヤー名 */}
     <Box my={2}>
@@ -72,6 +87,49 @@ const EditForm: React.FC<Props> = ({
       currentImageUrl={camp.imageUrl}
       onImageChange={handleImageChange}
     />
+
+    {/* サプリメント */}
+    <Box my={2}>
+      <Typography variant="h6" gutterBottom>
+        サプリメント
+      </Typography>
+      <FormGroup row>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={camp.supplements?.useStrangeField ?? false}
+              onChange={(e) =>
+                setCamp({
+                  ...camp,
+                  supplements: {
+                    ...camp.supplements,
+                    useStrangeField: e.target.checked,
+                  },
+                })
+              }
+            />
+          }
+          label="異界の原野"
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={camp.supplements?.useDragonPlain ?? false}
+              onChange={(e) =>
+                setCamp({
+                  ...camp,
+                  supplements: {
+                    ...camp.supplements,
+                    useDragonPlain: e.target.checked,
+                  },
+                })
+              }
+            />
+          }
+          label="竜の平原"
+        />
+      </FormGroup>
+    </Box>
 
     {/* 施設テーブル */}
     <Box my={3}>
@@ -108,7 +166,7 @@ const EditForm: React.FC<Props> = ({
       </Typography>
 
       <Box mb={2}>
-        <AddItemForm catalog={items} onItemAdd={handleItemAdd} />
+        <AddItemForm catalog={itemCatalog} onItemAdd={handleItemAdd} />
       </Box>
 
       <Box sx={{ width: '100%' }}>
@@ -206,6 +264,7 @@ const EditForm: React.FC<Props> = ({
       </MuiLink>
     </Box>
   </Box>
-);
+  );
+};
 
 export default EditForm;

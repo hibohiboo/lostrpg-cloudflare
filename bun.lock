@@ -94,6 +94,7 @@
       "devDependencies": {
         "@lostrpg/eslint-config-custom": "workspace:*",
         "@lostrpg/typescript-config": "workspace:*",
+        "eslint": "9.39.2",
       },
     },
     "packages/eslint-config-custom": {
