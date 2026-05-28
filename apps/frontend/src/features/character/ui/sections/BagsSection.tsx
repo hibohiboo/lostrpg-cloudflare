@@ -1,5 +1,4 @@
-import { items } from '@lostrpg/core/game-data/item';
-import { CharacterItem } from '@lostrpg/schemas/validation/items';
+import { CharacterItem, ItemBase } from '@lostrpg/schemas/validation/items';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { GridRowId } from '@mui/x-data-grid';
 import React, { useMemo, useCallback } from 'react';
@@ -21,7 +20,7 @@ import type { Bag } from '@lostrpg/schemas';
 // 個別のBagItemコンポーネント - 各バッグの独立した再レンダリングを実現
 const BagItem: React.FC<{
   bag: Bag;
-  catalog: typeof items;
+  catalog: ItemBase[];
   onBagUpdate: (bag: Bag) => void;
   onBagDelete: (bagId: string) => void;
   onItemAdd: (bagId: string, itemName: string) => void;
@@ -149,7 +148,7 @@ export const BagsSection: React.FC = () => {
   }, [dispatch]);
 
   const handleItemAdd = useCallback((bagId: string, itemName: string) => {
-    const item = items.find((i) => i.name === itemName);
+    const item = catalog.find((i) => i.name === itemName);
     const bag = bags.find((b) => b.id === bagId);
     if (item && bag) {
       const itemId = `item-${bagId}-${Date.now()}`;
@@ -171,7 +170,7 @@ export const BagsSection: React.FC = () => {
       };
       dispatch(updateBag({ ...bag, items: [...bag.items, newItem] }));
     }
-  }, [bags, dispatch]);
+  }, [bags, catalog, dispatch]);
 
   const handleItemUpdate = useCallback((
     bagId: string,
