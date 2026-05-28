@@ -3,6 +3,7 @@ import {
   equipmentList,
 } from '@lostrpg/core/game-data/camp';
 import {
+  dragonPlainGreaterItemList,
   dragonPlainItemList,
   items,
   strangeFieldsItemList,
@@ -56,7 +57,7 @@ const EditForm: React.FC<Props> = ({
   const itemCatalog = useMemo(() => {
     const catalog = [...items];
     if (camp.supplements?.useStrangeField) catalog.push(...strangeFieldsItemList);
-    if (camp.supplements?.useDragonPlain) catalog.push(...dragonPlainItemList);
+    if (camp.supplements?.useDragonPlain) catalog.push(...dragonPlainItemList, ...dragonPlainGreaterItemList);
     return catalog;
   }, [camp.supplements?.useStrangeField, camp.supplements?.useDragonPlain]);
 

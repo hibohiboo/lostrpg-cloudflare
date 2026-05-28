@@ -1362,7 +1362,7 @@ export const dragonPlainItemList = [
 export const dragonPlainGreaterItemList = [
   {
     name: '☾ほうちょう',
-    j: '3',
+    j: 3,
     weight: 1,
     type: '装備',
     area: '片手',
@@ -1374,7 +1374,7 @@ export const dragonPlainGreaterItemList = [
   },
   {
     name: '☾ナタ',
-    j: '6',
+    j: 6,
     weight: 2,
     type: '装備',
     area: '片手',
@@ -1385,7 +1385,7 @@ export const dragonPlainGreaterItemList = [
   },
   {
     name: '☾剥ぎ取りナイフ',
-    j: '9',
+    j: 9,
     weight: 1,
     type: '装備',
     area: '片手',
@@ -1396,7 +1396,7 @@ export const dragonPlainGreaterItemList = [
   },
   {
     name: '☾カタナ',
-    j: '15',
+    j: 15,
     weight: 2,
     type: '装備',
     area: '片手',
@@ -1408,7 +1408,7 @@ export const dragonPlainGreaterItemList = [
   },
   {
     name: '☾槍',
-    j: '4',
+    j: 4,
     weight: 4,
     type: '装備',
     area: '両手',
@@ -1419,7 +1419,7 @@ export const dragonPlainGreaterItemList = [
   },
   {
     name: '☾棍棒',
-    j: '1',
+    j: 1,
     weight: 2,
     type: '装備',
     area: '片手',
@@ -1431,7 +1431,7 @@ export const dragonPlainGreaterItemList = [
   },
   {
     name: '☾バール',
-    j: '4',
+    j: 4,
     weight: 2,
     type: '装備',
     area: '片手',
@@ -1443,7 +1443,7 @@ export const dragonPlainGreaterItemList = [
   },
   {
     name: '☾ハンマー',
-    j: '6',
+    j: 6,
     weight: 5,
     type: '装備',
     area: '両手',
@@ -1454,7 +1454,7 @@ export const dragonPlainGreaterItemList = [
   },
   {
     name: '☾スリング',
-    j: '3',
+    j: 3,
     weight: 1,
     type: '装備',
     area: '両手',
@@ -1466,7 +1466,7 @@ export const dragonPlainGreaterItemList = [
   },
   {
     name: '☾弓',
-    j: '5',
+    j: 5,
     weight: 3,
     type: '装備',
     area: '両手',
@@ -1478,7 +1478,7 @@ export const dragonPlainGreaterItemList = [
   },
   {
     name: '☾ダーツ',
-    j: '12',
+    j: 12,
     weight: 1,
     type: '装備',
     area: '片手',
@@ -1490,7 +1490,7 @@ export const dragonPlainGreaterItemList = [
   },
   {
     name: '☾手斧',
-    j: '6',
+    j: 6,
     weight: 2,
     type: '装備',
     area: '片手',
@@ -1501,7 +1501,7 @@ export const dragonPlainGreaterItemList = [
   },
   {
     name: '☾ダガーナイフ',
-    j: '6',
+    j: 6,
     weight: 1,
     type: '装備',
     area: '片手',
@@ -1513,7 +1513,7 @@ export const dragonPlainGreaterItemList = [
   },
   {
     name: '☾農具',
-    j: '15',
+    j: 15,
     weight: 6,
     type: '装備',
     area: '両手',
@@ -1525,7 +1525,7 @@ export const dragonPlainGreaterItemList = [
   },
   {
     name: '☾大盾',
-    j: '10',
+    j: 10,
     weight: 6,
     type: '装備',
     area: '両手',
@@ -1536,7 +1536,7 @@ export const dragonPlainGreaterItemList = [
   },
   {
     name: '☾ツルハシ',
-    j: '9',
+    j: 9,
     weight: 4,
     type: '装備',
     area: '両手',
@@ -1547,7 +1547,7 @@ export const dragonPlainGreaterItemList = [
   },
   {
     name: '☾斧',
-    j: '7',
+    j: 7,
     weight: 4,
     type: '装備',
     area: '片手',
@@ -1558,7 +1558,7 @@ export const dragonPlainGreaterItemList = [
   },
   {
     name: '☾鎖',
-    j: '9',
+    j: 9,
     weight: 3,
     type: '装備',
     area: '片手',
@@ -1570,7 +1570,7 @@ export const dragonPlainGreaterItemList = [
   },
   {
     name: '☾杭',
-    j: '9',
+    j: 9,
     weight: 2,
     type: '装備',
     area: '片手',
@@ -1582,7 +1582,7 @@ export const dragonPlainGreaterItemList = [
   },
   {
     name: '☾シャベル',
-    j: '12',
+    j: 12,
     weight: 4,
     type: '装備',
     area: '両手',

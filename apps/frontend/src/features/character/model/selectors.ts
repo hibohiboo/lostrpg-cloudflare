@@ -8,6 +8,7 @@ import {
   dragonPlainClassList,
 } from '@lostrpg/core/game-data/character';
 import {
+  dragonPlainGreaterItemList,
   dragonPlainItemList,
   items,
   strangeFieldsItemList,
@@ -24,7 +25,7 @@ export const itemCatalogSelector = createSelector(
     const ret = [...items];
 
     if (useStrangeField) ret.push(...strangeFieldsItemList);
-    if (useDragonPlain) ret.push(...dragonPlainItemList);
+    if (useDragonPlain) ret.push(...dragonPlainItemList, ...dragonPlainGreaterItemList);
 
     return ret;
   },
