@@ -7,12 +7,7 @@ import {
   strangeFieldsClassList,
   dragonPlainClassList,
 } from '@lostrpg/core/game-data/character';
-import {
-  dragonPlainGreaterItemList,
-  dragonPlainItemList,
-  items,
-  strangeFieldsItemList,
-} from '@lostrpg/core/game-data/item';
+import { buildItemCatalog } from '@lostrpg/core/game-data/item';
 import { createSelector } from '@reduxjs/toolkit';
 import { checkSpecialties } from '../utils/checkSpecialties';
 
@@ -21,14 +16,8 @@ export const itemCatalogSelector = createSelector(
     (state: RootState) => state.character.supplements.useStrangeField,
     (state: RootState) => state.character.supplements.useDragonPlain,
   ],
-  (useStrangeField, useDragonPlain) => {
-    const ret = [...items];
-
-    if (useStrangeField) ret.push(...strangeFieldsItemList);
-    if (useDragonPlain) ret.push(...dragonPlainItemList, ...dragonPlainGreaterItemList);
-
-    return ret;
-  },
+  (useStrangeField, useDragonPlain) =>
+    buildItemCatalog({ useStrangeField, useDragonPlain }),
 );
 export const equipmentCatalogSelector = createSelector(
   [itemCatalogSelector],

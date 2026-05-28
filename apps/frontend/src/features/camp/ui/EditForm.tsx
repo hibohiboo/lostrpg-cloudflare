@@ -2,12 +2,7 @@ import {
   dragonPlainEquipmentList,
   equipmentList,
 } from '@lostrpg/core/game-data/camp';
-import {
-  dragonPlainGreaterItemList,
-  dragonPlainItemList,
-  items,
-  strangeFieldsItemList,
-} from '@lostrpg/core/game-data/item';
+import { buildItemCatalog } from '@lostrpg/core/game-data/item';
 import SaveIcon from '@mui/icons-material/Save';
 import {
   Box,
@@ -54,12 +49,10 @@ const EditForm: React.FC<Props> = ({
   handleSave,
   handleDelete,
 }) => {
-  const itemCatalog = useMemo(() => {
-    const catalog = [...items];
-    if (camp.supplements?.useStrangeField) catalog.push(...strangeFieldsItemList);
-    if (camp.supplements?.useDragonPlain) catalog.push(...dragonPlainItemList, ...dragonPlainGreaterItemList);
-    return catalog;
-  }, [camp.supplements?.useStrangeField, camp.supplements?.useDragonPlain]);
+  const itemCatalog = useMemo(
+    () => buildItemCatalog(camp.supplements ?? {}),
+    [camp.supplements?.useStrangeField, camp.supplements?.useDragonPlain],
+  );
 
   const facilityCatalog = useMemo(() => {
     const catalog = [...equipmentList];

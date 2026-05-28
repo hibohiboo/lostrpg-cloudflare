@@ -1801,3 +1801,13 @@ export const dragonPlainGreaterItemList = [
     effect: '《走る》《跳ぶ》《踏む》が指定特技の判定にプラス3の修正がつく。',
   },
 ];
+
+export const buildItemCatalog = (supplements: {
+  useStrangeField?: boolean;
+  useDragonPlain?: boolean;
+}) => {
+  const catalog = [...items];
+  if (supplements.useStrangeField) catalog.push(...strangeFieldsItemList);
+  if (supplements.useDragonPlain) catalog.push(...dragonPlainItemList, ...dragonPlainGreaterItemList);
+  return catalog;
+};
