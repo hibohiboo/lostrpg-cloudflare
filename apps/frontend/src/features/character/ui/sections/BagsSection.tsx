@@ -152,7 +152,7 @@ export const BagsSection: React.FC = () => {
     const item = items.find((i) => i.name === itemName);
     const bag = bags.find((b) => b.id === bagId);
     if (item && bag) {
-      const itemId = `item-${bagId}-${bag.items.length}`;
+      const itemId = `item-${bagId}-${Date.now()}`;
       const newItem: CharacterItem = {
         id: itemId,
         name: item.name,
