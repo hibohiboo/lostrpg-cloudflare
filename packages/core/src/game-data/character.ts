@@ -100,11 +100,10 @@ export const abilityList = [
         name: '集中',
         group: '汎用',
         type: '補助',
-        recoil: '2',
+        recoil: '3',
         specialty: '-',
         target: '-',
-        effect:
-          '命中判定に組み合わせて使用する。命中判定の達成値にプラス1の修正がつく。',
+        effect: '行為判定に組み合わせて使用する。達成値にプラス1の修正がつく。',
       },
       {
         name: 'たからもの',
