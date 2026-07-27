@@ -1,4 +1,4 @@
-/* eslint-disable complexity */
+ 
 import { CreateCharacterRequest } from '@lostrpg/schemas';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DownloadIcon from '@mui/icons-material/Download';

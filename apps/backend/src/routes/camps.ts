@@ -13,8 +13,7 @@ import type { Env } from '../types/cloudflare';
 
 const listCampsQuerySchema = z.object({
   offset: z.coerce.number().int().min(0).default(0),
-  // camp選択用ドロップダウン（キャラクター編集画面）が全件取得に使うため、一覧ページのページサイズより大きい上限を許容する
-  limit: z.coerce.number().int().min(1).max(1000).default(20),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
   name: z.string().trim().optional(),
 });
 

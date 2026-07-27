@@ -1,4 +1,4 @@
-/* eslint-disable complexity */
+ 
 import { specialties } from '@lostrpg/core/game-data/speciality';
 import { CreateCharacterRequest } from '@lostrpg/schemas';
 import { saveAs } from 'file-saver';

@@ -51,224 +51,225 @@ const EditForm: React.FC<Props> = ({
 }) => {
   const itemCatalog = useMemo(
     () => buildItemCatalog(camp.supplements ?? {}),
-    [camp.supplements?.useStrangeField, camp.supplements?.useDragonPlain],
+    [camp.supplements],
   );
 
   const facilityCatalog = useMemo(() => {
     const catalog = [...equipmentList];
-    if (camp.supplements?.useDragonPlain) catalog.push(...dragonPlainEquipmentList);
+    if (camp.supplements?.useDragonPlain)
+      catalog.push(...dragonPlainEquipmentList);
     return catalog;
   }, [camp.supplements?.useDragonPlain]);
 
   return (
-  <Box>
-    {/* プレイヤー名 */}
-    <Box my={2}>
-      <TextField
-        fullWidth
-        label="プレイヤー名"
-        value={camp.playerName}
-        onChange={(e) => setCamp({ ...camp, playerName: e.target.value })}
+    <Box>
+      {/* プレイヤー名 */}
+      <Box my={2}>
+        <TextField
+          fullWidth
+          label="プレイヤー名"
+          value={camp.playerName}
+          onChange={(e) => setCamp({ ...camp, playerName: e.target.value })}
+        />
+      </Box>
+
+      {/* キャンプ名（必須） */}
+      <Box my={2}>
+        <TextField
+          fullWidth
+          required
+          label="キャンプ名"
+          error={!camp.name && isValidError}
+          helperText={!camp.name && isValidError ? 'キャンプ名は必須です' : ''}
+          value={camp.name}
+          onChange={(e) => setCamp({ ...camp, name: e.target.value })}
+        />
+      </Box>
+
+      {/* 画像アップロード */}
+      <ImageUploadField
+        previewUrl={previewUrl}
+        currentImageUrl={camp.imageUrl}
+        onImageChange={handleImageChange}
       />
-    </Box>
 
-    {/* キャンプ名（必須） */}
-    <Box my={2}>
-      <TextField
-        fullWidth
-        required
-        label="キャンプ名"
-        error={!camp.name && isValidError}
-        helperText={!camp.name && isValidError ? 'キャンプ名は必須です' : ''}
-        value={camp.name}
-        onChange={(e) => setCamp({ ...camp, name: e.target.value })}
-      />
-    </Box>
+      {/* サプリメント */}
+      <Box my={2}>
+        <Typography variant="h6" gutterBottom>
+          サプリメント
+        </Typography>
+        <FormGroup row>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={camp.supplements?.useStrangeField ?? false}
+                onChange={(e) =>
+                  setCamp({
+                    ...camp,
+                    supplements: {
+                      ...camp.supplements,
+                      useStrangeField: e.target.checked,
+                    },
+                  })
+                }
+              />
+            }
+            label="異界の原野"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={camp.supplements?.useDragonPlain ?? false}
+                onChange={(e) =>
+                  setCamp({
+                    ...camp,
+                    supplements: {
+                      ...camp.supplements,
+                      useDragonPlain: e.target.checked,
+                    },
+                  })
+                }
+              />
+            }
+            label="竜の平原"
+          />
+        </FormGroup>
+      </Box>
 
-    {/* 画像アップロード */}
-    <ImageUploadField
-      previewUrl={previewUrl}
-      currentImageUrl={camp.imageUrl}
-      onImageChange={handleImageChange}
-    />
+      {/* 施設テーブル */}
+      <Box my={3}>
+        <Typography variant="h6" gutterBottom>
+          施設
+        </Typography>
 
-    {/* サプリメント */}
-    <Box my={2}>
-      <Typography variant="h6" gutterBottom>
-        サプリメント
-      </Typography>
-      <FormGroup row>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={camp.supplements?.useStrangeField ?? false}
-              onChange={(e) =>
-                setCamp({
-                  ...camp,
-                  supplements: {
-                    ...camp.supplements,
-                    useStrangeField: e.target.checked,
-                  },
-                })
-              }
-            />
+        {/* 設備・人材追加 */}
+        <Box display="flex" gap={2} mb={2}>
+          <AddFacilityForm
+            equipmentSelect={equipmentSelect}
+            onEquipmentAdd={handleEquipmentAdd}
+            catalog={facilityCatalog}
+          />
+
+          <AddPersonalityForm
+            personalitySelect={personalitySelect}
+            onPersonalityAdd={handlePersonalityAdd}
+          />
+        </Box>
+
+        <Box sx={{ width: '100%' }}>
+          <FacilityTable
+            facilities={camp.facilities}
+            handleFacilityDelete={handleFacilityDelete}
+            handleFacilityUpdate={handleFacilityUpdate}
+          />
+        </Box>
+      </Box>
+
+      {/* アイテムテーブル */}
+      <Box my={3}>
+        <Typography variant="h6" gutterBottom>
+          倉庫
+        </Typography>
+
+        <Box mb={2}>
+          <AddItemForm catalog={itemCatalog} onItemAdd={handleItemAdd} />
+        </Box>
+
+        <Box sx={{ width: '100%' }}>
+          <ItemTable
+            items={camp.items}
+            handleItemDelete={handleItemDelete}
+            handleItemUpdate={handleItemUpdate}
+          />
+        </Box>
+      </Box>
+
+      {/* キャンプポイント */}
+      <Box display="flex" gap={2} my={2}>
+        <TextField
+          type="number"
+          label="未使用CP"
+          value={camp.unusedCampPoint}
+          onChange={(e) =>
+            setCamp({ ...camp, unusedCampPoint: Number(e.target.value) })
           }
-          label="異界の原野"
+          sx={{ flex: 1 }}
         />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={camp.supplements?.useDragonPlain ?? false}
-              onChange={(e) =>
-                setCamp({
-                  ...camp,
-                  supplements: {
-                    ...camp.supplements,
-                    useDragonPlain: e.target.checked,
-                  },
-                })
-              }
-            />
+        <TextField
+          type="number"
+          label="合計CP"
+          value={camp.totalCampPoint}
+          onChange={(e) =>
+            setCamp({ ...camp, totalCampPoint: Number(e.target.value) })
           }
-          label="竜の平原"
-        />
-      </FormGroup>
-    </Box>
-
-    {/* 施設テーブル */}
-    <Box my={3}>
-      <Typography variant="h6" gutterBottom>
-        施設
-      </Typography>
-
-      {/* 設備・人材追加 */}
-      <Box display="flex" gap={2} mb={2}>
-        <AddFacilityForm
-          equipmentSelect={equipmentSelect}
-          onEquipmentAdd={handleEquipmentAdd}
-          catalog={facilityCatalog}
-        />
-
-        <AddPersonalityForm
-          personalitySelect={personalitySelect}
-          onPersonalityAdd={handlePersonalityAdd}
+          sx={{ flex: 1 }}
         />
       </Box>
 
-      <Box sx={{ width: '100%' }}>
-        <FacilityTable
-          facilities={camp.facilities}
-          handleFacilityDelete={handleFacilityDelete}
-          handleFacilityUpdate={handleFacilityUpdate}
+      {/* サマリー */}
+      <Box my={2}>
+        <TextField
+          fullWidth
+          multiline
+          rows={3}
+          label="概要"
+          value={camp.summary}
+          onChange={(e) => setCamp({ ...camp, summary: e.target.value })}
         />
       </Box>
-    </Box>
 
-    {/* アイテムテーブル */}
-    <Box my={3}>
-      <Typography variant="h6" gutterBottom>
-        倉庫
-      </Typography>
-
-      <Box mb={2}>
-        <AddItemForm catalog={itemCatalog} onItemAdd={handleItemAdd} />
-      </Box>
-
-      <Box sx={{ width: '100%' }}>
-        <ItemTable
-          items={camp.items}
-          handleItemDelete={handleItemDelete}
-          handleItemUpdate={handleItemUpdate}
+      {/* 詳細 */}
+      <Box my={2}>
+        <TextField
+          fullWidth
+          multiline
+          rows={5}
+          label="詳細"
+          value={camp.freeWriting}
+          onChange={(e) => setCamp({ ...camp, freeWriting: e.target.value })}
         />
       </Box>
-    </Box>
 
-    {/* キャンプポイント */}
-    <Box display="flex" gap={2} my={2}>
-      <TextField
-        type="number"
-        label="未使用CP"
-        value={camp.unusedCampPoint}
-        onChange={(e) =>
-          setCamp({ ...camp, unusedCampPoint: Number(e.target.value) })
-        }
-        sx={{ flex: 1 }}
-      />
-      <TextField
-        type="number"
-        label="合計CP"
-        value={camp.totalCampPoint}
-        onChange={(e) =>
-          setCamp({ ...camp, totalCampPoint: Number(e.target.value) })
-        }
-        sx={{ flex: 1 }}
-      />
-    </Box>
+      {/* パスワード */}
+      <Box my={2}>
+        <TextField
+          fullWidth
+          type="password"
+          label="パスワード（任意）"
+          value={camp.password || ''}
+          onChange={(e) => setCamp({ ...camp, password: e.target.value })}
+          helperText="パスワードを設定すると、キャンプの編集にパスワードが必要になります"
+        />
+      </Box>
 
-    {/* サマリー */}
-    <Box my={2}>
-      <TextField
-        fullWidth
-        multiline
-        rows={3}
-        label="概要"
-        value={camp.summary}
-        onChange={(e) => setCamp({ ...camp, summary: e.target.value })}
-      />
-    </Box>
-
-    {/* 詳細 */}
-    <Box my={2}>
-      <TextField
-        fullWidth
-        multiline
-        rows={5}
-        label="詳細"
-        value={camp.freeWriting}
-        onChange={(e) => setCamp({ ...camp, freeWriting: e.target.value })}
-      />
-    </Box>
-
-    {/* パスワード */}
-    <Box my={2}>
-      <TextField
-        fullWidth
-        type="password"
-        label="パスワード（任意）"
-        value={camp.password || ''}
-        onChange={(e) => setCamp({ ...camp, password: e.target.value })}
-        helperText="パスワードを設定すると、キャンプの編集にパスワードが必要になります"
-      />
-    </Box>
-
-    {/* 保存ボタン */}
-    <Box my={2}>
-      <Button
-        variant="contained"
-        color="primary"
-        startIcon={<SaveIcon />}
-        onClick={handleSave}
-      >
-        保存
-      </Button>
-    </Box>
-
-    {/* 削除ボタン（編集時のみ表示する想定） */}
-    {handleDelete && (
-      <Box my={2} sx={{ display: 'none' }}>
-        <Button variant="contained" color="error" onClick={handleDelete}>
-          削除
+      {/* 保存ボタン */}
+      <Box my={2}>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<SaveIcon />}
+          onClick={handleSave}
+        >
+          保存
         </Button>
       </Box>
-    )}
 
-    {/* 戻るリンク */}
-    <Box mt={4}>
-      <MuiLink href={prevPath} underline="hover">
-        戻る
-      </MuiLink>
+      {/* 削除ボタン（編集時のみ表示する想定） */}
+      {handleDelete && (
+        <Box my={2} sx={{ display: 'none' }}>
+          <Button variant="contained" color="error" onClick={handleDelete}>
+            削除
+          </Button>
+        </Box>
+      )}
+
+      {/* 戻るリンク */}
+      <Box mt={4}>
+        <MuiLink href={prevPath} underline="hover">
+          戻る
+        </MuiLink>
+      </Box>
     </Box>
-  </Box>
   );
 };
 

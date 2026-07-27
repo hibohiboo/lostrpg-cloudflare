@@ -1,3 +1,4 @@
+import { useDebouncedValue } from '@lostrpg/frontend/shared/lib/hooks';
 import { useEffect } from 'react';
 import { useGetCharacterListQuery } from '@lostrpg/frontend/entities/character';
 import {
@@ -11,7 +12,6 @@ import {
   setOffset,
   ITEMS_PER_PAGE_CONSTANT,
 } from '../model';
-import { useDebouncedValue } from './useDebouncedValue';
 
 const SEARCH_DEBOUNCE_MS = 400;
 

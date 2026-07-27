@@ -1,17 +1,16 @@
 import {
   Box,
+  Button,
   Checkbox,
-  FormControl,
   FormControlLabel,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
   TextField,
   Typography,
 } from '@mui/material';
-import React from 'react';
-import { useGetCampListQuery } from '@lostrpg/frontend/entities/camp';
+import React, { useState } from 'react';
+import {
+  CampSelectionModal,
+  useGetCampQuery,
+} from '@lostrpg/frontend/entities/camp';
 import {
   useAppDispatch,
   useAppSelector,
@@ -29,18 +28,19 @@ export const CharacterBasicSection: React.FC<{
   const campId = useAppSelector((state) => state.character.campId);
   const name = useAppSelector((state) => state.character.name);
   const imageUrl = useAppSelector((state) => state.character.imageUrl);
-  // キャンプ選択用のドロップダウンなので全件取得する
-  const { data: campListResponse } = useGetCampListQuery({
-    offset: 0,
-    limit: 1000,
-  });
-  const camps = campListResponse?.data ?? [];
   const useStrangeField = useAppSelector(
     (state) => state.character.supplements.useStrangeField,
   );
   const useDragonPlain = useAppSelector(
     (state) => state.character.supplements.useDragonPlain,
   );
+
+  const [isCampModalOpen, setCampModalOpen] = useState(false);
+  const currentCampId = campId ?? '';
+  // 選択中のキャンプ名を表示するためだけに1件取得する
+  const { data: selectedCamp } = useGetCampQuery(currentCampId, {
+    skip: !currentCampId,
+  });
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -106,26 +106,24 @@ export const CharacterBasicSection: React.FC<{
           />
         </Box>
       </Box>
-      <FormControl>
-        <InputLabel id="camp-select-label">キャンプ</InputLabel>
-        <Select
-          value={campId}
-          labelId="camp-select-label"
-          label="キャンプ"
-          onChange={(e: SelectChangeEvent) => {
-            const { value } = e.target;
-            dispatch(setCampId(value));
-          }}
-          sx={{ minWidth: 200, mb: 2 }}
+      <Box my={2}>
+        <Typography variant="body2" color="text.secondary" gutterBottom>
+          キャンプ
+        </Typography>
+        <Button
+          variant="outlined"
+          onClick={() => setCampModalOpen(true)}
+          sx={{ minWidth: 200 }}
         >
-          <MenuItem value={''}>未選択</MenuItem>
-          {camps.map((c) => (
-            <MenuItem value={c.id} key={c.id}>
-              {c.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+          {selectedCamp ? selectedCamp.name : '未選択'}
+        </Button>
+        <CampSelectionModal
+          open={isCampModalOpen}
+          onClose={() => setCampModalOpen(false)}
+          selectedCampId={currentCampId}
+          onSelect={(value) => dispatch(setCampId(value))}
+        />
+      </Box>
 
       {/* キャラクター名（必須） */}
       <Box my={2}>

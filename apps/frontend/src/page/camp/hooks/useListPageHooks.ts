@@ -1,3 +1,4 @@
+import { useDebouncedValue } from '@lostrpg/frontend/shared/lib/hooks';
 import { useEffect } from 'react';
 import { useGetCampListQuery } from '@lostrpg/frontend/entities/camp';
 import {
@@ -11,7 +12,6 @@ import {
   setOffset,
   ITEMS_PER_PAGE_CONSTANT,
 } from '../model';
-import { useDebouncedValue } from './useDebouncedValue';
 
 const SEARCH_DEBOUNCE_MS = 400;
 
