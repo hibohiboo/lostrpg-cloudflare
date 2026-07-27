@@ -19,11 +19,9 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { useDebouncedValue } from '@lostrpg/frontend/shared/lib/hooks';
 import { useGetCampListQuery } from '../../api/api';
 
 const PAGE_SIZE = 20;
-const SEARCH_DEBOUNCE_MS = 400;
 
 type CampSelectionModalProps = {
   open: boolean;
@@ -39,24 +37,16 @@ export const CampSelectionModal: React.FC<CampSelectionModalProps> = ({
   onSelect,
 }) => {
   // Dialogは閉じると内容がアンマウントされるため、開くたびに検索語・ページ位置は初期状態に戻る
-  const [searchText, setSearchText] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+  const [appliedSearchName, setAppliedSearchName] = useState('');
   const [offset, setOffset] = useState(0);
-  const debouncedSearchText = useDebouncedValue(searchText, SEARCH_DEBOUNCE_MS);
-
-  // 検索語が確定したら表示ページを先頭に戻す（レンダー中に状態を調整する公式パターン）
-  const [committedSearchText, setCommittedSearchText] =
-    useState(debouncedSearchText);
-  if (debouncedSearchText !== committedSearchText) {
-    setCommittedSearchText(debouncedSearchText);
-    setOffset(0);
-  }
 
   const {
     data: response,
     isLoading,
     isFetching,
   } = useGetCampListQuery(
-    { offset, limit: PAGE_SIZE, name: debouncedSearchText },
+    { offset, limit: PAGE_SIZE, name: appliedSearchName },
     { skip: !open },
   );
   const { data: camps = [], hasMore = false } = response ?? {};
@@ -64,6 +54,13 @@ export const CampSelectionModal: React.FC<CampSelectionModalProps> = ({
   const handleSelect = (campId: string) => {
     onSelect(campId);
     onClose();
+  };
+
+  // 検索ボタン押下 or Enterで検索を確定する（DBアクセスを増やさないよう入力のたびには検索しない）
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setAppliedSearchName(searchInput);
+    setOffset(0);
   };
 
   return (
@@ -83,24 +80,33 @@ export const CampSelectionModal: React.FC<CampSelectionModalProps> = ({
         </Box>
       </DialogTitle>
       <DialogContent>
-        <TextField
-          fullWidth
-          label="キャンプ名で絞り込み"
-          variant="outlined"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          sx={{ mt: 2, mb: 2 }}
-          autoFocus
-          slotProps={{
-            input: {
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon fontSize="small" color="action" />
-                </InputAdornment>
-              ),
-            },
-          }}
-        />
+        <Box component="form" onSubmit={handleSearchSubmit}>
+          <TextField
+            fullWidth
+            label="キャンプ名で絞り込み"
+            variant="outlined"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            sx={{ mt: 2, mb: 2 }}
+            autoFocus
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <IconButton
+                      type="submit"
+                      size="small"
+                      aria-label="検索"
+                      edge="start"
+                    >
+                      <SearchIcon fontSize="small" color="action" />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+        </Box>
         <List disablePadding>
           <ListItemButton
             selected={selectedCampId === ''}
