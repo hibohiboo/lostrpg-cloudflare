@@ -8,14 +8,14 @@ export interface Character {
 
 export interface CharacterListPageState {
   searchName: string;
-  displayCount: number;
+  offset: number;
 }
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 20;
 
 const initialState: CharacterListPageState = {
   searchName: '',
-  displayCount: ITEMS_PER_PAGE,
+  offset: 0,
 };
 
 export const characterListPageSlice = createSlice({
@@ -25,22 +25,15 @@ export const characterListPageSlice = createSlice({
     setSearchName: (state, action: PayloadAction<string>) => {
       state.searchName = action.payload;
     },
-    setDisplayCount: (state, action: PayloadAction<number>) => {
-      state.displayCount = action.payload;
-    },
-    incrementDisplayCount: (state) => {
-      state.displayCount += ITEMS_PER_PAGE;
+    setOffset: (state, action: PayloadAction<number>) => {
+      state.offset = action.payload;
     },
     resetListPage: () => initialState,
   },
 });
 
-export const {
-  setSearchName,
-  setDisplayCount,
-  incrementDisplayCount,
-  resetListPage,
-} = characterListPageSlice.actions;
+export const { setSearchName, setOffset, resetListPage } =
+  characterListPageSlice.actions;
 
 export default characterListPageSlice.reducer;
 
