@@ -570,7 +570,8 @@ export const abilityList = [
         recoil: '-',
         specialty: '-',
         target: '自身',
-        effect: 'あなたは補助タイプの特技を2つまで組み合わせられるようになる。',
+        effect:
+          'あなたは補助タイプの【アビリティ】を2つまで組み合わせられるようになる。',
       },
     ],
   },
