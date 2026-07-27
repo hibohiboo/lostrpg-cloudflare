@@ -21,6 +21,7 @@ interface Prop {
   isLoadingMore?: boolean;
   searchName: string;
   setSearchName: (name: string) => void;
+  handleSearchSubmit: () => void;
   handleLoadMore: () => void;
   hasMore: boolean;
   itemsPerPage: number;
@@ -37,6 +38,7 @@ const ListPage: React.FC<Prop> = (props) => {
     isLoadingMore = false,
     searchName,
     setSearchName,
+    handleSearchSubmit,
     handleLoadMore,
     hasMore,
     itemsPerPage,
@@ -60,8 +62,19 @@ const ListPage: React.FC<Prop> = (props) => {
           </MuiLink>
         </Box>
 
-        {/* 検索フォーム */}
-        <Box display="flex" alignItems="flex-end" mt={2} gap={1} maxWidth={400}>
+        {/* 検索フォーム（ボタン押下 or Enterで検索を実行） */}
+        <Box
+          component="form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSearchSubmit();
+          }}
+          display="flex"
+          alignItems="flex-end"
+          mt={2}
+          gap={1}
+          maxWidth={400}
+        >
           <TextField
             label="名前で絞り込み"
             variant="standard"
@@ -71,6 +84,7 @@ const ListPage: React.FC<Prop> = (props) => {
             size="small"
           />
           <Button
+            type="submit"
             variant="contained"
             color="primary"
             sx={{ minWidth: 'auto', px: 2 }}

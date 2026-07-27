@@ -1,32 +1,24 @@
-import { useEffect } from 'react';
 import { useGetCharacterListQuery } from '@lostrpg/frontend/entities/character';
-import { useDebouncedValue } from '@lostrpg/frontend/shared/lib/hooks';
 import {
   useAppDispatch,
   useAppSelector,
 } from '@lostrpg/frontend/shared/lib/store';
 import {
-  selectSearchName,
+  selectSearchInput,
+  selectAppliedSearchName,
   selectOffset,
-  setSearchName,
+  setSearchInput,
+  submitSearch,
   setOffset,
   ITEMS_PER_PAGE_CONSTANT,
 } from '../model';
 
-const SEARCH_DEBOUNCE_MS = 400;
-
 export const useListPageHooks = () => {
   const dispatch = useAppDispatch();
-  const searchName = useAppSelector(selectSearchName);
+  const searchInput = useAppSelector(selectSearchInput);
+  const appliedSearchName = useAppSelector(selectAppliedSearchName);
   const offset = useAppSelector(selectOffset);
   const ITEMS_PER_PAGE = ITEMS_PER_PAGE_CONSTANT;
-
-  // 検索語は入力のたびにAPIを叩かないよう、確定した値だけをクエリに渡す
-  const appliedSearchName = useDebouncedValue(searchName, SEARCH_DEBOUNCE_MS);
-
-  useEffect(() => {
-    dispatch(setOffset(0));
-  }, [appliedSearchName, dispatch]);
 
   const {
     data: response,
@@ -48,15 +40,21 @@ export const useListPageHooks = () => {
   };
 
   const handleSetSearchName = (value: string) => {
-    dispatch(setSearchName(value));
+    dispatch(setSearchInput(value));
+  };
+
+  // 検索ボタン押下 or Enterで検索を確定する
+  const handleSearchSubmit = () => {
+    dispatch(submitSearch());
   };
 
   return {
     list,
     isLoading: isInitialLoading,
     isLoadingMore,
-    searchName,
+    searchName: searchInput,
     setSearchName: handleSetSearchName,
+    handleSearchSubmit,
     handleLoadMore,
     hasMore,
     itemsPerPage: ITEMS_PER_PAGE,

@@ -5,9 +5,14 @@ import type { RootState } from '@lostrpg/frontend/app/store';
 export const selectCharacterListPageState = (state: RootState) =>
   state.characterListPage;
 
-export const selectSearchName = createSelector(
+export const selectSearchInput = createSelector(
   [selectCharacterListPageState],
-  (characterListPage) => characterListPage.searchName,
+  (characterListPage) => characterListPage.searchInput,
+);
+
+export const selectAppliedSearchName = createSelector(
+  [selectCharacterListPageState],
+  (characterListPage) => characterListPage.appliedSearchName,
 );
 
 export const selectOffset = createSelector(
