@@ -89,7 +89,7 @@ export const CampSelectionModal: React.FC<CampSelectionModalProps> = ({
           variant="outlined"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
-          sx={{ mb: 2 }}
+          sx={{ mt: 2, mb: 2 }}
           autoFocus
           slotProps={{
             input: {

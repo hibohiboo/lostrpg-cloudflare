@@ -41,6 +41,9 @@ export const CharacterBasicSection: React.FC<{
   const { data: selectedCamp } = useGetCampQuery(currentCampId, {
     skip: !currentCampId,
   });
+  // RTK Queryはskipに切り替わった後も直前の取得結果を保持し続けるため、
+  // currentCampIdの有無で表示を明示的に出し分ける
+  const selectedCampName = currentCampId ? selectedCamp?.name : undefined;
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -115,7 +118,7 @@ export const CharacterBasicSection: React.FC<{
           onClick={() => setCampModalOpen(true)}
           sx={{ minWidth: 200 }}
         >
-          {selectedCamp ? selectedCamp.name : '未選択'}
+          {selectedCampName ?? '未選択'}
         </Button>
         <CampSelectionModal
           open={isCampModalOpen}
