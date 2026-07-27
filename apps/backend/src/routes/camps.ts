@@ -1,7 +1,7 @@
 import { zValidator } from '@hono/zod-validator';
 import { createCampSchema, updateCampSchema } from '@lostrpg/schemas';
 import bcrypt from 'bcryptjs';
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, ilike, sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 import { z } from 'zod';
@@ -11,32 +11,42 @@ import { validateImageFile, uploadImageToR2 } from '../lib/r2/image-upload';
 import { requirePasswordAuth } from '../middleware/auth';
 import type { Env } from '../types/cloudflare';
 
+const listCampsQuerySchema = z.object({
+  offset: z.coerce.number().int().min(0).default(0),
+  // camp選択用ドロップダウン（キャラクター編集画面）が全件取得に使うため、一覧ページのページサイズより大きい上限を許容する
+  limit: z.coerce.number().int().min(1).max(1000).default(20),
+  name: z.string().trim().optional(),
+});
+
 export const campsRouter = new Hono<{ Bindings: Env }>()
-  // Get all camps
-  .get('/', async (c) => {
+  // Get camps (paginated, optionally filtered by name)
+  .get('/', zValidator('query', listCampsQuerySchema), async (c) => {
+    const { offset, limit, name } = c.req.valid('query');
+
     const campList = await getDb()
       .select({
         id: camps.id,
         name: camps.name,
         createdAt: camps.createdAt,
         updatedAt: camps.updatedAt,
-        data: camps.data,
+        imageUrl: sql<string | null>`${camps.data}->>'imageUrl'`,
       })
       .from(camps)
-      .orderBy(desc(camps.updatedAt));
+      .where(name ? ilike(camps.name, `%${name}%`) : undefined)
+      .orderBy(desc(camps.updatedAt))
+      .limit(limit + 1)
+      .offset(offset);
 
-    const formattedList = campList.map((camp) => {
-      const data = camp.data as Record<string, unknown>;
-      return {
-        id: camp.id,
-        name: camp.name,
-        createdAt: camp.createdAt,
-        updatedAt: camp.updatedAt,
-        imageUrl: data?.imageUrl as string | undefined,
-      };
-    });
+    const hasMore = campList.length > limit;
+    const data = campList.slice(0, limit).map((camp) => ({
+      id: camp.id,
+      name: camp.name,
+      createdAt: camp.createdAt,
+      updatedAt: camp.updatedAt,
+      imageUrl: camp.imageUrl ?? undefined,
+    }));
 
-    return c.json(formattedList);
+    return c.json({ data, hasMore });
   })
   // Create new camp
   .post('/', zValidator('json', createCampSchema), async (c) => {

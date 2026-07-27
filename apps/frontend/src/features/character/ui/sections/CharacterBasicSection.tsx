@@ -29,7 +29,12 @@ export const CharacterBasicSection: React.FC<{
   const campId = useAppSelector((state) => state.character.campId);
   const name = useAppSelector((state) => state.character.name);
   const imageUrl = useAppSelector((state) => state.character.imageUrl);
-  const { data: camps = [] } = useGetCampListQuery();
+  // キャンプ選択用のドロップダウンなので全件取得する
+  const { data: campListResponse } = useGetCampListQuery({
+    offset: 0,
+    limit: 1000,
+  });
+  const camps = campListResponse?.data ?? [];
   const useStrangeField = useAppSelector(
     (state) => state.character.supplements.useStrangeField,
   );

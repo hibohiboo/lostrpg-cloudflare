@@ -7,16 +7,40 @@ type CampDetailType = ApiType['camps'][':id'];
 type CampDetailData = InferResponseType<CampDetailType['$get']>;
 type UploadImageType = ApiType['camps'][':id']['upload-image'];
 type UploadImageResponse = InferResponseType<UploadImageType['$post']>;
+type GetCampListResponse = InferResponseType<ApiType['camps']['$get']>;
+export interface GetCampListArgs {
+  offset: number;
+  limit: number;
+  name?: string;
+}
+
 export const campApi = createApi({
   reducerPath: 'campApi',
   baseQuery,
   tagTypes: ['Camp', 'CampList'],
   endpoints: (builder) => ({
-    getCampList: builder.query<
-      InferResponseType<ApiType['camps']['$get']>,
-      void
-    >({
-      query: () => `/camps`,
+    getCampList: builder.query<GetCampListResponse, GetCampListArgs>({
+      query: ({ offset, limit, name }) => ({
+        url: '/camps',
+        params: {
+          offset,
+          limit,
+          ...(name ? { name } : {}),
+        },
+      }),
+      // ページネーション（もっと読み込む）用に、検索語ごとにキャッシュをまとめて結合する
+      serializeQueryArgs: ({ queryArgs, endpointName }) =>
+        `${endpointName}-${queryArgs.name ?? ''}`,
+      merge: (currentCache, newItems, { arg }) =>
+        arg.offset === 0
+          ? newItems
+          : {
+              data: [...currentCache.data, ...newItems.data],
+              hasMore: newItems.hasMore,
+            },
+      forceRefetch: ({ currentArg, previousArg }) =>
+        currentArg?.offset !== previousArg?.offset ||
+        currentArg?.name !== previousArg?.name,
       providesTags: ['CampList'],
     }),
     createCamp: builder.mutation<
