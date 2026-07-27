@@ -10,7 +10,6 @@ import {
   DialogTitle,
   Divider,
   IconButton,
-  InputAdornment,
   List,
   ListItemAvatar,
   ListItemButton,
@@ -80,32 +79,31 @@ export const CampSelectionModal: React.FC<CampSelectionModalProps> = ({
         </Box>
       </DialogTitle>
       <DialogContent>
-        <Box component="form" onSubmit={handleSearchSubmit}>
+        <Box
+          component="form"
+          onSubmit={handleSearchSubmit}
+          display="flex"
+          alignItems="flex-end"
+          gap={1}
+          sx={{ mt: 2, mb: 2 }}
+        >
           <TextField
-            fullWidth
             label="キャンプ名で絞り込み"
-            variant="outlined"
+            variant="standard"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            sx={{ mt: 2, mb: 2 }}
+            fullWidth
+            size="small"
             autoFocus
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <IconButton
-                      type="submit"
-                      size="small"
-                      aria-label="検索"
-                      edge="start"
-                    >
-                      <SearchIcon fontSize="small" color="action" />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              },
-            }}
           />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{ minWidth: 'auto', px: 2 }}
+          >
+            <SearchIcon />
+          </Button>
         </Box>
         <List disablePadding>
           <ListItemButton
