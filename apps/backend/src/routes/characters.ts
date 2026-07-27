@@ -7,7 +7,7 @@ import {
   updateRecordSchema,
 } from '@lostrpg/schemas';
 import bcrypt from 'bcryptjs';
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, ilike, sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 import { z } from 'zod';
@@ -22,32 +22,41 @@ import { validateImageFile, uploadImageToR2 } from '../lib/r2/image-upload';
 import { requirePasswordAuth } from '../middleware/auth';
 import type { Env } from '../types/cloudflare';
 
+const listCharactersQuerySchema = z.object({
+  offset: z.coerce.number().int().min(0).default(0),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+  name: z.string().trim().optional(),
+});
+
 export const charactersRouter = new Hono<{ Bindings: Env }>()
-  // Get all characters
-  .get('/', async (c) => {
+  // Get characters (paginated, optionally filtered by name)
+  .get('/', zValidator('query', listCharactersQuerySchema), async (c) => {
+    const { offset, limit, name } = c.req.valid('query');
+
     const characterList = await getDb()
       .select({
         id: characters.id,
         name: characters.name,
         createdAt: characters.createdAt,
         updatedAt: characters.updatedAt,
-        data: characters.data,
+        imageUrl: sql<string | null>`${characters.data}->>'imageUrl'`,
       })
       .from(characters)
-      .orderBy(desc(characters.updatedAt));
+      .where(name ? ilike(characters.name, `%${name}%`) : undefined)
+      .orderBy(desc(characters.updatedAt))
+      .limit(limit + 1)
+      .offset(offset);
 
-    const formattedList = characterList.map((character) => {
-      const data = character.data as Record<string, unknown>;
-      return {
-        id: character.id,
-        name: character.name,
-        createdAt: character.createdAt,
-        updatedAt: character.updatedAt,
-        imageUrl: data?.imageUrl as string | undefined,
-      };
-    });
+    const hasMore = characterList.length > limit;
+    const data = characterList.slice(0, limit).map((character) => ({
+      id: character.id,
+      name: character.name,
+      createdAt: character.createdAt,
+      updatedAt: character.updatedAt,
+      imageUrl: character.imageUrl ?? undefined,
+    }));
 
-    return c.json(formattedList);
+    return c.json({ data, hasMore });
   })
   // Create new character
   .post('/', zValidator('json', createCharacterSchema), async (c) => {

@@ -8,16 +8,45 @@ type CharacterDetailData = InferResponseType<CharacterDetailType['$get']>;
 type UploadImageType = ApiType['characters'][':id']['upload-image'];
 type UploadImageResponse = InferResponseType<UploadImageType['$post']>;
 
+type GetCharacterListResponse = InferResponseType<
+  ApiType['characters']['$get']
+>;
+export interface GetCharacterListArgs {
+  offset: number;
+  limit: number;
+  name?: string;
+}
+
 export const characterApi = createApi({
   reducerPath: 'characterApi',
   baseQuery,
   tagTypes: ['Character', 'CharacterList'],
   endpoints: (builder) => ({
     getCharacterList: builder.query<
-      InferResponseType<ApiType['characters']['$get']>,
-      void
+      GetCharacterListResponse,
+      GetCharacterListArgs
     >({
-      query: () => `/characters`,
+      query: ({ offset, limit, name }) => ({
+        url: '/characters',
+        params: {
+          offset,
+          limit,
+          ...(name ? { name } : {}),
+        },
+      }),
+      // ページネーション（もっと読み込む）用に、検索語ごとにキャッシュをまとめて結合する
+      serializeQueryArgs: ({ queryArgs, endpointName }) =>
+        `${endpointName}-${queryArgs.name ?? ''}`,
+      merge: (currentCache, newItems, { arg }) =>
+        arg.offset === 0
+          ? newItems
+          : {
+              data: [...currentCache.data, ...newItems.data],
+              hasMore: newItems.hasMore,
+            },
+      forceRefetch: ({ currentArg, previousArg }) =>
+        currentArg?.offset !== previousArg?.offset ||
+        currentArg?.name !== previousArg?.name,
       providesTags: ['CharacterList'],
     }),
     createCharacter: builder.mutation<

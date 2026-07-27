@@ -7,40 +7,40 @@ export interface Camp {
 }
 
 export interface CampListPageState {
-  searchName: string;
-  displayCount: number;
+  searchInput: string;
+  appliedSearchName: string;
+  offset: number;
 }
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 20;
 
 const initialState: CampListPageState = {
-  searchName: '',
-  displayCount: ITEMS_PER_PAGE,
+  searchInput: '',
+  appliedSearchName: '',
+  offset: 0,
 };
 
 export const campListPageSlice = createSlice({
   name: 'campListPage',
   initialState,
   reducers: {
-    setSearchName: (state, action: PayloadAction<string>) => {
-      state.searchName = action.payload;
+    setSearchInput: (state, action: PayloadAction<string>) => {
+      state.searchInput = action.payload;
     },
-    setDisplayCount: (state, action: PayloadAction<number>) => {
-      state.displayCount = action.payload;
+    // 検索ボタン押下 or Enterで確定するまではAPIに問い合わせない
+    submitSearch: (state) => {
+      state.appliedSearchName = state.searchInput;
+      state.offset = 0;
     },
-    incrementDisplayCount: (state) => {
-      state.displayCount += ITEMS_PER_PAGE;
+    setOffset: (state, action: PayloadAction<number>) => {
+      state.offset = action.payload;
     },
     resetListPage: () => initialState,
   },
 });
 
-export const {
-  setSearchName,
-  setDisplayCount,
-  incrementDisplayCount,
-  resetListPage,
-} = campListPageSlice.actions;
+export const { setSearchInput, submitSearch, setOffset, resetListPage } =
+  campListPageSlice.actions;
 
 export default campListPageSlice.reducer;
 

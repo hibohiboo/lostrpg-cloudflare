@@ -17,7 +17,7 @@ import { FacilityTable } from '@lostrpg/frontend/entities/facility';
 import { ItemTable } from '@lostrpg/frontend/entities/item';
 import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 
-// eslint-disable-next-line complexity
+ 
 const DetailPage: React.FC = () => {
   const { id } = useParams();
   if (!id) throw new Error('id is empty');

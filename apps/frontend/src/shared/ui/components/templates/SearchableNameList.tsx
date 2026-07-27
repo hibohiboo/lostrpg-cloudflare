@@ -18,8 +18,10 @@ import React from 'react';
 interface Prop {
   list: { name: string; id: string; imageUrl?: string }[];
   isLoading: boolean;
+  isLoadingMore?: boolean;
   searchName: string;
   setSearchName: (name: string) => void;
+  handleSearchSubmit: () => void;
   handleLoadMore: () => void;
   hasMore: boolean;
   itemsPerPage: number;
@@ -33,8 +35,10 @@ const ListPage: React.FC<Prop> = (props) => {
   const {
     list,
     isLoading,
+    isLoadingMore = false,
     searchName,
     setSearchName,
+    handleSearchSubmit,
     handleLoadMore,
     hasMore,
     itemsPerPage,
@@ -58,8 +62,19 @@ const ListPage: React.FC<Prop> = (props) => {
           </MuiLink>
         </Box>
 
-        {/* 検索フォーム */}
-        <Box display="flex" alignItems="flex-end" mt={2} gap={1} maxWidth={400}>
+        {/* 検索フォーム（ボタン押下 or Enterで検索を実行） */}
+        <Box
+          component="form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSearchSubmit();
+          }}
+          display="flex"
+          alignItems="flex-end"
+          mt={2}
+          gap={1}
+          maxWidth={400}
+        >
           <TextField
             label="名前で絞り込み"
             variant="standard"
@@ -69,6 +84,7 @@ const ListPage: React.FC<Prop> = (props) => {
             size="small"
           />
           <Button
+            type="submit"
             variant="contained"
             color="primary"
             sx={{ minWidth: 'auto', px: 2 }}
@@ -177,8 +193,17 @@ const ListPage: React.FC<Prop> = (props) => {
               {/* もっと読み込むボタン */}
               {hasMore && (
                 <Box mt={4} display="flex" justifyContent="center">
-                  <Button variant="outlined" onClick={handleLoadMore}>
-                    次の{itemsPerPage}件
+                  <Button
+                    variant="outlined"
+                    onClick={handleLoadMore}
+                    disabled={isLoadingMore}
+                    startIcon={
+                      isLoadingMore ? (
+                        <CircularProgress size={16} color="inherit" />
+                      ) : undefined
+                    }
+                  >
+                    {isLoadingMore ? '読み込み中...' : `次の${itemsPerPage}件`}
                   </Button>
                 </Box>
               )}

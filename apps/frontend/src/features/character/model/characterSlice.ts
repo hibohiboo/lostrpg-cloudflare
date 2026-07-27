@@ -122,7 +122,7 @@ const initialState: CharacterFormData = {
 
 const applyDefaults = (
   data: Partial<CharacterFormData>,
-  // eslint-disable-next-line complexity
+   
 ): CharacterFormData => ({
   ...initialState,
   ...data,

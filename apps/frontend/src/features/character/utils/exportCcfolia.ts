@@ -1,4 +1,4 @@
-/* eslint-disable complexity */
+ 
 import { bodyParts } from '@lostrpg/core/game-data/speciality';
 import { CreateCharacterRequest } from '@lostrpg/schemas';
 
