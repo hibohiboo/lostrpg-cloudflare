@@ -18,6 +18,7 @@ import React from 'react';
 interface Prop {
   list: { name: string; id: string; imageUrl?: string }[];
   isLoading: boolean;
+  isLoadingMore?: boolean;
   searchName: string;
   setSearchName: (name: string) => void;
   handleLoadMore: () => void;
@@ -33,6 +34,7 @@ const ListPage: React.FC<Prop> = (props) => {
   const {
     list,
     isLoading,
+    isLoadingMore = false,
     searchName,
     setSearchName,
     handleLoadMore,
@@ -177,8 +179,17 @@ const ListPage: React.FC<Prop> = (props) => {
               {/* もっと読み込むボタン */}
               {hasMore && (
                 <Box mt={4} display="flex" justifyContent="center">
-                  <Button variant="outlined" onClick={handleLoadMore}>
-                    次の{itemsPerPage}件
+                  <Button
+                    variant="outlined"
+                    onClick={handleLoadMore}
+                    disabled={isLoadingMore}
+                    startIcon={
+                      isLoadingMore ? (
+                        <CircularProgress size={16} color="inherit" />
+                      ) : undefined
+                    }
+                  >
+                    {isLoadingMore ? '読み込み中...' : `次の${itemsPerPage}件`}
                   </Button>
                 </Box>
               )}

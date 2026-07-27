@@ -1,6 +1,6 @@
-import { useDebouncedValue } from '@lostrpg/frontend/shared/lib/hooks';
 import { useEffect } from 'react';
 import { useGetCampListQuery } from '@lostrpg/frontend/entities/camp';
+import { useDebouncedValue } from '@lostrpg/frontend/shared/lib/hooks';
 import {
   useAppDispatch,
   useAppSelector,
@@ -40,6 +40,7 @@ export const useListPageHooks = () => {
   const { data: list = [], hasMore = false } = response ?? {};
 
   const isInitialLoading = isLoading || (offset === 0 && isFetching);
+  const isLoadingMore = offset > 0 && isFetching;
 
   // もっと読み込む
   const handleLoadMore = () => {
@@ -53,6 +54,7 @@ export const useListPageHooks = () => {
   return {
     list,
     isLoading: isInitialLoading,
+    isLoadingMore,
     searchName,
     setSearchName: handleSetSearchName,
     handleLoadMore,
