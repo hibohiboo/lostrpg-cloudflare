@@ -4,10 +4,10 @@ import { baseQuery } from '@lostrpg/frontend/shared/lib/store/api';
 import type { ApiType } from '@lostrpg/frontend/shared/lib/api/client';
 
 type CampDetailType = ApiType['camps'][':id'];
-type CampDetailData = InferResponseType<CampDetailType['$get']>;
+type CampDetailData = InferResponseType<CampDetailType['$get'], 200>;
 type UploadImageType = ApiType['camps'][':id']['upload-image'];
-type UploadImageResponse = InferResponseType<UploadImageType['$post']>;
-type GetCampListResponse = InferResponseType<ApiType['camps']['$get']>;
+type UploadImageResponse = InferResponseType<UploadImageType['$post'], 200>;
+type GetCampListResponse = InferResponseType<ApiType['camps']['$get'], 200>;
 export interface GetCampListArgs {
   offset: number;
   limit: number;
@@ -44,7 +44,7 @@ export const campApi = createApi({
       providesTags: ['CampList'],
     }),
     createCamp: builder.mutation<
-      InferResponseType<ApiType['camps']['$post']>,
+      InferResponseType<ApiType['camps']['$post'], 201>,
       InferRequestType<ApiType['camps']['$post']>['json']
     >({
       query: (data) => ({
@@ -59,7 +59,7 @@ export const campApi = createApi({
       providesTags: (_result, _error, id) => [{ type: 'Camp', id }],
     }),
     getCampCharacters: builder.query<
-      InferResponseType<CampDetailType['characters']['$get']>,
+      InferResponseType<CampDetailType['characters']['$get'], 200>,
       string
     >({
       query: (id) => `/camps/${id}/characters`,

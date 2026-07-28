@@ -14,14 +14,14 @@ export const recordApi = createApi({
   tagTypes: ['Record', 'RecordList'],
   endpoints: (builder) => ({
     getRecord: builder.query<
-      InferResponseType<RecordGetEndpointType['$get']>,
+      InferResponseType<RecordGetEndpointType['$get'], 200>,
       string
     >({
       query: (id) => `/characters/records/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Record', id }],
     }),
     createRecord: builder.mutation<
-      InferResponseType<RecordsEndpointType['$post']>,
+      InferResponseType<RecordsEndpointType['$post'], 201>,
       {
         characterId: string;
         data: InferRequestType<RecordsEndpointType['$post']>['json'];
@@ -35,7 +35,7 @@ export const recordApi = createApi({
       invalidatesTags: ['RecordList'],
     }),
     updateRecord: builder.mutation<
-      InferResponseType<RecordEndpointType['$put']>,
+      InferResponseType<RecordEndpointType['$put'], 200>,
       {
         characterId: string;
         id: string;

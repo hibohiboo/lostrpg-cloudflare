@@ -30,9 +30,11 @@ import { BackboneTable } from '@lostrpg/frontend/entities/backbone';
 import { useGetCampQuery } from '@lostrpg/frontend/entities/camp';
 import { useGetCharacterRecordsQuery } from '@lostrpg/frontend/entities/character';
 import { ItemTable, EquipmentTable } from '@lostrpg/frontend/entities/item';
-import { copyCharacterToCcfolia } from '@lostrpg/frontend/features/character/utils/exportCcfolia';
-import { exportCharacterToTRPGStudio } from '@lostrpg/frontend/features/character/utils/exportTRPGStudio';
-import { exportCharacterToUdonarium } from '@lostrpg/frontend/features/character/utils/exportUdonarium';
+import {
+  copyCharacterToCcfolia,
+  exportCharacterToTRPGStudio,
+  exportCharacterToUdonarium,
+} from '@lostrpg/frontend/features/character';
 import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 import { SpecialtiesTable } from '@lostrpg/frontend/shared/ui';
 
