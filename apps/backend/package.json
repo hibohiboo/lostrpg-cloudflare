@@ -30,23 +30,23 @@
   },
   "dependencies": {
     "@lostrpg/schemas": "workspace:*",
-    "@hono/zod-validator": "^0.7.6",
-    "@neondatabase/serverless": "^1.0.2",
+    "@hono/zod-validator": "^0.9.0",
+    "@neondatabase/serverless": "^1.1.0",
     "@types/bcryptjs": "^3.0.0",
     "bcryptjs": "^3.0.3",
-    "drizzle-orm": "^0.45.1",
-    "hono": "^4.11.4",
-    "postgres": "^3.4.8",
-    "zod": "^4.3.5"
+    "drizzle-orm": "^0.45.2",
+    "hono": "^4.12.32",
+    "postgres": "^3.4.9",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260117.0",
+    "@cloudflare/workers-types": "^5.20260728.1",
     "@lostrpg/eslint-config-custom": "workspace:*",
     "@lostrpg/typescript-config": "workspace:*",
-    "@testcontainers/postgresql": "^11.11.0",
-    "drizzle-kit": "^0.31.8",
-    "eslint": "^9.39.2",
-    "typescript": "^5.9.3",
-    "wrangler": "^4.59.2"
+    "@testcontainers/postgresql": "^12.0.4",
+    "drizzle-kit": "^0.31.10",
+    "eslint": "^9.39.5",
+    "typescript": "^7.0.2",
+    "wrangler": "^4.114.0"
   }
 }
