@@ -46,7 +46,7 @@ export const BackbonesSection: React.FC = () => {
   }
 
   return (
-    <Box my={3}>
+    <Box sx={{ my: 3 }}>
       <Typography variant="h6" gutterBottom>
         背景
       </Typography>

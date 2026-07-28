@@ -26,11 +26,11 @@ export const RecordSummarySection: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <Box my={3}>
+    <Box sx={{ my: 3 }}>
       <Typography variant="h6" gutterBottom>
         セッション結果
       </Typography>
-      <Box display="flex" gap={2} mb={2}>
+      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
         <TextField
           type="number"
           label="獲得経験点"
@@ -54,7 +54,7 @@ export const RecordSummarySection: React.FC = () => {
           ))}
         </TextField>
       </Box>
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <TextField
           fullWidth
           multiline

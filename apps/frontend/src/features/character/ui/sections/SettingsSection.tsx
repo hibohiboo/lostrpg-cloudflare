@@ -13,7 +13,7 @@ export const SettingsSection: React.FC = () => {
 
   return (
     <>
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <TextField
           fullWidth
           type="password"

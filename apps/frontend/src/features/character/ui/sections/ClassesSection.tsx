@@ -33,7 +33,7 @@ export const ClassesSection: React.FC = () => {
   };
 
   return (
-    <Box my={3}>
+    <Box sx={{ my: 3 }}>
       <Typography variant="h6" gutterBottom>
         クラス
       </Typography>
@@ -57,7 +57,7 @@ export const ClassesSection: React.FC = () => {
         ))}
       </Select>
 
-      <Box display="flex" flexWrap="wrap" gap={1}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
         {classes.map((cls) => (
           <Chip
             key={cls.id}

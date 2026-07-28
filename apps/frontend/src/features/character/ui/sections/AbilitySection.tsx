@@ -16,11 +16,11 @@ export const AbilitySection: React.FC = () => {
   const willPower = useAppSelector((state) => state.character.willPower);
 
   return (
-    <Box my={3}>
+    <Box sx={{ my: 3 }}>
       <Typography variant="h6" gutterBottom>
         能力値
       </Typography>
-      <Box display="flex" gap={2} flexWrap="wrap">
+      <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
         <TextField
           type="number"
           label="生命力"

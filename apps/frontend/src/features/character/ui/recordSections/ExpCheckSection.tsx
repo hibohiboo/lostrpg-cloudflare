@@ -24,7 +24,7 @@ export const ExpCheckSection: React.FC = () => {
     useAppSelector((state) => state.record.expCheckPoints) || [];
 
   return (
-    <Box my={3}>
+    <Box sx={{ my: 3 }}>
       <Typography variant="h6" gutterBottom>
         経験点チェック表
       </Typography>

@@ -55,7 +55,7 @@ export const CharacterBasicSection: React.FC<{
   return (
     <>
       {/* プレイヤー名 */}
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <TextField
           fullWidth
           label="プレイヤー名"
@@ -66,7 +66,7 @@ export const CharacterBasicSection: React.FC<{
         />
       </Box>
 
-      <Box my={3}>
+      <Box sx={{ my: 3 }}>
         <Typography variant="h6" gutterBottom>
           使用サプリメント
         </Typography>
@@ -109,7 +109,7 @@ export const CharacterBasicSection: React.FC<{
           />
         </Box>
       </Box>
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <Typography variant="body2" color="text.secondary" gutterBottom>
           キャンプ
         </Typography>
@@ -129,7 +129,7 @@ export const CharacterBasicSection: React.FC<{
       </Box>
 
       {/* キャラクター名（必須） */}
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <TextField
           fullWidth
           required

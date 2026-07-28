@@ -69,7 +69,7 @@ export const FormActionsSection: React.FC<Props> = ({
 
   return (
     <>
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <Button
           variant="contained"
           color="primary"
@@ -82,7 +82,7 @@ export const FormActionsSection: React.FC<Props> = ({
       </Box>
 
       {handleDelete && (
-        <Box my={2} sx={{ display: 'none' }}>
+        <Box sx={{ my: 2, display: 'none' }}>
           <Button variant="contained" color="error" onClick={handleDelete}>
             削除
           </Button>
@@ -90,7 +90,15 @@ export const FormActionsSection: React.FC<Props> = ({
       )}
       {/* エクスポートボタン */}
       {id && (
-        <Box my={3} display="flex" flexWrap="wrap" gap={2} alignItems="center">
+        <Box
+          sx={{
+            my: 3,
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 2,
+            alignItems: 'center',
+          }}
+        >
           <Button
             variant="contained"
             color="primary"
@@ -133,7 +141,7 @@ export const FormActionsSection: React.FC<Props> = ({
         </Box>
       )}
 
-      <Box mt={4}>
+      <Box sx={{ mt: 4 }}>
         <MuiLink href={prevPath} underline="hover">
           戻る
         </MuiLink>

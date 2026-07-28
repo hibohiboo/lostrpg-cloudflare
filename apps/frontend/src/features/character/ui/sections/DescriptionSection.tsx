@@ -15,7 +15,7 @@ export const DescriptionSection: React.FC = () => {
 
   return (
     <>
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <TextField
           fullWidth
           multiline
@@ -28,7 +28,7 @@ export const DescriptionSection: React.FC = () => {
         />
       </Box>
 
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <TextField
           fullWidth
           multiline
@@ -41,7 +41,7 @@ export const DescriptionSection: React.FC = () => {
         />
       </Box>
 
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <TextField
           fullWidth
           multiline
@@ -54,7 +54,7 @@ export const DescriptionSection: React.FC = () => {
         />
       </Box>
 
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <TextField
           fullWidth
           label="セリフ"

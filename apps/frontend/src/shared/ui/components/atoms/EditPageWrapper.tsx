@@ -9,7 +9,7 @@ export function EditPageWrapper({
 }) {
   return (
     <Container maxWidth="lg">
-      <Box my={4}>
+      <Box sx={{ my: 4 }}>
         <Typography variant="h4" component="h2" gutterBottom>
           {title}
         </Typography>

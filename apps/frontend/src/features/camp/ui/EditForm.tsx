@@ -64,7 +64,7 @@ const EditForm: React.FC<Props> = ({
   return (
     <Box>
       {/* プレイヤー名 */}
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <TextField
           fullWidth
           label="プレイヤー名"
@@ -74,7 +74,7 @@ const EditForm: React.FC<Props> = ({
       </Box>
 
       {/* キャンプ名（必須） */}
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <TextField
           fullWidth
           required
@@ -94,7 +94,7 @@ const EditForm: React.FC<Props> = ({
       />
 
       {/* サプリメント */}
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <Typography variant="h6" gutterBottom>
           サプリメント
         </Typography>
@@ -137,13 +137,13 @@ const EditForm: React.FC<Props> = ({
       </Box>
 
       {/* 施設テーブル */}
-      <Box my={3}>
+      <Box sx={{ my: 3 }}>
         <Typography variant="h6" gutterBottom>
           施設
         </Typography>
 
         {/* 設備・人材追加 */}
-        <Box display="flex" gap={2} mb={2}>
+        <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
           <AddFacilityForm
             equipmentSelect={equipmentSelect}
             onEquipmentAdd={handleEquipmentAdd}
@@ -166,12 +166,12 @@ const EditForm: React.FC<Props> = ({
       </Box>
 
       {/* アイテムテーブル */}
-      <Box my={3}>
+      <Box sx={{ my: 3 }}>
         <Typography variant="h6" gutterBottom>
           倉庫
         </Typography>
 
-        <Box mb={2}>
+        <Box sx={{ mb: 2 }}>
           <AddItemForm catalog={itemCatalog} onItemAdd={handleItemAdd} />
         </Box>
 
@@ -185,7 +185,7 @@ const EditForm: React.FC<Props> = ({
       </Box>
 
       {/* キャンプポイント */}
-      <Box display="flex" gap={2} my={2}>
+      <Box sx={{ display: 'flex', gap: 2, my: 2 }}>
         <TextField
           type="number"
           label="未使用CP"
@@ -207,7 +207,7 @@ const EditForm: React.FC<Props> = ({
       </Box>
 
       {/* サマリー */}
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <TextField
           fullWidth
           multiline
@@ -219,7 +219,7 @@ const EditForm: React.FC<Props> = ({
       </Box>
 
       {/* 詳細 */}
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <TextField
           fullWidth
           multiline
@@ -231,7 +231,7 @@ const EditForm: React.FC<Props> = ({
       </Box>
 
       {/* パスワード */}
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <TextField
           fullWidth
           type="password"
@@ -243,7 +243,7 @@ const EditForm: React.FC<Props> = ({
       </Box>
 
       {/* 保存ボタン */}
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <Button
           variant="contained"
           color="primary"
@@ -256,7 +256,7 @@ const EditForm: React.FC<Props> = ({
 
       {/* 削除ボタン（編集時のみ表示する想定） */}
       {handleDelete && (
-        <Box my={2} sx={{ display: 'none' }}>
+        <Box sx={{ my: 2, display: 'none' }}>
           <Button variant="contained" color="error" onClick={handleDelete}>
             削除
           </Button>
@@ -264,7 +264,7 @@ const EditForm: React.FC<Props> = ({
       )}
 
       {/* 戻るリンク */}
-      <Box mt={4}>
+      <Box sx={{ mt: 4 }}>
         <MuiLink href={prevPath} underline="hover">
           戻る
         </MuiLink>

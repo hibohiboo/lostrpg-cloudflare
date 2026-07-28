@@ -26,16 +26,22 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          react: ['react', 'react-router', 'react-dom/client'],
-          redux: ['@reduxjs/toolkit', 'react-redux'],
-          icons: ['@mui/icons-material'],
-          mui: ['@mui/material'],
-          datatable: ['@mui/x-data-grid'],
-          datefns: ['date-fns'],
-          zipjs: ['@zip.js/zip.js'],
-          lodash: ['lodash'],
-          util: ['swr', 'file-saver'],
+        manualChunks(id) {
+          const chunks: Record<string, string[]> = {
+            react: ['react', 'react-router', 'react-dom'],
+            redux: ['@reduxjs/toolkit', 'react-redux'],
+            icons: ['@mui/icons-material'],
+            mui: ['@mui/material'],
+            datatable: ['@mui/x-data-grid'],
+            datefns: ['date-fns'],
+            zipjs: ['@zip.js/zip.js'],
+            lodash: ['lodash'],
+            util: ['swr', 'file-saver'],
+          };
+          const match = Object.entries(chunks).find(([, packages]) =>
+            packages.some((pkg) => id.includes(`/node_modules/${pkg}/`)),
+          );
+          return match?.[0];
         },
       },
     },

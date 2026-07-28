@@ -36,15 +36,15 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
   };
 
   return (
-    <Box my={2}>
+    <Box sx={{ my: 2 }}>
       <InputLabel>{label}</InputLabel>
       <Box
-        border={1}
-        borderColor="grey.300"
-        borderRadius={1}
-        p={2}
-        mt={1}
         sx={{
+          border: 1,
+          borderColor: 'grey.300',
+          borderRadius: 1,
+          p: 2,
+          mt: 1,
           maxWidth: 480,
           height: containerHeight,
           overflow: 'hidden',

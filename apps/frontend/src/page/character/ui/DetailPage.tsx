@@ -46,7 +46,7 @@ const CharacterRecords: React.FC<{ characterId: string }> = ({
   if (!records || records.length === 0) return null;
 
   return (
-    <Box my={3}>
+    <Box sx={{ my: 3 }}>
       <Typography variant="h6" gutterBottom>
         セッション履歴
       </Typography>
@@ -81,9 +81,9 @@ const CharacterRecords: React.FC<{ characterId: string }> = ({
 const CharacterClasses: React.FC<{ character: Character }> = ({
   character,
 }) => (
-  <Box my={3}>
+  <Box sx={{ my: 3 }}>
     <InputLabel sx={{ mb: 1 }}>クラス</InputLabel>
-    <Box display="flex" flexWrap="wrap" gap={1}>
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
       {character.classes && character.classes.length > 0 ? (
         character.classes.map((cls: { name: string }, index: number) => (
           <Chip key={index} label={cls.name} color="primary" />
@@ -105,7 +105,7 @@ const CharacterInfo: React.FC<{
 }> = ({ character, id, campName, campId }) => (
   <>
     {/* タイトルと編集ボタン */}
-    <Box mb={2} display="flex" alignItems="center" gap={2}>
+    <Box sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
       <Typography variant="h4" component="h1">
         {character.name}
       </Typography>
@@ -116,7 +116,7 @@ const CharacterInfo: React.FC<{
       </Link>
     </Box>
     {campName && (
-      <Box mb={3}>
+      <Box sx={{ mb: 3 }}>
         <Typography variant="body1" color="text.secondary">
           キャンプ:
           <Link to={`/camp/${campId}`} style={{ color: '#00f' }}>
@@ -126,9 +126,12 @@ const CharacterInfo: React.FC<{
       </Box>
     )}
     {character.quote && (
-      <Box my={3}>
-        <Box p={2}>
-          <Typography fontSize={'1.5rem'} variant="body1" fontStyle="italic">
+      <Box sx={{ my: 3 }}>
+        <Box sx={{ p: 2 }}>
+          <Typography
+            variant="body1"
+            sx={{ fontSize: '1.5rem', fontStyle: 'italic' }}
+          >
             「{character.quote}」
           </Typography>
         </Box>
@@ -137,7 +140,7 @@ const CharacterInfo: React.FC<{
     <CharacterClasses character={character} />
 
     {/* 画像と概要 */}
-    <Box display="flex" flexWrap="wrap" gap={2} mb={3}>
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3 }}>
       {character.imageUrl && (
         <Box
           component={Paper}
@@ -160,8 +163,8 @@ const CharacterInfo: React.FC<{
           <InputLabel sx={{ mb: 1 }}>概要</InputLabel>
           <Box
             component={Paper}
-            p={2}
             sx={{
+              p: 2,
               whiteSpace: 'pre-wrap',
             }}
           >
@@ -180,7 +183,7 @@ const CharacterSpecialties: React.FC<{ character: Character }> = ({
   character,
 }) => (
   <>
-    <Box my={3}>
+    <Box sx={{ my: 3 }}>
       <InputLabel sx={{ mb: 1 }}>特技</InputLabel>
       <SpecialtiesTable
         specialties={character.specialties || []}
@@ -190,9 +193,9 @@ const CharacterSpecialties: React.FC<{ character: Character }> = ({
       />
     </Box>
 
-    <Box my={3}>
+    <Box sx={{ my: 3 }}>
       <InputLabel sx={{ mb: 1 }}>習得特技</InputLabel>
-      <Box display="flex" flexWrap="wrap" gap={1}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
         {character.specialties && character.specialties.length > 0 ? (
           character.specialties.map((specialty: string, index: number) => (
             <Chip key={index} label={specialty} variant="outlined" />
@@ -213,7 +216,9 @@ const CharacterStats: React.FC<{ character: Character }> = ({ character }) => (
     <CharacterSpecialties character={character} />
 
     {/* 能力値 */}
-    <Box display="flex" gap={2} my={3} maxWidth={600} flexWrap="wrap">
+    <Box
+      sx={{ display: 'flex', gap: 2, my: 3, maxWidth: 600, flexWrap: 'wrap' }}
+    >
       <TextField
         label="生命力"
         value={character.staminaBase}
@@ -244,7 +249,7 @@ const CharacterStats: React.FC<{ character: Character }> = ({ character }) => (
       />
     </Box>
 
-    <Box display="flex" gap={2} my={3} maxWidth={400}>
+    <Box sx={{ display: 'flex', gap: 2, my: 3, maxWidth: 400 }}>
       <TextField
         label="未使用経験点"
         value={character.unusedExperience}
@@ -269,7 +274,7 @@ const CharacterAbilities: React.FC<{ character: Character }> = ({
 }) => (
   <>
     {character.abilities && character.abilities.length > 0 && (
-      <Box my={3}>
+      <Box sx={{ my: 3 }}>
         <Typography variant="h6" gutterBottom>
           アビリティ
         </Typography>
@@ -290,7 +295,7 @@ const CharacterAbilities: React.FC<{ character: Character }> = ({
 const CharacterItems: React.FC<{ character: Character }> = ({ character }) => (
   <>
     {character.items && character.items.length > 0 && (
-      <Box my={3}>
+      <Box sx={{ my: 3 }}>
         <Typography variant="h6" gutterBottom>
           アイテム
         </Typography>
@@ -309,7 +314,7 @@ const CharacterItems: React.FC<{ character: Character }> = ({ character }) => (
     )}
 
     {character.equipments && character.equipments.length > 0 && (
-      <Box my={3}>
+      <Box sx={{ my: 3 }}>
         <Typography variant="h6" gutterBottom>
           装備
         </Typography>
@@ -325,22 +330,20 @@ const CharacterItems: React.FC<{ character: Character }> = ({ character }) => (
     )}
 
     {character.bags && character.bags.length > 0 && (
-      <Box my={3}>
+      <Box sx={{ my: 3 }}>
         <Typography variant="h6" gutterBottom>
           袋
         </Typography>
         {character.bags.map((bag) => (
           <Box
             key={bag.id}
-            my={2}
-            p={2}
             component={Paper}
-            sx={{ borderRadius: 1 }}
+            sx={{ my: 2, p: 2, borderRadius: 1 }}
           >
             <Typography variant="subtitle1" gutterBottom>
               {bag.name}
             </Typography>
-            <Box display="flex" gap={2} mb={2}>
+            <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
               <TextField
                 label="袋容量"
                 value={bag.capacity}
@@ -380,7 +383,7 @@ const CharacterBackbones: React.FC<{ character: Character }> = ({
   }
 
   return (
-    <Box my={3}>
+    <Box sx={{ my: 3 }}>
       <Typography variant="h6" gutterBottom>
         背景
       </Typography>
@@ -409,7 +412,7 @@ const CharacterTrophies: React.FC<{ character: Character }> = ({
   }
 
   return (
-    <Box my={3}>
+    <Box sx={{ my: 3 }}>
       <Typography variant="h6" gutterBottom>
         称号
       </Typography>
@@ -433,11 +436,11 @@ const CharacterStatusAilments: React.FC<{ character: Character }> = ({
   }
 
   return (
-    <Box my={3}>
+    <Box sx={{ my: 3 }}>
       <Typography variant="h6" gutterBottom>
         状態異常
       </Typography>
-      <Box display="flex" flexWrap="wrap" gap={1}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
         {character.statusAilments.map((ailment, index) => (
           <Chip key={index} label={ailment} color="warning" />
         ))}
@@ -450,12 +453,11 @@ const CharacterStatusAilments: React.FC<{ character: Character }> = ({
 const CharacterNotes: React.FC<{ character: Character }> = ({ character }) => (
   <>
     {character.appearance && (
-      <Box my={3}>
+      <Box sx={{ my: 3 }}>
         <InputLabel sx={{ mb: 1 }}>容姿</InputLabel>
         <Box
           component={Paper}
-          p={2}
-          sx={{ whiteSpace: 'pre-wrap', minWidth: 320 }}
+          sx={{ p: 2, whiteSpace: 'pre-wrap', minWidth: 320 }}
         >
           <Typography variant="body1">{character.appearance}</Typography>
         </Box>
@@ -463,12 +465,11 @@ const CharacterNotes: React.FC<{ character: Character }> = ({ character }) => (
     )}
 
     {character.freeWriting && (
-      <Box my={3}>
+      <Box sx={{ my: 3 }}>
         <InputLabel sx={{ mb: 1 }}>詳細</InputLabel>
         <Box
           component={Paper}
-          p={2}
-          sx={{ whiteSpace: 'pre-wrap', minWidth: 320 }}
+          sx={{ p: 2, whiteSpace: 'pre-wrap', minWidth: 320 }}
         >
           <Typography variant="body1">{character.freeWriting}</Typography>
         </Box>
@@ -520,7 +521,7 @@ const DetailPage: React.FC = () => {
 
   return (
     <Container maxWidth="lg">
-      <Box my={4}>
+      <Box sx={{ my: 4 }}>
         <CharacterInfo
           character={character}
           id={id!}
@@ -534,7 +535,7 @@ const DetailPage: React.FC = () => {
         <CharacterTrophies character={character} />
         <CharacterStatusAilments character={character} />
         <CharacterNotes character={character} />
-        <Box mt={4}>
+        <Box sx={{ mt: 4 }}>
           <MuiLink
             component={Link}
             to={`/character/${id}/record`}
@@ -547,9 +548,9 @@ const DetailPage: React.FC = () => {
         <CharacterRecords characterId={id!} />
         {(character.supplements?.useStrangeField ||
           character.supplements?.useDragonPlain) && (
-          <Box mb={3}>
+          <Box sx={{ mb: 3 }}>
             <InputLabel sx={{ mb: 1 }}>使用サプリメント</InputLabel>
-            <Box display="flex" flexWrap="wrap" gap={1}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
               {character.supplements.useStrangeField && (
                 <Chip label="終末列島百景" variant="outlined" />
               )}
@@ -561,7 +562,7 @@ const DetailPage: React.FC = () => {
         )}
 
         {character.playerName && (
-          <Box mb={3}>
+          <Box sx={{ mb: 3 }}>
             <Typography variant="body1" color="text.secondary">
               プレイヤー: {character.playerName}
             </Typography>
@@ -569,7 +570,15 @@ const DetailPage: React.FC = () => {
         )}
 
         {/* エクスポートボタン */}
-        <Box my={3} display="flex" flexWrap="wrap" gap={2} alignItems="center">
+        <Box
+          sx={{
+            my: 3,
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 2,
+            alignItems: 'center',
+          }}
+        >
           <Button
             variant="contained"
             color="primary"
@@ -612,7 +621,7 @@ const DetailPage: React.FC = () => {
         </Box>
 
         {/* 戻るリンク */}
-        <Box mt={4}>
+        <Box sx={{ mt: 4 }}>
           <MuiLink component={Link} to="/character/" underline="hover">
             戻る
           </MuiLink>

@@ -16,11 +16,18 @@ export const StatusAilmentsSection = React.memo(() => {
   );
 
   return (
-    <Box my={3}>
+    <Box sx={{ my: 3 }}>
       <Typography variant="h6" gutterBottom>
         変調
       </Typography>
-      <Box display="flex" flexDirection="column" flexWrap="wrap" gap={1}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          flexWrap: 'wrap',
+          gap: 1,
+        }}
+      >
         {statusAilments.map((ailment) => (
           <FormControlLabel
             key={ailment.name}

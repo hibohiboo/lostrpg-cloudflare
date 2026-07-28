@@ -82,10 +82,7 @@ export const CampSelectionModal: React.FC<CampSelectionModalProps> = ({
         <Box
           component="form"
           onSubmit={handleSearchSubmit}
-          display="flex"
-          alignItems="flex-end"
-          gap={1}
-          sx={{ mt: 2, mb: 2 }}
+          sx={{ display: 'flex', alignItems: 'flex-end', gap: 1, mt: 2, mb: 2 }}
         >
           <TextField
             label="キャンプ名で絞り込み"
@@ -130,7 +127,7 @@ export const CampSelectionModal: React.FC<CampSelectionModalProps> = ({
         </List>
 
         {isLoading && (
-          <Box display="flex" justifyContent="center" p={3}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
             <CircularProgress />
           </Box>
         )}
@@ -142,7 +139,7 @@ export const CampSelectionModal: React.FC<CampSelectionModalProps> = ({
         )}
 
         {hasMore && (
-          <Box mt={2} display="flex" justifyContent="center">
+          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
             <Button
               variant="outlined"
               disabled={isFetching}
