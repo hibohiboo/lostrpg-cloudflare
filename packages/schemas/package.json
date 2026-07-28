@@ -23,7 +23,7 @@
   "devDependencies": {
     "@lostrpg/eslint-config-custom": "workspace:*",
     "@lostrpg/typescript-config": "workspace:*",
-    "eslint": "^9.39.2",
+    "eslint": "^9.39.5",
     "typescript": "^7.0.2"
   }
 }

@@ -38,3 +38,6 @@ export * from './hooks/useEditFormHooks';
 export { default as CharacterEditForm } from './ui/EditForm';
 export { default as RecordEditForm } from './ui/RecordEditForm';
 export { characterFormSlice } from './model/characterFormSlice';
+export { copyCharacterToCcfolia } from './utils/exportCcfolia';
+export { exportCharacterToTRPGStudio } from './utils/exportTRPGStudio';
+export { exportCharacterToUdonarium } from './utils/exportUdonarium';

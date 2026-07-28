@@ -4,12 +4,13 @@ import { baseQuery } from '@lostrpg/frontend/shared/lib/store/api';
 import type { ApiType } from '@lostrpg/frontend/shared/lib/api/client';
 
 export type CharacterDetailType = ApiType['characters'][':id'];
-type CharacterDetailData = InferResponseType<CharacterDetailType['$get']>;
+type CharacterDetailData = InferResponseType<CharacterDetailType['$get'], 200>;
 type UploadImageType = ApiType['characters'][':id']['upload-image'];
-type UploadImageResponse = InferResponseType<UploadImageType['$post']>;
+type UploadImageResponse = InferResponseType<UploadImageType['$post'], 200>;
 
 type GetCharacterListResponse = InferResponseType<
-  ApiType['characters']['$get']
+  ApiType['characters']['$get'],
+  200
 >;
 export interface GetCharacterListArgs {
   offset: number;
@@ -50,7 +51,7 @@ export const characterApi = createApi({
       providesTags: ['CharacterList'],
     }),
     createCharacter: builder.mutation<
-      InferResponseType<ApiType['characters']['$post']>,
+      InferResponseType<ApiType['characters']['$post'], 201>,
       InferRequestType<ApiType['characters']['$post']>['json']
     >({
       query: (data) => ({
@@ -107,7 +108,7 @@ export const characterApi = createApi({
       invalidatesTags: (_result, _error, { id }) => [{ type: 'Character', id }],
     }),
     getCharacterRecords: builder.query<
-      InferResponseType<CharacterDetailType['records']['$get']>,
+      InferResponseType<CharacterDetailType['records']['$get'], 200>,
       string
     >({
       query: (id) => `/characters/${id}/records`,

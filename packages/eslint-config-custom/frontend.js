@@ -10,11 +10,23 @@ export default defineConfig([
     files: ['**/*.ts', '**/*.tsx'],
     ignores: ['dist', 'public'],
     extends: [
-      featureSliced({ sortImports: false }),
+      featureSliced({
+        sortImports: false,
+        // '@x' cross-import files only re-export from their own slice; skip
+        // public-api validation for their internal relative imports.
+        publicApi: { ignoreFiles: ['**/@x/**'] },
+      }),
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
       ...customConfig,
     ],
+    settings: {
+      // Segment folder names beyond the plugin's defaults (ui/model/lib/api/config/assets)
+      // that this project uses, so slice detection doesn't fall back to the wrong folder.
+      '@conarti/feature-sliced': {
+        segments: ['actions', 'hooks', 'utils'],
+      },
+    },
     rules: {
       'react-refresh/only-export-components': [
         'warn',
