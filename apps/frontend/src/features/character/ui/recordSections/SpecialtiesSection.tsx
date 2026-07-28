@@ -1,5 +1,5 @@
 import { damageTableRows } from '@lostrpg/core/game-data/speciality';
-import { HelpOutline } from '@mui/icons-material';
+import { HelpOutlineOutlined as HelpOutline } from '@mui/icons-material';
 import {
   Box,
   InputLabel,
@@ -186,8 +186,8 @@ export const SpecialtiesSection: React.FC = () => {
   );
   return (
     <>
-      <Box my={1}>
-        <Box display="flex" alignItems="center" gap={1}>
+      <Box sx={{ my: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <Typography variant="h6">特技</Typography>
           <Tooltip
             title="判定特技指定はテキスト部分クリック。ダメージはチェック。"
@@ -209,9 +209,9 @@ export const SpecialtiesSection: React.FC = () => {
         />
       </Box>
 
-      <Box my={1}>
+      <Box sx={{ my: 1 }}>
         <InputLabel>判定特技:{selectedSpecialty}</InputLabel>
-        <Box display="flex" flexWrap="wrap" gap={1}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
           {selectedSpecialty ? (
             <TableContainer component={Paper} sx={{ width: 'auto' }}>
               <Table
@@ -262,8 +262,8 @@ export const SpecialtiesSection: React.FC = () => {
         </Box>
       </Box>
 
-      <Box my={3}>
-        <Box display="flex" gap={2} alignItems="center" mb={2}>
+      <Box sx={{ my: 3 }}>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mb: 2 }}>
           <Typography variant="h6">身体部位決定表</Typography>
           <Button
             variant="outlined"

@@ -31,12 +31,14 @@ export const PartySection: React.FC = () => {
   const parties = useAppSelector((state) => state.record.parties);
 
   return (
-    <Box my={3}>
+    <Box sx={{ my: 3 }}>
       <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={2}
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 2,
+        }}
       >
         <Typography variant="h6">共に挑んだ仲間</Typography>
         <Button

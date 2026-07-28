@@ -68,24 +68,28 @@ const BagItem: React.FC<{
 
   return (
     <Box
-      my={2}
-      p={2}
-      border={1}
-      borderColor="grey.300"
-      borderRadius={1}
+      sx={{
+        my: 2,
+        p: 2,
+        border: 1,
+        borderColor: 'grey.300',
+        borderRadius: 1,
+      }}
     >
       <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={2}
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 2,
+        }}
       >
         <Typography variant="subtitle1">{bag.name}</Typography>
         <Button size="small" color="error" onClick={handleDelete}>
           削除
         </Button>
       </Box>
-      <Box display="flex" gap={2} mb={2}>
+      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
         <TextField
           type="number"
           label="袋容量"
@@ -197,11 +201,11 @@ export const BagsSection: React.FC = () => {
   }, [bags, dispatch]);
 
   return (
-    <Box my={3}>
+    <Box sx={{ my: 3 }}>
       <Typography variant="h6" gutterBottom>
         袋
       </Typography>
-      <Box display="flex" gap={2} mb={2}>
+      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
         <TextField
           label="袋の名前を入れて追加"
           value={bagName}

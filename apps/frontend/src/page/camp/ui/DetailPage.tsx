@@ -27,9 +27,9 @@ const DetailPage: React.FC = () => {
 
   return (
     <Container maxWidth="lg">
-      <Box my={4}>
+      <Box sx={{ my: 4 }}>
         {/* タイトルと編集ボタン */}
-        <Box mb={2} display="flex" alignItems="center" gap={2}>
+        <Box sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
           <Typography variant="h4" component="h1">
             {camp.name}
           </Typography>
@@ -42,7 +42,7 @@ const DetailPage: React.FC = () => {
 
         {/* プレイヤー名 */}
         {camp.playerName && (
-          <Box mb={3}>
+          <Box sx={{ mb: 3 }}>
             <Typography variant="body1" color="text.secondary">
               プレイヤー: {camp.playerName}
             </Typography>
@@ -50,7 +50,7 @@ const DetailPage: React.FC = () => {
         )}
 
         {/* 画像と概要 */}
-        <Box display="flex" flexWrap="wrap" gap={2} mb={3}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3 }}>
           {camp.imageUrl && (
             <Box
               component={Paper}
@@ -73,8 +73,8 @@ const DetailPage: React.FC = () => {
               <InputLabel sx={{ mb: 1 }}>概要</InputLabel>
               <Box
                 component={Paper}
-                p={2}
                 sx={{
+                  p: 2,
                   whiteSpace: 'pre-wrap',
                 }}
               >
@@ -85,9 +85,9 @@ const DetailPage: React.FC = () => {
         </Box>
 
         {/* メンバー */}
-        <Box my={3}>
+        <Box sx={{ my: 3 }}>
           <InputLabel sx={{ mb: 1 }}>メンバー</InputLabel>
-          <Box display="flex" flexWrap="wrap" gap={1}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
             {members.map((member) => (
               <Link key={member.id} to={`/character/${member.id}`}>
                 <Chip
@@ -107,7 +107,7 @@ const DetailPage: React.FC = () => {
         </Box>
 
         {/* 施設テーブル */}
-        <Box my={3}>
+        <Box sx={{ my: 3 }}>
           <Typography variant="h6" gutterBottom>
             施設
           </Typography>
@@ -121,7 +121,7 @@ const DetailPage: React.FC = () => {
         </Box>
 
         {/* アイテムテーブル */}
-        <Box my={3}>
+        <Box sx={{ my: 3 }}>
           <Typography variant="h6" gutterBottom>
             倉庫
           </Typography>
@@ -135,7 +135,7 @@ const DetailPage: React.FC = () => {
         </Box>
 
         {/* キャンプポイント */}
-        <Box display="flex" gap={2} my={3} maxWidth={400}>
+        <Box sx={{ display: 'flex', gap: 2, my: 3, maxWidth: 400 }}>
           <TextField
             label="未使用CP"
             value={camp.unusedCampPoint}
@@ -162,12 +162,12 @@ const DetailPage: React.FC = () => {
 
         {/* 詳細 */}
         {camp.freeWriting && (
-          <Box my={3}>
+          <Box sx={{ my: 3 }}>
             <InputLabel sx={{ mb: 1 }}>詳細</InputLabel>
             <Box
               component={Paper}
-              p={2}
               sx={{
+                p: 2,
                 whiteSpace: 'pre-wrap',
                 minWidth: 320,
               }}
@@ -178,7 +178,7 @@ const DetailPage: React.FC = () => {
         )}
 
         {/* 戻るリンク */}
-        <Box mt={4}>
+        <Box sx={{ mt: 4 }}>
           <MuiLink href="/camp/" underline="hover">
             戻る
           </MuiLink>

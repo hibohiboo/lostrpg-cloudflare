@@ -25,7 +25,7 @@ export const CharacterBasicSection: React.FC<{
 
   return (
     <>
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <TextField
           fullWidth
           required
@@ -37,7 +37,7 @@ export const CharacterBasicSection: React.FC<{
         />
       </Box>
       {playerName && (
-        <Box my={2}>
+        <Box sx={{ my: 2 }}>
           <TextField
             disabled
             fullWidth
@@ -47,7 +47,7 @@ export const CharacterBasicSection: React.FC<{
         </Box>
       )}
 
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <TextField
           fullWidth
           required
@@ -58,7 +58,7 @@ export const CharacterBasicSection: React.FC<{
           onChange={(e) => dispatch(setRecordTitle(e.target.value))}
         />
       </Box>
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <TextField
           fullWidth
           label="ゲームマスター名"
@@ -66,7 +66,7 @@ export const CharacterBasicSection: React.FC<{
           onChange={(e) => dispatch(updateRecord({ gm: e.target.value }))}
         />
       </Box>
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <TextField
           fullWidth
           label="日付"

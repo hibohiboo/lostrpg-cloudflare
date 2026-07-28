@@ -1,6 +1,6 @@
 import { damageTableRows } from '@lostrpg/core/game-data/speciality';
 import { Gap } from '@lostrpg/schemas';
-import { HelpOutline } from '@mui/icons-material';
+import { HelpOutlineOutlined as HelpOutline } from '@mui/icons-material';
 import {
   Box,
   Chip,
@@ -144,8 +144,8 @@ export const SpecialtiesSection: React.FC = () => {
 
   return (
     <>
-      <Box my={3}>
-        <Box display="flex" alignItems="center" gap={1} mb={2}>
+      <Box sx={{ my: 3 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
           <Typography variant="h6">特技</Typography>
           <Tooltip
             title="特技取得はテキスト部分クリック。ダメージはチェック。"
@@ -170,9 +170,9 @@ export const SpecialtiesSection: React.FC = () => {
         />
       </Box>
 
-      <Box my={3}>
+      <Box sx={{ my: 3 }}>
         <InputLabel>習得特技</InputLabel>
-        <Box display="flex" flexWrap="wrap" gap={1}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
           {specialties.length > 0 ? (
             specialties.map((specialty) => (
               <Chip key={specialty} label={specialty} color="primary" />
@@ -185,8 +185,8 @@ export const SpecialtiesSection: React.FC = () => {
         </Box>
       </Box>
 
-      <Box my={3}>
-        <Box display="flex" gap={2} alignItems="center" mb={2}>
+      <Box sx={{ my: 3 }}>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mb: 2 }}>
           <Typography variant="h6">身体部位決定表</Typography>
           <Button
             variant="outlined"

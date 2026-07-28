@@ -16,11 +16,11 @@ export const ExperienceSection: React.FC = () => {
   );
 
   return (
-    <Box my={3}>
+    <Box sx={{ my: 3 }}>
       <Typography variant="h6" gutterBottom>
         経験点
       </Typography>
-      <Box display="flex" gap={2}>
+      <Box sx={{ display: 'flex', gap: 2 }}>
         <TextField
           type="number"
           label="未使用経験点"

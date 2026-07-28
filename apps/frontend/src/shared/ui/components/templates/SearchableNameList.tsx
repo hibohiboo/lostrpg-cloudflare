@@ -50,13 +50,13 @@ const ListPage: React.FC<Prop> = (props) => {
 
   return (
     <Container maxWidth="md">
-      <Box my={4}>
+      <Box sx={{ my: 4 }}>
         <Typography variant="h4" component="h2" gutterBottom>
           {title}
         </Typography>
 
         {/* 認証リンク */}
-        <Box mt={2}>
+        <Box sx={{ mt: 2 }}>
           <MuiLink href={createPath} underline="hover">
             作成
           </MuiLink>
@@ -69,11 +69,7 @@ const ListPage: React.FC<Prop> = (props) => {
             e.preventDefault();
             handleSearchSubmit();
           }}
-          display="flex"
-          alignItems="flex-end"
-          mt={2}
-          gap={1}
-          maxWidth={400}
+          sx={{ display: 'flex', alignItems: 'flex-end', mt: 2, gap: 1, maxWidth: 400 }}
         >
           <TextField
             label="名前で絞り込み"
@@ -94,9 +90,9 @@ const ListPage: React.FC<Prop> = (props) => {
         </Box>
 
         {/* 一覧 */}
-        <Box mt={3}>
+        <Box sx={{ mt: 3 }}>
           {isLoading && (
-            <Box display="flex" justifyContent="center" p={3}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
               <CircularProgress />
             </Box>
           )}
@@ -140,12 +136,14 @@ const ListPage: React.FC<Prop> = (props) => {
                             />
                           ) : (
                             <Box
-                              height={140}
-                              display="flex"
-                              alignItems="center"
-                              justifyContent="center"
-                              bgcolor="grey.100"
-                              color="grey.400"
+                              sx={{
+                                height: 140,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                bgcolor: 'grey.100',
+                                color: 'grey.400',
+                              }}
                             >
                               <Typography
                                 variant="h3"
@@ -192,7 +190,7 @@ const ListPage: React.FC<Prop> = (props) => {
 
               {/* もっと読み込むボタン */}
               {hasMore && (
-                <Box mt={4} display="flex" justifyContent="center">
+                <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
                   <Button
                     variant="outlined"
                     onClick={handleLoadMore}
@@ -212,7 +210,7 @@ const ListPage: React.FC<Prop> = (props) => {
         </Box>
 
         {/* 戻るリンク */}
-        <Box mt={4}>
+        <Box sx={{ mt: 4 }}>
           <MuiLink href="/" underline="hover">
             戻る
           </MuiLink>

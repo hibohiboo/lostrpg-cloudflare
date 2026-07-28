@@ -117,11 +117,11 @@ export const ItemsSection: React.FC = () => {
   );
 
   return (
-    <Box my={3}>
+    <Box sx={{ my: 3 }}>
       <Typography variant="h6" gutterBottom>
         アイテム
       </Typography>
-      <Box display="flex" gap={2} mb={2}>
+      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
         <TextField
           type="number"
           label="所持限界"

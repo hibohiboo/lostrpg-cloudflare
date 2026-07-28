@@ -11,11 +11,11 @@ export const PasswordSection: React.FC = () => {
   const password = useAppSelector((state) => state.characterForm.password);
 
   return (
-    <Box my={3}>
+    <Box sx={{ my: 3 }}>
       <Typography variant="h6" gutterBottom>
         認証
       </Typography>
-      <Box my={2}>
+      <Box sx={{ my: 2 }}>
         <TextField
           fullWidth
           type="password"

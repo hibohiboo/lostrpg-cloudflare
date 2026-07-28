@@ -59,7 +59,7 @@ export const EquipmentSection: React.FC = () => {
     dispatch(deleteEquipment(id));
   }, [dispatch]);
   return (
-    <Box my={3}>
+    <Box sx={{ my: 3 }}>
       <Typography variant="h6" gutterBottom>
         装備
       </Typography>
