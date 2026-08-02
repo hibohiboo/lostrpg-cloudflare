@@ -1,4 +1,3 @@
-import { items } from '@lostrpg/core/game-data/item';
 import { CharacterItem } from '@lostrpg/schemas/validation/items';
 import { Box, TextField, Typography } from '@mui/material';
 import { GridRowId } from '@mui/x-data-grid';
@@ -64,7 +63,7 @@ export const ItemsSection: React.FC = () => {
   }, [characterItems, bags, equipment]);
 
   const handleItemAdd = useCallback((itemName: string) => {
-    const item = items.find((i) => i.name === itemName);
+    const item = catalog.find((i) => i.name === itemName);
     if (item) {
       const newItem: CharacterItem = {
         id: `item-${Date.now()}`,
@@ -84,7 +83,7 @@ export const ItemsSection: React.FC = () => {
       };
       dispatch(addItem(newItem));
     }
-  }, [dispatch]);
+  }, [dispatch, catalog]);
 
   const handleItemUpdate = useCallback((
     newRow: EntityItem,
