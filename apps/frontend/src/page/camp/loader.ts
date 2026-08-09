@@ -1,5 +1,5 @@
 import { Camp, getCampAction } from '@lostrpg/frontend/entities/camp';
-import { setCamp } from '@lostrpg/frontend/features/camp';
+import { resetCamp, setCamp } from '@lostrpg/frontend/features/camp';
 import type { LoaderFunctionArgs } from 'react-router';
 
 const getCamp = async (dispatch: AppDispatch, id?: string) => {
@@ -34,3 +34,9 @@ export const createCampEditLoader =
     console.log(id, camp);
     return camp;
   };
+
+// 新規作成ページを開いたとき、前に編集していたデータが残らないようにリセットする
+export const createCampCreateLoader = (dispatch: AppDispatch) => () => {
+  dispatch(resetCamp());
+  return null;
+};

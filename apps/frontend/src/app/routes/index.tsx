@@ -5,7 +5,10 @@ import {
   BossEditPage,
   BossListPage,
 } from '@lostrpg/frontend/page/boss';
-import { createBossLoader } from '@lostrpg/frontend/page/boss/loader';
+import {
+  createBossCreateLoader,
+  createBossLoader,
+} from '@lostrpg/frontend/page/boss/loader';
 import {
   CampCreatePage,
   CampDetailPage,
@@ -13,6 +16,7 @@ import {
   CampListPage,
 } from '@lostrpg/frontend/page/camp';
 import {
+  createCampCreateLoader,
   createCampDetailLoader,
   createCampEditLoader,
 } from '@lostrpg/frontend/page/camp/loader';
@@ -23,6 +27,7 @@ import {
   LOSTCharacterListPage,
 } from '@lostrpg/frontend/page/character';
 import {
+  createCharacterCreateLoader,
   createCharacterLoader,
   createRecordLoader,
 } from '@lostrpg/frontend/page/character/loader';
@@ -32,7 +37,10 @@ import {
   EnemyEditPage,
   EnemyListPage,
 } from '@lostrpg/frontend/page/enemy';
-import { createEnemyLoader } from '@lostrpg/frontend/page/enemy/loader';
+import {
+  createEnemyCreateLoader,
+  createEnemyLoader,
+} from '@lostrpg/frontend/page/enemy/loader';
 import {
   RecordCreatePage,
   RecordEditPage,
@@ -60,6 +68,7 @@ export const createRouter = ({ dispatch }: { dispatch: AppDispatch }) =>
             {
               path: 'create',
               element: <EnemyCreatePage />,
+              loader: createEnemyCreateLoader(dispatch),
             },
             {
               path: ':id',
@@ -83,6 +92,7 @@ export const createRouter = ({ dispatch }: { dispatch: AppDispatch }) =>
             {
               path: 'create',
               element: <CampCreatePage />,
+              loader: createCampCreateLoader(dispatch),
             },
             {
               path: ':id',
@@ -106,6 +116,7 @@ export const createRouter = ({ dispatch }: { dispatch: AppDispatch }) =>
             {
               path: 'create',
               element: <BossCreatePage />,
+              loader: createBossCreateLoader(dispatch),
             },
             {
               path: ':id',
@@ -129,6 +140,7 @@ export const createRouter = ({ dispatch }: { dispatch: AppDispatch }) =>
             {
               path: 'create',
               element: <LOSTCharacterCreatePage />,
+              loader: createCharacterCreateLoader(dispatch),
             },
             {
               path: ':id',

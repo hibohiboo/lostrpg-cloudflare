@@ -1,5 +1,5 @@
 import { getEnemyAction } from '@lostrpg/frontend/entities/enemy';
-import { setEnemy } from '@lostrpg/frontend/features/enemy';
+import { resetEnemy, setEnemy } from '@lostrpg/frontend/features/enemy';
 import type { LoaderFunctionArgs } from 'react-router';
 
 export const createEnemyLoader =
@@ -16,3 +16,9 @@ export const createEnemyLoader =
     dispatch(setEnemy(enemy));
     return enemy;
   };
+
+// 新規作成ページを開いたとき、前に編集していたデータが残らないようにリセットする
+export const createEnemyCreateLoader = (dispatch: AppDispatch) => () => {
+  dispatch(resetEnemy());
+  return null;
+};

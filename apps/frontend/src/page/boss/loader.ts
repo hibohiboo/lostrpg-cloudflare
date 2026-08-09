@@ -1,5 +1,5 @@
 import { getBossAction } from '@lostrpg/frontend/entities/boss';
-import { setBoss } from '@lostrpg/frontend/features/boss';
+import { resetBoss, setBoss } from '@lostrpg/frontend/features/boss';
 import type { LoaderFunctionArgs } from 'react-router';
 
 export const createBossLoader =
@@ -16,3 +16,9 @@ export const createBossLoader =
     dispatch(setBoss(boss));
     return boss;
   };
+
+// 新規作成ページを開いたとき、前に編集していたデータが残らないようにリセットする
+export const createBossCreateLoader = (dispatch: AppDispatch) => () => {
+  dispatch(resetBoss());
+  return null;
+};

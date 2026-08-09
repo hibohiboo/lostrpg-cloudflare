@@ -1,6 +1,6 @@
 import { characterApi } from '@lostrpg/frontend/entities/character';
 import { recordApi, setRecord } from '@lostrpg/frontend/entities/record';
-import { setCharacter } from '@lostrpg/frontend/features/character';
+import { resetCharacter, setCharacter } from '@lostrpg/frontend/features/character';
 import type { LoaderFunctionArgs } from 'react-router';
 
 export const createCharacterLoader =
@@ -22,6 +22,12 @@ export const createCharacterLoader =
     dispatch(setCharacter(character));
     return character;
   };
+// 新規作成ページを開いたとき、前に編集していたデータが残らないようにリセットする
+export const createCharacterCreateLoader = (dispatch: AppDispatch) => () => {
+  dispatch(resetCharacter());
+  return null;
+};
+
 export const createRecordLoader =
   (dispatch: AppDispatch) =>
   async ({ params }: LoaderFunctionArgs) => {
