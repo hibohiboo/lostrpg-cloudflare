@@ -1,7 +1,7 @@
 import { zValidator } from '@hono/zod-validator';
 import { createEnemySchema, getEnemySchema, updateEnemySchema } from '@lostrpg/schemas';
 import bcrypt from 'bcryptjs';
-import { desc, eq, ilike, sql } from 'drizzle-orm';
+import { desc, eq, ilike } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 import { z } from 'zod';
@@ -28,7 +28,7 @@ export const enemiesRouter = new Hono<{ Bindings: Env }>()
         name: enemies.name,
         createdAt: enemies.createdAt,
         updatedAt: enemies.updatedAt,
-        imageUrl: sql<string | null>`${enemies.data}->>'imageUrl'`,
+        data: enemies.data,
       })
       .from(enemies)
       .where(name ? ilike(enemies.name, `%${name}%`) : undefined)
@@ -37,13 +37,23 @@ export const enemiesRouter = new Hono<{ Bindings: Env }>()
       .offset(offset);
 
     const hasMore = enemyList.length > limit;
-    const data = enemyList.slice(0, limit).map((enemy) => ({
-      id: enemy.id,
-      name: enemy.name,
-      createdAt: enemy.createdAt,
-      updatedAt: enemy.updatedAt,
-      imageUrl: enemy.imageUrl ?? undefined,
-    }));
+    // シナリオに登場させるエネミーを選びやすいよう、一覧にも主要ステータスを含める
+    const data = enemyList.slice(0, limit).map((enemy) => {
+      const parsed = getEnemySchema.parse(enemy.data);
+      return {
+        id: enemy.id,
+        name: enemy.name,
+        createdAt: enemy.createdAt,
+        updatedAt: enemy.updatedAt,
+        imageUrl: parsed.imageUrl,
+        level: parsed.level,
+        type: parsed.type,
+        stamina: parsed.stamina,
+        willPower: parsed.willPower,
+        specialties: parsed.specialties,
+        abilities: parsed.abilities.map((a) => a.name),
+      };
+    });
 
     return c.json({ data, hasMore });
   })
