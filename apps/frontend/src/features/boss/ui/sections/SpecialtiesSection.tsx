@@ -159,9 +159,13 @@ export const SpecialtiesSection: React.FC = () => {
     [selectedSpecialty],
   );
 
+  // 折りたたみ表示中は、ダメージを受けて使えない特技は判定特技の候補から除外する
+  // （「すべて表示」時のみ、ダメージを受けている特技も含めて確認できる）
   const visibleTargets = showAllTargets
     ? specialtiesWithTarget
-    : specialtiesWithTarget.slice(0, TARGET_LIST_COLLAPSED_COUNT);
+    : specialtiesWithTarget
+        .filter(({ specialty }) => !damagedSpecialties.includes(specialty))
+        .slice(0, TARGET_LIST_COLLAPSED_COUNT);
 
   const damageRows = useMemo(
     () =>
