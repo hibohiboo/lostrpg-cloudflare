@@ -1,12 +1,15 @@
 import { combineReducers, type UnknownAction } from '@reduxjs/toolkit';
+import { bossApi } from '@lostrpg/frontend/entities/boss';
 import { campApi } from '@lostrpg/frontend/entities/camp';
 import { characterApi } from '@lostrpg/frontend/entities/character';
 import { recordSlice, recordApi } from '@lostrpg/frontend/entities/record';
+import { bossSlice } from '@lostrpg/frontend/features/boss';
 import { campSlice } from '@lostrpg/frontend/features/camp';
 import {
   characterFormSlice,
   characterSlice,
 } from '@lostrpg/frontend/features/character';
+import { bossListPageSlice } from '@lostrpg/frontend/page/boss/model';
 import { campListPageSlice } from '@lostrpg/frontend/page/camp/model';
 import { characterListPageSlice } from '@lostrpg/frontend/page/character/model';
 
@@ -20,6 +23,9 @@ const combinedReducer = combineReducers({
   [characterListPageSlice.reducerPath]: characterListPageSlice.reducer,
   [recordSlice.reducerPath]: recordSlice.reducer,
   [characterFormSlice.reducerPath]: characterFormSlice.reducer,
+  [bossSlice.reducerPath]: bossSlice.reducer,
+  [bossApi.reducerPath]: bossApi.reducer,
+  [bossListPageSlice.reducerPath]: bossListPageSlice.reducer,
 });
 
 type CombinedState = ReturnType<typeof combinedReducer>;

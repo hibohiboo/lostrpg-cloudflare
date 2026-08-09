@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { errorHandler } from './middleware/errorHandler';
+import { bossesRouter } from './routes/bosses';
 import { campsRouter } from './routes/camps';
 import { charactersRouter } from './routes/characters';
 import { imagesRouter } from './routes/images';
@@ -38,7 +39,8 @@ app.get('/health', (c) =>
 // eslint-disable-next-line no-underscore-dangle
 const _routes = app
   .route('/api/camps', campsRouter)
-  .route('/api/characters', charactersRouter);
+  .route('/api/characters', charactersRouter)
+  .route('/api/bosses', bossesRouter);
 app.route('/api/images', imagesRouter);
 
 const port = Number(process.env.PORT) || 3001;

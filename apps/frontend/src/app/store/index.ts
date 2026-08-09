@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { bossApi } from '@lostrpg/frontend/entities/boss';
 import { campApi } from '@lostrpg/frontend/entities/camp';
 import { characterApi } from '@lostrpg/frontend/entities/character';
 import { recordApi } from '@lostrpg/frontend/entities/record';
@@ -11,6 +12,7 @@ export const store = configureStore({
       campApi.middleware,
       characterApi.middleware,
       recordApi.middleware,
+      bossApi.middleware,
     ),
 });
 
