@@ -29,6 +29,9 @@ const DetailPage: React.FC = () => {
   const [copySuccess, setCopySuccess] = useState(false);
   const [exportSuccess, setExportSuccess] = useState(false);
   const [trpgStudioSuccess, setTrpgStudioSuccess] = useState(false);
+  // 体力・気力はプレイ中にメモとして書き換えられるよう、この画面限りの状態として保持する（保存はしない）
+  const [staminaMemo, setStaminaMemo] = useState(boss.stamina);
+  const [willPowerMemo, setWillPowerMemo] = useState(boss.willPower);
 
   const handleCopyToCcfolia = async () => {
     try {
@@ -103,11 +106,22 @@ const DetailPage: React.FC = () => {
           )}
         </Box>
 
-        {/* 特技・ギャップ */}
-        <SpecialtiesSection />
-
-        {/* 変調 */}
-        <StatusAilmentsSection />
+        {/* アビリティ */}
+        {boss.abilities && boss.abilities.length > 0 && (
+          <Box sx={{ my: 3 }}>
+            <Typography variant="h6" gutterBottom>
+              アビリティ
+            </Typography>
+            <Box sx={{ width: '100%' }}>
+              <AbilityTable
+                abilities={boss.abilities}
+                handleAbilityDelete={() => {}}
+                handleAbilityUpdate={(row) => row}
+                hideActions={true}
+              />
+            </Box>
+          </Box>
+        )}
 
         {/* 能力値 */}
         <Box
@@ -128,36 +142,27 @@ const DetailPage: React.FC = () => {
           />
           <TextField
             label="体力"
-            value={boss.stamina}
+            helperText="プレイ中のメモ用（保存されません）"
+            value={staminaMemo}
             type="number"
-            slotProps={{ input: { readOnly: true } }}
+            onChange={(e) => setStaminaMemo(Number(e.target.value))}
             sx={{ flex: 1, minWidth: 120 }}
           />
           <TextField
             label="気力"
-            value={boss.willPower}
+            helperText="プレイ中のメモ用（保存されません）"
+            value={willPowerMemo}
             type="number"
-            slotProps={{ input: { readOnly: true } }}
+            onChange={(e) => setWillPowerMemo(Number(e.target.value))}
             sx={{ flex: 1, minWidth: 120 }}
           />
         </Box>
 
-        {/* アビリティ */}
-        {boss.abilities && boss.abilities.length > 0 && (
-          <Box sx={{ my: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              アビリティ
-            </Typography>
-            <Box sx={{ width: '100%' }}>
-              <AbilityTable
-                abilities={boss.abilities}
-                handleAbilityDelete={() => {}}
-                handleAbilityUpdate={(row) => row}
-                hideActions={true}
-              />
-            </Box>
-          </Box>
-        )}
+        {/* 特技・ギャップ */}
+        <SpecialtiesSection />
+
+        {/* 変調 */}
+        <StatusAilmentsSection />
 
         {/* エクスポートボタン */}
         <Box
