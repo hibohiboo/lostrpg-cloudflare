@@ -45,7 +45,6 @@ const EditForm: React.FC<Props> = ({
       />
       <StatsSection enemy={enemy} onChange={handleChange} />
       <AbilitiesSection
-        type={enemy.type}
         abilities={enemy.abilities}
         onAbilityAdd={handleAbilityAdd}
         onAbilityUpdate={handleAbilityUpdate}
