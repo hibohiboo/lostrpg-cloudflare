@@ -1,3 +1,5 @@
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import DownloadIcon from '@mui/icons-material/Download';
 import EditIcon from '@mui/icons-material/Edit';
 import {
   Box,
@@ -9,15 +11,53 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { AbilityTable } from '@lostrpg/frontend/entities/ability';
-import { SpecialtiesSection } from '@lostrpg/frontend/features/boss';
+import {
+  SpecialtiesSection,
+  copyBossToCcfolia,
+  exportBossToTRPGStudio,
+  exportBossToUdonarium,
+} from '@lostrpg/frontend/features/boss';
 import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 
 const DetailPage: React.FC = () => {
   const { id } = useParams();
   const boss = useAppSelector((state) => state.boss);
+  const [copySuccess, setCopySuccess] = useState(false);
+  const [exportSuccess, setExportSuccess] = useState(false);
+  const [trpgStudioSuccess, setTrpgStudioSuccess] = useState(false);
+
+  const handleCopyToCcfolia = async () => {
+    try {
+      await copyBossToCcfolia(boss, id || '');
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000);
+    } catch (error) {
+      console.error('クリップボードへのコピーに失敗しました:', error);
+    }
+  };
+
+  const handleExportToUdonarium = async () => {
+    try {
+      await exportBossToUdonarium(boss, id || '');
+      setExportSuccess(true);
+      setTimeout(() => setExportSuccess(false), 2000);
+    } catch (error) {
+      console.error('ユドナリウムへのエクスポートに失敗しました:', error);
+    }
+  };
+
+  const handleExportToTRPGStudio = () => {
+    try {
+      exportBossToTRPGStudio(boss);
+      setTrpgStudioSuccess(true);
+      setTimeout(() => setTrpgStudioSuccess(false), 2000);
+    } catch (error) {
+      console.error('TRPGスタジオへのエクスポートに失敗しました:', error);
+    }
+  };
 
   return (
     <Container maxWidth="lg">
@@ -98,6 +138,57 @@ const DetailPage: React.FC = () => {
             </Box>
           </Box>
         )}
+
+        {/* エクスポートボタン */}
+        <Box
+          sx={{
+            my: 3,
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 2,
+            alignItems: 'center',
+          }}
+        >
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<ContentCopyIcon />}
+            onClick={handleCopyToCcfolia}
+          >
+            ココフォリア用クリップボードコピー
+          </Button>
+          {copySuccess && (
+            <Typography variant="body2" color="success.main">
+              コピーしました！
+            </Typography>
+          )}
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<DownloadIcon />}
+            onClick={handleExportToUdonarium}
+          >
+            ユドナリウムコマ出力
+          </Button>
+          {exportSuccess && (
+            <Typography variant="body2" color="success.main">
+              ダウンロードしました！
+            </Typography>
+          )}
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<DownloadIcon />}
+            onClick={handleExportToTRPGStudio}
+          >
+            TRPGスタジオ用テキスト出力
+          </Button>
+          {trpgStudioSuccess && (
+            <Typography variant="body2" color="success.main">
+              ダウンロードしました！
+            </Typography>
+          )}
+        </Box>
 
         {/* 戻るリンク */}
         <Box sx={{ mt: 4 }}>
