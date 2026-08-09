@@ -40,6 +40,7 @@ const baseEnemyFields = {
   willPower: z.number().int().min(0).default(10),
   dropItems: dropItemsSchema.default(['', '', '', '', '', '']),
   imageUrl: z.string().optional(),
+  creator: z.string().optional(),
   password: z.string().nullable().optional(),
 };
 

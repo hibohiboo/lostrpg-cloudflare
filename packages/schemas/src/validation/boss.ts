@@ -23,6 +23,7 @@ const baseBossFields = {
   stamina: z.number().int().min(0).default(5),
   willPower: z.number().int().min(0).default(11),
   imageUrl: z.string().optional(),
+  creator: z.string().optional(),
   password: z.string().nullable().optional(),
 };
 

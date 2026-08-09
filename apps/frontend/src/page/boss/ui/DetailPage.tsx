@@ -80,6 +80,14 @@ const DetailPage: React.FC = () => {
           </Link>
         </Box>
 
+        {boss.creator && (
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="body1" color="text.secondary">
+              作成者: {boss.creator}
+            </Typography>
+          </Box>
+        )}
+
         {/* 画像と概要 */}
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3 }}>
           {boss.imageUrl && (

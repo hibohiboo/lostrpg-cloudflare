@@ -19,6 +19,7 @@ const initialState: EnemyFormData = {
   willPower: 10,
   dropItems: ['', '', '', '', '', ''],
   imageUrl: '',
+  creator: '',
   password: '',
 };
 

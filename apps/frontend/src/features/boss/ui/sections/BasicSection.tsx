@@ -38,6 +38,17 @@ export const BasicSection: React.FC<Props> = ({
       />
     </Box>
 
+    {/* 作成者（任意） */}
+    <Box sx={{ my: 2 }}>
+      <TextField
+        fullWidth
+        label="作成者"
+        helperText="任意項目です"
+        value={boss.creator ?? ''}
+        onChange={(e) => onChange({ creator: e.target.value })}
+      />
+    </Box>
+
     {/* 外見 */}
     <Box sx={{ my: 2 }}>
       <TextField
