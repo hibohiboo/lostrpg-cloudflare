@@ -16,6 +16,7 @@ import { Link, useParams } from 'react-router';
 import { AbilityTable } from '@lostrpg/frontend/entities/ability';
 import {
   SpecialtiesSection,
+  StatusAilmentsSection,
   copyBossToCcfolia,
   exportBossToTRPGStudio,
   exportBossToUdonarium,
@@ -104,6 +105,9 @@ const DetailPage: React.FC = () => {
 
         {/* 特技・ギャップ */}
         <SpecialtiesSection />
+
+        {/* 変調 */}
+        <StatusAilmentsSection />
 
         {/* 能力値 */}
         <Box

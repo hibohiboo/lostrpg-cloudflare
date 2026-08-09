@@ -15,7 +15,7 @@ export { default as bossReducer } from './model/bossSlice';
 
 export * from './hooks/useEditFormHooks';
 export { default as BossEditForm } from './ui/EditForm';
-export { SpecialtiesSection } from './ui/sections';
+export { SpecialtiesSection, StatusAilmentsSection } from './ui/sections';
 export { copyBossToCcfolia } from './utils/exportCcfolia';
 export { exportBossToUdonarium } from './utils/exportUdonarium';
 export { exportBossToTRPGStudio } from './utils/exportTRPGStudio';
