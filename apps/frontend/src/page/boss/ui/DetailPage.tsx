@@ -4,6 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import {
   Box,
   Button,
+  Chip,
   Container,
   InputLabel,
   Link as MuiLink,
@@ -71,6 +72,7 @@ const DetailPage: React.FC = () => {
           <Typography variant="h4" component="h1">
             {boss.name}
           </Typography>
+          <Chip label={`Lv.${boss.level}`} color="primary" />
           <Link to={`/boss/${id}/edit`}>
             <Button variant="outlined" startIcon={<EditIcon />} size="small">
               編集
@@ -133,13 +135,6 @@ const DetailPage: React.FC = () => {
             flexWrap: 'wrap',
           }}
         >
-          <TextField
-            label="レベル"
-            value={boss.level}
-            type="number"
-            slotProps={{ input: { readOnly: true } }}
-            sx={{ flex: 1, minWidth: 120 }}
-          />
           <TextField
             label="体力"
             helperText="プレイ中のメモ用（保存されません）"
