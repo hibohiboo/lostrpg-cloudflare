@@ -43,8 +43,9 @@ export const AbilitySelectionModal: React.FC<AbilitySelectionModalProps> = ({
   );
 
   // 選択肢に出現するグループ・タイプのみを絞り込み候補にする
+  // グループは呼び出し元のabilityGroupsの並び順（初出順）をそのまま使う
   const groupOptions = useMemo(
-    () => [...new Set(allAbilities.map((a) => a.group))].sort(),
+    () => [...new Set(allAbilities.map((a) => a.group))],
     [allAbilities],
   );
   const typeOptions = useMemo(
