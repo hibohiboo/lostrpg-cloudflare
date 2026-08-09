@@ -1,6 +1,7 @@
 import { specialties } from '@lostrpg/core/game-data/speciality';
 import { floor } from 'lodash';
 
+// 判定特技(from)から対象特技(to)までの特技表グリッド上の距離をもとに目標値を算出する
 export const checkSpecialties = (from: string, to: string, gaps: string[]) => {
   const base = 5;
   if (from === to) return base;

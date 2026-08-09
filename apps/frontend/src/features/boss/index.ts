@@ -15,3 +15,4 @@ export { default as bossReducer } from './model/bossSlice';
 
 export * from './hooks/useEditFormHooks';
 export { default as BossEditForm } from './ui/EditForm';
+export { SpecialtiesSection } from './ui/sections';

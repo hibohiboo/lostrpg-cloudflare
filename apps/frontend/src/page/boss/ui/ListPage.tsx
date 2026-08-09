@@ -10,7 +10,7 @@ const ListPage: React.FC = () => {
       title="ヌシ一覧"
       createPath="/boss/create"
       detailPathPrefix="/boss"
-      fallbackIcon="👹"
+      fallbackIcon="🐉"
     />
   );
 };

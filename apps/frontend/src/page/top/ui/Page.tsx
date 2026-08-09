@@ -67,7 +67,9 @@ export const Page = () => (
           <h2 className="text-2xl font-bold mb-3 text-sky-300 group-hover:text-sky-200">
             キャラクター
           </h2>
-          <p className="text-sm text-gray-300 leading-relaxed">特技や持ち物</p>
+          <p className="text-sm text-gray-300 leading-relaxed">
+            廃墟の子供たち
+          </p>
         </Link>
 
         <Link
@@ -75,12 +77,14 @@ export const Page = () => (
           className="group block p-8 rounded-2xl bg-black/30 backdrop-blur-md border border-white/10 hover:bg-black/40 hover:border-rose-400/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-rose-900/20 hover:shadow-2xl"
         >
           <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
-            👹
+            🐉
           </div>
           <h2 className="text-2xl font-bold mb-3 text-rose-300 group-hover:text-rose-200">
             ヌシ
           </h2>
-          <p className="text-sm text-gray-300 leading-relaxed">強大な敵の登録</p>
+          <p className="text-sm text-gray-300 leading-relaxed">
+            ＜フィールド＞の主
+          </p>
         </Link>
       </div>
     </div>

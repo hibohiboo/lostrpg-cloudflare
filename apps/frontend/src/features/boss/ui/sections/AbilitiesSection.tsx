@@ -48,13 +48,15 @@ export const AbilitiesSection: React.FC<Props> = ({
 
       <Paper variant="outlined" sx={{ p: 2, mb: 2 }}>
         <Typography variant="body2" color="text.secondary">
-          ・ヌシグループの【アビリティ】をまず4つ習得しています（現在{bossGroupCount}
+          ・ヌシグループの【アビリティ】をまず4つ習得しています（現在
+          {bossGroupCount}
           / 4）
           <br />
           ・さらに、レベルと同じ数（{level}
           個）の【アビリティ】を全てのグループから習得できます
           <br />
-          ・4レベル以降は2つ、8レベル以降は3つの補助アビリティを組み合わせることができます（現在のレベルでの目安: {comboCount(level)}つ）
+          ・4レベル以降は2つ、8レベル以降は3つの補助アビリティを組み合わせることができます（現在のレベルでの組み合わせ可能数:{' '}
+          {comboCount(level)}つ）
         </Typography>
       </Paper>
 

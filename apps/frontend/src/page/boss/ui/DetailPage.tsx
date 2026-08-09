@@ -12,6 +12,7 @@ import {
 import React from 'react';
 import { Link, useParams } from 'react-router';
 import { AbilityTable } from '@lostrpg/frontend/entities/ability';
+import { SpecialtiesSection } from '@lostrpg/frontend/features/boss';
 import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 
 const DetailPage: React.FC = () => {
@@ -33,10 +34,9 @@ const DetailPage: React.FC = () => {
           </Link>
         </Box>
 
-        {/* 外見 */}
         {boss.appearance && (
           <Box sx={{ my: 3 }}>
-            <InputLabel sx={{ mb: 1 }}>外見</InputLabel>
+            <InputLabel sx={{ mb: 1 }}>概要</InputLabel>
             <Box
               component={Paper}
               sx={{ p: 2, whiteSpace: 'pre-wrap', minWidth: 320 }}
@@ -47,16 +47,17 @@ const DetailPage: React.FC = () => {
         )}
 
         {/* 特技・ギャップ */}
-        <Box sx={{ my: 3 }}>
-          <InputLabel sx={{ mb: 1 }}>特技・ギャップ</InputLabel>
-          <Typography variant="body2" color="text.secondary">
-            全ての特技を習得しており、ギャップは埋めません。
-          </Typography>
-        </Box>
+        <SpecialtiesSection />
 
         {/* 能力値 */}
         <Box
-          sx={{ display: 'flex', gap: 2, my: 3, maxWidth: 600, flexWrap: 'wrap' }}
+          sx={{
+            display: 'flex',
+            gap: 2,
+            my: 3,
+            maxWidth: 600,
+            flexWrap: 'wrap',
+          }}
         >
           <TextField
             label="レベル"

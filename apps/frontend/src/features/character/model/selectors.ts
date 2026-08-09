@@ -9,7 +9,7 @@ import {
 } from '@lostrpg/core/game-data/character';
 import { buildItemCatalog } from '@lostrpg/core/game-data/item';
 import { createSelector } from '@reduxjs/toolkit';
-import { checkSpecialties } from '../utils/checkSpecialties';
+import { checkSpecialties } from '@lostrpg/frontend/shared/lib/specialty';
 
 export const itemCatalogSelector = createSelector(
   [

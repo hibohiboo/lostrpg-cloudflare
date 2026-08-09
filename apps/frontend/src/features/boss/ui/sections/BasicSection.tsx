@@ -39,8 +39,8 @@ export const BasicSection: React.FC<Props> = ({
         fullWidth
         multiline
         rows={4}
-        label="外見"
-        helperText="動物を中心に、機械や災害などの要素を組み合わせたものが多いようです"
+        label="概要"
+        helperText="外見や設定など"
         value={boss.appearance ?? ''}
         onChange={(e) => onChange({ appearance: e.target.value })}
       />
@@ -51,7 +51,7 @@ export const BasicSection: React.FC<Props> = ({
       <TextField
         type="number"
         label="レベル"
-        helperText="初期作成の冒険者を相手にする場合、人数と等しい数にするとよいでしょう"
+        helperText=""
         value={boss.level}
         onChange={(e) => onLevelChange(Number(e.target.value))}
         sx={{ width: 200 }}
