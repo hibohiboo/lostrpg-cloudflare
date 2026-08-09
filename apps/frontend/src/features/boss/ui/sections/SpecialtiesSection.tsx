@@ -221,6 +221,12 @@ export const SpecialtiesSection: React.FC = () => {
                     >
                       目標値
                     </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{ border: 1, borderColor: 'divider', fontWeight: 600 }}
+                    >
+                      ダメージ
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -231,6 +237,17 @@ export const SpecialtiesSection: React.FC = () => {
                       </TableCell>
                       <TableCell sx={{ border: 1, borderColor: 'divider' }}>
                         {target}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{ border: 1, borderColor: 'divider', p: 0 }}
+                      >
+                        <Checkbox
+                          checked={damagedSpecialties.includes(specialty)}
+                          onChange={() => handleDamageChange(specialty)}
+                          size="small"
+                          color="error"
+                        />
                       </TableCell>
                     </TableRow>
                   ))}
