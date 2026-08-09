@@ -1,4 +1,3 @@
-import { specialties as allSpecialties } from '@lostrpg/core/game-data/speciality';
 import { HelpOutlineOutlined as HelpOutline } from '@mui/icons-material';
 import {
   Box,
@@ -71,7 +70,7 @@ export const SpecialtiesSection: React.FC<Props> = ({ specialties, gaps }) => {
         </Typography>
         <SpecialtiesTable
           gaps={gaps}
-          specialties={allSpecialties}
+          specialties={specialties}
           damagedSpecialties={[]}
           selectedSpecialty={selectedSpecialty}
           onGapChange={undefined}
