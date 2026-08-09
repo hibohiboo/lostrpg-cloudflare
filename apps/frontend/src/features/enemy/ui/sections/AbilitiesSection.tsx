@@ -2,7 +2,10 @@ import {
   abilityList,
   trophyAbilityList,
 } from '@lostrpg/core/game-data/character';
-import { enemyAbilityList } from '@lostrpg/core/game-data/enemy';
+import {
+  enemyAbilityList,
+  strangeFieldsEnemyAbilityList,
+} from '@lostrpg/core/game-data/enemy';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 import {
@@ -27,9 +30,10 @@ const orderedEnemyAbilityList = ENEMY_GROUP_ORDER.map((name) =>
 ).filter((group): group is (typeof enemyAbilityList)[number] => !!group);
 
 // ヌシと同様、タイプによる絞り込みは行わず、全グループから自由に選択できる
-// ドロップダウンの並びは エネミー系グループ → 汎用 → クラス特技 → 称号特技 の順
+// ドロップダウンの並びは エネミー系グループ（基本+サプリメント1）→ 汎用 → クラス特技 → 称号特技 の順
 const abilityGroups: readonly AbilityGroup[] = [
   ...orderedEnemyAbilityList,
+  ...strangeFieldsEnemyAbilityList,
   ...abilityList,
   ...trophyAbilityList,
 ];

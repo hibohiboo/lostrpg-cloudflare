@@ -586,4 +586,20 @@ export const strangeFieldsEnemyAbilityList = [
       },
     ],
   },
+  {
+    name: 'ヌシ',
+    id: 'boss',
+    list: [
+      {
+        name: '暴虐',
+        group: 'ヌシ',
+        type: '常駐',
+        recoil: '-',
+        specialty: '-',
+        target: '-',
+        effect:
+          '【体力】が0のキャラクターに与える部位ダメージの個数が【組み合わせた攻撃のダメージ/(体力基準値)】個となる。',
+      },
+    ],
+  },
 ];
