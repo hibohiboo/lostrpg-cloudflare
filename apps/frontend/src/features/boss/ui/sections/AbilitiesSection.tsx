@@ -1,3 +1,4 @@
+import { abilityList, trophyAbilityList } from '@lostrpg/core/game-data/character';
 import { enemyAbilityList } from '@lostrpg/core/game-data/enemy';
 import { Box, Paper, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
@@ -5,6 +6,7 @@ import {
   AddAbilityForm,
   AbilityTable,
   type Ability,
+  type AbilityGroup,
 } from '@lostrpg/frontend/entities/ability';
 import type { BossAbility } from '@lostrpg/frontend/entities/boss';
 
@@ -15,6 +17,14 @@ type Props = {
   onAbilityUpdate: (ability: BossAbility) => void;
   onAbilityDelete: (id: string) => void;
 };
+
+// ヌシはクラスや称号を持たないため、キャラクターが習得条件付きで選ぶアビリティ
+// （クラス別アビリティ・称号アビリティ）も含めた全グループから自由に選択できる
+const abilityGroups: readonly AbilityGroup[] = [
+  ...enemyAbilityList,
+  ...abilityList,
+  ...trophyAbilityList,
+];
 
 // 4レベル以降は2つ、8レベル以降は3つの補助アビリティを組み合わせられる
 const comboCount = (level: number) => {
@@ -61,7 +71,7 @@ export const AbilitiesSection: React.FC<Props> = ({
       </Paper>
 
       <AddAbilityForm
-        abilityGroups={enemyAbilityList}
+        abilityGroups={abilityGroups}
         onAbilityAdd={(ability) => onAbilityAdd(ability as BossAbility)}
       />
 
