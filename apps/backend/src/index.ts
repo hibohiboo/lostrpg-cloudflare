@@ -5,6 +5,7 @@ import { errorHandler } from './middleware/errorHandler';
 import { bossesRouter } from './routes/bosses';
 import { campsRouter } from './routes/camps';
 import { charactersRouter } from './routes/characters';
+import { enemiesRouter } from './routes/enemies';
 import { imagesRouter } from './routes/images';
 import type { Env } from './types/cloudflare';
 
@@ -40,7 +41,8 @@ app.get('/health', (c) =>
 const _routes = app
   .route('/api/camps', campsRouter)
   .route('/api/characters', charactersRouter)
-  .route('/api/bosses', bossesRouter);
+  .route('/api/bosses', bossesRouter)
+  .route('/api/enemies', enemiesRouter);
 app.route('/api/images', imagesRouter);
 
 const port = Number(process.env.PORT) || 3001;

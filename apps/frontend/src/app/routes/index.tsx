@@ -27,6 +27,13 @@ import {
   createRecordLoader,
 } from '@lostrpg/frontend/page/character/loader';
 import {
+  EnemyCreatePage,
+  EnemyDetailPage,
+  EnemyEditPage,
+  EnemyListPage,
+} from '@lostrpg/frontend/page/enemy';
+import { createEnemyLoader } from '@lostrpg/frontend/page/enemy/loader';
+import {
   RecordCreatePage,
   RecordEditPage,
 } from '@lostrpg/frontend/page/record';
@@ -42,6 +49,29 @@ export const createRouter = ({ dispatch }: { dispatch: AppDispatch }) =>
         {
           path: '',
           element: <TopPage />,
+        },
+        {
+          path: '/enemy',
+          children: [
+            {
+              path: '',
+              element: <EnemyListPage />,
+            },
+            {
+              path: 'create',
+              element: <EnemyCreatePage />,
+            },
+            {
+              path: ':id',
+              element: <EnemyDetailPage />,
+              loader: createEnemyLoader(dispatch),
+            },
+            {
+              path: ':id/edit',
+              element: <EnemyEditPage />,
+              loader: createEnemyLoader(dispatch),
+            },
+          ],
         },
         {
           path: '/camp',

@@ -25,6 +25,8 @@ interface SpecialtiesTableProps {
   onDamageChange?: (name: string) => void;
   readOnly?: boolean;
   selectedSpecialty?: string;
+  /** ダメージのチェックボックス自体を表示するか（部位ダメージの概念がないシートではfalseにする） */
+  showDamageCheckbox?: boolean;
 }
 
 const HeaderCell: React.FC<{ col: string }> = ({ col }) => (
@@ -92,6 +94,7 @@ const Cell: React.FC<{
   handleDamageClick: (s: string) => void;
   readOnly?: boolean;
   selectedSpecialty?: string;
+  showDamageCheckbox?: boolean;
 }> = ({
   name,
   specialties,
@@ -101,6 +104,7 @@ const Cell: React.FC<{
   isBodyParts,
   readOnly,
   selectedSpecialty,
+  showDamageCheckbox = true,
 }) => {
   const isSelected = specialties.includes(name);
 
@@ -138,24 +142,26 @@ const Cell: React.FC<{
         >
           {name}
         </Typography>
-        <Checkbox
-          sx={{
-            p: 0,
-            ...(isSelected && {
-              color: 'white',
-              '&.Mui-checked': {
-                color: 'error.main',
-              },
-              '&.Mui-checked svg': {
-                bgcolor: 'white',
-              },
-            }),
-          }}
-          checked={damagedSpecialties.includes(name)}
-          onChange={() => handleDamageClick(name)}
-          size="small"
-          color="error"
-        />
+        {showDamageCheckbox && (
+          <Checkbox
+            sx={{
+              p: 0,
+              ...(isSelected && {
+                color: 'white',
+                '&.Mui-checked': {
+                  color: 'error.main',
+                },
+                '&.Mui-checked svg': {
+                  bgcolor: 'white',
+                },
+              }),
+            }}
+            checked={damagedSpecialties.includes(name)}
+            onChange={() => handleDamageClick(name)}
+            size="small"
+            color="error"
+          />
+        )}
       </div>
     </TableCell>
   );
@@ -170,6 +176,7 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
   onDamageChange,
   readOnly = false,
   selectedSpecialty,
+  showDamageCheckbox = true,
 }) => {
   const handleDamageClick = (specialtyName: string) => {
     if (!readOnly && onDamageChange && specialtyName) {
@@ -255,6 +262,7 @@ const SpecialtiesTable: React.FC<SpecialtiesTableProps> = ({
                     handleDamageClick={handleDamageClick}
                     readOnly={readOnly}
                     selectedSpecialty={selectedSpecialty}
+                    showDamageCheckbox={showDamageCheckbox}
                   />
                 ),
               )}
