@@ -1,5 +1,12 @@
 import { createBrowserRouter } from 'react-router';
 import {
+  BossCreatePage,
+  BossDetailPage,
+  BossEditPage,
+  BossListPage,
+} from '@lostrpg/frontend/page/boss';
+import { createBossLoader } from '@lostrpg/frontend/page/boss/loader';
+import {
   CampCreatePage,
   CampDetailPage,
   CampEditPage,
@@ -56,6 +63,29 @@ export const createRouter = ({ dispatch }: { dispatch: AppDispatch }) =>
               path: ':id/edit',
               element: <CampEditPage />,
               loader: createCampEditLoader(dispatch),
+            },
+          ],
+        },
+        {
+          path: '/boss',
+          children: [
+            {
+              path: '',
+              element: <BossListPage />,
+            },
+            {
+              path: 'create',
+              element: <BossCreatePage />,
+            },
+            {
+              path: ':id',
+              element: <BossDetailPage />,
+              loader: createBossLoader(dispatch),
+            },
+            {
+              path: ':id/edit',
+              element: <BossEditPage />,
+              loader: createBossLoader(dispatch),
             },
           ],
         },

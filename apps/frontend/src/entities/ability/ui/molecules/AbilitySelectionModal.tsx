@@ -6,9 +6,10 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  MenuItem,
   TextField,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { AbilityCard } from './AbilityCard';
 import type { AbilityGroup } from '../../model/types';
 
@@ -22,6 +23,8 @@ type AbilitySelectionModalProps = {
   title?: string;
 };
 
+const ALL_VALUE = '';
+
 export const AbilitySelectionModal: React.FC<AbilitySelectionModalProps> = ({
   open,
   onClose,
@@ -30,30 +33,55 @@ export const AbilitySelectionModal: React.FC<AbilitySelectionModalProps> = ({
   title = 'アビリティ選択',
 }) => {
   const [searchText, setSearchText] = useState('');
+  const [groupFilter, setGroupFilter] = useState(ALL_VALUE);
+  const [typeFilter, setTypeFilter] = useState(ALL_VALUE);
 
   // 全アビリティをフラットに展開
-  const allAbilities = abilityGroups.flatMap((group) => group.list);
+  const allAbilities = useMemo(
+    () => abilityGroups.flatMap((group) => group.list),
+    [abilityGroups],
+  );
+
+  // 選択肢に出現するグループ・タイプのみを絞り込み候補にする
+  // グループは呼び出し元のabilityGroupsの並び順（初出順）をそのまま使う
+  const groupOptions = useMemo(
+    () => [...new Set(allAbilities.map((a) => a.group))],
+    [allAbilities],
+  );
+  const typeOptions = useMemo(
+    () => [...new Set(allAbilities.map((a) => a.type))].sort(),
+    [allAbilities],
+  );
 
   const filteredAbilities = allAbilities.filter((ability) => {
     const search = searchText.toLowerCase();
-    return (
+    const matchesSearch =
       ability.name.toLowerCase().includes(search) ||
       ability.group.toLowerCase().includes(search) ||
       ability.type.toLowerCase().includes(search) ||
       ability.effect.toLowerCase().includes(search) ||
-      ability.specialty.toLowerCase().includes(search)
-    );
+      ability.specialty.toLowerCase().includes(search);
+    const matchesGroup = !groupFilter || ability.group === groupFilter;
+    const matchesType = !typeFilter || ability.type === typeFilter;
+
+    return matchesSearch && matchesGroup && matchesType;
   });
+
+  const resetFilters = () => {
+    setSearchText('');
+    setGroupFilter(ALL_VALUE);
+    setTypeFilter(ALL_VALUE);
+  };
 
   const handleSelect = (ability: AbilityBase) => {
     onSelect(ability);
     onClose();
-    setSearchText('');
+    resetFilters();
   };
 
   const handleClose = () => {
     onClose();
-    setSearchText('');
+    resetFilters();
   };
 
   return (
@@ -73,15 +101,46 @@ export const AbilitySelectionModal: React.FC<AbilitySelectionModalProps> = ({
         </Box>
       </DialogTitle>
       <DialogContent>
-        <TextField
-          fullWidth
-          label="アビリティを検索"
-          variant="outlined"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          sx={{ mb: 2 }}
-          autoFocus
-        />
+        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 2 }}>
+          <TextField
+            label="アビリティを検索"
+            variant="outlined"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            autoFocus
+            sx={{ flex: 2, minWidth: 200 }}
+          />
+          <TextField
+            select
+            label="グループ"
+            variant="outlined"
+            value={groupFilter}
+            onChange={(e) => setGroupFilter(e.target.value)}
+            sx={{ flex: 1, minWidth: 160 }}
+          >
+            <MenuItem value={ALL_VALUE}>すべて</MenuItem>
+            {groupOptions.map((group) => (
+              <MenuItem key={group} value={group}>
+                {group}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            select
+            label="タイプ"
+            variant="outlined"
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+            sx={{ flex: 1, minWidth: 160 }}
+          >
+            <MenuItem value={ALL_VALUE}>すべて</MenuItem>
+            {typeOptions.map((type) => (
+              <MenuItem key={type} value={type}>
+                {type}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Box>
         <Box
           sx={{
             display: 'grid',

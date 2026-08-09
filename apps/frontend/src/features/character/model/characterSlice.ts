@@ -1,5 +1,4 @@
 import { items } from '@lostrpg/core/game-data/item';
-import { bodyParts, specialtyRows } from '@lostrpg/core/game-data/speciality';
 import {
   Ability,
   Backbone,
@@ -10,59 +9,7 @@ import {
 } from '@lostrpg/schemas/validation/character';
 import { CharacterItem, Equipment } from '@lostrpg/schemas/validation/items';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-
-// 身体部位の位置を見つける
-const findBodyPartPosition = (
-  bodyPartName: string,
-): { row: number; col: number } | null => {
-  for (let col = 0; col < specialtyRows.length; col += 1) {
-    for (let row = 0; row < specialtyRows[col].length; row += 1) {
-      if (specialtyRows[col][row].name === bodyPartName) {
-        return { row, col };
-      }
-    }
-  }
-  return null;
-};
-
-// 周囲8マスのオフセット
-const SURROUNDING_OFFSETS = [
-  [-1, -1],
-  [-1, 0],
-  [-1, 1],
-  [0, -1],
-  [0, 1],
-  [1, -1],
-  [1, 0],
-  [1, 1],
-];
-
-// 身体部位の周囲8マスの特技を取得する
-const getSurroundingSpecialties = (bodyPartName: string): string[] => {
-  const position = findBodyPartPosition(bodyPartName);
-  if (!position) return [];
-
-  const surrounding: string[] = [];
-
-  SURROUNDING_OFFSETS.forEach(([colOffset, rowOffset]) => {
-    const newCol = position.col + colOffset;
-    const newRow = position.row + rowOffset;
-
-    if (
-      newCol >= 0 &&
-      newCol < specialtyRows.length &&
-      newRow >= 0 &&
-      newRow < specialtyRows[newCol].length
-    ) {
-      const specialty = specialtyRows[newCol][newRow];
-      if (!bodyParts.includes(specialty.name)) {
-        surrounding.push(specialty.name);
-      }
-    }
-  });
-
-  return surrounding;
-};
+import { toggleDamagedSpecialtyList } from '@lostrpg/frontend/shared/lib/specialty';
 
 export type CharacterFormData = CreateCharacterRequest;
 
@@ -175,54 +122,10 @@ export const characterSlice = createSlice({
       }
     },
     toggleDamagedSpecialty: (state, action: PayloadAction<string>) => {
-      const specialtyName = action.payload;
-      const index = state.damagedSpecialties.indexOf(specialtyName);
-      const isBodyPart = bodyParts.includes(specialtyName);
-
-      if (index !== -1) {
-        // ダメージを削除
-        state.damagedSpecialties.splice(index, 1);
-
-        // 身体部位の場合、周囲8マスの特技からもダメージを削除
-        if (isBodyPart) {
-          const surrounding = getSurroundingSpecialties(specialtyName);
-
-          // 他のダメージを受けている身体部位の周囲8マスを集計
-          const otherDamagedBodyParts = state.damagedSpecialties.filter(
-            (s) => bodyParts.includes(s) && s !== specialtyName,
-          );
-          const protectedSpecialties = new Set<string>();
-          otherDamagedBodyParts.forEach((bodyPart) => {
-            getSurroundingSpecialties(bodyPart).forEach((s) =>
-              protectedSpecialties.add(s),
-            );
-          });
-
-          // 他の身体部位の影響を受けていない特技のみダメージを削除
-          surrounding.forEach((surroundingSpecialty) => {
-            if (!protectedSpecialties.has(surroundingSpecialty)) {
-              const surroundingIndex =
-                state.damagedSpecialties.indexOf(surroundingSpecialty);
-              if (surroundingIndex !== -1) {
-                state.damagedSpecialties.splice(surroundingIndex, 1);
-              }
-            }
-          });
-        }
-      } else {
-        // ダメージを追加
-        state.damagedSpecialties.push(specialtyName);
-
-        // 身体部位の場合、周囲8マスの特技にもダメージを追加
-        if (isBodyPart) {
-          const surrounding = getSurroundingSpecialties(specialtyName);
-          surrounding.forEach((surroundingSpecialty) => {
-            if (!state.damagedSpecialties.includes(surroundingSpecialty)) {
-              state.damagedSpecialties.push(surroundingSpecialty);
-            }
-          });
-        }
-      }
+      state.damagedSpecialties = toggleDamagedSpecialtyList(
+        state.damagedSpecialties,
+        action.payload,
+      );
     },
     addAbility: (state, action: PayloadAction<Ability>) => {
       state.abilities.push(action.payload);
