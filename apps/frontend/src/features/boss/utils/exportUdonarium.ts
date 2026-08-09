@@ -28,8 +28,31 @@ const convertDocToXML = (doc: Document): string => {
   return serializer.serializeToString(doc);
 };
 
+// SHA256ハッシュ計算
+const calculateSHA256 = async (data: ArrayBuffer): Promise<string> => {
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+  return hashHex;
+};
+
+// 画像URLからArrayBufferを取得
+const fetchImageAsArrayBuffer = async (url: string): Promise<ArrayBuffer> => {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch image: ${response.statusText}`);
+  }
+  return response.arrayBuffer();
+};
+
 // ヌシデータをユドナリウムXMLに変換
-export const bossToUdonariumDoc = (boss: BossFormData, bossId: string): string => {
+export const bossToUdonariumDoc = (
+  boss: BossFormData,
+  bossId: string,
+  imageIdentifier?: string,
+): string => {
   const doc = createDoc();
   const characterElm = createElement(doc, 'character', [
     ['location.name', 'table'],
@@ -42,6 +65,22 @@ export const bossToUdonariumDoc = (boss: BossFormData, bossId: string): string =
 
   // #char
   const char = createElement(doc, 'data', [['name', 'character']]);
+
+  // char image
+  if (imageIdentifier) {
+    const image = createElement(doc, 'data', [['name', 'image']]);
+    const imageIdentifierElm = createElement(
+      doc,
+      'data',
+      [
+        ['name', 'imageIdentifier'],
+        ['type', 'image'],
+      ],
+      imageIdentifier,
+    );
+    image.appendChild(imageIdentifierElm);
+    char.appendChild(image);
+  }
 
   // char common
   const common = createElement(doc, 'data', [['name', 'common']]);
@@ -157,7 +196,34 @@ export const exportBossToUdonarium = async (
     bufferedWrite: true,
   });
 
-  const xml = bossToUdonariumDoc(boss, bossId);
+  let imageIdentifier: string | undefined;
+  let imageExtension: string | undefined;
+
+  // 画像がある場合は取得してハッシュ計算
+  if (boss.imageUrl) {
+    try {
+      const imageData = await fetchImageAsArrayBuffer(boss.imageUrl);
+      const hash = await calculateSHA256(imageData);
+      imageIdentifier = hash;
+
+      // 画像の拡張子を取得
+      const urlPath = new URL(boss.imageUrl).pathname;
+      const match = urlPath.match(/\.([^.]+)$/);
+      imageExtension = match ? match[1] : 'png';
+
+      // ZIPに画像を追加
+      const imageBlob = new Blob([imageData]);
+      await zipWriter.add(
+        `${hash}.${imageExtension}`,
+        new BlobReader(imageBlob),
+      );
+    } catch (error) {
+      console.error('画像の取得に失敗しました:', error);
+    }
+  }
+
+  // XMLを生成してZIPに追加
+  const xml = bossToUdonariumDoc(boss, bossId, imageIdentifier);
   const xmlBlob = new Blob([xml], { type: 'text/xml' });
   await zipWriter.add('data.xml', new BlobReader(xmlBlob));
 

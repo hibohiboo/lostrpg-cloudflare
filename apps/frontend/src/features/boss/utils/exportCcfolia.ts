@@ -45,6 +45,7 @@ export const bossToCcfoliaDoc = (boss: BossFormData, bossId: string): string => 
 
   obj.data.name = boss.name;
   obj.data.externalUrl = `${window.location.origin}/boss/${bossId}`;
+  obj.data.iconUrl = boss.imageUrl || null;
 
   // ステータス
   obj.data.status?.push({
