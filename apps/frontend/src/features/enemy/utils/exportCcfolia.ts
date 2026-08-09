@@ -66,6 +66,12 @@ export const enemyToCcfoliaDoc = (
 タイプ: ${enemy.type || ''}
 ${enemy.appearance || ''}`;
 
+  // 特技
+  enemy.specialties.forEach((specialty) => {
+    obj.data.memo = `${obj.data.memo}
+特技:《${specialty}》`;
+  });
+
   // ドロップアイテム
   if (enemy.dropItems.some((item) => item)) {
     obj.data.memo = `${obj.data.memo}

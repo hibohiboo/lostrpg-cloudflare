@@ -4,6 +4,7 @@ import {
   AbilitiesSection,
   BasicSection,
   DropItemsSection,
+  EditSpecialtiesSection,
   FormActionsSection,
   PasswordSection,
   StatsSection,
@@ -24,6 +25,8 @@ const EditForm: React.FC<Props> = ({
   setEnemy,
   handleImageChange,
   handleDropItemChange,
+  handleSpecialtyToggle,
+  handleGapToggle,
   handleAbilityAdd,
   handleAbilityUpdate,
   handleAbilityDelete,
@@ -44,6 +47,12 @@ const EditForm: React.FC<Props> = ({
         onImageChange={handleImageChange}
       />
       <StatsSection enemy={enemy} onChange={handleChange} />
+      <EditSpecialtiesSection
+        specialties={enemy.specialties}
+        gaps={enemy.gaps}
+        onSpecialtyToggle={handleSpecialtyToggle}
+        onGapToggle={handleGapToggle}
+      />
       <AbilitiesSection
         abilities={enemy.abilities}
         onAbilityAdd={handleAbilityAdd}

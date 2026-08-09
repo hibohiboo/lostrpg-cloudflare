@@ -157,7 +157,7 @@ const DetailPage: React.FC = () => {
         </Box>
 
         {/* 特技・ギャップ */}
-        <SpecialtiesSection />
+        <SpecialtiesSection specialties={enemy.specialties} gaps={enemy.gaps} />
 
         {/* ドロップアイテム表 */}
         {enemy.dropItems.some((item) => item) && (

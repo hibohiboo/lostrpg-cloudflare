@@ -154,6 +154,17 @@ export const enemyToUdonariumDoc = (
   );
   detail.appendChild(info);
 
+  // char detail 特技
+  if (enemy.specialties.length > 0) {
+    const specialty = createElement(doc, 'data', [['name', '特技']]);
+    enemy.specialties.forEach((s, i) => {
+      specialty.appendChild(
+        createElement(doc, 'data', [['name', `特技${i + 1}`]], s),
+      );
+    });
+    detail.appendChild(specialty);
+  }
+
   // char detail アビリティ
   if (enemy.abilities.length > 0) {
     const abilities = createElement(doc, 'data', [['name', 'アビリティ']]);

@@ -18,16 +18,23 @@ const enemyTypeEnum = z.enum(['ケモノ', 'ムシ', 'ミュータント']);
 
 export type EnemyType = z.infer<typeof enemyTypeEnum>;
 
+// ギャップの列挙型（キャラクターと同じ）
+const gapEnum = z.enum(['A', 'B', 'C', 'D', 'E']);
+
+export type EnemyGap = z.infer<typeof gapEnum>;
+
 // 1d6で出た目に応じて入手できるドロップアイテム表（1〜6の6項目固定）
 const dropItemsSchema = z.array(z.string()).length(6);
 
 // エネミー作成フィールドスキーマ
-// エネミーは部位ダメージを受けず体力が0で倒れるため、身体部位決定表に相当する項目は持たない
+// エネミーは部位ダメージを受けず体力が0で倒れるため、部位ダメージ（damagedSpecialties）は持たない
 const baseEnemyFields = {
   name: z.string().max(100, 'name は100文字以内で入力してください'),
   appearance: z.string().optional(),
   type: enemyTypeEnum.optional(),
   level: z.number().int().min(1).default(1),
+  specialties: z.array(z.string()).default([]),
+  gaps: z.array(gapEnum).default([]),
   abilities: z.array(enemyAbilitySchema).default([]),
   stamina: z.number().int().min(0).default(5),
   willPower: z.number().int().min(0).default(10),

@@ -1,5 +1,9 @@
+import { specialties, specialtiesTableColumns } from '@lostrpg/core/game-data/speciality';
 import { saveAs } from 'file-saver';
 import type { EnemyFormData } from '../model/enemySlice';
+
+// 範囲配列を生成
+const range = (n: number): number[] => Array.from({ length: n }, (_, i) => i);
 
 // アビリティのカラム
 const abilitiesColumns = [
@@ -15,6 +19,16 @@ const abilitiesColumns = [
 // エネミーデータをTRPGスタジオ形式のJSONに変換
 export const enemyToTRPGStudioDoc = (enemy: EnemyFormData): string => {
   const typeLabel = enemy.type ? `（${enemy.type}）` : '';
+  const heads = specialtiesTableColumns.filter((_, i) => i % 2 === 1);
+  const makeData = (t: string) => ({
+    t,
+    c: enemy.specialties.includes(t),
+    k: 1,
+  });
+  const specialityList = range(11).map((y) =>
+    range(6).map((x) => makeData(specialties[y + 11 * x])),
+  );
+
   const result = {
     info: {
       chara_name: enemy.name,
@@ -54,6 +68,12 @@ export const enemyToTRPGStudioDoc = (enemy: EnemyFormData): string => {
             textarea: enemy.appearance || '',
           },
         ],
+      },
+      {
+        type: 'charaSheetInputCloneCheckTable',
+        title: '特技',
+        array_th: heads.map((t) => ({ t, c: false, k: 1 })),
+        array_tr: specialityList,
       },
       {
         type: 'charaSheetInputCloneTextTable',

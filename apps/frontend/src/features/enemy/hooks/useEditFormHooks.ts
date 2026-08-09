@@ -7,11 +7,13 @@ import {
 import {
   setEnemy,
   setDropItem,
+  toggleSpecialty,
+  toggleGap,
   addAbility,
   updateAbility,
   deleteAbility,
 } from '../model/enemySlice';
-import type { EnemyAbility } from '@lostrpg/frontend/entities/enemy';
+import type { EnemyAbility, EnemyGap } from '@lostrpg/frontend/entities/enemy';
 
 export const useEditFormHooks = () => {
   const dispatch = useAppDispatch();
@@ -55,6 +57,14 @@ export const useEditFormHooks = () => {
     dispatch(setDropItem({ index, value }));
   };
 
+  const handleSpecialtyToggle = (specialty: string) => {
+    dispatch(toggleSpecialty(specialty));
+  };
+
+  const handleGapToggle = (gap: string) => {
+    dispatch(toggleGap(gap as EnemyGap));
+  };
+
   const handleAbilityAdd = (ability: EnemyAbility) => {
     dispatch(addAbility(ability));
   };
@@ -77,6 +87,8 @@ export const useEditFormHooks = () => {
     handleImageChange,
     handleImageUpload,
     handleDropItemChange,
+    handleSpecialtyToggle,
+    handleGapToggle,
     handleAbilityAdd,
     handleAbilityUpdate,
     handleAbilityDelete,

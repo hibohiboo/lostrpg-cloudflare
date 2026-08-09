@@ -20,8 +20,8 @@ type Props = {
   onAbilityDelete: (id: string) => void;
 };
 
-// エネミーグループ（ヌシ・ケモノ・ムシ・ミュータント・その他）をこの並び順で先頭に出す
-const ENEMY_GROUP_ORDER = ['ヌシ', 'ケモノ', 'ムシ', 'ミュータント', 'その他'];
+// エネミーグループ（ケモノ・ムシ・ミュータント・その他）をこの並び順で先頭に出す
+const ENEMY_GROUP_ORDER = ['ケモノ', 'ムシ', 'ミュータント', 'その他'];
 const orderedEnemyAbilityList = ENEMY_GROUP_ORDER.map((name) =>
   enemyAbilityList.find((group) => group.name === name),
 ).filter((group): group is (typeof enemyAbilityList)[number] => !!group);
