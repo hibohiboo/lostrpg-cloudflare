@@ -65,6 +65,17 @@ export const Layout: React.FC<LayoutProps> = ({
                   </span>
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/boss"
+                  className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-rose-400 transition-all duration-300 group"
+                >
+                  <span className="text-xl group-hover:scale-110 transition-transform">
+                    🐉
+                  </span>
+                  <span className="hidden sm:inline font-medium">ヌシ</span>
+                </Link>
+              </li>
             </ul>
           </nav>
         </div>
