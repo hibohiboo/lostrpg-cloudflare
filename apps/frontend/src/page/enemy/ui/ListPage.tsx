@@ -7,6 +7,7 @@ import {
   CircularProgress,
   Container,
   Link as MuiLink,
+  MenuItem,
   Paper,
   Table,
   TableBody,
@@ -14,11 +15,13 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TableSortLabel,
   TextField,
   Typography,
 } from '@mui/material';
 import React from 'react';
 import { Link, useNavigate } from 'react-router';
+import { ENEMY_TYPES } from '@lostrpg/frontend/entities/enemy';
 import { useListPageHooks } from '../hooks/useListPageHooks';
 
 const ListPage: React.FC = () => {
@@ -30,6 +33,10 @@ const ListPage: React.FC = () => {
     searchName,
     setSearchName,
     handleSearchSubmit,
+    typeFilter,
+    setTypeFilter,
+    levelSortOrder,
+    handleToggleLevelSort,
     handleLoadMore,
     hasMore,
     itemsPerPage,
@@ -59,26 +66,54 @@ const ListPage: React.FC = () => {
             display: 'flex',
             alignItems: 'flex-end',
             mt: 2,
-            gap: 1,
-            maxWidth: 400,
+            gap: 2,
+            flexWrap: 'wrap',
           }}
         >
-          <TextField
-            label="名前で絞り込み"
-            variant="standard"
-            value={searchName}
-            onChange={(e) => setSearchName(e.target.value)}
-            fullWidth
-            size="small"
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            sx={{ minWidth: 'auto', px: 2 }}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-end',
+              gap: 1,
+              maxWidth: 400,
+              flexGrow: 1,
+            }}
           >
-            <SearchIcon />
-          </Button>
+            <TextField
+              label="名前で絞り込み"
+              variant="standard"
+              value={searchName}
+              onChange={(e) => setSearchName(e.target.value)}
+              fullWidth
+              size="small"
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{ minWidth: 'auto', px: 2 }}
+            >
+              <SearchIcon />
+            </Button>
+          </Box>
+
+          {/* タイプで絞り込み（選択と同時に確定） */}
+          <TextField
+            select
+            label="タイプで絞り込み"
+            variant="standard"
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+            size="small"
+            sx={{ width: 180 }}
+          >
+            <MenuItem value="">すべて</MenuItem>
+            {ENEMY_TYPES.map((type) => (
+              <MenuItem key={type} value={type}>
+                {type}
+              </MenuItem>
+            ))}
+          </TextField>
         </Box>
 
         {/* 一覧 */}
@@ -99,7 +134,13 @@ const ListPage: React.FC = () => {
                         <TableCell sx={{ width: 48 }} />
                         <TableCell sx={{ fontWeight: 600 }}>名前</TableCell>
                         <TableCell align="right" sx={{ fontWeight: 600 }}>
-                          レベル
+                          <TableSortLabel
+                            active={levelSortOrder !== null}
+                            direction={levelSortOrder ?? 'asc'}
+                            onClick={handleToggleLevelSort}
+                          >
+                            レベル
+                          </TableSortLabel>
                         </TableCell>
                         <TableCell sx={{ fontWeight: 600 }}>タイプ</TableCell>
                         <TableCell align="right" sx={{ fontWeight: 600 }}>

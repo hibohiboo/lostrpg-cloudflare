@@ -12,6 +12,9 @@ export interface GetEnemyListArgs {
   offset: number;
   limit: number;
   name?: string;
+  type?: string;
+  sortBy?: 'updatedAt' | 'level';
+  sortOrder?: 'asc' | 'desc';
 }
 
 export const enemyApi = createApi({
@@ -20,17 +23,19 @@ export const enemyApi = createApi({
   tagTypes: ['Enemy', 'EnemyList'],
   endpoints: (builder) => ({
     getEnemyList: builder.query<GetEnemyListResponse, GetEnemyListArgs>({
-      query: ({ offset, limit, name }) => ({
+      query: ({ offset, limit, name, type, sortBy, sortOrder }) => ({
         url: '/enemies',
         params: {
           offset,
           limit,
           ...(name ? { name } : {}),
+          ...(type ? { type } : {}),
+          ...(sortBy ? { sortBy, sortOrder } : {}),
         },
       }),
-      // ページネーション（もっと読み込む）用に、検索語ごとにキャッシュをまとめて結合する
+      // ページネーション（もっと読み込む）用に、検索語/絞り込み/並び順ごとにキャッシュをまとめて結合する
       serializeQueryArgs: ({ queryArgs, endpointName }) =>
-        `${endpointName}-${queryArgs.name ?? ''}`,
+        `${endpointName}-${queryArgs.name ?? ''}-${queryArgs.type ?? ''}-${queryArgs.sortBy ?? ''}-${queryArgs.sortOrder ?? ''}`,
       merge: (currentCache, newItems, { arg }) =>
         arg.offset === 0
           ? newItems
@@ -40,7 +45,10 @@ export const enemyApi = createApi({
             },
       forceRefetch: ({ currentArg, previousArg }) =>
         currentArg?.offset !== previousArg?.offset ||
-        currentArg?.name !== previousArg?.name,
+        currentArg?.name !== previousArg?.name ||
+        currentArg?.type !== previousArg?.type ||
+        currentArg?.sortBy !== previousArg?.sortBy ||
+        currentArg?.sortOrder !== previousArg?.sortOrder,
       providesTags: ['EnemyList'],
     }),
     createEnemy: builder.mutation<

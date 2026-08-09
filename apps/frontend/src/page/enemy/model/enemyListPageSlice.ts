@@ -6,9 +6,13 @@ export interface EnemyListItem {
   imageUrl?: string;
 }
 
+export type EnemyListSortOrder = 'asc' | 'desc' | null;
+
 export interface EnemyListPageState {
   searchInput: string;
   appliedSearchName: string;
+  typeFilter: string;
+  levelSortOrder: EnemyListSortOrder;
   offset: number;
 }
 
@@ -17,6 +21,8 @@ const ITEMS_PER_PAGE = 20;
 const initialState: EnemyListPageState = {
   searchInput: '',
   appliedSearchName: '',
+  typeFilter: '',
+  levelSortOrder: null,
   offset: 0,
 };
 
@@ -32,6 +38,24 @@ export const enemyListPageSlice = createSlice({
       state.appliedSearchName = state.searchInput;
       state.offset = 0;
     },
+    // タイプでの絞り込みは選択と同時に確定する
+    setTypeFilter: (state, action: PayloadAction<string>) => {
+      state.typeFilter = action.payload;
+      state.offset = 0;
+    },
+    // レベル列ヘッダー押下で 昇順 → 降順 → 解除 の順に切り替える
+    toggleLevelSort: (state) => {
+      const nextSortOrder: Record<
+        NonNullable<EnemyListSortOrder> | 'null',
+        EnemyListSortOrder
+      > = {
+        null: 'asc',
+        asc: 'desc',
+        desc: null,
+      };
+      state.levelSortOrder = nextSortOrder[state.levelSortOrder ?? 'null'];
+      state.offset = 0;
+    },
     setOffset: (state, action: PayloadAction<number>) => {
       state.offset = action.payload;
     },
@@ -39,8 +63,14 @@ export const enemyListPageSlice = createSlice({
   },
 });
 
-export const { setSearchInput, submitSearch, setOffset, resetListPage } =
-  enemyListPageSlice.actions;
+export const {
+  setSearchInput,
+  submitSearch,
+  setTypeFilter,
+  toggleLevelSort,
+  setOffset,
+  resetListPage,
+} = enemyListPageSlice.actions;
 
 export default enemyListPageSlice.reducer;
 

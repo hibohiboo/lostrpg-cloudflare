@@ -1,7 +1,7 @@
 import { zValidator } from '@hono/zod-validator';
 import { createEnemySchema, getEnemySchema, updateEnemySchema } from '@lostrpg/schemas';
 import bcrypt from 'bcryptjs';
-import { desc, eq, ilike } from 'drizzle-orm';
+import { and, asc, desc, eq, ilike, sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 import { z } from 'zod';
@@ -15,12 +15,26 @@ const listEnemiesQuerySchema = z.object({
   offset: z.coerce.number().int().min(0).default(0),
   limit: z.coerce.number().int().min(1).max(100).default(20),
   name: z.string().trim().optional(),
+  type: z.enum(['ケモノ', 'ムシ', 'ミュータント']).optional(),
+  sortBy: z.enum(['updatedAt', 'level']).default('updatedAt'),
+  sortOrder: z.enum(['asc', 'desc']).default('desc'),
 });
 
 export const enemiesRouter = new Hono<{ Bindings: Env }>()
-  // Get enemies (paginated, optionally filtered by name)
+  // Get enemies (paginated, optionally filtered by name/type, sortable by level)
   .get('/', zValidator('query', listEnemiesQuerySchema), async (c) => {
-    const { offset, limit, name } = c.req.valid('query');
+    const { offset, limit, name, type, sortBy, sortOrder } = c.req.valid('query');
+
+    const conditions = [
+      name ? ilike(enemies.name, `%${name}%`) : undefined,
+      type ? eq(sql`${enemies.data}->>'type'`, type) : undefined,
+    ].filter((condition) => condition !== undefined);
+
+    const levelExpr = sql`(${enemies.data}->>'level')::int`;
+    let orderBy = desc(enemies.updatedAt);
+    if (sortBy === 'level') {
+      orderBy = sortOrder === 'asc' ? asc(levelExpr) : desc(levelExpr);
+    }
 
     const enemyList = await getDb()
       .select({
@@ -31,8 +45,8 @@ export const enemiesRouter = new Hono<{ Bindings: Env }>()
         data: enemies.data,
       })
       .from(enemies)
-      .where(name ? ilike(enemies.name, `%${name}%`) : undefined)
-      .orderBy(desc(enemies.updatedAt))
+      .where(conditions.length > 0 ? and(...conditions) : undefined)
+      .orderBy(orderBy)
       .limit(limit + 1)
       .offset(offset);
 

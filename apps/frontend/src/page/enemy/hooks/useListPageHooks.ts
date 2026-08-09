@@ -6,9 +6,13 @@ import {
 import {
   selectSearchInput,
   selectAppliedSearchName,
+  selectTypeFilter,
+  selectLevelSortOrder,
   selectOffset,
   setSearchInput,
   submitSearch,
+  setTypeFilter,
+  toggleLevelSort,
   setOffset,
   ITEMS_PER_PAGE_CONSTANT,
 } from '../model';
@@ -17,6 +21,8 @@ export const useListPageHooks = () => {
   const dispatch = useAppDispatch();
   const searchInput = useAppSelector(selectSearchInput);
   const appliedSearchName = useAppSelector(selectAppliedSearchName);
+  const typeFilter = useAppSelector(selectTypeFilter);
+  const levelSortOrder = useAppSelector(selectLevelSortOrder);
   const offset = useAppSelector(selectOffset);
   const ITEMS_PER_PAGE = ITEMS_PER_PAGE_CONSTANT;
 
@@ -28,6 +34,10 @@ export const useListPageHooks = () => {
     offset,
     limit: ITEMS_PER_PAGE,
     name: appliedSearchName,
+    type: typeFilter || undefined,
+    ...(levelSortOrder
+      ? { sortBy: 'level' as const, sortOrder: levelSortOrder }
+      : {}),
   });
   const { data: list = [], hasMore = false } = response ?? {};
 
@@ -48,6 +58,16 @@ export const useListPageHooks = () => {
     dispatch(submitSearch());
   };
 
+  // タイプで絞り込む（選択と同時に確定）
+  const handleSetTypeFilter = (value: string) => {
+    dispatch(setTypeFilter(value));
+  };
+
+  // レベル列ヘッダー押下でソート順を切り替える
+  const handleToggleLevelSort = () => {
+    dispatch(toggleLevelSort());
+  };
+
   return {
     list,
     isLoading: isInitialLoading,
@@ -55,6 +75,10 @@ export const useListPageHooks = () => {
     searchName: searchInput,
     setSearchName: handleSetSearchName,
     handleSearchSubmit,
+    typeFilter,
+    setTypeFilter: handleSetTypeFilter,
+    levelSortOrder,
+    handleToggleLevelSort,
     handleLoadMore,
     hasMore,
     itemsPerPage: ITEMS_PER_PAGE,

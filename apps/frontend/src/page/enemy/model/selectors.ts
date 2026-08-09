@@ -19,3 +19,13 @@ export const selectOffset = createSelector(
   [selectEnemyListPageState],
   (enemyListPage) => enemyListPage.offset,
 );
+
+export const selectTypeFilter = createSelector(
+  [selectEnemyListPageState],
+  (enemyListPage) => enemyListPage.typeFilter,
+);
+
+export const selectLevelSortOrder = createSelector(
+  [selectEnemyListPageState],
+  (enemyListPage) => enemyListPage.levelSortOrder,
+);
