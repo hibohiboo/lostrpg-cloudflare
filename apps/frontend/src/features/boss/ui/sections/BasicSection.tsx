@@ -1,19 +1,24 @@
 import { Box, TextField, Typography } from '@mui/material';
 import React from 'react';
+import { ImageUploadField } from '@lostrpg/frontend/shared/ui';
 import type { BossFormData } from '../../model/bossSlice';
 
 type Props = {
   boss: BossFormData;
   isValidError: boolean;
+  previewUrl: string;
   onChange: (data: Partial<BossFormData>) => void;
   onLevelChange: (level: number) => void;
+  onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export const BasicSection: React.FC<Props> = ({
   boss,
   isValidError,
+  previewUrl,
   onChange,
   onLevelChange,
+  onImageChange,
 }) => (
   <Box sx={{ my: 2 }}>
     <Typography variant="h6" gutterBottom>
@@ -57,5 +62,12 @@ export const BasicSection: React.FC<Props> = ({
         sx={{ width: 200 }}
       />
     </Box>
+
+    {/* 画像 */}
+    <ImageUploadField
+      previewUrl={previewUrl}
+      currentImageUrl={boss.imageUrl}
+      onImageChange={onImageChange}
+    />
   </Box>
 );

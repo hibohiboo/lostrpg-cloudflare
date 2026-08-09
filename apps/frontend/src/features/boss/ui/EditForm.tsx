@@ -20,8 +20,10 @@ type Props = EditFormViewModel & {
 const EditForm: React.FC<Props> = ({
   boss,
   isValidError,
+  previewUrl,
   setBoss,
   handleLevelChange,
+  handleImageChange,
   handleAbilityAdd,
   handleAbilityUpdate,
   handleAbilityDelete,
@@ -37,8 +39,10 @@ const EditForm: React.FC<Props> = ({
       <BasicSection
         boss={boss}
         isValidError={isValidError}
+        previewUrl={previewUrl}
         onChange={handleChange}
         onLevelChange={handleLevelChange}
+        onImageChange={handleImageChange}
       />
       <SpecialtyNoteSection />
       <StatsSection boss={boss} onChange={handleChange} />

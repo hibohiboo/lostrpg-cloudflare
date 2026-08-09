@@ -22,6 +22,7 @@ const baseBossFields = {
   abilities: z.array(bossAbilitySchema).default([]),
   stamina: z.number().int().min(0).default(5),
   willPower: z.number().int().min(0).default(11),
+  imageUrl: z.string().optional(),
   password: z.string().nullable().optional(),
 };
 

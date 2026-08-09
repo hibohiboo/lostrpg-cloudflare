@@ -9,7 +9,7 @@ export const useEditPageHooks = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const editForm = useEditFormHooks();
-  const { boss, setIsValidError } = editForm;
+  const { boss, setIsValidError, handleImageUpload } = editForm;
 
   const handleSave = async () => {
     if (!boss.name) {
@@ -20,7 +20,13 @@ export const useEditPageHooks = () => {
     if (!id) return;
 
     try {
-      await dispatch(updateBossAction({ id, data: boss })).unwrap();
+      // 画像がある場合は先にアップロード
+      const imageUrl = await handleImageUpload(id, boss.password);
+
+      // imageUrlを含めて更新
+      await dispatch(
+        updateBossAction({ id, data: imageUrl ? { ...boss, imageUrl } : boss }),
+      ).unwrap();
 
       navigate(`/boss/${id}`);
     } catch (error) {

@@ -74,17 +74,33 @@ const DetailPage: React.FC = () => {
           </Link>
         </Box>
 
-        {boss.appearance && (
-          <Box sx={{ my: 3 }}>
-            <InputLabel sx={{ mb: 1 }}>概要</InputLabel>
+        {/* 画像と概要 */}
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3 }}>
+          {boss.imageUrl && (
             <Box
               component={Paper}
-              sx={{ p: 2, whiteSpace: 'pre-wrap', minWidth: 320 }}
+              sx={{ minWidth: 320, maxWidth: 500, overflow: 'hidden' }}
             >
-              <Typography variant="body1">{boss.appearance}</Typography>
+              <img
+                src={boss.imageUrl}
+                alt="ヌシ画像"
+                style={{ width: '100%', display: 'block' }}
+              />
             </Box>
-          </Box>
-        )}
+          )}
+
+          {boss.appearance && (
+            <Box sx={{ minWidth: 320, flex: 1 }}>
+              <InputLabel sx={{ mb: 1 }}>概要</InputLabel>
+              <Box
+                component={Paper}
+                sx={{ p: 2, whiteSpace: 'pre-wrap' }}
+              >
+                <Typography variant="body1">{boss.appearance}</Typography>
+              </Box>
+            </Box>
+          )}
+        </Box>
 
         {/* 特技・ギャップ */}
         <SpecialtiesSection />

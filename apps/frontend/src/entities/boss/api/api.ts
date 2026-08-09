@@ -5,6 +5,8 @@ import type { ApiType } from '@lostrpg/frontend/shared/lib/api/client';
 
 type BossDetailType = ApiType['bosses'][':id'];
 type BossDetailData = InferResponseType<BossDetailType['$get'], 200>;
+type UploadImageType = ApiType['bosses'][':id']['upload-image'];
+type UploadImageResponse = InferResponseType<UploadImageType['$post'], 200>;
 type GetBossListResponse = InferResponseType<ApiType['bosses']['$get'], 200>;
 export interface GetBossListArgs {
   offset: number;
@@ -77,6 +79,24 @@ export const bossApi = createApi({
       }),
       invalidatesTags: ['BossList'],
     }),
+    uploadBossImage: builder.mutation<
+      UploadImageResponse,
+      { id: string; image: File; password?: string }
+    >({
+      query: ({ id, image, password }) => {
+        const formData = new FormData();
+        formData.append('image', image);
+        if (password) {
+          formData.append('password', password);
+        }
+        return {
+          url: `/bosses/${id}/upload-image`,
+          method: 'POST',
+          body: formData,
+        };
+      },
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'Boss', id }],
+    }),
   }),
 });
 
@@ -86,4 +106,5 @@ export const {
   useCreateBossMutation,
   useUpdateBossMutation,
   useDeleteBossMutation,
+  useUploadBossImageMutation,
 } = bossApi;

@@ -1,12 +1,13 @@
 import { zValidator } from '@hono/zod-validator';
 import { createBossSchema, getBossSchema, updateBossSchema } from '@lostrpg/schemas';
 import bcrypt from 'bcryptjs';
-import { desc, eq, ilike } from 'drizzle-orm';
+import { desc, eq, ilike, sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 import { z } from 'zod';
 import { getDb } from '../lib/db/connection';
 import { bosses } from '../lib/db/schema';
+import { validateImageFile, uploadImageToR2 } from '../lib/r2/image-upload';
 import { requirePasswordAuth } from '../middleware/auth';
 import type { Env } from '../types/cloudflare';
 
@@ -27,6 +28,7 @@ export const bossesRouter = new Hono<{ Bindings: Env }>()
         name: bosses.name,
         createdAt: bosses.createdAt,
         updatedAt: bosses.updatedAt,
+        imageUrl: sql<string | null>`${bosses.data}->>'imageUrl'`,
       })
       .from(bosses)
       .where(name ? ilike(bosses.name, `%${name}%`) : undefined)
@@ -35,7 +37,13 @@ export const bossesRouter = new Hono<{ Bindings: Env }>()
       .offset(offset);
 
     const hasMore = bossList.length > limit;
-    const data = bossList.slice(0, limit);
+    const data = bossList.slice(0, limit).map((boss) => ({
+      id: boss.id,
+      name: boss.name,
+      createdAt: boss.createdAt,
+      updatedAt: boss.updatedAt,
+      imageUrl: boss.imageUrl ?? undefined,
+    }));
 
     return c.json({ data, hasMore });
   })
@@ -196,5 +204,65 @@ export const bossesRouter = new Hono<{ Bindings: Env }>()
       await getDb().delete(bosses).where(eq(bosses.id, id));
 
       return c.json({ message: 'Boss deleted successfully' }, 200);
+    },
+  )
+
+  // Upload boss image
+  .post(
+    '/:id/upload-image',
+    zValidator(
+      'param',
+      z.object({
+        id: z.string().uuid('Invalid ID format'),
+      }),
+    ),
+    async (c) => {
+      const { id } = c.req.valid('param');
+      if (!c.env.IMAGES_BUCKET) {
+        throw new HTTPException(404, { message: 'Bucket not found' });
+      }
+
+      // ヌシの存在確認
+      const [boss] = await getDb().select().from(bosses).where(eq(bosses.id, id));
+
+      if (!boss) {
+        throw new HTTPException(404, { message: 'Boss not found' });
+      }
+
+      // multipart/form-dataから画像を取得
+      const formData = await c.req.formData();
+      const imageFile = formData.get('image') as File | null;
+      const password = formData.get('password') as string | null;
+
+      // パスワード認証
+      await requirePasswordAuth(boss, password ?? undefined);
+
+      // 画像ファイルのバリデーション
+      const validatedFile = validateImageFile(imageFile);
+
+      // R2にアップロード
+      const imageUrl = await uploadImageToR2(
+        c.env.IMAGES_BUCKET,
+        'bosses',
+        id,
+        validatedFile,
+      );
+
+      // データベースのimageUrlを更新
+      const bossData = boss.data as Record<string, unknown>;
+      const updatedData = {
+        ...bossData,
+        imageUrl,
+      };
+
+      await getDb()
+        .update(bosses)
+        .set({
+          data: updatedData,
+          updatedAt: new Date(),
+        })
+        .where(eq(bosses.id, id));
+
+      return c.json({ imageUrl }, 200);
     },
   );

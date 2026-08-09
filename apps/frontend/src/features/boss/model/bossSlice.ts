@@ -18,6 +18,7 @@ const initialState: BossFormData = {
   abilities: [],
   stamina: calcBossStamina(1),
   willPower: calcBossWillPower(1),
+  imageUrl: '',
   password: '',
 };
 
