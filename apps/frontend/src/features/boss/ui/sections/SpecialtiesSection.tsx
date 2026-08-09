@@ -128,12 +128,18 @@ const DamageTable: React.FC<DamageTableProps> = ({
 
 // ＜ヌシ＞は全ての特技を習得しておりギャップを埋めないため、
 // 習得特技・ギャップは常に固定。ダメージ・判定特技の選択はこの画面内だけのセッション状態として扱う（保存はしない）
+
+// 判定特技の目標値一覧を、折りたたみ表示するデフォルト件数
+const TARGET_LIST_COLLAPSED_COUNT = 5;
+
 export const SpecialtiesSection: React.FC = () => {
   const [damagedSpecialties, setDamagedSpecialties] = useState<string[]>([]);
   const [selectedSpecialty, setSelectedSpecialty] = useState('');
+  const [showAllTargets, setShowAllTargets] = useState(false);
 
   const handleSpecialtySelect = (specialty: string) => {
     setSelectedSpecialty((prev) => (prev === specialty ? '' : specialty));
+    setShowAllTargets(false);
   };
 
   const handleDamageChange = (specialty: string) => {
@@ -152,6 +158,10 @@ export const SpecialtiesSection: React.FC = () => {
         .sort((a, b) => a.target - b.target),
     [selectedSpecialty],
   );
+
+  const visibleTargets = showAllTargets
+    ? specialtiesWithTarget
+    : specialtiesWithTarget.slice(0, TARGET_LIST_COLLAPSED_COUNT);
 
   const damageRows = useMemo(
     () =>
@@ -214,7 +224,7 @@ export const SpecialtiesSection: React.FC = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {specialtiesWithTarget.map(({ specialty, target }) => (
+                  {visibleTargets.map(({ specialty, target }) => (
                     <TableRow key={specialty}>
                       <TableCell sx={{ border: 1, borderColor: 'divider' }}>
                         {specialty}
@@ -233,6 +243,18 @@ export const SpecialtiesSection: React.FC = () => {
             </Typography>
           )}
         </Box>
+        {selectedSpecialty &&
+          specialtiesWithTarget.length > TARGET_LIST_COLLAPSED_COUNT && (
+            <Button
+              size="small"
+              onClick={() => setShowAllTargets((prev) => !prev)}
+              sx={{ mt: 1 }}
+            >
+              {showAllTargets
+                ? '折りたたむ'
+                : `すべて表示（${specialtiesWithTarget.length}件）`}
+            </Button>
+          )}
       </Box>
 
       <Box sx={{ my: 3 }}>
