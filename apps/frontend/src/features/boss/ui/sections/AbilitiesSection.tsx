@@ -1,4 +1,9 @@
-import { abilityList, trophyAbilityList } from '@lostrpg/core/game-data/character';
+import {
+  abilityList,
+  dragonPlainAbilityList,
+  strangeFieldsAbilityList,
+  trophyAbilityList,
+} from '@lostrpg/core/game-data/character';
 import {
   enemyAbilityList,
   strangeFieldsEnemyAbilityList,
@@ -29,11 +34,13 @@ const orderedEnemyAbilityList = ENEMY_GROUP_ORDER.map((name) =>
 
 // ヌシはクラスや称号を持たないため、キャラクターが習得条件付きで選ぶアビリティ
 // （クラス別アビリティ・称号アビリティ）も含めた全グループから自由に選択できる
-// ドロップダウンの並びは ヌシ系グループ（基本+サプリメント1）→ 汎用 → クラス特技 → 称号特技 の順
+// ドロップダウンの並びは ヌシ系グループ（基本+サプリメント1）→ 汎用 → クラス特技（基本+追加クラス）→ 称号特技 の順
 const abilityGroups: readonly AbilityGroup[] = [
   ...orderedEnemyAbilityList,
   ...strangeFieldsEnemyAbilityList,
   ...abilityList,
+  ...strangeFieldsAbilityList,
+  ...dragonPlainAbilityList,
   ...trophyAbilityList,
 ];
 
