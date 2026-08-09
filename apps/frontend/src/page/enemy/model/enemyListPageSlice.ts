@@ -22,7 +22,7 @@ const initialState: EnemyListPageState = {
   searchInput: '',
   appliedSearchName: '',
   typeFilter: '',
-  levelSortOrder: null,
+  levelSortOrder: 'asc', // 初期表示はレベル昇順
   offset: 0,
 };
 
