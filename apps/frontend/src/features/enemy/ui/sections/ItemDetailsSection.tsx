@@ -48,6 +48,7 @@ export const ItemDetailsSection: React.FC<Props> = ({
           items={itemDetails}
           handleItemDelete={onItemDetailDelete}
           handleItemUpdate={handleItemUpdate}
+          hideNumberColumn
         />
       </Box>
     </Box>

@@ -207,6 +207,7 @@ const DetailPage: React.FC = () => {
                 handleItemDelete={() => {}}
                 handleItemUpdate={(row) => row}
                 hideActions={true}
+                hideNumberColumn
               />
             </Box>
           </Box>

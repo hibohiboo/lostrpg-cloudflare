@@ -13,6 +13,7 @@ type Props = {
     },
   ) => Item;
   hideActions?: boolean;
+  hideNumberColumn?: boolean;
 };
 
 export const ItemTable: React.FC<Props> = ({
@@ -20,15 +21,20 @@ export const ItemTable: React.FC<Props> = ({
   handleItemDelete,
   handleItemUpdate,
   hideActions = false,
+  hideNumberColumn = false,
 }) => {
   const columns: GridColDef<Item>[] = [
-    {
-      field: 'number',
-      headerName: '個数',
-      width: 80,
-      type: 'number',
-      editable: true,
-    },
+    ...(hideNumberColumn
+      ? []
+      : [
+          {
+            field: 'number',
+            headerName: '個数',
+            width: 80,
+            type: 'number',
+            editable: true,
+          } satisfies GridColDef<Item>,
+        ]),
     { field: 'name', headerName: '名前', width: 150, editable: true },
     {
       field: 'j',
