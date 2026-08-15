@@ -6,6 +6,7 @@ import {
   DropItemsSection,
   EditSpecialtiesSection,
   FormActionsSection,
+  ItemDetailsSection,
   PasswordSection,
   StatsSection,
 } from './sections';
@@ -30,6 +31,9 @@ const EditForm: React.FC<Props> = ({
   handleAbilityAdd,
   handleAbilityUpdate,
   handleAbilityDelete,
+  handleItemDetailAdd,
+  handleItemDetailUpdate,
+  handleItemDetailDelete,
   handleSave,
   handleDelete,
   prevPath,
@@ -62,6 +66,12 @@ const EditForm: React.FC<Props> = ({
       <DropItemsSection
         dropItems={enemy.dropItems}
         onDropItemChange={handleDropItemChange}
+      />
+      <ItemDetailsSection
+        itemDetails={enemy.itemDetails}
+        onItemDetailAdd={handleItemDetailAdd}
+        onItemDetailUpdate={handleItemDetailUpdate}
+        onItemDetailDelete={handleItemDetailDelete}
       />
       <PasswordSection enemy={enemy} onChange={handleChange} />
       <FormActionsSection

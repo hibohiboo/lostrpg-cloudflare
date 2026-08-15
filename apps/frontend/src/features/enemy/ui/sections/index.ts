@@ -1,6 +1,7 @@
 export { BasicSection } from './BasicSection';
 export { StatsSection } from './StatsSection';
 export { DropItemsSection } from './DropItemsSection';
+export { ItemDetailsSection } from './ItemDetailsSection';
 export { AbilitiesSection } from './AbilitiesSection';
 export { EditSpecialtiesSection } from './EditSpecialtiesSection';
 export { SpecialtiesSection } from './SpecialtiesSection';

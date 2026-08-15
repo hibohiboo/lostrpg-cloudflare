@@ -4,6 +4,7 @@ import type {
   EnemyAbility,
   EnemyGap,
 } from '@lostrpg/schemas/validation/enemy';
+import type { CharacterItem } from '@lostrpg/schemas/validation/items';
 
 export type EnemyFormData = CreateEnemyRequest;
 
@@ -18,6 +19,7 @@ const initialState: EnemyFormData = {
   stamina: 5,
   willPower: 10,
   dropItems: ['', '', '', '', '', ''],
+  itemDetails: [],
   imageUrl: '',
   creator: '',
   password: '',
@@ -67,6 +69,22 @@ export const enemySlice = createSlice({
     deleteAbility: (state, action: PayloadAction<string>) => {
       state.abilities = state.abilities.filter((a) => a.id !== action.payload);
     },
+    addItemDetail: (state, action: PayloadAction<CharacterItem>) => {
+      state.itemDetails.push(action.payload);
+    },
+    updateItemDetail: (state, action: PayloadAction<CharacterItem>) => {
+      const index = state.itemDetails.findIndex(
+        (i) => i.id === action.payload.id,
+      );
+      if (index !== -1) {
+        state.itemDetails[index] = action.payload;
+      }
+    },
+    deleteItemDetail: (state, action: PayloadAction<string>) => {
+      state.itemDetails = state.itemDetails.filter(
+        (i) => i.id !== action.payload,
+      );
+    },
     resetEnemy: () => initialState,
   },
 });
@@ -80,6 +98,9 @@ export const {
   addAbility,
   updateAbility,
   deleteAbility,
+  addItemDetail,
+  updateItemDetail,
+  deleteItemDetail,
   resetEnemy,
 } = enemySlice.actions;
 

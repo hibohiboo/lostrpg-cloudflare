@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { itemSchema } from './items';
 
 const enemyAbilitySchema = z.object({
   id: z.string(),
@@ -39,6 +40,8 @@ const baseEnemyFields = {
   stamina: z.number().int().min(0).default(5),
   willPower: z.number().int().min(0).default(10),
   dropItems: dropItemsSchema.default(['', '', '', '', '', '']),
+  // ドロップアイテムの詳細情報（既存アイテムからの追加・自由編集が可能）
+  itemDetails: z.array(itemSchema).default([]),
   imageUrl: z.string().optional(),
   creator: z.string().optional(),
   password: z.string().nullable().optional(),

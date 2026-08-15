@@ -21,6 +21,7 @@ import {
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { AbilityTable } from '@lostrpg/frontend/entities/ability';
+import { ItemTable } from '@lostrpg/frontend/entities/item';
 import {
   SpecialtiesSection,
   copyEnemyToCcfolia,
@@ -191,6 +192,23 @@ const DetailPage: React.FC = () => {
                 </TableBody>
               </Table>
             </TableContainer>
+          </Box>
+        )}
+
+        {/* アイテム詳細 */}
+        {enemy.itemDetails && enemy.itemDetails.length > 0 && (
+          <Box sx={{ my: 3 }}>
+            <Typography variant="h6" gutterBottom>
+              アイテム詳細
+            </Typography>
+            <Box sx={{ width: '100%' }}>
+              <ItemTable
+                items={enemy.itemDetails}
+                handleItemDelete={() => {}}
+                handleItemUpdate={(row) => row}
+                hideActions={true}
+              />
+            </Box>
           </Box>
         )}
 

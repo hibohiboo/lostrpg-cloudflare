@@ -12,8 +12,12 @@ import {
   addAbility,
   updateAbility,
   deleteAbility,
+  addItemDetail,
+  updateItemDetail,
+  deleteItemDetail,
 } from '../model/enemySlice';
 import type { EnemyAbility, EnemyGap } from '@lostrpg/frontend/entities/enemy';
+import type { Item } from '@lostrpg/frontend/entities/item';
 
 export const useEditFormHooks = () => {
   const dispatch = useAppDispatch();
@@ -78,6 +82,18 @@ export const useEditFormHooks = () => {
     dispatch(deleteAbility(id));
   };
 
+  const handleItemDetailAdd = (item: Item) => {
+    dispatch(addItemDetail(item));
+  };
+
+  const handleItemDetailUpdate = (item: Item) => {
+    dispatch(updateItemDetail(item));
+  };
+
+  const handleItemDetailDelete = (id: string) => {
+    dispatch(deleteItemDetail(id));
+  };
+
   return {
     enemy,
     isValidError,
@@ -92,6 +108,9 @@ export const useEditFormHooks = () => {
     handleAbilityAdd,
     handleAbilityUpdate,
     handleAbilityDelete,
+    handleItemDetailAdd,
+    handleItemDetailUpdate,
+    handleItemDetailDelete,
   };
 };
 
