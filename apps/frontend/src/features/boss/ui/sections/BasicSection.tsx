@@ -1,4 +1,10 @@
-import { Box, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  TextField,
+  Typography,
+} from '@mui/material';
 import React from 'react';
 import { ImageUploadField } from '@lostrpg/frontend/shared/ui';
 import type { BossFormData } from '../../model/bossSlice';
@@ -80,5 +86,18 @@ export const BasicSection: React.FC<Props> = ({
       currentImageUrl={boss.imageUrl}
       onImageChange={onImageChange}
     />
+
+    {/* 一覧に表示しない */}
+    <Box sx={{ my: 2 }}>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={boss.hideFromList ?? false}
+            onChange={(e) => onChange({ hideFromList: e.target.checked })}
+          />
+        }
+        label="一覧に表示しない"
+      />
+    </Box>
   </Box>
 );

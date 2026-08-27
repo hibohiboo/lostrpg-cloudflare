@@ -1,5 +1,7 @@
 import {
   Box,
+  Checkbox,
+  FormControlLabel,
   MenuItem,
   TextField,
   Typography,
@@ -105,5 +107,18 @@ export const BasicSection: React.FC<Props> = ({
       currentImageUrl={enemy.imageUrl}
       onImageChange={onImageChange}
     />
+
+    {/* 一覧に表示しない */}
+    <Box sx={{ my: 2 }}>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={enemy.hideFromList ?? false}
+            onChange={(e) => onChange({ hideFromList: e.target.checked })}
+          />
+        }
+        label="一覧に表示しない"
+      />
+    </Box>
   </Box>
 );

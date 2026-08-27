@@ -1,7 +1,7 @@
 import { zValidator } from '@hono/zod-validator';
 import { createBossSchema, getBossSchema, updateBossSchema } from '@lostrpg/schemas';
 import bcrypt from 'bcryptjs';
-import { desc, eq, ilike, sql } from 'drizzle-orm';
+import { and, desc, eq, ilike, sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 import { z } from 'zod';
@@ -31,7 +31,13 @@ export const bossesRouter = new Hono<{ Bindings: Env }>()
         imageUrl: sql<string | null>`${bosses.data}->>'imageUrl'`,
       })
       .from(bosses)
-      .where(name ? ilike(bosses.name, `%${name}%`) : undefined)
+      .where(
+        and(
+          name ? ilike(bosses.name, `%${name}%`) : undefined,
+          // 「一覧に表示しない」がONのヌシは一覧から除外する（詳細への直接リンクは可）
+          sql`COALESCE((${bosses.data}->>'hideFromList')::boolean, false) = false`,
+        ),
+      )
       .orderBy(desc(bosses.updatedAt))
       .limit(limit + 1)
       .offset(offset);

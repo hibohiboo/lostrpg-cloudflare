@@ -23,6 +23,7 @@ const initialState: EnemyFormData = {
   imageUrl: '',
   creator: '',
   password: '',
+  hideFromList: false,
 };
 
 export const enemySlice = createSlice({

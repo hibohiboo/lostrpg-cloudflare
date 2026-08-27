@@ -28,6 +28,8 @@ export const enemiesRouter = new Hono<{ Bindings: Env }>()
     const conditions = [
       name ? ilike(enemies.name, `%${name}%`) : undefined,
       type ? eq(sql`${enemies.data}->>'type'`, type) : undefined,
+      // 「一覧に表示しない」がONのエネミーは一覧から除外する（詳細への直接リンクは可）
+      sql`COALESCE((${enemies.data}->>'hideFromList')::boolean, false) = false`,
     ].filter((condition) => condition !== undefined);
 
     const levelExpr = sql`(${enemies.data}->>'level')::int`;

@@ -7,7 +7,7 @@ import {
   updateRecordSchema,
 } from '@lostrpg/schemas';
 import bcrypt from 'bcryptjs';
-import { desc, eq, ilike, sql } from 'drizzle-orm';
+import { and, desc, eq, ilike, sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 import { z } from 'zod';
@@ -42,7 +42,13 @@ export const charactersRouter = new Hono<{ Bindings: Env }>()
         imageUrl: sql<string | null>`${characters.data}->>'imageUrl'`,
       })
       .from(characters)
-      .where(name ? ilike(characters.name, `%${name}%`) : undefined)
+      .where(
+        and(
+          name ? ilike(characters.name, `%${name}%`) : undefined,
+          // 「一覧に表示しない」がONのPCは一覧から除外する（キャンプ等からの直接リンクは可）
+          sql`COALESCE((${characters.data}->>'hideFromList')::boolean, false) = false`,
+        ),
+      )
       .orderBy(desc(characters.updatedAt))
       .limit(limit + 1)
       .offset(offset);

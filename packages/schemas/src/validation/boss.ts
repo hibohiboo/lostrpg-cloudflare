@@ -25,6 +25,8 @@ const baseBossFields = {
   imageUrl: z.string().optional(),
   creator: z.string().optional(),
   password: z.string().nullable().optional(),
+  // 一覧に表示しない（キャンプ等からの直接リンクでは表示される）
+  hideFromList: z.boolean().optional().default(false),
 };
 
 // ヌシ作成リクエストスキーマ

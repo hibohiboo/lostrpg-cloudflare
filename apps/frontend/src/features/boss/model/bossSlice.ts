@@ -21,6 +21,7 @@ const initialState: BossFormData = {
   imageUrl: '',
   creator: '',
   password: '',
+  hideFromList: false,
 };
 
 export const bossSlice = createSlice({

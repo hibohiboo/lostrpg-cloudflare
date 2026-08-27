@@ -86,6 +86,8 @@ const baseCharacterFields = {
   trophies: z.array(z.string()).default([]),
   supplements: supplementSchema,
   password: z.string().nullable().optional(),
+  // 一覧に表示しない（キャンプ等からの直接リンクでは表示される）
+  hideFromList: z.boolean().optional().default(false),
 };
 
 // キャラクター作成リクエストスキーマ

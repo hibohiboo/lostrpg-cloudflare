@@ -63,6 +63,7 @@ const initialState: CharacterFormData = {
     useStrangeField: false,
     useDragonPlain: false,
   },
+  hideFromList: false,
 };
 
 // APIから取得したデータにデフォルト値を適用
