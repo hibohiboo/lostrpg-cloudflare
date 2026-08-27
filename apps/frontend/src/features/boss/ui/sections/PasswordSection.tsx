@@ -1,4 +1,4 @@
-import { Box, TextField } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import React from 'react';
 import type { BossFormData } from '../../model/bossSlice';
 
@@ -17,5 +17,18 @@ export const PasswordSection: React.FC<Props> = ({ boss, onChange }) => (
       onChange={(e) => onChange({ password: e.target.value })}
       helperText="パスワードを設定すると、ヌシの編集・削除にパスワードが必要になります"
     />
+
+    {/* 一覧に表示しない */}
+    <Box sx={{ mt: 2 }}>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={boss.hideFromList ?? false}
+            onChange={(e) => onChange({ hideFromList: e.target.checked })}
+          />
+        }
+        label="一覧に表示しない"
+      />
+    </Box>
   </Box>
 );

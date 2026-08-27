@@ -34,9 +34,6 @@ export const CharacterBasicSection: React.FC<{
   const useDragonPlain = useAppSelector(
     (state) => state.character.supplements.useDragonPlain,
   );
-  const hideFromList = useAppSelector(
-    (state) => state.character.hideFromList,
-  );
 
   const [isCampModalOpen, setCampModalOpen] = useState(false);
   const currentCampId = campId ?? '';
@@ -152,21 +149,6 @@ export const CharacterBasicSection: React.FC<{
         containerHeight="auto"
         imageStyle={{ width: '100%', display: 'block' }}
       />
-
-      {/* 一覧に表示しない */}
-      <Box sx={{ my: 2 }}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={hideFromList ?? false}
-              onChange={(e) =>
-                dispatch(updateCharacter({ hideFromList: e.target.checked }))
-              }
-            />
-          }
-          label="一覧に表示しない"
-        />
-      </Box>
     </>
   );
 };
