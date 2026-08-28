@@ -91,6 +91,7 @@ export const createCharacterThunk = createAsyncThunk<
       quote: character.quote,
       supplements: character.supplements,
       password: character.password,
+      hideFromList: character.hideFromList,
     };
     // キャラクター作成
     const result = await dispatch(
@@ -194,6 +195,7 @@ export const updateCharacterThunk = createAsyncThunk<
       quote: character.quote,
       supplements: character.supplements,
       password: character.password,
+      hideFromList: character.hideFromList,
     };
     try {
       // キャラクター更新
