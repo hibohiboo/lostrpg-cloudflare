@@ -25,15 +25,6 @@ export const ScenarioContentEditor: React.FC<Props> = ({
   return (
     <Box>
       <InputLabel sx={{ mb: 1 }}>本文</InputLabel>
-      <Box sx={{ mb: 1 }}>
-        <MuiLink
-          href="/scenario/sample"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          記法例を見る（別タブで開きます）
-        </MuiLink>
-      </Box>
 
       <Tabs
         value={tab}
@@ -48,15 +39,26 @@ export const ScenarioContentEditor: React.FC<Props> = ({
         <StructuredEditor content={content} onContentChange={onContentChange} />
       )}
       {tab === 1 && (
-        <TextField
-          fullWidth
-          multiline
-          rows={16}
-          label="本文（Markdown）"
-          value={content}
-          onChange={(e) => onContentChange(e.target.value)}
-          helperText="保存時にフェイズ／シーン／イベントの構造へ自動変換されます（記法は上のリンクから確認できます）"
-        />
+        <>
+          <Box sx={{ mb: 2 }}>
+            <MuiLink
+              href="/scenario/sample"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              記法例を見る（別タブで開きます）
+            </MuiLink>
+          </Box>
+          <TextField
+            fullWidth
+            multiline
+            rows={16}
+            label="本文（Markdown）"
+            value={content}
+            onChange={(e) => onContentChange(e.target.value)}
+            helperText="保存時にフェイズ／シーン／イベントの構造へ自動変換されます（記法は上のリンクから確認できます）"
+          />
+        </>
       )}
     </Box>
   );

@@ -28,7 +28,9 @@ export const BossAppendixEditor: React.FC<Props> = ({ bosses, onChange }) => {
   };
 
   const handleBossNameChange = (index: number, bossName: string) => {
-    onChange(bosses.map((boss, i) => (i === index ? { ...boss, bossName } : boss)));
+    onChange(
+      bosses.map((boss, i) => (i === index ? { ...boss, bossName } : boss)),
+    );
   };
 
   const handleBossUrlChange = (index: number, url: string) => {
@@ -38,10 +40,13 @@ export const BossAppendixEditor: React.FC<Props> = ({ bosses, onChange }) => {
   return (
     <Box>
       <Typography variant="subtitle2" gutterBottom>
-        ヌシ付録（本文に登場させたヌシの参照用）
+        ヌシ
       </Typography>
       {bosses.map((boss, index) => (
-        <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1, my: 1 }}>
+        <Box
+          key={index}
+          sx={{ display: 'flex', alignItems: 'center', gap: 1, my: 1 }}
+        >
           <TextField
             size="small"
             placeholder="名前"
@@ -56,7 +61,11 @@ export const BossAppendixEditor: React.FC<Props> = ({ bosses, onChange }) => {
             value={boss.url ?? ''}
             onChange={(e) => handleBossUrlChange(index, e.target.value)}
           />
-          <IconButton aria-label="ヌシを削除" size="small" onClick={() => handleRemoveBoss(index)}>
+          <IconButton
+            aria-label="ヌシを削除"
+            size="small"
+            onClick={() => handleRemoveBoss(index)}
+          >
             <DeleteIcon />
           </IconButton>
         </Box>

@@ -141,7 +141,14 @@ const EditForm: React.FC<Props> = ({
           onContentChange={handleContentChange}
         />
       </Box>
-
+      <h3>付録</h3>
+      {/* ヌシ付録：付録のため本文の後に配置 */}
+      <Box sx={{ my: 3 }}>
+        <BossAppendixEditor
+          bosses={bosses}
+          onChange={(value) => setScenario({ ...scenario, bosses: value })}
+        />
+      </Box>
       {/* エネミー付録：付録のため本文の後に配置 */}
       <Box sx={{ my: 3 }}>
         <EncounterAppendixEditor
@@ -149,14 +156,6 @@ const EditForm: React.FC<Props> = ({
           onChange={(value) =>
             setScenario({ ...scenario, encounterTable: value })
           }
-        />
-      </Box>
-
-      {/* ヌシ付録：付録のため本文の後に配置 */}
-      <Box sx={{ my: 3 }}>
-        <BossAppendixEditor
-          bosses={bosses}
-          onChange={(value) => setScenario({ ...scenario, bosses: value })}
         />
       </Box>
 

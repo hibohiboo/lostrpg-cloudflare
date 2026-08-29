@@ -3,7 +3,11 @@ import AddIcon from '@mui/icons-material/Add';
 import { Box, Button, Typography } from '@mui/material';
 import { GridRowId } from '@mui/x-data-grid';
 import React, { useMemo } from 'react';
-import { AddItemForm, ItemTable, type Item } from '@lostrpg/frontend/entities/item';
+import {
+  AddItemForm,
+  ItemTable,
+  type Item,
+} from '@lostrpg/frontend/entities/item';
 import type { ScenarioItemAppendix } from '@lostrpg/frontend/entities/scenario';
 
 type Props = {
@@ -37,7 +41,8 @@ export const ItemAppendixEditor: React.FC<Props> = ({ items, onChange }) => {
 
   const handleAdd = (item: Item) => onChange([...items, item]);
   const handleAddManual = () => onChange([...items, createBlankItem()]);
-  const handleDelete = (id: string) => onChange(items.filter((item) => item.id !== id));
+  const handleDelete = (id: string) =>
+    onChange(items.filter((item) => item.id !== id));
   const handleUpdate = (
     newRow: Item,
     _oldRow: Item,
@@ -50,7 +55,7 @@ export const ItemAppendixEditor: React.FC<Props> = ({ items, onChange }) => {
   return (
     <Box>
       <Typography variant="subtitle2" gutterBottom>
-        アイテム付録（本文に登場させたアイテムの参照用。キャラクターシートと同様に編集できます）
+        アイテム
       </Typography>
       <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
         <AddItemForm catalog={catalog} onItemAdd={handleAdd} />

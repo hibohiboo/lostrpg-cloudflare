@@ -210,14 +210,6 @@ export const StructuredEditor: React.FC<Props> = ({
         />
       </Box>
 
-      {/* ランダムエンカウント表 */}
-      <Box sx={{ mb: 3 }}>
-        <EncounterTablesForm
-          tables={state.encounterTables}
-          onChange={commitEncounterTables}
-        />
-      </Box>
-
       <Box
         sx={{
           display: 'flex',
@@ -252,6 +244,13 @@ export const StructuredEditor: React.FC<Props> = ({
           )}
         </Box>
         <Box sx={{ flex: 1, minWidth: 280 }}>{renderForm()}</Box>
+      </Box>
+      {/* ランダムエンカウント表 */}
+      <Box sx={{ mb: 3 }}>
+        <EncounterTablesForm
+          tables={state.encounterTables}
+          onChange={commitEncounterTables}
+        />
       </Box>
     </Box>
   );

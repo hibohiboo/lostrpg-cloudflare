@@ -13,7 +13,10 @@ type Props = {
 // エネミー付録：本文（Markdown）のランダムエンカウント表に登場させたエネミーの参照用一覧。
 // ランダムエンカウント表本体は本文の「## ランダムエンカウント表 {.encounterTable}」セクションで
 // 編集するため、ここでは付録（エネミー一覧）のみを編集する。
-export const EncounterAppendixEditor: React.FC<Props> = ({ encounterTable, onChange }) => {
+export const EncounterAppendixEditor: React.FC<Props> = ({
+  encounterTable,
+  onChange,
+}) => {
   const [isEnemyModalOpen, setEnemyModalOpen] = useState(false);
   const { enemies } = encounterTable;
 
@@ -42,24 +45,31 @@ export const EncounterAppendixEditor: React.FC<Props> = ({ encounterTable, onCha
   const handleEnemyNameChange = (index: number, enemyName: string) => {
     onChange({
       ...encounterTable,
-      enemies: enemies.map((enemy, i) => (i === index ? { ...enemy, enemyName } : enemy)),
+      enemies: enemies.map((enemy, i) =>
+        i === index ? { ...enemy, enemyName } : enemy,
+      ),
     });
   };
 
   const handleEnemyUrlChange = (index: number, url: string) => {
     onChange({
       ...encounterTable,
-      enemies: enemies.map((enemy, i) => (i === index ? { ...enemy, url } : enemy)),
+      enemies: enemies.map((enemy, i) =>
+        i === index ? { ...enemy, url } : enemy,
+      ),
     });
   };
 
   return (
     <Box>
       <Typography variant="subtitle2" gutterBottom>
-        エネミー付録（本文のランダムエンカウント表に登場させたエネミーの参照用）
+        エネミー
       </Typography>
       {enemies.map((enemy, index) => (
-        <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1, my: 1 }}>
+        <Box
+          key={index}
+          sx={{ display: 'flex', alignItems: 'center', gap: 1, my: 1 }}
+        >
           <TextField
             size="small"
             placeholder="名前"
