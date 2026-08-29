@@ -12,6 +12,7 @@ const initialState: ScenarioFormData = {
   caution: '',
   summary: '',
   content: '',
+  phases: [],
   creatorName: '',
   isPublish: false,
   hideFromList: false,

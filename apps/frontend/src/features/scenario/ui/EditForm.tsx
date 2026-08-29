@@ -1,13 +1,16 @@
+import { parseScenarioContent } from '@lostrpg/core/scenario/parseScenarioContent';
 import SaveIcon from '@mui/icons-material/Save';
 import {
   Box,
   Button,
   Checkbox,
   FormControlLabel,
+  InputLabel,
   Link as MuiLink,
   TextField,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { ScenarioPhaseList } from '@lostrpg/frontend/entities/scenario';
 import { ImageUploadField } from '@lostrpg/frontend/shared/ui';
 import { EditFormViewModel } from '../hooks/useEditFormHooks';
 
@@ -60,6 +63,10 @@ const EditForm: React.FC<Props> = ({
   } = scenario;
   const nameError = !name && isValidError;
   const nameHelperText = nameError ? 'シナリオ名は必須です' : '';
+  const previewPhases = useMemo(
+    () => parseScenarioContent(content).phases,
+    [content],
+  );
 
   return (
     <Box>
@@ -160,7 +167,14 @@ const EditForm: React.FC<Props> = ({
           onChange={(e) =>
             setScenario({ ...scenario, content: e.target.value })
           }
+          helperText="保存時にフェイズ／シーン／イベントの構造へ自動変換されます（記法はプレビューを参照）"
         />
+      </Box>
+
+      {/* 構造化プレビュー */}
+      <Box sx={{ my: 2 }}>
+        <InputLabel sx={{ mb: 1 }}>構造化プレビュー</InputLabel>
+        <ScenarioPhaseList phases={previewPhases} />
       </Box>
 
       {/* 公開設定 */}

@@ -42,6 +42,10 @@ describe('POST /api/scenarios', () => {
     });
     return app.fetch(req);
   };
+  const get = async (id: string) => {
+    const req = new Request(`${url}/${id}`, { method: 'GET' });
+    return app.fetch(req);
+  };
   const minimalData = {
     name: 'テストシナリオ',
     players: '',
@@ -67,6 +71,81 @@ describe('POST /api/scenarios', () => {
       expect(data.id).toMatch(uuidRegex);
     });
   });
+  describe('本文の構造化', () => {
+    it('作成時にcontentからphasesが生成され、詳細取得で返ること', async () => {
+      const md = [
+        '## 探索フェイズ',
+        '### チェックポイント',
+        '#### 描写',
+        'チェックポイントの描写です',
+      ].join('\n');
+
+      const createRes = await create({ ...minimalData, content: md });
+      const createData = (await createRes.json()) as any;
+      expect(createRes.status).toBe(201);
+
+      const getRes = await get(createData.id);
+      const getData = (await getRes.json()) as any;
+
+      expect(getRes.status).toBe(200);
+      expect(getData.data.phases).toEqual([
+        {
+          name: '探索フェイズ',
+          scenes: [
+            {
+              name: 'チェックポイント',
+              type: null,
+              alias: null,
+              next: null,
+              lines: [],
+              events: [
+                {
+                  name: '描写',
+                  type: 'view',
+                  lines: ['チェックポイントの描写です'],
+                  items: [],
+                  tables: [],
+                  links: [],
+                },
+              ],
+            },
+          ],
+        },
+      ]);
+    });
+
+    it('クライアントが送ったphasesは無視され、contentから再生成されること', async () => {
+      const createRes = await create({
+        ...minimalData,
+        content: '## 探索フェイズ',
+        phases: [{ name: 'なりすまし', scenes: [] }],
+      });
+      const createData = (await createRes.json()) as any;
+
+      const getRes = await get(createData.id);
+      const getData = (await getRes.json()) as any;
+
+      expect(getData.data.phases).toEqual([
+        { name: '探索フェイズ', scenes: [] },
+      ]);
+    });
+
+    it('更新時にcontentを変更するとphasesも更新されること', async () => {
+      const createRes = await create({ ...minimalData, content: '## A' });
+      const createData = (await createRes.json()) as any;
+
+      const updateRes = await update(createData.id, {
+        ...minimalData,
+        content: '## B',
+      });
+      expect(updateRes.status).toBe(200);
+
+      const getRes = await get(createData.id);
+      const getData = (await getRes.json()) as any;
+      expect(getData.data.phases).toEqual([{ name: 'B', scenes: [] }]);
+    });
+  });
+
   describe('パスワード', () => {
     it('パスワードありで作成できること', async () => {
       const dataWithPassword = { ...minimalData, password: 'secret123' };

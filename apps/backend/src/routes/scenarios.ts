@@ -1,4 +1,5 @@
 import { zValidator } from '@hono/zod-validator';
+import { parseScenarioContent } from '@lostrpg/core/scenario/parseScenarioContent';
 import { createScenarioSchema, getScenarioSchema, updateScenarioSchema } from '@lostrpg/schemas';
 import bcrypt from 'bcryptjs';
 import { and, desc, eq, ilike, sql } from 'drizzle-orm';
@@ -67,12 +68,16 @@ export const scenariosRouter = new Hono<{ Bindings: Env }>()
     // eslint-disable-next-line sonarjs/no-unused-vars
     const { password: _password, ...dataWithoutPassword } = scenarioData;
 
+    // 本文（Markdown）からフェイズ／シーン／イベントを構造化する
+    // クライアントから送られた phases は使わず、常に content から再生成する
+    const { phases } = parseScenarioContent(scenarioData.content);
+
     // データベースに保存
     const [newScenario] = await getDb()
       .insert(scenarios)
       .values({
         name: scenarioData.name,
-        data: dataWithoutPassword,
+        data: { ...dataWithoutPassword, phases },
         passwordHash,
       })
       .returning();
@@ -140,6 +145,10 @@ export const scenariosRouter = new Hono<{ Bindings: Env }>()
       // eslint-disable-next-line sonarjs/no-unused-vars
       const { password: _password, ...dataWithoutPassword } = requestBody;
 
+      // 本文（Markdown）からフェイズ／シーン／イベントを構造化する
+      // クライアントから送られた phases は使わず、常に content から再生成する
+      const { phases } = parseScenarioContent(requestBody.content);
+
       // 更新データの構築
       const updateData: {
         data: object;
@@ -147,7 +156,7 @@ export const scenariosRouter = new Hono<{ Bindings: Env }>()
         updatedAt: Date;
         passwordHash?: string;
       } = {
-        data: dataWithoutPassword,
+        data: { ...dataWithoutPassword, phases },
         name: requestBody.name || scenario.name,
         updatedAt: new Date(),
       };
@@ -172,6 +181,7 @@ export const scenariosRouter = new Hono<{ Bindings: Env }>()
           createdAt: updatedScenario.createdAt,
           updatedAt: updatedScenario.updatedAt,
           ...dataWithoutPassword,
+          phases,
         },
         200,
       );

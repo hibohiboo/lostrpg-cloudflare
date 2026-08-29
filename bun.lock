@@ -20,6 +20,7 @@
       "version": "0.1.0",
       "dependencies": {
         "@hono/zod-validator": "^0.9.0",
+        "@lostrpg/core": "workspace:*",
         "@lostrpg/schemas": "workspace:*",
         "@neondatabase/serverless": "^1.1.0",
         "@types/bcryptjs": "^3.0.0",

@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { Link, useParams } from 'react-router';
+import { ScenarioPhaseList } from '@lostrpg/frontend/entities/scenario';
 import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 
 const DetailPage: React.FC = () => {
@@ -109,20 +110,11 @@ const DetailPage: React.FC = () => {
           </Box>
         )}
 
-        {/* 本文 */}
-        {scenario.content?.trim() && (
+        {/* 本文（フェイズ／シーン／イベントの構造） */}
+        {scenario.phases.length > 0 && (
           <Box sx={{ my: 3 }}>
             <InputLabel sx={{ mb: 1 }}>本文</InputLabel>
-            <Box
-              component={Paper}
-              sx={{
-                p: 2,
-                whiteSpace: 'pre-wrap',
-                minWidth: 320,
-              }}
-            >
-              <Typography variant="body1">{scenario.content}</Typography>
-            </Box>
+            <ScenarioPhaseList phases={scenario.phases} />
           </Box>
         )}
 
