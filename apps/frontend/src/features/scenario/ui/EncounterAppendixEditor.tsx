@@ -10,10 +10,23 @@ type Props = {
   onChange: (value: ScenarioEncounterEnemy[]) => void;
 };
 
+// ルールブック標準のランダムエンカウント表に登場するデフォルトのエネミー。
+// 「デフォルトのエネミーを追加」ボタンでまとめて付録に追加できるようにする。
+const DEFAULT_ENCOUNTER_ENEMIES: { enemyId: string; enemyName: string }[] = [
+  { enemyId: '8e68525d-549b-4a78-b84b-1df7ad49eeb9', enemyName: 'ツノウサギ' },
+  { enemyId: '8dd063ea-6065-41f6-b9aa-fbb2fa79f7a1', enemyName: 'オニトンボ' },
+  { enemyId: '067ca9e1-8edc-4246-825b-2219f548b780', enemyName: 'ナガムカデ' },
+  { enemyId: '458f6150-f04f-4762-bf45-8c982ae58b5f', enemyName: 'ヨロイバチ' },
+  { enemyId: '0fab8713-1ba5-4548-95a3-7bb99a6d55e5', enemyName: 'ゾンビ' },
+];
+
 // エネミー付録：本文（Markdown）のランダムエンカウント表に登場させたエネミーの参照用一覧。
 // ランダムエンカウント表本体はカスタム表（本文の「## カスタム表 {.customTable}」セクション）で
 // 編集するため、ここでは付録（エネミー一覧）のみを編集する。
-export const EncounterAppendixEditor: React.FC<Props> = ({ enemies, onChange }) => {
+export const EncounterAppendixEditor: React.FC<Props> = ({
+  enemies,
+  onChange,
+}) => {
   const [isEnemyModalOpen, setEnemyModalOpen] = useState(false);
 
   const handleAddEnemy = (enemyId: string, enemyName: string) => {
@@ -25,16 +38,33 @@ export const EncounterAppendixEditor: React.FC<Props> = ({ enemies, onChange }) 
     onChange([...enemies, { enemyName: '', url: '' }]);
   };
 
+  const handleAddDefaultEnemies = () => {
+    const existingIds = new Set(
+      enemies.map((enemy) => enemy.enemyId).filter(Boolean),
+    );
+    const toAdd = DEFAULT_ENCOUNTER_ENEMIES.filter(
+      (enemy) => !existingIds.has(enemy.enemyId),
+    ).map((enemy) => ({ ...enemy, url: `/enemy/${enemy.enemyId}` }));
+    if (toAdd.length === 0) return;
+    onChange([...enemies, ...toAdd]);
+  };
+
   const handleRemoveEnemy = (index: number) => {
     onChange(enemies.filter((_, i) => i !== index));
   };
 
   const handleEnemyNameChange = (index: number, enemyName: string) => {
-    onChange(enemies.map((enemy, i) => (i === index ? { ...enemy, enemyName } : enemy)));
+    onChange(
+      enemies.map((enemy, i) =>
+        i === index ? { ...enemy, enemyName } : enemy,
+      ),
+    );
   };
 
   const handleEnemyUrlChange = (index: number, url: string) => {
-    onChange(enemies.map((enemy, i) => (i === index ? { ...enemy, url } : enemy)));
+    onChange(
+      enemies.map((enemy, i) => (i === index ? { ...enemy, url } : enemy)),
+    );
   };
 
   return (
@@ -70,12 +100,15 @@ export const EncounterAppendixEditor: React.FC<Props> = ({ enemies, onChange }) 
           </IconButton>
         </Box>
       ))}
-      <Box sx={{ display: 'flex', gap: 1 }}>
+      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
         <Button startIcon={<AddIcon />} onClick={() => setEnemyModalOpen(true)}>
           エネミーを選択して追加
         </Button>
         <Button startIcon={<AddIcon />} onClick={handleAddManualEnemy}>
           手動で追加
+        </Button>
+        <Button startIcon={<AddIcon />} onClick={handleAddDefaultEnemies}>
+          デフォルトのエンカウント表のエネミーを追加
         </Button>
       </Box>
 
