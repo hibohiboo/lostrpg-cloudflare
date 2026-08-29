@@ -9,4 +9,5 @@ export {
 export { ScenarioPhaseList } from './ui/ScenarioPhaseList';
 export { ScenarioOutlineTree } from './ui/ScenarioOutlineTree';
 export { EncounterTableView } from './ui/EncounterTableView';
+export { BossAppendixView } from './ui/BossAppendixView';
 export { ScenarioChartView } from './ui/ScenarioChartView';

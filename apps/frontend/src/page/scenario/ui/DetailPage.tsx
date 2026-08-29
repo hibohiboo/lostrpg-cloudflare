@@ -14,12 +14,34 @@ import {
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router';
 import {
+  BossAppendixView,
   EncounterTableView,
   ScenarioChartView,
   ScenarioOutlineTree,
   ScenarioPhaseList,
+  type Scenario,
 } from '@lostrpg/frontend/entities/scenario';
 import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
+
+// ランダムエンカウント表・ヌシ付録：どちらも本文の後に付録として表示する参照用データ
+const ScenarioAppendixSection: React.FC<{ scenario: Scenario }> = ({
+  scenario,
+}) => (
+  <>
+    {scenario.encounterTable.mode !== 'default' && (
+      <Box sx={{ my: 3 }}>
+        <InputLabel sx={{ mb: 1 }}>ランダムエンカウント表</InputLabel>
+        <EncounterTableView encounterTable={scenario.encounterTable} />
+      </Box>
+    )}
+    {scenario.bosses.length > 0 && (
+      <Box sx={{ my: 3 }}>
+        <InputLabel sx={{ mb: 1 }}>ヌシ</InputLabel>
+        <BossAppendixView bosses={scenario.bosses} />
+      </Box>
+    )}
+  </>
+);
 
 const DetailPage: React.FC = () => {
   const { id } = useParams();
@@ -117,13 +139,7 @@ const DetailPage: React.FC = () => {
             </Box>
           </Box>
         )}
-        {/* ランダムエンカウント表 */}
-        {scenario.encounterTable.mode !== 'default' && (
-          <Box sx={{ my: 3 }}>
-            <InputLabel sx={{ mb: 1 }}>ランダムエンカウント表</InputLabel>
-            <EncounterTableView encounterTable={scenario.encounterTable} />
-          </Box>
-        )}
+
         {/* 本文（左にツリー・右に本文）／チャート（フェイズが上から下に並ぶフロー図） */}
         {scenario.phases.length > 0 && (
           <Box sx={{ my: 3 }}>
@@ -170,7 +186,8 @@ const DetailPage: React.FC = () => {
             {detailTab === 1 && <ScenarioChartView phases={scenario.phases} />}
           </Box>
         )}
-
+        {/* ランダムエンカウント表・ヌシ付録 */}
+        <ScenarioAppendixSection scenario={scenario} />
         {/* 戻るリンク */}
         <Box sx={{ mt: 4 }}>
           <MuiLink href="/scenario/" underline="hover">

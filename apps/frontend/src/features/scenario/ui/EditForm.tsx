@@ -11,6 +11,7 @@ import {
 import React, { useState } from 'react';
 import { ImageUploadField } from '@lostrpg/frontend/shared/ui';
 import { EditFormViewModel } from '../hooks/useEditFormHooks';
+import { BossAppendixEditor } from './BossAppendixEditor';
 import { EncounterAppendixEditor } from './EncounterAppendixEditor';
 import { ScenarioContentEditor } from './ScenarioContentEditor';
 
@@ -53,6 +54,7 @@ const EditForm: React.FC<Props> = ({
     summary = '',
     content = '',
     encounterTable,
+    bosses = [],
     creatorName = '',
     password = '',
     isPublish = false,
@@ -142,6 +144,14 @@ const EditForm: React.FC<Props> = ({
         <EncounterAppendixEditor
           encounterTable={encounterTable}
           onChange={(value) => setScenario({ ...scenario, encounterTable: value })}
+        />
+      </Box>
+
+      {/* ヌシ付録：付録のため本文の後に配置 */}
+      <Box sx={{ my: 3 }}>
+        <BossAppendixEditor
+          bosses={bosses}
+          onChange={(value) => setScenario({ ...scenario, bosses: value })}
         />
       </Box>
 

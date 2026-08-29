@@ -101,6 +101,19 @@ export type ScenarioEncounterSettings = z.infer<
   typeof scenarioEncounterSettingsSchema
 >;
 
+// 本文中に登場させたヌシ（ボス）の付録（参照用一覧）。
+// ヌシ選択から追加した場合は名前・URL（サイト内のヌシ詳細ページ）が自動入力されるが、
+// 内部に登録されていないヌシ（外部サイト参照等）も想定し、名前・URLは自由に編集できる。
+export const scenarioBossAppendixSchema = z.object({
+  // ヌシ選択で追加した場合の内部ヌシID（任意。手動追加の場合は無い）
+  bossId: z.string().optional(),
+  // 表示用の名前（自由記述。ヌシ選択時は自動入力されるが後から編集可能）
+  bossName: z.string().optional(),
+  // ヌシの参照先URL（サイト内のヌシ詳細ページ or 外部サイトへのリンク）
+  url: z.string().optional(),
+});
+export type ScenarioBossAppendix = z.infer<typeof scenarioBossAppendixSchema>;
+
 // 基本フィールドスキーマ
 const baseScenarioFields = {
   name: z.string().max(50, 'name は50文字以内で入力してください'),
@@ -118,6 +131,8 @@ const baseScenarioFields = {
   encounterTable: scenarioEncounterSettingsSchema
     .optional()
     .default({ mode: 'default', tables: [], enemies: [] }),
+  // ヌシ付録（本文に登場させたヌシの参照用一覧）
+  bosses: z.array(scenarioBossAppendixSchema).optional().default([]),
   creatorName: z.string().optional(), // 作者名
   isPublish: z.boolean().optional().default(false), // 公開フラグ
   password: z.string().nullable().optional(),
