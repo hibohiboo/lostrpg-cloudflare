@@ -360,3 +360,35 @@ export const parseScenarioContent = (
     phases: final.phases,
   };
 };
+
+const PHASE_META_KEYS = new Set(['players', 'time', 'limit', 'caution']);
+
+export interface SplitScenarioIntroResult {
+  intro: string;
+  phasesMarkdown: string;
+}
+
+// content の先頭から「最初の実フェイズ見出し」より前の部分
+// （タイトル・概要文・players/time/limit/caution 等のメタ見出し）を intro として切り出す。
+// 構造化編集タブでフェイズ以降を書き換える際、この部分をそのまま温存するために使用する。
+export const splitScenarioIntro = (
+  content: string | undefined | null,
+): SplitScenarioIntroResult => {
+  const lines = (content ?? '').replace(/\r\n/g, '\n').split('\n');
+  let phaseStartLine = lines.length;
+
+  for (let i = 0; i < lines.length; i += 1) {
+    const heading = parseHeadingLine(lines[i]);
+    if (heading && heading.depth === 2) {
+      const [, key] = getAttributes(heading.text);
+      if (!key || !PHASE_META_KEYS.has(key)) {
+        phaseStartLine = i;
+        break;
+      }
+    }
+  }
+
+  const intro = lines.slice(0, phaseStartLine).join('\n').trimEnd();
+  const phasesMarkdown = lines.slice(phaseStartLine).join('\n');
+  return { intro, phasesMarkdown };
+};

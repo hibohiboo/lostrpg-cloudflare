@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { scenarioSamples } from '../game-data/scenario';
-import { parseScenarioContent } from './parseScenarioContent';
+import { parseScenarioContent, splitScenarioIntro } from './parseScenarioContent';
 
 describe('parseScenarioContent', () => {
   it('記法例（scenarioSamples）が全てエラーなく構造化でき、想定するフェイズ名になること', () => {
@@ -14,7 +14,6 @@ describe('parseScenarioContent', () => {
       ]);
     });
   });
-
 
   it('本文が空でもエラーにならず空のフェイズを返すこと', () => {
     const result = parseScenarioContent('');
@@ -170,5 +169,48 @@ describe('parseScenarioContent', () => {
     ]);
     expect(result.phases[1].name).toBe('結果フェイズ');
     expect(result.phases[1].scenes.map((s) => s.name)).toEqual(['エピローグ']);
+  });
+});
+
+describe('splitScenarioIntro', () => {
+  it('タイトル・概要文・メタ見出しをintroとして切り出せること', () => {
+    const md = [
+      '# タイトル',
+      '',
+      '## 3人 {.players}',
+      '',
+      '概要文です。',
+      '',
+      '## キャンプフェイズ',
+      '### プロローグ',
+    ].join('\n');
+
+    const { intro, phasesMarkdown } = splitScenarioIntro(md);
+
+    expect(intro).toBe(['# タイトル', '', '## 3人 {.players}', '', '概要文です。'].join('\n'));
+    expect(parseScenarioContent(phasesMarkdown).phases.map((p) => p.name)).toEqual([
+      'キャンプフェイズ',
+    ]);
+  });
+
+  it('メタ見出しが無い場合はintroが空文字列になること', () => {
+    const md = ['## キャンプフェイズ', '### プロローグ'].join('\n');
+    const { intro, phasesMarkdown } = splitScenarioIntro(md);
+
+    expect(intro).toBe('');
+    expect(phasesMarkdown).toBe(md);
+  });
+
+  it('記法例（scenarioSamples）のintroを切り出した後もフェイズが揃うこと', () => {
+    scenarioSamples.forEach((sample) => {
+      const { phasesMarkdown } = splitScenarioIntro(sample.content);
+      const { phases } = parseScenarioContent(phasesMarkdown);
+      expect(phases.map((p) => p.name)).toEqual([
+        'キャンプフェイズ',
+        '探索フェイズ',
+        '決戦フェイズ',
+        '結果フェイズ',
+      ]);
+    });
   });
 });

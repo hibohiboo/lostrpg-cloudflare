@@ -1,4 +1,3 @@
-import { parseScenarioContent } from '@lostrpg/core/scenario/parseScenarioContent';
 import SaveIcon from '@mui/icons-material/Save';
 import {
   Box,
@@ -9,11 +8,11 @@ import {
   Link as MuiLink,
   TextField,
 } from '@mui/material';
-import React, { useMemo, useState } from 'react';
-import { ScenarioPhaseList } from '@lostrpg/frontend/entities/scenario';
+import React, { useState } from 'react';
 import { ImageUploadField } from '@lostrpg/frontend/shared/ui';
 import { EditFormViewModel } from '../hooks/useEditFormHooks';
 import { EncounterTableEditor } from './EncounterTableEditor';
+import { ScenarioContentEditor } from './ScenarioContentEditor';
 
 type Props = EditFormViewModel & {
   handleSave: () => void;
@@ -65,10 +64,6 @@ const EditForm: React.FC<Props> = ({
   } = scenario;
   const nameError = !name && isValidError;
   const nameHelperText = nameError ? 'シナリオ名は必須です' : '';
-  const previewPhases = useMemo(
-    () => parseScenarioContent(content).phases,
-    [content],
-  );
 
   return (
     <Box>
@@ -167,30 +162,12 @@ const EditForm: React.FC<Props> = ({
         />
       </Box>
 
-      {/* 本文 */}
+      {/* 本文（Markdown編集 / 構造編集の切り替え） */}
       <Box sx={{ my: 2 }}>
-        <Box sx={{ mb: 1 }}>
-          <MuiLink href="/scenario/sample" target="_blank" rel="noopener noreferrer">
-            記法例を見る（別タブで開きます）
-          </MuiLink>
-        </Box>
-        <TextField
-          fullWidth
-          multiline
-          rows={16}
-          label="本文（Markdown）"
-          value={content}
-          onChange={(e) =>
-            setScenario({ ...scenario, content: e.target.value })
-          }
-          helperText="保存時にフェイズ／シーン／イベントの構造へ自動変換されます（記法は上のリンクから確認できます）"
+        <ScenarioContentEditor
+          content={content}
+          onContentChange={(next) => setScenario({ ...scenario, content: next })}
         />
-      </Box>
-
-      {/* 構造化プレビュー */}
-      <Box sx={{ my: 2 }}>
-        <InputLabel sx={{ mb: 1 }}>構造化プレビュー</InputLabel>
-        <ScenarioPhaseList phases={previewPhases} />
       </Box>
 
       {/* 公開設定 */}
