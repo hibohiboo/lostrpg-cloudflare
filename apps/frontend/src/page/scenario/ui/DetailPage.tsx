@@ -7,9 +7,11 @@ import {
   InputLabel,
   Link as MuiLink,
   Paper,
+  Tab,
+  Tabs,
   Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useParams } from 'react-router';
 import {
   EncounterTableView,
@@ -24,6 +26,7 @@ const DetailPage: React.FC = () => {
   if (!id) throw new Error('id is empty');
 
   const scenario = useAppSelector((state) => state.scenario);
+  const [detailTab, setDetailTab] = useState(0);
 
   return (
     <Container maxWidth="lg">
@@ -123,29 +126,43 @@ const DetailPage: React.FC = () => {
           </Box>
         )}
 
-        {/* ツリー（アイコン付き見出し一覧。クリックで本文へジャンプ） */}
+        {/* 本文（左にツリー・右に本文）／チャート（フェイズが上から下に並ぶフロー図） */}
         {scenario.phases.length > 0 && (
           <Box sx={{ my: 3 }}>
-            <InputLabel sx={{ mb: 1 }}>ツリー</InputLabel>
-            <Box component={Paper} variant="outlined" sx={{ p: 2 }}>
-              <ScenarioOutlineTree phases={scenario.phases} />
-            </Box>
-          </Box>
-        )}
+            <Tabs
+              value={detailTab}
+              onChange={(_, value) => setDetailTab(value)}
+              sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}
+            >
+              <Tab label="本文" />
+              <Tab label="チャート" />
+            </Tabs>
 
-        {/* チャート（チェックポイント／道のつながり・フロー図） */}
-        {scenario.phases.length > 0 && (
-          <Box sx={{ my: 3 }}>
-            <InputLabel sx={{ mb: 1 }}>チャート（シーンのつながり）</InputLabel>
-            <ScenarioChartView phases={scenario.phases} />
-          </Box>
-        )}
+            {detailTab === 0 && (
+              <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+                <Box
+                  component={Paper}
+                  variant="outlined"
+                  sx={{
+                    width: 280,
+                    flexShrink: 0,
+                    p: 2,
+                    position: 'sticky',
+                    top: 16,
+                    maxHeight: 'calc(100vh - 32px)',
+                    overflowY: 'auto',
+                  }}
+                >
+                  <InputLabel sx={{ mb: 1 }}>ツリー</InputLabel>
+                  <ScenarioOutlineTree phases={scenario.phases} />
+                </Box>
+                <Box sx={{ flex: 1, minWidth: 280 }}>
+                  <ScenarioPhaseList phases={scenario.phases} />
+                </Box>
+              </Box>
+            )}
 
-        {/* 本文（フェイズ／シーン／イベントの構造） */}
-        {scenario.phases.length > 0 && (
-          <Box sx={{ my: 3 }}>
-            <InputLabel sx={{ mb: 1 }}>本文</InputLabel>
-            <ScenarioPhaseList phases={scenario.phases} />
+            {detailTab === 1 && <ScenarioChartView phases={scenario.phases} />}
           </Box>
         )}
 

@@ -21,6 +21,8 @@ const NODE_WIDTH = 176;
 const NODE_HEIGHT = 60;
 const COL_WIDTH = 220;
 const ROW_HEIGHT = 128;
+const PHASE_LABEL_HEIGHT = 32;
+const BAND_HEIGHT = PHASE_LABEL_HEIGHT + ROW_HEIGHT;
 const PADDING = 24;
 
 interface ChartNode {
@@ -73,7 +75,7 @@ const buildChart = (phases: ScenarioPhase[]): { nodes: ChartNode[]; edges: Chart
         alias: scene.alias,
         isDeadEnd: next.includes('none'),
         x: PADDING + sceneIndex * COL_WIDTH,
-        y: PADDING + phaseIndex * ROW_HEIGHT,
+        y: PADDING + phaseIndex * BAND_HEIGHT + PHASE_LABEL_HEIGHT + (ROW_HEIGHT - NODE_HEIGHT) / 2,
       });
 
       // next（'none'以外）はaliasで解決できた接続先だけを明示的なエッジとして描画する
@@ -218,7 +220,7 @@ export const ScenarioChartView: React.FC<Props> = ({ phases }) => {
   const nodeByKey = new Map(nodes.map((node) => [node.key, node]));
   const maxCols = Math.max(...phases.map((phase) => phase.scenes.length));
   const width = PADDING * 2 + maxCols * COL_WIDTH;
-  const height = PADDING * 2 + phases.length * ROW_HEIGHT;
+  const height = PADDING * 2 + phases.length * BAND_HEIGHT;
 
   const defaultColor = theme.palette.text.disabled;
   const explicitColor = theme.palette.primary.main;
@@ -251,6 +253,26 @@ export const ScenarioChartView: React.FC<Props> = ({ phases }) => {
               <path d="M0,0 L10,5 L0,10 z" fill={explicitColor} />
             </marker>
           </defs>
+
+          {/* フェイズごとの帯（上から下に並ぶ）と見出し */}
+          {phases.map((phase, phaseIndex) => {
+            const bandY = PADDING + phaseIndex * BAND_HEIGHT;
+            return (
+              <g key={`band-${phaseIndex}`}>
+                {phaseIndex % 2 === 0 && (
+                  <rect x={0} y={bandY} width={width} height={BAND_HEIGHT} fill={theme.palette.action.hover} />
+                )}
+                <foreignObject x={PADDING} y={bandY} width={width - PADDING * 2} height={PHASE_LABEL_HEIGHT}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{ display: 'flex', alignItems: 'center', height: '100%' }}
+                  >
+                    {phase.name}
+                  </Typography>
+                </foreignObject>
+              </g>
+            );
+          })}
 
           {edges.map((edge, index) => {
             const from = nodeByKey.get(edge.fromKey);
