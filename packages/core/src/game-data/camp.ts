@@ -89,7 +89,7 @@ export const equipmentList = [
     specialty: 'なし',
     maxLv: '3',
     precondition: '水場、ドラムカン',
-    effect: 'あなたの【精神力】が[レベル]点増加する。',
+    effect: 'あなたの【精神力】【気力】にプラス[レベル]点する。。',
   },
   {
     name: '温泉',
@@ -98,7 +98,8 @@ export const equipmentList = [
     specialty: 'なし',
     maxLv: '3',
     precondition: '',
-    effect: 'あなたの【精神力】と【生命力】が[レベル]点増加する。',
+    effect:
+      'あなたの【精神力】【生命力】【気力】【体力】にプラス[レベル]点する。',
   },
   {
     name: '畑',
@@ -288,7 +289,8 @@ export const dragonPlainEquipmentList = [
     specialty: 'なし',
     maxLv: '5',
     precondition: '物見やぐら',
-    effect: '使用すると、セッション中に1回、割込みでキャンプの「ドラムカン」を破壊して、＜ヌシ＞に[レベル]×3点のダメージを与える効果を使えるようになる',
+    effect:
+      '使用すると、セッション中に1回、割込みでキャンプの「ドラムカン」を破壊して、＜ヌシ＞に[レベル]×3点のダメージを与える効果を使えるようになる',
   },
 ];
 
