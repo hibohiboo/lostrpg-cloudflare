@@ -14,6 +14,7 @@ import { Link, useParams } from 'react-router';
 import {
   EncounterTableView,
   ScenarioChartView,
+  ScenarioOutlineTree,
   ScenarioPhaseList,
 } from '@lostrpg/frontend/entities/scenario';
 import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
@@ -122,7 +123,17 @@ const DetailPage: React.FC = () => {
           </Box>
         )}
 
-        {/* チャート（チェックポイント／道のID・つながり一覧） */}
+        {/* ツリー（アイコン付き見出し一覧。クリックで本文へジャンプ） */}
+        {scenario.phases.length > 0 && (
+          <Box sx={{ my: 3 }}>
+            <InputLabel sx={{ mb: 1 }}>ツリー</InputLabel>
+            <Box component={Paper} variant="outlined" sx={{ p: 2 }}>
+              <ScenarioOutlineTree phases={scenario.phases} />
+            </Box>
+          </Box>
+        )}
+
+        {/* チャート（チェックポイント／道のつながり・フロー図） */}
         {scenario.phases.length > 0 && (
           <Box sx={{ my: 3 }}>
             <InputLabel sx={{ mb: 1 }}>チャート（シーンのつながり）</InputLabel>

@@ -98,6 +98,15 @@ export const scenarioNotationTable: {
   ],
 };
 
+// アイコン（type）→ 表示用の日本語名。詳細画面でシーン／イベント／項目の種類を
+// 人間が読める名前で表示するために scenarioNotationTable から導出する
+// （同じアイコンキーが複数行にまたがる場合は最初に出てきた purpose を採用する）。
+export const scenarioTypeLabels: Partial<Record<ScenarioNotationIconKey, string>> =
+  scenarioNotationTable.rows.reduce<Partial<Record<ScenarioNotationIconKey, string>>>(
+    (acc, row) => (row.icon && !acc[row.icon] ? { ...acc, [row.icon]: row.purpose } : acc),
+    {},
+  );
+
 export interface ScenarioSample {
   title: string;
   content: string;

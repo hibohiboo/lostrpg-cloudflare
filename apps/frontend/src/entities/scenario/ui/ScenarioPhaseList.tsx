@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Box,
   Chip,
@@ -12,12 +13,34 @@ import {
   Typography,
 } from '@mui/material';
 import React from 'react';
+import { getScenarioTypeIcon, getScenarioTypeLabel } from '../model/scenarioIcons';
+import {
+  scenarioEventElementId,
+  scenarioPhaseElementId,
+  scenarioSceneElementId,
+} from '../model/scenarioNodeIds';
 import type {
   ScenarioEvent,
   ScenarioPhase,
   ScenarioScene,
   ScenarioTable,
 } from '../model/scenario';
+
+// 種類（type）アイコン付きのChip。記法例にないtypeの場合はアイコンなしで表示し、
+// ラベルも日本語名が引ければそちらを使う（引けなければtypeの生値を表示する）。
+const TypeBadge: React.FC<{ type?: string | null; prefix?: string }> = ({ type, prefix }) => {
+  if (!type) return null;
+  const icon = getScenarioTypeIcon(type);
+  const label = getScenarioTypeLabel(type) ?? type;
+  return (
+    <Chip
+      icon={icon ? <FontAwesomeIcon icon={icon} style={{ fontSize: '0.85em' }} /> : undefined}
+      label={prefix ? `${prefix}（${label}）` : label}
+      size="small"
+      variant="outlined"
+    />
+  );
+};
 
 const EventTable: React.FC<{ table: ScenarioTable }> = ({ table }) => (
   <Box sx={{ my: 1 }}>
@@ -49,18 +72,22 @@ const EventTable: React.FC<{ table: ScenarioTable }> = ({ table }) => (
   </Box>
 );
 
-const EventView: React.FC<{ event: ScenarioEvent }> = ({ event }) => (
+type EventViewProps = { event: ScenarioEvent; elementId?: string };
+
+const EventView: React.FC<EventViewProps> = ({ event, elementId }) => (
   <Box
+    id={elementId}
     sx={{
       my: 1.5,
       pl: 2,
       borderLeft: '3px solid',
       borderColor: 'divider',
+      scrollMarginTop: 16,
     }}
   >
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
       <Typography variant="subtitle1">{event.name}</Typography>
-      <Chip label={event.type} size="small" variant="outlined" />
+      <TypeBadge type={event.type} />
     </Box>
 
     {event.lines.map((line, index) => (
@@ -72,13 +99,7 @@ const EventView: React.FC<{ event: ScenarioEvent }> = ({ event }) => (
     {event.items.length > 0 && (
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 1 }}>
         {event.items.map((item, index) => (
-          <Chip
-            key={index}
-            label={`${item.name}（${item.type}）`}
-            size="small"
-            color="primary"
-            variant="outlined"
-          />
+          <TypeBadge key={index} type={item.type} prefix={item.name} />
         ))}
       </Box>
     )}
@@ -101,11 +122,18 @@ const EventView: React.FC<{ event: ScenarioEvent }> = ({ event }) => (
   </Box>
 );
 
-const SceneView: React.FC<{ scene: ScenarioScene }> = ({ scene }) => (
-  <Box component={Paper} variant="outlined" sx={{ p: 2, my: 2 }}>
+type SceneViewProps = { scene: ScenarioScene; phaseIndex: number; sceneIndex: number };
+
+const SceneView: React.FC<SceneViewProps> = ({ scene, phaseIndex, sceneIndex }) => (
+  <Box
+    id={scenarioSceneElementId(phaseIndex, sceneIndex)}
+    component={Paper}
+    variant="outlined"
+    sx={{ p: 2, my: 2, scrollMarginTop: 16 }}
+  >
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
       <Typography variant="h6">{scene.name}</Typography>
-      {scene.type && <Chip label={`type: ${scene.type}`} size="small" />}
+      <TypeBadge type={scene.type} />
       {scene.alias && <Chip label={`alias: ${scene.alias}`} size="small" />}
       {scene.next && scene.next.length > 0 && (
         <Chip label={`next: ${scene.next.join(', ')}`} size="small" />
@@ -119,18 +147,25 @@ const SceneView: React.FC<{ scene: ScenarioScene }> = ({ scene }) => (
     ))}
 
     {scene.events.map((event, index) => (
-      <EventView key={index} event={event} />
+      <EventView
+        key={index}
+        event={event}
+        elementId={scenarioEventElementId(phaseIndex, sceneIndex, index)}
+      />
     ))}
   </Box>
 );
 
-const PhaseView: React.FC<{ phase: ScenarioPhase }> = ({ phase }) => (
-  <Box sx={{ my: 3 }}>
+const PhaseView: React.FC<{ phase: ScenarioPhase; phaseIndex: number }> = ({
+  phase,
+  phaseIndex,
+}) => (
+  <Box id={scenarioPhaseElementId(phaseIndex)} sx={{ my: 3, scrollMarginTop: 16 }}>
     <Typography variant="h5" sx={{ borderBottom: '2px solid', borderColor: 'primary.main', pb: 0.5 }}>
       {phase.name}
     </Typography>
     {phase.scenes.map((scene, index) => (
-      <SceneView key={index} scene={scene} />
+      <SceneView key={index} scene={scene} phaseIndex={phaseIndex} sceneIndex={index} />
     ))}
   </Box>
 );
@@ -151,7 +186,7 @@ export const ScenarioPhaseList: React.FC<Props> = ({ phases }) => {
   return (
     <Box>
       {phases.map((phase, index) => (
-        <PhaseView key={index} phase={phase} />
+        <PhaseView key={index} phase={phase} phaseIndex={index} />
       ))}
     </Box>
   );
