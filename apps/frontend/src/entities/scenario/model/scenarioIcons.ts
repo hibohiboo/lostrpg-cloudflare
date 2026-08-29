@@ -21,7 +21,7 @@ import {
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import type { ScenarioNotationIconKey } from '@lostrpg/core/game-data/scenario';
 
-// 記法例ページ（アイコン列）で使用するFont Awesomeアイコンのマッピング
+// シナリオ関連画面（記法例ページ・構造編集フォーム等）で使用するFont Awesomeアイコンのマッピング
 // 参考: create-now版 src/data/lostrpg.ts の sampleTable
 export const SCENARIO_NOTATION_ICONS: Record<ScenarioNotationIconKey, IconDefinition> = {
   players: faUserFriends,

@@ -1,6 +1,7 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import React from 'react';
+import { SceneTypeSelect } from './SceneTypeSelect';
 import type { ScenarioScene } from '@lostrpg/frontend/entities/scenario';
 
 type Props = {
@@ -29,14 +30,9 @@ export const SceneForm: React.FC<Props> = ({ scene, onChange, onDelete }) => (
       onChange={(e) => onChange({ name: e.target.value })}
       sx={{ my: 2 }}
     />
-    <TextField
-      fullWidth
-      label="種類（type）"
-      placeholder="checkpoint / path など"
-      helperText="チェックポイントは checkpoint、道は path が一般的です（空欄も可）"
-      value={scene.type ?? ''}
-      onChange={(e) => onChange({ type: e.target.value || null })}
-      sx={{ my: 2 }}
+    <SceneTypeSelect
+      value={scene.type}
+      onChange={(type) => onChange({ type })}
     />
     <TextField
       fullWidth

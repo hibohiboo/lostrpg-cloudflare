@@ -16,7 +16,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { SCENARIO_NOTATION_ICONS } from './scenarioNotationIcons';
+import { SCENARIO_NOTATION_ICONS } from '@lostrpg/frontend/entities/scenario';
 
 const CopyButton: React.FC<{ text: string }> = ({ text }) => {
   const [copied, setCopied] = useState(false);
