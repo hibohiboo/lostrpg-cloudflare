@@ -15,7 +15,11 @@ import type { ScenarioNotationIconKey } from '@lostrpg/core/game-data/scenario';
 
 // シナリオ本文の記法例（/scenario/sample）にある「チェックポイント」「道」に対応する
 // シーン種類のみを選択肢とする（自由入力ではなくドロップダウンで選ばせる）
-const SCENE_TYPE_OPTIONS: { value: string; label: string; icon: ScenarioNotationIconKey }[] = [
+const SCENE_TYPE_OPTIONS: {
+  value: string;
+  label: string;
+  icon: ScenarioNotationIconKey;
+}[] = [
   { value: 'checkpoint', label: 'チェックポイント', icon: 'checkpoint' },
   { value: 'path', label: '道', icon: 'path' },
 ];
@@ -34,10 +38,10 @@ export const SceneTypeSelect: React.FC<Props> = ({ value, onChange }) => {
 
   return (
     <FormControl fullWidth sx={{ my: 2 }}>
-      <InputLabel id={LABEL_ID}>種類（type）</InputLabel>
+      <InputLabel id={LABEL_ID}>カテゴリ</InputLabel>
       <Select
         labelId={LABEL_ID}
-        label="種類（type）"
+        label="カテゴリ"
         value={value ?? ''}
         onChange={handleChange}
         renderValue={(selected) => {

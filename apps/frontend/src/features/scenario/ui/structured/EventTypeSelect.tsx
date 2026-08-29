@@ -15,7 +15,11 @@ import type { ScenarioNotationIconKey } from '@lostrpg/core/game-data/scenario';
 
 // シナリオ本文の記法例（/scenario/sample）にあるイベント種類のみを選択肢とする
 // （自由入力ではなくドロップダウンで選ばせる）
-const EVENT_TYPE_OPTIONS: { value: string; label: string; icon: ScenarioNotationIconKey }[] = [
+const EVENT_TYPE_OPTIONS: {
+  value: string;
+  label: string;
+  icon: ScenarioNotationIconKey;
+}[] = [
   { value: 'view', label: '描写', icon: 'view' },
   { value: 'battle', label: '戦闘', icon: 'battle' },
   { value: 'lock', label: '障害', icon: 'lock' },
@@ -38,10 +42,10 @@ export const EventTypeSelect: React.FC<Props> = ({ value, onChange }) => {
 
   return (
     <FormControl fullWidth sx={{ my: 2 }}>
-      <InputLabel id={LABEL_ID}>種類（type）</InputLabel>
+      <InputLabel id={LABEL_ID}>カテゴリ</InputLabel>
       <Select
         labelId={LABEL_ID}
-        label="種類（type）"
+        label="カテゴリ"
         value={value}
         onChange={handleChange}
         renderValue={(selected) => {

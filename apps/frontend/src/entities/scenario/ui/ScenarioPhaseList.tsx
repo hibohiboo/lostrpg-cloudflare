@@ -13,7 +13,10 @@ import {
   Typography,
 } from '@mui/material';
 import React from 'react';
-import { getScenarioTypeIcon, getScenarioTypeLabel } from '../model/scenarioIcons';
+import {
+  getScenarioTypeIcon,
+  getScenarioTypeLabel,
+} from '../model/scenarioIcons';
 import {
   scenarioEventElementId,
   scenarioPhaseElementId,
@@ -26,15 +29,22 @@ import type {
   ScenarioTable,
 } from '../model/scenario';
 
-// 種類（type）アイコン付きのChip。記法例にないtypeの場合はアイコンなしで表示し、
+// カテゴリアイコン付きのChip。記法例にないtypeの場合はアイコンなしで表示し、
 // ラベルも日本語名が引ければそちらを使う（引けなければtypeの生値を表示する）。
-const TypeBadge: React.FC<{ type?: string | null; prefix?: string }> = ({ type, prefix }) => {
+const TypeBadge: React.FC<{ type?: string | null; prefix?: string }> = ({
+  type,
+  prefix,
+}) => {
   if (!type) return null;
   const icon = getScenarioTypeIcon(type);
   const label = getScenarioTypeLabel(type) ?? type;
   return (
     <Chip
-      icon={icon ? <FontAwesomeIcon icon={icon} style={{ fontSize: '0.85em' }} /> : undefined}
+      icon={
+        icon ? (
+          <FontAwesomeIcon icon={icon} style={{ fontSize: '0.85em' }} />
+        ) : undefined
+      }
       label={prefix ? `${prefix}（${label}）` : label}
       size="small"
       variant="outlined"
@@ -122,16 +132,26 @@ const EventView: React.FC<EventViewProps> = ({ event, elementId }) => (
   </Box>
 );
 
-type SceneViewProps = { scene: ScenarioScene; phaseIndex: number; sceneIndex: number };
+type SceneViewProps = {
+  scene: ScenarioScene;
+  phaseIndex: number;
+  sceneIndex: number;
+};
 
-const SceneView: React.FC<SceneViewProps> = ({ scene, phaseIndex, sceneIndex }) => (
+const SceneView: React.FC<SceneViewProps> = ({
+  scene,
+  phaseIndex,
+  sceneIndex,
+}) => (
   <Box
     id={scenarioSceneElementId(phaseIndex, sceneIndex)}
     component={Paper}
     variant="outlined"
     sx={{ p: 2, my: 2, scrollMarginTop: 16 }}
   >
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+    <Box
+      sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}
+    >
       <Typography variant="h6">{scene.name}</Typography>
       <TypeBadge type={scene.type} />
       {scene.alias && <Chip label={`alias: ${scene.alias}`} size="small" />}
@@ -141,7 +161,11 @@ const SceneView: React.FC<SceneViewProps> = ({ scene, phaseIndex, sceneIndex }) 
     </Box>
 
     {scene.lines.map((line, index) => (
-      <Typography key={index} variant="body2" sx={{ whiteSpace: 'pre-wrap', mt: 1 }}>
+      <Typography
+        key={index}
+        variant="body2"
+        sx={{ whiteSpace: 'pre-wrap', mt: 1 }}
+      >
         {line}
       </Typography>
     ))}
@@ -160,12 +184,23 @@ const PhaseView: React.FC<{ phase: ScenarioPhase; phaseIndex: number }> = ({
   phase,
   phaseIndex,
 }) => (
-  <Box id={scenarioPhaseElementId(phaseIndex)} sx={{ my: 3, scrollMarginTop: 16 }}>
-    <Typography variant="h5" sx={{ borderBottom: '2px solid', borderColor: 'primary.main', pb: 0.5 }}>
+  <Box
+    id={scenarioPhaseElementId(phaseIndex)}
+    sx={{ my: 3, scrollMarginTop: 16 }}
+  >
+    <Typography
+      variant="h5"
+      sx={{ borderBottom: '2px solid', borderColor: 'primary.main', pb: 0.5 }}
+    >
       {phase.name}
     </Typography>
     {phase.scenes.map((scene, index) => (
-      <SceneView key={index} scene={scene} phaseIndex={phaseIndex} sceneIndex={index} />
+      <SceneView
+        key={index}
+        scene={scene}
+        phaseIndex={phaseIndex}
+        sceneIndex={index}
+      />
     ))}
   </Box>
 );
