@@ -11,7 +11,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import type {
   ScenarioCustomTable,
   ScenarioCustomTableKind,
@@ -74,10 +74,21 @@ type Props = {
 // 種別を1つも追加しなければ、その種別（その他を除く）はルールブック標準の表を使用する。
 // Markdown編集タブで直接書いた内容もここに反映され、双方向に同期する。
 export const CustomTablesForm: React.FC<Props> = ({ tables, onChange }) => {
+  // 「自由入力」を選んだ表のIDを覚えておく。個数・面数がたまたま1d6/2d6と同じ値になっても
+  // dicePresetOf() の逆算だけに頼るとプリセット扱いに戻ってしまい、自由入力欄が消えてしまうため。
+  const [customDiceTableIds, setCustomDiceTableIds] = useState<Set<string>>(new Set());
+
   const handleAddTable = () => onChange([...tables, createTable(tables.length)]);
 
-  const handleRemoveTable = (tableId: string) =>
+  const handleRemoveTable = (tableId: string) => {
     onChange(tables.filter((table) => table.id !== tableId));
+    setCustomDiceTableIds((prev) => {
+      if (!prev.has(tableId)) return prev;
+      const next = new Set(prev);
+      next.delete(tableId);
+      return next;
+    });
+  };
 
   const updateTable = (tableId: string, changes: Partial<ScenarioCustomTable>) =>
     onChange(tables.map((table) => (table.id === tableId ? { ...table, ...changes } : table)));
@@ -91,6 +102,13 @@ export const CustomTablesForm: React.FC<Props> = ({ tables, onChange }) => {
   };
 
   const handleDicePresetChange = (table: ScenarioCustomTable, preset: DicePresetKey) => {
+    setCustomDiceTableIds((prev) => {
+      const next = new Set(prev);
+      if (preset === 'custom') next.add(table.id);
+      else next.delete(table.id);
+      return next;
+    });
+
     if (preset === '1d6') applyDice(table, { diceType: 'sum', diceCount: 1, diceSides: 6 });
     else if (preset === '2d6') applyDice(table, { diceType: 'sum', diceCount: 2, diceSides: 6 });
     else if (preset === 'd66') applyDice(table, { diceType: 'd66', diceCount: 2, diceSides: 6 });
@@ -120,7 +138,9 @@ export const CustomTablesForm: React.FC<Props> = ({ tables, onChange }) => {
       </Typography>
 
       {tables.map((table) => {
-        const dicePreset = dicePresetOf(table);
+        const dicePreset: DicePresetKey = customDiceTableIds.has(table.id)
+          ? 'custom'
+          : dicePresetOf(table);
         return (
           <Paper key={table.id} variant="outlined" sx={{ p: 2, my: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, flexWrap: 'wrap' }}>
