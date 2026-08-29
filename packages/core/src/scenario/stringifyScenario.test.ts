@@ -43,23 +43,27 @@ describe('stringifyScenario', () => {
     expect(reparsed.caution).toBe('1行目 2行目');
   });
 
-  it('カスタム表（種別・ダイス設定が異なる複数表）を含めてラウンドトリップできること', () => {
+  it('カスタム表（種別・ダイス設定が異なる複数表。d66も含む）を含めてラウンドトリップできること', () => {
     const original = parseScenarioContent(
       [
         '## カスタム表 {.customTable}',
-        '##### 表A {.table.kind-encounter.d1.s6}',
+        '##### 表A {.table.kind-encounter.dice-1d6}',
         '| 出目 | 内容 |',
         '| --- | --- |',
         '| 1 | オオカミ 1d6体 |',
-        '##### 表B {.table.kind-wander.d2.s6}',
+        '##### 表B {.table.kind-wander.dice-2d6}',
         '| 出目 | 内容 |',
         '| --- | --- |',
         '| 2 | 何も見つからない |',
         '| 12 | 大当たり |',
-        '##### 表C {.table.kind-search.d1.s8}',
+        '##### 表C {.table.kind-search.dice-1d8}',
         '| 出目 | 内容 |',
         '| --- | --- |',
         '| 8 | レアアイテム |',
+        '##### 表D {.table.kind-other.dice-d66}',
+        '| 出目 | 内容 |',
+        '| --- | --- |',
+        '| 66 | 大吉 |',
         '## キャンプフェイズ',
         '### プロローグ',
       ].join('\n'),

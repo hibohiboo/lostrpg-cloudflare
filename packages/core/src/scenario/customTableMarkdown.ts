@@ -1,13 +1,17 @@
 import { buildTableFromRows, getAttributes, tokenizeBlocks, type Block } from './markdownBlocks';
-import type { ScenarioCustomTable, ScenarioCustomTableKind } from '@lostrpg/schemas';
+import type {
+  ScenarioCustomTable,
+  ScenarioCustomTableDiceType,
+  ScenarioCustomTableKind,
+} from '@lostrpg/schemas';
 
-// カスタム表（ランダムエンカウント表・散策表・探索表・休憩表）をMarkdownで読み書きするための
-// 変換処理。4種別を1つの「## カスタム表 {.customTable}」セクションにまとめ、表ごとの見出しで
-// 種別・サイコロの個数／面数を指定する:
+// カスタム表（ランダムエンカウント表・散策表・探索表・休憩表・その他）をMarkdownで読み書きする
+// ための変換処理。種別を1つの「## カスタム表 {.customTable}」セクションにまとめ、表ごとの見出しで
+// 種別・サイコロを指定する:
 //
 //   ## カスタム表 {.customTable}
 //
-//   ##### 表A {.table.kind-encounter.d1.s6}
+//   ##### 表A {.table.kind-encounter.dice-1d6}
 //   | 出目 | 内容 |
 //   | --- | --- |
 //   | 1   | オオカミ 1d6体 |
@@ -15,26 +19,69 @@ import type { ScenarioCustomTable, ScenarioCustomTableKind } from '@lostrpg/sche
 //   ...
 //   | 6   | 表B参照 |
 //
-//   ##### 表B {.table.kind-wander.d2.s6}
+//   ##### 表B {.table.kind-wander.dice-2d6}
 //   | 出目 | 内容 |
 //   | --- | --- |
 //   | 2   | 何も見つからない |
 //   ...
 //
-// kind-xxx を省略した場合は 'encounter'、d/s を省略した場合は 1d6 として扱う（後方互換）。
+//   ##### 表C {.table.kind-other.dice-d66}
+//   | 出目 | 内容 |
+//   | --- | --- |
+//   | 11  | 何も起きない |
+//   ...
+//   | 66  | 大当たり |
+//
+// kind-xxx を省略した場合は 'encounter'、dice-xxx を省略した場合は 1d6 として扱う（後方互換）。
 // エネミー付録（scenario.enemies）は表とは独立した参照用データのため対象外。
 
-const KIND_VALUES: ScenarioCustomTableKind[] = ['encounter', 'wander', 'search', 'rest'];
+const KIND_VALUES: ScenarioCustomTableKind[] = ['encounter', 'wander', 'search', 'rest', 'other'];
 const DEFAULT_KIND: ScenarioCustomTableKind = 'encounter';
+const DEFAULT_DICE_TYPE: ScenarioCustomTableDiceType = 'sum';
 const DEFAULT_DICE_COUNT = 1;
 const DEFAULT_DICE_SIDES = 6;
 
-// サイコロの個数・面数から、出目として取り得る値の一覧を返す（例: 2d6 → 2〜12）
+interface DiceSpec {
+  diceType: ScenarioCustomTableDiceType;
+  diceCount: number;
+  diceSides: number;
+}
+
+const DEFAULT_DICE: DiceSpec = {
+  diceType: DEFAULT_DICE_TYPE,
+  diceCount: DEFAULT_DICE_COUNT,
+  diceSides: DEFAULT_DICE_SIDES,
+};
+
+// サイコロを diceCount 個振って出目を合計する通常のダイスで、出目として取り得る値の一覧を返す
+// （例: 2d6 → 2〜12）
 export const rollsForDice = (diceCount: number, diceSides: number): number[] => {
   const min = diceCount;
   const max = diceCount * diceSides;
   return Array.from({ length: max - min + 1 }, (_, i) => min + i);
 };
+
+// d66：サイコロを2個振り、大きい方を十の位・小さい方を一の位として読む（2と1が出たら12）。
+// 11〜66の21通り。
+export const rollsForD66 = (): number[] => {
+  const rolls: number[] = [];
+  for (let tens = 1; tens <= 6; tens += 1) {
+    for (let ones = tens; ones <= 6; ones += 1) {
+      rolls.push(tens * 10 + ones);
+    }
+  }
+  return rolls;
+};
+
+// テーブルのサイコロ設定（diceType/diceCount/diceSides）から、出目として取り得る値の一覧を返す
+export const rollsForTable = (table: {
+  diceType: ScenarioCustomTableDiceType;
+  diceCount: number;
+  diceSides: number;
+}): number[] =>
+  table.diceType === 'd66' ? rollsForD66() : rollsForDice(table.diceCount, table.diceSides);
+
+const DICE_SUM_RE = /^(\d+)d(\d+)$/;
 
 const parseKindAttr = (attrs: string[]): ScenarioCustomTableKind => {
   const attr = attrs.find((a) => a.startsWith('kind-'));
@@ -44,12 +91,24 @@ const parseKindAttr = (attrs: string[]): ScenarioCustomTableKind => {
     : DEFAULT_KIND;
 };
 
-const parseNumberAttr = (attrs: string[], prefix: string, fallback: number): number => {
-  const attr = attrs.find((a) => new RegExp(`^${prefix}\\d+$`).test(a));
-  if (!attr) return fallback;
-  const value = Number(attr.slice(prefix.length));
-  return Number.isInteger(value) && value >= 1 ? value : fallback;
+// `dice-1d6` `dice-2d6` `dice-3d8`（自由入力の xdn） `dice-d66` のいずれかを解釈する
+const parseDiceAttr = (attrs: string[]): DiceSpec => {
+  const attr = attrs.find((a) => a.startsWith('dice-'));
+  const value = attr?.slice('dice-'.length);
+  if (!value) return DEFAULT_DICE;
+  if (value === 'd66') return { diceType: 'd66', diceCount: 2, diceSides: 6 };
+
+  const match = DICE_SUM_RE.exec(value);
+  if (!match) return DEFAULT_DICE;
+  const diceCount = Number(match[1]);
+  const diceSides = Number(match[2]);
+  if (!Number.isInteger(diceCount) || diceCount < 1) return DEFAULT_DICE;
+  if (!Number.isInteger(diceSides) || diceSides < 2) return DEFAULT_DICE;
+  return { diceType: 'sum', diceCount, diceSides };
 };
+
+const stringifyDiceAttr = (table: ScenarioCustomTable): string =>
+  table.diceType === 'd66' ? 'dice-d66' : `dice-${table.diceCount}d${table.diceSides}`;
 
 // 表の各行 [出目, 内容] を rolls に対応する ScenarioCustomTableRow[] へ変換する。
 // 出目が rolls に含まれない行は無視する。
@@ -68,15 +127,13 @@ const toRollRows = (rows: { cells: string[] }[], rolls: readonly number[]) => {
 interface PendingHeading {
   title: string;
   kind: ScenarioCustomTableKind;
-  diceCount: number;
-  diceSides: number;
+  dice: DiceSpec;
 }
 
 const DEFAULT_PENDING: PendingHeading = {
   title: '',
   kind: DEFAULT_KIND,
-  diceCount: DEFAULT_DICE_COUNT,
-  diceSides: DEFAULT_DICE_SIDES,
+  dice: DEFAULT_DICE,
 };
 
 interface ParseState {
@@ -93,8 +150,7 @@ const applyCustomTableBlock = (state: ParseState, block: Block): ParseState => {
       pending: {
         title: val ?? '',
         kind: parseKindAttr(attrs),
-        diceCount: parseNumberAttr(attrs, 'd', DEFAULT_DICE_COUNT),
-        diceSides: parseNumberAttr(attrs, 's', DEFAULT_DICE_SIDES),
+        dice: parseDiceAttr(attrs),
       },
     };
   }
@@ -102,14 +158,15 @@ const applyCustomTableBlock = (state: ParseState, block: Block): ParseState => {
   if (block.type === 'table') {
     const parsed = buildTableFromRows(block.rows, state.pending.title);
     if (!parsed) return { ...state, pending: DEFAULT_PENDING };
-    const { kind, diceCount, diceSides } = state.pending;
+    const { kind, dice } = state.pending;
     const table: ScenarioCustomTable = {
       id: `table-${state.tables.length}`,
       kind,
       name: parsed.title || `表${state.tables.length + 1}`,
-      diceCount,
-      diceSides,
-      rows: toRollRows(parsed.rows, rollsForDice(diceCount, diceSides)),
+      diceType: dice.diceType,
+      diceCount: dice.diceCount,
+      diceSides: dice.diceSides,
+      rows: toRollRows(parsed.rows, rollsForTable(dice)),
     };
     return { tables: [...state.tables, table], pending: DEFAULT_PENDING };
   }
@@ -126,9 +183,7 @@ export const parseCustomTablesMarkdown = (
 };
 
 const stringifyCustomTable = (table: ScenarioCustomTable): string => {
-  const attrs = ['table', `kind-${table.kind}`, `d${table.diceCount}`, `s${table.diceSides}`].join(
-    '.',
-  );
+  const attrs = ['table', `kind-${table.kind}`, stringifyDiceAttr(table)].join('.');
   const heading = `##### ${table.name} {.${attrs}}`;
   const header = '| 出目 | 内容 |';
   const separator = '| --- | --- |';

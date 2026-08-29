@@ -39,10 +39,11 @@ const CUSTOM_TABLE_SECTIONS: {
   { kind: 'wander', label: '散策表', defaultLabel: 'ルールブック標準の散策表を使用します。' },
   { kind: 'search', label: '探索表', defaultLabel: 'ルールブック標準の探索表を使用します。' },
   { kind: 'rest', label: '休憩表', defaultLabel: 'ルールブック標準の休憩表を使用します。' },
+  { kind: 'other', label: 'その他の表', defaultLabel: '' },
 ];
 
-// カスタム表（ランダムエンカウント表・散策表・探索表・休憩表）・エネミー付録・ヌシ付録・
-// アイテム付録：いずれも本文の後に付録として表示する参照用データ
+// カスタム表（ランダムエンカウント表・散策表・探索表・休憩表・その他）・エネミー付録・
+// ヌシ付録・アイテム付録：いずれも本文の後に付録として表示する参照用データ
 const ScenarioAppendixSection: React.FC<{ scenario: Scenario }> = ({
   scenario,
 }) => (

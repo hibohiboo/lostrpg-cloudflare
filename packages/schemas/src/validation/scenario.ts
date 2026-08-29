@@ -57,15 +57,23 @@ export const scenarioPhaseSchema = z.object({
 });
 export type ScenarioPhase = z.infer<typeof scenarioPhaseSchema>;
 
-// カスタム表の種別：ランダムエンカウント表・散策表・探索表・休憩表のいずれとして使うか。
-// 同じ種別のカスタム表が1つも無ければ、その種別はルールブック標準の表を使用する。
+// カスタム表の種別：ランダムエンカウント表・散策表・探索表・休憩表・その他のいずれとして使うか。
+// 「その他」以外は、同じ種別のカスタム表が1つも無ければルールブック標準の表を使用する。
 export const scenarioCustomTableKindSchema = z.enum([
   'encounter',
   'wander',
   'search',
   'rest',
+  'other',
 ]);
 export type ScenarioCustomTableKind = z.infer<typeof scenarioCustomTableKindSchema>;
+
+// サイコロの種類。
+// 'sum'：サイコロを diceCount 個振って出目を合計する通常のダイス（1d6・2d6・3d8 等）
+// 'd66'：サイコロを2個振り、大きい方の出目を十の位、小さい方の出目を一の位として読む
+//        （例: 2と1が出たら12。11〜66の21通り）。diceCount/diceSides は使用しない。
+export const scenarioCustomTableDiceTypeSchema = z.enum(['sum', 'd66']);
+export type ScenarioCustomTableDiceType = z.infer<typeof scenarioCustomTableDiceTypeSchema>;
 
 // カスタム表の1マス。1マスは自由記述（例: 「オオカミ 1d6体」「表B参照」「何も起きない」等）。
 // 出現数（1d6等）や他の表への振り直しも、表記自体を自由記述の中に書いてもらう。
@@ -75,13 +83,15 @@ export const scenarioCustomTableRowSchema = z.object({
 });
 export type ScenarioCustomTableRow = z.infer<typeof scenarioCustomTableRowSchema>;
 
-// カスタム表：ランダムエンカウント表・散策表・探索表・休憩表を1つの配列にまとめて管理する。
-// 出目の範囲はサイコロの個数（diceCount：1d/2d）と面数（diceSides：6・8・10等）から決まる。
+// カスタム表：ランダムエンカウント表・散策表・探索表・休憩表・その他を1つの配列にまとめて管理する。
+// 出目の範囲は diceType（'sum' or 'd66'）と、'sum' の場合はサイコロの個数（diceCount）・
+// 面数（diceSides）から決まる。
 export const scenarioCustomTableSchema = z.object({
   id: z.string(),
   kind: scenarioCustomTableKindSchema,
   name: z.string(), // 表A・表B 等
-  diceCount: z.number().int().min(1).max(2).default(1),
+  diceType: scenarioCustomTableDiceTypeSchema.default('sum'),
+  diceCount: z.number().int().min(1).max(10).default(1),
   diceSides: z.number().int().min(2).max(100).default(6),
   rows: z.array(scenarioCustomTableRowSchema),
 });

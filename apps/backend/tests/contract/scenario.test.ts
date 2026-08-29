@@ -197,7 +197,7 @@ describe('POST /api/scenarios', () => {
       const content = [
         '## カスタム表 {.customTable}',
         '',
-        '##### 表A {.table.kind-encounter.d1.s6}',
+        '##### 表A {.table.kind-encounter.dice-1d6}',
         '',
         '| 出目 | 内容 |',
         '| --- | --- |',
@@ -208,18 +208,24 @@ describe('POST /api/scenarios', () => {
         '| 5 |  |',
         '| 6 | 表B参照 |',
         '',
-        '##### 表B {.table.kind-wander.d2.s6}',
+        '##### 表B {.table.kind-wander.dice-2d6}',
         '',
         '| 出目 | 内容 |',
         '| --- | --- |',
         '| 2 | 何も見つからない |',
         '| 12 | 大当たり |',
         '',
-        '##### 表C {.table.kind-search.d1.s8}',
+        '##### 表C {.table.kind-search.dice-1d8}',
         '',
         '| 出目 | 内容 |',
         '| --- | --- |',
         '| 8 | レアアイテム |',
+        '',
+        '##### 表D {.table.kind-other.dice-d66}',
+        '',
+        '| 出目 | 内容 |',
+        '| --- | --- |',
+        '| 66 | 大吉 |',
       ].join('\n');
       // エネミー付録は本文とは独立した参照用データなので、クライアントから送った値をそのまま保存する
       const enemies = [{ enemyId: 'enemy-1', enemyName: 'オオカミ', url: '/enemy/enemy-1' }];
@@ -230,60 +236,29 @@ describe('POST /api/scenarios', () => {
       const getRes = await get(createData.id);
       const getData = (await getRes.json()) as any;
 
-      expect(getData.data.customTables).toEqual([
-        {
-          id: 'table-0',
-          kind: 'encounter',
-          name: '表A',
-          diceCount: 1,
-          diceSides: 6,
-          rows: [
-            { roll: 1, text: 'オオカミ 1d6体' },
-            { roll: 2, text: '何も起きない' },
-            { roll: 3, text: '' },
-            { roll: 4, text: '' },
-            { roll: 5, text: '' },
-            { roll: 6, text: '表B参照' },
-          ],
-        },
-        {
-          id: 'table-1',
-          kind: 'wander',
-          name: '表B',
-          diceCount: 2,
-          diceSides: 6,
-          rows: [
-            { roll: 2, text: '何も見つからない' },
-            { roll: 3, text: '' },
-            { roll: 4, text: '' },
-            { roll: 5, text: '' },
-            { roll: 6, text: '' },
-            { roll: 7, text: '' },
-            { roll: 8, text: '' },
-            { roll: 9, text: '' },
-            { roll: 10, text: '' },
-            { roll: 11, text: '' },
-            { roll: 12, text: '大当たり' },
-          ],
-        },
-        {
-          id: 'table-2',
-          kind: 'search',
-          name: '表C',
-          diceCount: 1,
-          diceSides: 8,
-          rows: [
-            { roll: 1, text: '' },
-            { roll: 2, text: '' },
-            { roll: 3, text: '' },
-            { roll: 4, text: '' },
-            { roll: 5, text: '' },
-            { roll: 6, text: '' },
-            { roll: 7, text: '' },
-            { roll: 8, text: 'レアアイテム' },
-          ],
-        },
+      expect(
+        getData.data.customTables.map((t: any) => ({ kind: t.kind, name: t.name, diceType: t.diceType })),
+      ).toEqual([
+        { kind: 'encounter', name: '表A', diceType: 'sum' },
+        { kind: 'wander', name: '表B', diceType: 'sum' },
+        { kind: 'search', name: '表C', diceType: 'sum' },
+        { kind: 'other', name: '表D', diceType: 'd66' },
       ]);
+      expect(getData.data.customTables[0].rows).toEqual([
+        { roll: 1, text: 'オオカミ 1d6体' },
+        { roll: 2, text: '何も起きない' },
+        { roll: 3, text: '' },
+        { roll: 4, text: '' },
+        { roll: 5, text: '' },
+        { roll: 6, text: '表B参照' },
+      ]);
+      expect(getData.data.customTables[1].rows).toHaveLength(11);
+      expect(getData.data.customTables[1].rows[10]).toEqual({ roll: 12, text: '大当たり' });
+      expect(getData.data.customTables[2].diceCount).toBe(1);
+      expect(getData.data.customTables[2].diceSides).toBe(8);
+      expect(getData.data.customTables[3].rows).toHaveLength(21);
+      expect(getData.data.customTables[3].rows[0].roll).toBe(11);
+      expect(getData.data.customTables[3].rows[20]).toEqual({ roll: 66, text: '大吉' });
       expect(getData.data.enemies).toEqual(enemies);
     });
 
@@ -292,7 +267,15 @@ describe('POST /api/scenarios', () => {
         ...minimalData,
         content: '',
         customTables: [
-          { id: 'なりすまし', kind: 'encounter', name: 'なりすまし表', diceCount: 1, diceSides: 6, rows: [] },
+          {
+            id: 'なりすまし',
+            kind: 'encounter',
+            name: 'なりすまし表',
+            diceType: 'sum',
+            diceCount: 1,
+            diceSides: 6,
+            rows: [],
+          },
         ],
       });
       const createData = (await createRes.json()) as any;

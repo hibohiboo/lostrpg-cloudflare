@@ -2,10 +2,13 @@ import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typo
 import React from 'react';
 import type { ScenarioCustomTable } from '../model/scenario';
 
+const diceLabel = (table: ScenarioCustomTable): string =>
+  table.diceType === 'd66' ? 'd66' : `${table.diceCount}d${table.diceSides}`;
+
 const CustomTableCard: React.FC<{ table: ScenarioCustomTable }> = ({ table }) => (
   <Box sx={{ my: 2 }}>
     <Typography variant="subtitle1" gutterBottom>
-      {table.name}（{table.diceCount}d{table.diceSides}）
+      {table.name}（{diceLabel(table)}）
     </Typography>
     <TableContainer component={Paper} variant="outlined">
       <Table size="small">

@@ -14,6 +14,7 @@ export type {
   ScenarioTable,
   ScenarioLink,
   ScenarioCustomTableKind,
+  ScenarioCustomTableDiceType,
   ScenarioCustomTableRow,
   ScenarioCustomTable,
   ScenarioEncounterEnemy,
