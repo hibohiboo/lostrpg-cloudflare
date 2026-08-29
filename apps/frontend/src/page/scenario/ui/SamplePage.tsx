@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { scenarioNotationTable, scenarioSamples } from '@lostrpg/core/game-data/scenario';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import {
@@ -15,6 +16,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
+import { SCENARIO_NOTATION_ICONS } from './scenarioNotationIcons';
 
 const CopyButton: React.FC<{ text: string }> = ({ text }) => {
   const [copied, setCopied] = useState(false);
@@ -58,12 +60,20 @@ const SamplePage: React.FC = () => (
           </TableHead>
           <TableBody>
             {scenarioNotationTable.rows.map((row) => (
-              <TableRow key={row.cells.join('|')}>
-                {row.cells.map((cell, cellIndex) => (
-                  <TableCell key={cellIndex} sx={{ whiteSpace: 'pre-wrap' }}>
-                    {cell}
-                  </TableCell>
-                ))}
+              <TableRow key={`${row.purpose}-${row.notation}`}>
+                <TableCell sx={{ whiteSpace: 'pre-wrap' }}>{row.purpose}</TableCell>
+                <TableCell sx={{ whiteSpace: 'pre-wrap', fontFamily: 'monospace' }}>
+                  {row.notation}
+                </TableCell>
+                <TableCell sx={{ whiteSpace: 'pre-wrap' }}>
+                  {row.icon && (
+                    <FontAwesomeIcon
+                      icon={SCENARIO_NOTATION_ICONS[row.icon]}
+                      style={{ marginRight: 8 }}
+                    />
+                  )}
+                  {row.label}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

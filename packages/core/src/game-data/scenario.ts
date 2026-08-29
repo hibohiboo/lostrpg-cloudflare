@@ -1,8 +1,32 @@
 // シナリオ本文（Markdown）の記法一覧・記法例
 // 参考: create-now版 src/data/lostrpg.ts の sampleTable / data/samples/scenario(2).md
 
+// アイコン列に対応するFont Awesomeアイコンの種類。
+// 実際のアイコン定義（@fortawesome）はフロントエンド側（page/scenario/ui/scenarioNotationIcons.ts）で
+// マッピングする（packages/core はUIライブラリに依存しないため）。
+export type ScenarioNotationIconKey =
+  | 'players'
+  | 'time'
+  | 'limit'
+  | 'caution'
+  | 'checkpoint'
+  | 'path'
+  | 'view'
+  | 'battle'
+  | 'lock'
+  | 'search'
+  | 'limitUp'
+  | 'boss'
+  | 'roll'
+  | 'item'
+  | 'prize'
+  | 'table';
+
 export interface ScenarioNotationRow {
-  cells: [purpose: string, notation: string, description: string];
+  purpose: string; // やりたいこと
+  notation: string; // 記法
+  icon?: ScenarioNotationIconKey;
+  label: string; // アイコン列に添えるテキスト
 }
 
 export const scenarioNotationTable: {
@@ -11,39 +35,60 @@ export const scenarioNotationTable: {
   rows: ScenarioNotationRow[];
 } = {
   title: '記法一覧',
-  columns: ['やりたいこと', '記法', '説明'],
+  columns: ['やりたいこと', '記法', 'アイコン'],
   rows: [
-    { cells: ['シナリオタイトル', '#', ''] },
-    { cells: ['推奨するプレイヤー人数', '## 〇人 {.players}', '推奨人数：〇人'] },
-    { cells: ['シナリオの所要時間目安', '## 〇時間 {.time}', 'プレイ時間：〇時間'] },
-    { cells: ['リミット', '## 〇 {.limit}', 'リミット：〇'] },
-    { cells: ['注意書き', '## 注意 {.caution}', '注意'] },
-    { cells: ['フェイズ', '## 〇フェイズ', ''] },
-    { cells: ['シーン', '### シーン', ''] },
-    { cells: ['チェックポイント', '### チェックポイント {.type-checkpoint}', 'チェックポイント'] },
-    { cells: ['道', '### 道 {.type-path}', '道'] },
-    { cells: ['描写', '#### 描写', '描写'] },
-    { cells: ['戦闘', '#### 戦闘 {.battle}', '戦闘'] },
-    { cells: ['障害', '#### 障害 {.lock}', '障害'] },
-    { cells: ['探索オブジェクト', '#### 探索 {.search}', '探索'] },
-    { cells: ['リミット増加オブジェクト', '#### オブジェクト {.limitUp}', 'オブジェクト'] },
-    { cells: ['ヌシ', '#### ヌシ {.boss}', 'ヌシ'] },
-    { cells: ['判定', '##### 《判定/分野 x》 {.roll}', '《判定/分野 x》'] },
-    { cells: ['アイテム', '##### アイテム {.item}', 'アイテム'] },
-    { cells: ['報酬', '##### 報酬 {.prize}', '報酬'] },
-    { cells: ['道', '##### 道 {.path}', '道'] },
-    { cells: ['表', '##### 表 {.table}', '表'] },
-    { cells: ['リンク', '[文字](URL)', '文字（リンク）'] },
-    { cells: ['シーンID:X', '### シーン {.alias-X}', 'Xは[.-]以外の文字ならなんでもOK。チャート用。'] },
-    { cells: ['次のシーン', '### シーン {.next-X}', 'Xは[.-]以外の文字ならなんでもOK。チャート用。'] },
+    { purpose: 'シナリオタイトル', notation: '#', label: '' },
+    { purpose: '推奨するプレイヤー人数', notation: '## 〇人 {.players}', icon: 'players', label: '推奨人数：〇人' },
+    { purpose: 'シナリオの所要時間目安', notation: '## 〇時間 {.time}', icon: 'time', label: 'プレイ時間：〇時間' },
+    { purpose: 'リミット', notation: '## 〇 {.limit}', icon: 'limit', label: 'リミット：〇' },
+    { purpose: '注意書き', notation: '## 注意 {.caution}', icon: 'caution', label: '注意' },
+    { purpose: 'フェイズ', notation: '## 〇フェイズ', label: '' },
+    { purpose: 'シーン', notation: '### シーン', label: '' },
     {
-      cells: [
-        '次のシーン(分岐あり）',
-        '### シーン {.next-X1-X2}',
-        'X1,X2は[.-]以外の文字ならなんでもOK。チャート用。',
-      ],
+      purpose: 'チェックポイント',
+      notation: '### チェックポイント {.type-checkpoint}',
+      icon: 'checkpoint',
+      label: 'チェックポイント',
     },
-    { cells: ['次のシーンなし', '### シーン {.next-none}', '行き止まり。チャート用。'] },
+    { purpose: '道', notation: '### 道 {.type-path}', icon: 'path', label: '道' },
+    { purpose: '描写', notation: '#### 描写', icon: 'view', label: '描写' },
+    { purpose: '戦闘', notation: '#### 戦闘 {.battle}', icon: 'battle', label: '戦闘' },
+    { purpose: '障害', notation: '#### 障害 {.lock}', icon: 'lock', label: '障害' },
+    { purpose: '探索オブジェクト', notation: '#### 探索 {.search}', icon: 'search', label: '探索' },
+    {
+      purpose: 'リミット増加オブジェクト',
+      notation: '#### オブジェクト {.limitUp}',
+      icon: 'limitUp',
+      label: 'オブジェクト',
+    },
+    { purpose: 'ヌシ', notation: '#### ヌシ {.boss}', icon: 'boss', label: 'ヌシ' },
+    {
+      purpose: '判定',
+      notation: '##### 《判定/分野 x》 {.roll}',
+      icon: 'roll',
+      label: '《判定/分野 x》',
+    },
+    { purpose: 'アイテム', notation: '##### アイテム {.item}', icon: 'item', label: 'アイテム' },
+    { purpose: '報酬', notation: '##### 報酬 {.prize}', icon: 'prize', label: '報酬' },
+    { purpose: '道', notation: '##### 道 {.path}', icon: 'path', label: '道' },
+    { purpose: '表', notation: '##### 表 {.table}', icon: 'table', label: '表' },
+    { purpose: 'リンク', notation: '[文字](URL)', label: '文字（リンク）' },
+    {
+      purpose: 'シーンID:X',
+      notation: '### シーン {.alias-X}',
+      label: 'Xは[.-]以外の文字ならなんでもOK。チャート用。',
+    },
+    {
+      purpose: '次のシーン',
+      notation: '### シーン {.next-X}',
+      label: 'Xは[.-]以外の文字ならなんでもOK。チャート用。',
+    },
+    {
+      purpose: '次のシーン(分岐あり）',
+      notation: '### シーン {.next-X1-X2}',
+      label: 'X1,X2は[.-]以外の文字ならなんでもOK。チャート用。',
+    },
+    { purpose: '次のシーンなし', notation: '### シーン {.next-none}', label: '行き止まり。チャート用。' },
   ],
 };
 
