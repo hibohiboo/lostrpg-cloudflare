@@ -1,3 +1,4 @@
+import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import React from 'react';
@@ -7,9 +8,10 @@ type Props = {
   phase: ScenarioPhase;
   onChange: (changes: Partial<ScenarioPhase>) => void;
   onDelete: () => void;
+  onAddScene: () => void;
 };
 
-export const PhaseForm: React.FC<Props> = ({ phase, onChange, onDelete }) => (
+export const PhaseForm: React.FC<Props> = ({ phase, onChange, onDelete, onAddScene }) => (
   <Box>
     <Typography variant="h6" gutterBottom>
       フェイズを編集
@@ -21,13 +23,18 @@ export const PhaseForm: React.FC<Props> = ({ phase, onChange, onDelete }) => (
       onChange={(e) => onChange({ name: e.target.value })}
       sx={{ my: 2 }}
     />
-    <Button
-      variant="outlined"
-      color="error"
-      startIcon={<DeleteIcon />}
-      onClick={onDelete}
-    >
-      このフェイズを削除
-    </Button>
+    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+      <Button variant="contained" startIcon={<AddIcon />} onClick={onAddScene}>
+        シーンを追加
+      </Button>
+      <Button
+        variant="outlined"
+        color="error"
+        startIcon={<DeleteIcon />}
+        onClick={onDelete}
+      >
+        このフェイズを削除
+      </Button>
+    </Box>
   </Box>
 );

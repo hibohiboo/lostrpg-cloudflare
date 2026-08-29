@@ -1,3 +1,4 @@
+import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import React from 'react';
@@ -8,6 +9,7 @@ type Props = {
   scene: ScenarioScene;
   onChange: (changes: Partial<ScenarioScene>) => void;
   onDelete: () => void;
+  onAddEvent: () => void;
 };
 
 const parseNextField = (value: string): string[] | null => {
@@ -18,7 +20,7 @@ const parseNextField = (value: string): string[] | null => {
   return items.length > 0 ? items : null;
 };
 
-export const SceneForm: React.FC<Props> = ({ scene, onChange, onDelete }) => (
+export const SceneForm: React.FC<Props> = ({ scene, onChange, onDelete, onAddEvent }) => (
   <Box>
     <Typography variant="h6" gutterBottom>
       シーン（チェックポイント／道）を編集
@@ -61,13 +63,18 @@ export const SceneForm: React.FC<Props> = ({ scene, onChange, onDelete }) => (
       }
       sx={{ my: 2 }}
     />
-    <Button
-      variant="outlined"
-      color="error"
-      startIcon={<DeleteIcon />}
-      onClick={onDelete}
-    >
-      このシーンを削除
-    </Button>
+    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+      <Button variant="contained" startIcon={<AddIcon />} onClick={onAddEvent}>
+        イベントを追加
+      </Button>
+      <Button
+        variant="outlined"
+        color="error"
+        startIcon={<DeleteIcon />}
+        onClick={onDelete}
+      >
+        このシーンを削除
+      </Button>
+    </Box>
   </Box>
 );

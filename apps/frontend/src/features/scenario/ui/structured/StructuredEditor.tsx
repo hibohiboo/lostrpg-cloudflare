@@ -99,6 +99,7 @@ export const StructuredEditor: React.FC<Props> = ({
             commitPhases(removePhase(phases, selection.phaseIndex));
             setSelectedId(null);
           }}
+          onAddScene={() => handleAddScene(selection.phaseIndex)}
         />
       );
     }
@@ -125,6 +126,7 @@ export const StructuredEditor: React.FC<Props> = ({
             );
             setSelectedId(null);
           }}
+          onAddEvent={() => handleAddEvent(selection.phaseIndex, selection.sceneIndex)}
         />
       );
     }
