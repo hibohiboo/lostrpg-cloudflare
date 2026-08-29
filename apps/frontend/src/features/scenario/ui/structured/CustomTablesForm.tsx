@@ -60,7 +60,10 @@ const createTable = (index: number): ScenarioCustomTable => ({
   diceType: 'sum',
   diceCount: 1,
   diceSides: 6,
-  rows: resizeRows([], rollsForTable({ diceType: 'sum', diceCount: 1, diceSides: 6 })),
+  rows: resizeRows(
+    [],
+    rollsForTable({ diceType: 'sum', diceCount: 1, diceSides: 6 }),
+  ),
 });
 
 type Props = {
@@ -76,9 +79,12 @@ type Props = {
 export const CustomTablesForm: React.FC<Props> = ({ tables, onChange }) => {
   // 「自由入力」を選んだ表のIDを覚えておく。個数・面数がたまたま1d6/2d6と同じ値になっても
   // dicePresetOf() の逆算だけに頼るとプリセット扱いに戻ってしまい、自由入力欄が消えてしまうため。
-  const [customDiceTableIds, setCustomDiceTableIds] = useState<Set<string>>(new Set());
+  const [customDiceTableIds, setCustomDiceTableIds] = useState<Set<string>>(
+    new Set(),
+  );
 
-  const handleAddTable = () => onChange([...tables, createTable(tables.length)]);
+  const handleAddTable = () =>
+    onChange([...tables, createTable(tables.length)]);
 
   const handleRemoveTable = (tableId: string) => {
     onChange(tables.filter((table) => table.id !== tableId));
@@ -90,18 +96,31 @@ export const CustomTablesForm: React.FC<Props> = ({ tables, onChange }) => {
     });
   };
 
-  const updateTable = (tableId: string, changes: Partial<ScenarioCustomTable>) =>
-    onChange(tables.map((table) => (table.id === tableId ? { ...table, ...changes } : table)));
+  const updateTable = (
+    tableId: string,
+    changes: Partial<ScenarioCustomTable>,
+  ) =>
+    onChange(
+      tables.map((table) =>
+        table.id === tableId ? { ...table, ...changes } : table,
+      ),
+    );
 
   const applyDice = (
     table: ScenarioCustomTable,
     changes: Pick<ScenarioCustomTable, 'diceType' | 'diceCount' | 'diceSides'>,
   ) => {
     const next = { ...table, ...changes };
-    updateTable(table.id, { ...changes, rows: resizeRows(table.rows, rollsForTable(next)) });
+    updateTable(table.id, {
+      ...changes,
+      rows: resizeRows(table.rows, rollsForTable(next)),
+    });
   };
 
-  const handleDicePresetChange = (table: ScenarioCustomTable, preset: DicePresetKey) => {
+  const handleDicePresetChange = (
+    table: ScenarioCustomTable,
+    preset: DicePresetKey,
+  ) => {
     setCustomDiceTableIds((prev) => {
       const next = new Set(prev);
       if (preset === 'custom') next.add(table.id);
@@ -109,11 +128,19 @@ export const CustomTablesForm: React.FC<Props> = ({ tables, onChange }) => {
       return next;
     });
 
-    if (preset === '1d6') applyDice(table, { diceType: 'sum', diceCount: 1, diceSides: 6 });
-    else if (preset === '2d6') applyDice(table, { diceType: 'sum', diceCount: 2, diceSides: 6 });
-    else if (preset === 'd66') applyDice(table, { diceType: 'd66', diceCount: 2, diceSides: 6 });
+    if (preset === '1d6')
+      applyDice(table, { diceType: 'sum', diceCount: 1, diceSides: 6 });
+    else if (preset === '2d6')
+      applyDice(table, { diceType: 'sum', diceCount: 2, diceSides: 6 });
+    else if (preset === 'd66')
+      applyDice(table, { diceType: 'd66', diceCount: 2, diceSides: 6 });
     // '自由入力' に切り替えた直後は、それまでのサイコロ設定を初期値として引き継ぐ
-    else applyDice(table, { diceType: 'sum', diceCount: table.diceCount, diceSides: table.diceSides });
+    else
+      applyDice(table, {
+        diceType: 'sum',
+        diceCount: table.diceCount,
+        diceSides: table.diceSides,
+      });
   };
 
   const handleRowTextChange = (tableId: string, roll: number, text: string) =>
@@ -122,7 +149,9 @@ export const CustomTablesForm: React.FC<Props> = ({ tables, onChange }) => {
         if (table.id !== tableId) return table;
         return {
           ...table,
-          rows: table.rows.map((row) => (row.roll === roll ? { ...row, text } : row)),
+          rows: table.rows.map((row) =>
+            row.roll === roll ? { ...row, text } : row,
+          ),
         };
       }),
     );
@@ -143,12 +172,22 @@ export const CustomTablesForm: React.FC<Props> = ({ tables, onChange }) => {
           : dicePresetOf(table);
         return (
           <Paper key={table.id} variant="outlined" sx={{ p: 2, my: 1 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, flexWrap: 'wrap' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+                mb: 1,
+                flexWrap: 'wrap',
+              }}
+            >
               <Select
                 size="small"
                 value={table.kind}
                 onChange={(e) =>
-                  updateTable(table.id, { kind: e.target.value as ScenarioCustomTableKind })
+                  updateTable(table.id, {
+                    kind: e.target.value as ScenarioCustomTableKind,
+                  })
                 }
                 sx={{ minWidth: 180 }}
               >
@@ -162,7 +201,9 @@ export const CustomTablesForm: React.FC<Props> = ({ tables, onChange }) => {
                 size="small"
                 label="表の名前"
                 value={table.name}
-                onChange={(e) => updateTable(table.id, { name: e.target.value })}
+                onChange={(e) =>
+                  updateTable(table.id, { name: e.target.value })
+                }
               />
               <Select
                 size="small"
@@ -223,14 +264,19 @@ export const CustomTablesForm: React.FC<Props> = ({ tables, onChange }) => {
             </Box>
 
             {table.rows.map((row) => (
-              <Box key={row.roll} sx={{ display: 'flex', alignItems: 'center', gap: 1, my: 0.5 }}>
+              <Box
+                key={row.roll}
+                sx={{ display: 'flex', alignItems: 'center', gap: 1, my: 0.5 }}
+              >
                 <Typography sx={{ width: 32 }}>{row.roll}</Typography>
                 <TextField
                   size="small"
                   fullWidth
-                  placeholder="例: オオカミ 1d6体 / 表B参照 / 何も起きない"
+                  placeholder="例: ツノウサギ 1d6体 / 表B参照 / 何も起きない"
                   value={row.text ?? ''}
-                  onChange={(e) => handleRowTextChange(table.id, row.roll, e.target.value)}
+                  onChange={(e) =>
+                    handleRowTextChange(table.id, row.roll, e.target.value)
+                  }
                 />
               </Box>
             ))}

@@ -201,7 +201,7 @@ describe('POST /api/scenarios', () => {
         '',
         '| 出目 | 内容 |',
         '| --- | --- |',
-        '| 1 | オオカミ 1d6体 |',
+        '| 1 | ツノウサギ 1d6体 |',
         '| 2 | 何も起きない |',
         '| 3 |  |',
         '| 4 |  |',
@@ -228,7 +228,9 @@ describe('POST /api/scenarios', () => {
         '| 66 | 大吉 |',
       ].join('\n');
       // エネミー付録は本文とは独立した参照用データなので、クライアントから送った値をそのまま保存する
-      const enemies = [{ enemyId: 'enemy-1', enemyName: 'オオカミ', url: '/enemy/enemy-1' }];
+      const enemies = [
+        { enemyId: 'enemy-1', enemyName: 'ツノウサギ', url: '/enemy/enemy-1' },
+      ];
 
       const createRes = await create({ ...minimalData, content, enemies });
       const createData = (await createRes.json()) as any;
@@ -237,7 +239,11 @@ describe('POST /api/scenarios', () => {
       const getData = (await getRes.json()) as any;
 
       expect(
-        getData.data.customTables.map((t: any) => ({ kind: t.kind, name: t.name, diceType: t.diceType })),
+        getData.data.customTables.map((t: any) => ({
+          kind: t.kind,
+          name: t.name,
+          diceType: t.diceType,
+        })),
       ).toEqual([
         { kind: 'encounter', name: '表A', diceType: 'sum' },
         { kind: 'wander', name: '表B', diceType: 'sum' },
@@ -245,7 +251,7 @@ describe('POST /api/scenarios', () => {
         { kind: 'other', name: '表D', diceType: 'd66' },
       ]);
       expect(getData.data.customTables[0].rows).toEqual([
-        { roll: 1, text: 'オオカミ 1d6体' },
+        { roll: 1, text: 'ツノウサギ 1d6体' },
         { roll: 2, text: '何も起きない' },
         { roll: 3, text: '' },
         { roll: 4, text: '' },
@@ -253,12 +259,18 @@ describe('POST /api/scenarios', () => {
         { roll: 6, text: '表B参照' },
       ]);
       expect(getData.data.customTables[1].rows).toHaveLength(11);
-      expect(getData.data.customTables[1].rows[10]).toEqual({ roll: 12, text: '大当たり' });
+      expect(getData.data.customTables[1].rows[10]).toEqual({
+        roll: 12,
+        text: '大当たり',
+      });
       expect(getData.data.customTables[2].diceCount).toBe(1);
       expect(getData.data.customTables[2].diceSides).toBe(8);
       expect(getData.data.customTables[3].rows).toHaveLength(21);
       expect(getData.data.customTables[3].rows[0].roll).toBe(11);
-      expect(getData.data.customTables[3].rows[20]).toEqual({ roll: 66, text: '大吉' });
+      expect(getData.data.customTables[3].rows[20]).toEqual({
+        roll: 66,
+        text: '大吉',
+      });
       expect(getData.data.enemies).toEqual(enemies);
     });
 

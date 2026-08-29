@@ -31,7 +31,10 @@ describe('customTableMarkdown', () => {
     expect(tables[0].diceSides).toBe(6);
     expect(tables[0].rows).toHaveLength(11);
     expect(tables[0].rows[0]).toEqual({ roll: 2, text: '何も見つからない' });
-    expect(tables[0].rows.find((r) => r.roll === 7)).toEqual({ roll: 7, text: '平凡な発見' });
+    expect(tables[0].rows.find((r) => r.roll === 7)).toEqual({
+      roll: 7,
+      text: '平凡な発見',
+    });
     expect(tables[0].rows[10]).toEqual({ roll: 12, text: '大当たり' });
   });
 
@@ -40,7 +43,7 @@ describe('customTableMarkdown', () => {
       '##### 表A {.table}',
       '| 出目 | 内容 |',
       '| --- | --- |',
-      '| 1 | オオカミ 1d6体 |',
+      '| 1 | ツノウサギ 1d6体 |',
       '| 6 | 表B参照 |',
     ].join('\n');
 
@@ -51,7 +54,7 @@ describe('customTableMarkdown', () => {
     expect(tables[0].diceCount).toBe(1);
     expect(tables[0].diceSides).toBe(6);
     expect(tables[0].rows).toHaveLength(6);
-    expect(tables[0].rows[0]).toEqual({ roll: 1, text: 'オオカミ 1d6体' });
+    expect(tables[0].rows[0]).toEqual({ roll: 1, text: 'ツノウサギ 1d6体' });
   });
 
   it('自由入力の xdn（例: 1d8, 3d10）を扱えること', () => {
@@ -98,7 +101,10 @@ describe('customTableMarkdown', () => {
     expect(tables[0].diceType).toBe('d66');
     expect(tables[0].rows).toHaveLength(21);
     expect(tables[0].rows[0]).toEqual({ roll: 11, text: '何も起きない' });
-    expect(tables[0].rows[tables[0].rows.length - 1]).toEqual({ roll: 66, text: '大当たり' });
+    expect(tables[0].rows[tables[0].rows.length - 1]).toEqual({
+      roll: 66,
+      text: '大当たり',
+    });
     expect(rollsForD66()).toEqual(tables[0].rows.map((r) => r.roll));
   });
 
@@ -132,7 +138,7 @@ describe('customTableMarkdown', () => {
         diceCount: 1,
         diceSides: 6,
         rows: [
-          { roll: 1, text: 'オオカミ 1d6体' },
+          { roll: 1, text: 'ツノウサギ 1d6体' },
           { roll: 2, text: '何も起きない' },
           { roll: 3, text: '' },
           { roll: 4, text: '' },
@@ -147,7 +153,10 @@ describe('customTableMarkdown', () => {
         diceType: 'sum' as const,
         diceCount: 2,
         diceSides: 6,
-        rows: rollsForDice(2, 6).map((roll) => ({ roll, text: roll === 7 ? '平凡な発見' : '' })),
+        rows: rollsForDice(2, 6).map((roll) => ({
+          roll,
+          text: roll === 7 ? '平凡な発見' : '',
+        })),
       },
       {
         id: 'c',
@@ -156,7 +165,10 @@ describe('customTableMarkdown', () => {
         diceType: 'd66' as const,
         diceCount: 2,
         diceSides: 6,
-        rows: rollsForD66().map((roll) => ({ roll, text: roll === 66 ? '大吉' : '' })),
+        rows: rollsForD66().map((roll) => ({
+          roll,
+          text: roll === 66 ? '大吉' : '',
+        })),
       },
     ];
 

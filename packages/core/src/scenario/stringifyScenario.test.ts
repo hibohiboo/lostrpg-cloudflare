@@ -50,7 +50,7 @@ describe('stringifyScenario', () => {
         '##### 表A {.table.kind-encounter.dice-1d6}',
         '| 出目 | 内容 |',
         '| --- | --- |',
-        '| 1 | オオカミ 1d6体 |',
+        '| 1 | ツノウサギ 1d6体 |',
         '##### 表B {.table.kind-wander.dice-2d6}',
         '| 出目 | 内容 |',
         '| --- | --- |',

@@ -1,4 +1,9 @@
-import { buildTableFromRows, getAttributes, tokenizeBlocks, type Block } from './markdownBlocks';
+import {
+  buildTableFromRows,
+  getAttributes,
+  tokenizeBlocks,
+  type Block,
+} from './markdownBlocks';
 import type {
   ScenarioCustomTable,
   ScenarioCustomTableDiceType,
@@ -14,7 +19,7 @@ import type {
 //   ##### 表A {.table.kind-encounter.dice-1d6}
 //   | 出目 | 内容 |
 //   | --- | --- |
-//   | 1   | オオカミ 1d6体 |
+//   | 1   | ツノウサギ 1d6体 |
 //   | 2   | 何も起きない |
 //   ...
 //   | 6   | 表B参照 |
@@ -35,7 +40,13 @@ import type {
 // kind-xxx を省略した場合は 'encounter'、dice-xxx を省略した場合は 1d6 として扱う（後方互換）。
 // エネミー付録（scenario.enemies）は表とは独立した参照用データのため対象外。
 
-const KIND_VALUES: ScenarioCustomTableKind[] = ['encounter', 'wander', 'search', 'rest', 'other'];
+const KIND_VALUES: ScenarioCustomTableKind[] = [
+  'encounter',
+  'wander',
+  'search',
+  'rest',
+  'other',
+];
 const DEFAULT_KIND: ScenarioCustomTableKind = 'encounter';
 const DEFAULT_DICE_TYPE: ScenarioCustomTableDiceType = 'sum';
 const DEFAULT_DICE_COUNT = 1;
@@ -55,7 +66,10 @@ const DEFAULT_DICE: DiceSpec = {
 
 // サイコロを diceCount 個振って出目を合計する通常のダイスで、出目として取り得る値の一覧を返す
 // （例: 2d6 → 2〜12）
-export const rollsForDice = (diceCount: number, diceSides: number): number[] => {
+export const rollsForDice = (
+  diceCount: number,
+  diceSides: number,
+): number[] => {
   const min = diceCount;
   const max = diceCount * diceSides;
   return Array.from({ length: max - min + 1 }, (_, i) => min + i);
@@ -79,7 +93,9 @@ export const rollsForTable = (table: {
   diceCount: number;
   diceSides: number;
 }): number[] =>
-  table.diceType === 'd66' ? rollsForD66() : rollsForDice(table.diceCount, table.diceSides);
+  table.diceType === 'd66'
+    ? rollsForD66()
+    : rollsForDice(table.diceCount, table.diceSides);
 
 const DICE_SUM_RE = /^(\d+)d(\d+)$/;
 
@@ -108,7 +124,9 @@ const parseDiceAttr = (attrs: string[]): DiceSpec => {
 };
 
 const stringifyDiceAttr = (table: ScenarioCustomTable): string =>
-  table.diceType === 'd66' ? 'dice-d66' : `dice-${table.diceCount}d${table.diceSides}`;
+  table.diceType === 'd66'
+    ? 'dice-d66'
+    : `dice-${table.diceCount}d${table.diceSides}`;
 
 // 表の各行 [出目, 内容] を rolls に対応する ScenarioCustomTableRow[] へ変換する。
 // 出目が rolls に含まれない行は無視する。
@@ -183,7 +201,9 @@ export const parseCustomTablesMarkdown = (
 };
 
 const stringifyCustomTable = (table: ScenarioCustomTable): string => {
-  const attrs = ['table', `kind-${table.kind}`, stringifyDiceAttr(table)].join('.');
+  const attrs = ['table', `kind-${table.kind}`, stringifyDiceAttr(table)].join(
+    '.',
+  );
   const heading = `##### ${table.name} {.${attrs}}`;
   const header = '| 出目 | 内容 |';
   const separator = '| --- | --- |';

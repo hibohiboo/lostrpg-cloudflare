@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { scenarioSamples } from '../game-data/scenario';
-import { parseScenarioContent, splitScenarioIntro } from './parseScenarioContent';
+import {
+  parseScenarioContent,
+  splitScenarioIntro,
+} from './parseScenarioContent';
 
 describe('parseScenarioContent', () => {
   it('記法例（scenarioSamples）が全てエラーなく構造化でき、想定するフェイズ名になること', () => {
@@ -143,7 +146,10 @@ describe('parseScenarioContent', () => {
     const result = parseScenarioContent(md);
     const event = result.phases[0].scenes[0].events[0];
     expect(event.links).toEqual([
-      { url: 'https://example.com/scenario?id=abc', value: '→ヌシシートへのリンク' },
+      {
+        url: 'https://example.com/scenario?id=abc',
+        value: '→ヌシシートへのリンク',
+      },
     ]);
     expect(event.lines).toEqual([]);
   });
@@ -155,7 +161,7 @@ describe('parseScenarioContent', () => {
       '##### 表A {.table.kind-encounter.dice-1d6}',
       '| 出目 | 内容 |',
       '| --- | --- |',
-      '| 1 | オオカミ 1d6体 |',
+      '| 1 | ツノウサギ 1d6体 |',
       '| 6 | 表B参照 |',
       '##### 表B {.table.kind-wander.dice-2d6}',
       '| 出目 | 内容 |',
@@ -168,11 +174,16 @@ describe('parseScenarioContent', () => {
     const result = parseScenarioContent(md);
 
     expect(result.players).toBe('3人');
-    expect(result.customTables.map((t) => ({ name: t.name, kind: t.kind }))).toEqual([
+    expect(
+      result.customTables.map((t) => ({ name: t.name, kind: t.kind })),
+    ).toEqual([
       { name: '表A', kind: 'encounter' },
       { name: '表B', kind: 'wander' },
     ]);
-    expect(result.customTables[0].rows[0]).toEqual({ roll: 1, text: 'オオカミ 1d6体' });
+    expect(result.customTables[0].rows[0]).toEqual({
+      roll: 1,
+      text: 'ツノウサギ 1d6体',
+    });
     expect(result.customTables[1].rows).toHaveLength(11);
     expect(result.phases.map((p) => p.name)).toEqual(['キャンプフェイズ']);
   });
@@ -185,7 +196,7 @@ describe('parseScenarioContent', () => {
       '##### 表A {.table}',
       '| 出目 | 内容 |',
       '| --- | --- |',
-      '| 1 | オオカミ |',
+      '| 1 | ツノウサギ |',
       '## 探索フェイズ',
       '### 道',
     ].join('\n');
@@ -193,7 +204,10 @@ describe('parseScenarioContent', () => {
     const result = parseScenarioContent(md);
 
     expect(result.customTables.map((t) => t.name)).toEqual(['表A']);
-    expect(result.phases.map((p) => p.name)).toEqual(['キャンプフェイズ', '探索フェイズ']);
+    expect(result.phases.map((p) => p.name)).toEqual([
+      'キャンプフェイズ',
+      '探索フェイズ',
+    ]);
   });
 
   it('複数フェイズ・複数シーンを正しく積み上げること', () => {
@@ -236,10 +250,12 @@ describe('splitScenarioIntro', () => {
 
     const { intro, phasesMarkdown } = splitScenarioIntro(md);
 
-    expect(intro).toBe(['# タイトル', '', '## 3人 {.players}', '', '概要文です。'].join('\n'));
-    expect(parseScenarioContent(phasesMarkdown).phases.map((p) => p.name)).toEqual([
-      'キャンプフェイズ',
-    ]);
+    expect(intro).toBe(
+      ['# タイトル', '', '## 3人 {.players}', '', '概要文です。'].join('\n'),
+    );
+    expect(
+      parseScenarioContent(phasesMarkdown).phases.map((p) => p.name),
+    ).toEqual(['キャンプフェイズ']);
   });
 
   it('メタ見出しが無い場合はintroが空文字列になること', () => {
