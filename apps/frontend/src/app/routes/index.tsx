@@ -45,6 +45,16 @@ import {
   RecordCreatePage,
   RecordEditPage,
 } from '@lostrpg/frontend/page/record';
+import {
+  ScenarioCreatePage,
+  ScenarioDetailPage,
+  ScenarioEditPage,
+  ScenarioListPage,
+} from '@lostrpg/frontend/page/scenario';
+import {
+  createScenarioCreateLoader,
+  createScenarioLoader,
+} from '@lostrpg/frontend/page/scenario/loader';
 import { TopPage } from '@lostrpg/frontend/page/top';
 import { Layout } from '@lostrpg/frontend/shared/ui';
 
@@ -127,6 +137,30 @@ export const createRouter = ({ dispatch }: { dispatch: AppDispatch }) =>
               path: ':id/edit',
               element: <BossEditPage />,
               loader: createBossLoader(dispatch),
+            },
+          ],
+        },
+        {
+          path: '/scenario',
+          children: [
+            {
+              path: '',
+              element: <ScenarioListPage />,
+            },
+            {
+              path: 'create',
+              element: <ScenarioCreatePage />,
+              loader: createScenarioCreateLoader(dispatch),
+            },
+            {
+              path: ':id',
+              element: <ScenarioDetailPage />,
+              loader: createScenarioLoader(dispatch),
+            },
+            {
+              path: ':id/edit',
+              element: <ScenarioEditPage />,
+              loader: createScenarioLoader(dispatch),
             },
           ],
         },

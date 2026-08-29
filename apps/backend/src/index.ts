@@ -7,6 +7,7 @@ import { campsRouter } from './routes/camps';
 import { charactersRouter } from './routes/characters';
 import { enemiesRouter } from './routes/enemies';
 import { imagesRouter } from './routes/images';
+import { scenariosRouter } from './routes/scenarios';
 import type { Env } from './types/cloudflare';
 
 const app = new Hono<{ Bindings: Env }>();
@@ -42,7 +43,8 @@ const _routes = app
   .route('/api/camps', campsRouter)
   .route('/api/characters', charactersRouter)
   .route('/api/bosses', bossesRouter)
-  .route('/api/enemies', enemiesRouter);
+  .route('/api/enemies', enemiesRouter)
+  .route('/api/scenarios', scenariosRouter);
 app.route('/api/images', imagesRouter);
 
 const port = Number(process.env.PORT) || 3001;

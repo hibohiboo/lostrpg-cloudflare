@@ -3,3 +3,4 @@ export * from './validation/camp';
 export * from './validation/character';
 export * from './validation/enemy';
 export * from './validation/record';
+export * from './validation/scenario';

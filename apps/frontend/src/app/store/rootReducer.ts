@@ -4,6 +4,7 @@ import { campApi } from '@lostrpg/frontend/entities/camp';
 import { characterApi } from '@lostrpg/frontend/entities/character';
 import { enemyApi } from '@lostrpg/frontend/entities/enemy';
 import { recordSlice, recordApi } from '@lostrpg/frontend/entities/record';
+import { scenarioApi } from '@lostrpg/frontend/entities/scenario';
 import { bossSlice } from '@lostrpg/frontend/features/boss';
 import { campSlice } from '@lostrpg/frontend/features/camp';
 import {
@@ -11,10 +12,12 @@ import {
   characterSlice,
 } from '@lostrpg/frontend/features/character';
 import { enemySlice } from '@lostrpg/frontend/features/enemy';
+import { scenarioSlice } from '@lostrpg/frontend/features/scenario';
 import { bossListPageSlice } from '@lostrpg/frontend/page/boss/model';
 import { campListPageSlice } from '@lostrpg/frontend/page/camp/model';
 import { characterListPageSlice } from '@lostrpg/frontend/page/character/model';
 import { enemyListPageSlice } from '@lostrpg/frontend/page/enemy/model';
+import { scenarioListPageSlice } from '@lostrpg/frontend/page/scenario/model';
 
 const combinedReducer = combineReducers({
   [campSlice.reducerPath]: campSlice.reducer,
@@ -32,6 +35,9 @@ const combinedReducer = combineReducers({
   [enemySlice.reducerPath]: enemySlice.reducer,
   [enemyApi.reducerPath]: enemyApi.reducer,
   [enemyListPageSlice.reducerPath]: enemyListPageSlice.reducer,
+  [scenarioSlice.reducerPath]: scenarioSlice.reducer,
+  [scenarioApi.reducerPath]: scenarioApi.reducer,
+  [scenarioListPageSlice.reducerPath]: scenarioListPageSlice.reducer,
 });
 
 type CombinedState = ReturnType<typeof combinedReducer>;
