@@ -13,7 +13,7 @@ export default defineConfig(
         },
       },
       {
-        files: ['**/tests/**'],
+        files: ['**/tests/**', '**/*.test.ts'],
         rules: {
           'import/no-extraneous-dependencies': ['off'],
           '@typescript-eslint/no-explicit-any': ['off'],

@@ -25,7 +25,7 @@ export const Page = () => (
       </p>
 
       {/* Navigation Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-6 max-w-5xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
         <a
           href="https://lostrpg-751c1.firebaseapp.com/lost/"
           target="_blank"
@@ -98,8 +98,21 @@ export const Page = () => (
             エネミー
           </h2>
           <p className="text-sm text-gray-300 leading-relaxed">
-            冒険者たちの前に立ちはだかる者
+            いきものずかん
           </p>
+        </Link>
+
+        <Link
+          to="/scenario"
+          className="group block p-8 rounded-2xl bg-black/30 backdrop-blur-md border border-white/10 hover:bg-black/40 hover:border-violet-400/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-violet-900/20 hover:shadow-2xl"
+        >
+          <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
+            📖
+          </div>
+          <h2 className="text-2xl font-bold mb-3 text-violet-300 group-hover:text-violet-200">
+            シナリオ
+          </h2>
+          <p className="text-sm text-gray-300 leading-relaxed">新たな冒険へ</p>
         </Link>
       </div>
     </div>

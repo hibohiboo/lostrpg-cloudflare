@@ -19,6 +19,10 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@fortawesome/fontawesome-svg-core": "^7.3.1",
+    "@fortawesome/free-regular-svg-icons": "^7.3.1",
+    "@fortawesome/free-solid-svg-icons": "^7.3.1",
+    "@fortawesome/react-fontawesome": "^3.5.0",
     "@lostrpg/backend": "workspace:*",
     "@lostrpg/core": "workspace:*",
     "@lostrpg/schemas": "workspace:*",
@@ -26,6 +30,7 @@
     "@mui/icons-material": "^9.2.0",
     "@mui/material": "^9.2.0",
     "@mui/x-data-grid": "^9.10.1",
+    "@mui/x-tree-view": "^9.12.0",
     "@reduxjs/toolkit": "^2.12.0",
     "@zip.js/zip.js": "^2.8.34",
     "date-fns": "^4.4.0",

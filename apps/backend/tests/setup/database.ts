@@ -6,7 +6,7 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
 import postgres from 'postgres';
 import { setTestDb } from '../../src/lib/db/connection';
-import { characters, camps } from '../../src/lib/db/schema';
+import { characters, camps, scenarios } from '../../src/lib/db/schema';
 
 let container: StartedPostgreSqlContainer;
 let testDb: ReturnType<typeof drizzle>;
@@ -53,6 +53,7 @@ export const cleanupTestData = async () => {
     // charactersとcampsはonDelete: 'cascade'で関連テーブル（camp_characters等）も削除される
     await testDb.delete(characters);
     await testDb.delete(camps);
+    await testDb.delete(scenarios);
   }
 };
 

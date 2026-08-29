@@ -4,6 +4,7 @@ import { campApi } from '@lostrpg/frontend/entities/camp';
 import { characterApi } from '@lostrpg/frontend/entities/character';
 import { enemyApi } from '@lostrpg/frontend/entities/enemy';
 import { recordApi } from '@lostrpg/frontend/entities/record';
+import { scenarioApi } from '@lostrpg/frontend/entities/scenario';
 import { rootReducer } from './rootReducer';
 
 export const store = configureStore({
@@ -15,6 +16,7 @@ export const store = configureStore({
       recordApi.middleware,
       bossApi.middleware,
       enemyApi.middleware,
+      scenarioApi.middleware,
     ),
 });
 

@@ -84,9 +84,18 @@ export const Layout: React.FC<LayoutProps> = ({
                   <span className="text-xl group-hover:scale-110 transition-transform">
                     👾
                   </span>
-                  <span className="hidden sm:inline font-medium">
-                    エネミー
+                  <span className="hidden sm:inline font-medium">エネミー</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/scenario"
+                  className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-lime-400 transition-all duration-300 group"
+                >
+                  <span className="text-xl group-hover:scale-110 transition-transform">
+                    📖
                   </span>
+                  <span className="hidden sm:inline font-medium">シナリオ</span>
                 </Link>
               </li>
             </ul>
