@@ -223,7 +223,7 @@ describe('POST /api/scenarios', () => {
         '| 6 |  |',
       ].join('\n');
       // エネミー付録は本文とは独立した参照用データなので、クライアントから送った値をそのまま保存する
-      const enemies = [{ enemyId: 'enemy-1', enemyName: 'オオカミ', note: '表Aの1で1d6体登場' }];
+      const enemies = [{ enemyId: 'enemy-1', enemyName: 'オオカミ', url: '/enemy/enemy-1' }];
 
       const createRes = await create({
         ...minimalData,

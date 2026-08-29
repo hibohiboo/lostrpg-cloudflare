@@ -21,7 +21,14 @@ export const EncounterAppendixEditor: React.FC<Props> = ({ encounterTable, onCha
     if (!enemyId) return;
     onChange({
       ...encounterTable,
-      enemies: [...enemies, { enemyId, enemyName, note: '' }],
+      enemies: [...enemies, { enemyId, enemyName, url: `/enemy/${enemyId}` }],
+    });
+  };
+
+  const handleAddManualEnemy = () => {
+    onChange({
+      ...encounterTable,
+      enemies: [...enemies, { enemyName: '', url: '' }],
     });
   };
 
@@ -32,10 +39,17 @@ export const EncounterAppendixEditor: React.FC<Props> = ({ encounterTable, onCha
     });
   };
 
-  const handleEnemyNoteChange = (index: number, note: string) => {
+  const handleEnemyNameChange = (index: number, enemyName: string) => {
     onChange({
       ...encounterTable,
-      enemies: enemies.map((enemy, i) => (i === index ? { ...enemy, note } : enemy)),
+      enemies: enemies.map((enemy, i) => (i === index ? { ...enemy, enemyName } : enemy)),
+    });
+  };
+
+  const handleEnemyUrlChange = (index: number, url: string) => {
+    onChange({
+      ...encounterTable,
+      enemies: enemies.map((enemy, i) => (i === index ? { ...enemy, url } : enemy)),
     });
   };
 
@@ -46,13 +60,19 @@ export const EncounterAppendixEditor: React.FC<Props> = ({ encounterTable, onCha
       </Typography>
       {enemies.map((enemy, index) => (
         <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1, my: 1 }}>
-          <Typography sx={{ minWidth: 140 }}>{enemy.enemyName || 'エネミー'}</Typography>
+          <TextField
+            size="small"
+            placeholder="名前"
+            sx={{ minWidth: 160 }}
+            value={enemy.enemyName ?? ''}
+            onChange={(e) => handleEnemyNameChange(index, e.target.value)}
+          />
           <TextField
             size="small"
             fullWidth
-            placeholder="補足（例: 1d6体、表Aの1で登場 など）"
-            value={enemy.note ?? ''}
-            onChange={(e) => handleEnemyNoteChange(index, e.target.value)}
+            placeholder="URL（例: /enemy/xxxx や外部サイトへのリンク）"
+            value={enemy.url ?? ''}
+            onChange={(e) => handleEnemyUrlChange(index, e.target.value)}
           />
           <IconButton
             aria-label="エネミーを削除"
@@ -63,9 +83,14 @@ export const EncounterAppendixEditor: React.FC<Props> = ({ encounterTable, onCha
           </IconButton>
         </Box>
       ))}
-      <Button startIcon={<AddIcon />} onClick={() => setEnemyModalOpen(true)}>
-        エネミーを追加
-      </Button>
+      <Box sx={{ display: 'flex', gap: 1 }}>
+        <Button startIcon={<AddIcon />} onClick={() => setEnemyModalOpen(true)}>
+          エネミーを選択して追加
+        </Button>
+        <Button startIcon={<AddIcon />} onClick={handleAddManualEnemy}>
+          手動で追加
+        </Button>
+      </Box>
 
       <EnemySelectionModal
         open={isEnemyModalOpen}

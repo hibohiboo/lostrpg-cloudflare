@@ -67,12 +67,16 @@ export const EncounterTableView: React.FC<Props> = ({ encounterTable }) => {
               <TableBody>
                 {enemies.map((enemy, index) => (
                   <TableRow key={index}>
+                    <TableCell>{enemy.enemyName || 'エネミー'}</TableCell>
                     <TableCell>
-                      <MuiLink href={`/enemy/${enemy.enemyId}`} underline="hover">
-                        {enemy.enemyName || 'エネミー'}
-                      </MuiLink>
+                      {enemy.url ? (
+                        <MuiLink href={enemy.url} underline="hover" target="_blank" rel="noopener noreferrer">
+                          {enemy.url}
+                        </MuiLink>
+                      ) : (
+                        '－'
+                      )}
                     </TableCell>
-                    <TableCell>{enemy.note || ''}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

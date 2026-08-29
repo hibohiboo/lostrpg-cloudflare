@@ -75,13 +75,15 @@ export type ScenarioEncounterTable = z.infer<
 >;
 
 // 表中に登場させたエネミーの付録（参照用一覧）。
-// エネミー表から選び、表記（出現数など）は自由記述で補足する。
+// エネミー選択から追加した場合は名前・URL（サイト内のエネミー詳細ページ）が自動入力されるが、
+// 内部に登録されていないエネミー（外部サイト参照等）も想定し、名前・URLは自由に編集できる。
 export const scenarioEncounterEnemySchema = z.object({
-  enemyId: z.string(),
-  // 表示用に名前もキャッシュしておく（エネミーが削除された場合のフォールバック表示にも使う）
+  // エネミー選択で追加した場合の内部エネミーID（任意。手動追加の場合は無い）
+  enemyId: z.string().optional(),
+  // 表示用の名前（自由記述。エネミー選択時は自動入力されるが後から編集可能）
   enemyName: z.string().optional(),
-  // 出現数などの補足（例: 「1d6体」「表Aの1で登場」等の自由記述）
-  note: z.string().optional(),
+  // エネミーの参照先URL（サイト内のエネミー詳細ページ or 外部サイトへのリンク）
+  url: z.string().optional(),
 });
 export type ScenarioEncounterEnemy = z.infer<
   typeof scenarioEncounterEnemySchema
