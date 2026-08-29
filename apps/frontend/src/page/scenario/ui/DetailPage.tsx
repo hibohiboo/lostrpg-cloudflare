@@ -13,6 +13,7 @@ import React from 'react';
 import { Link, useParams } from 'react-router';
 import {
   EncounterTableView,
+  ScenarioChartView,
   ScenarioPhaseList,
 } from '@lostrpg/frontend/entities/scenario';
 import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
@@ -118,6 +119,14 @@ const DetailPage: React.FC = () => {
             >
               <Typography variant="body1">{scenario.caution}</Typography>
             </Box>
+          </Box>
+        )}
+
+        {/* チャート（チェックポイント／道のID・つながり一覧） */}
+        {scenario.phases.length > 0 && (
+          <Box sx={{ my: 3 }}>
+            <InputLabel sx={{ mb: 1 }}>チャート（シーンのつながり）</InputLabel>
+            <ScenarioChartView phases={scenario.phases} />
           </Box>
         )}
 

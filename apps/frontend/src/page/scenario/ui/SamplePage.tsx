@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { scenarioNotationTable, scenarioSamples } from '@lostrpg/core/game-data/scenario';
+import { parseScenarioContent } from '@lostrpg/core/scenario/parseScenarioContent';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import {
   Box,
@@ -16,7 +17,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { SCENARIO_NOTATION_ICONS } from '@lostrpg/frontend/entities/scenario';
+import { SCENARIO_NOTATION_ICONS, ScenarioChartView } from '@lostrpg/frontend/entities/scenario';
 
 const CopyButton: React.FC<{ text: string }> = ({ text }) => {
   const [copied, setCopied] = useState(false);
@@ -84,29 +85,46 @@ const SamplePage: React.FC = () => (
       <Typography variant="h6" gutterBottom>
         記法例
       </Typography>
-      {scenarioSamples.map((sample) => (
-        <Box key={sample.title} sx={{ mb: 4 }}>
-          <Typography variant="subtitle1" gutterBottom>
-            {sample.title}
-          </Typography>
-          <Box sx={{ mb: 1 }}>
-            <CopyButton text={sample.content} />
-          </Box>
-          <Box
-            component={Paper}
-            variant="outlined"
-            sx={{
-              p: 2,
-              maxHeight: 480,
-              overflow: 'auto',
-            }}
-          >
-            <Box component="pre" sx={{ m: 0, whiteSpace: 'pre-wrap', fontFamily: 'monospace' }}>
-              {sample.content}
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+        「シーンID:X」（<code>{'{.alias-X}'}</code>）と「次のシーン」（
+        <code>{'{.next-X}'}</code>）を組み合わせると、チェックポイントや道をIDでつないだ
+        チャート（分岐する探索ルート）を作れます。サンプル2では実際にこの記法を使っています
+        （下の「チャート」に接続関係を表示しています）。
+      </Typography>
+      {scenarioSamples.map((sample) => {
+        const { phases } = parseScenarioContent(sample.content);
+        return (
+          <Box key={sample.title} sx={{ mb: 4 }}>
+            <Typography variant="subtitle1" gutterBottom>
+              {sample.title}
+            </Typography>
+            <Box sx={{ mb: 1 }}>
+              <CopyButton text={sample.content} />
+            </Box>
+            <Box
+              component={Paper}
+              variant="outlined"
+              sx={{
+                p: 2,
+                maxHeight: 480,
+                overflow: 'auto',
+              }}
+            >
+              <Box component="pre" sx={{ m: 0, whiteSpace: 'pre-wrap', fontFamily: 'monospace' }}>
+                {sample.content}
+              </Box>
+            </Box>
+
+            {/* このサンプルのシーンID（alias）とつながり（next）の一覧 */}
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="subtitle2" gutterBottom>
+                チャート（シーンのつながり）
+              </Typography>
+              <ScenarioChartView phases={phases} />
             </Box>
           </Box>
-        </Box>
-      ))}
+        );
+      })}
 
       {/* 戻るリンク */}
       <Box sx={{ mt: 4 }}>
