@@ -48,6 +48,8 @@ type Props = {
   onSelect: (id: string | null) => void;
   onAddScene: (phaseIndex: number) => void;
   onAddEvent: (phaseIndex: number, sceneIndex: number) => void;
+  expandedIds: string[];
+  onExpandedIdsChange: (ids: string[]) => void;
 };
 
 export const ScenarioTree: React.FC<Props> = ({
@@ -56,10 +58,14 @@ export const ScenarioTree: React.FC<Props> = ({
   onSelect,
   onAddScene,
   onAddEvent,
+  expandedIds,
+  onExpandedIdsChange,
 }) => (
   <SimpleTreeView
     selectedItems={selectedId}
     onSelectedItemsChange={(_, itemId) => onSelect(itemId)}
+    expandedItems={expandedIds}
+    onExpandedItemsChange={(_, itemIds) => onExpandedIdsChange(itemIds)}
   >
     {phases.map((phase, phaseIndex) => (
       <TreeItem

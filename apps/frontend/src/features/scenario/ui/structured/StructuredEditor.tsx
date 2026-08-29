@@ -19,7 +19,7 @@ import {
   updatePhase,
   updateScene,
 } from './treeOperations';
-import { parseNodeId } from './types';
+import { parseNodeId, phaseNodeId, sceneNodeId } from './types';
 import type { ScenarioEncounterTable, ScenarioPhase } from '@lostrpg/frontend/entities/scenario';
 
 type Props = {
@@ -47,6 +47,9 @@ export const StructuredEditor: React.FC<Props> = ({
     parseScenarioContent(content),
   );
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [expandedIds, setExpandedIds] = useState<string[]>([]);
+  const expandNode = (id: string) =>
+    setExpandedIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
 
   const commit = (changes: Partial<EditorState>) => {
     const next = { ...state, ...changes };
@@ -60,10 +63,17 @@ export const StructuredEditor: React.FC<Props> = ({
     commit({ encounterTables: next });
 
   const handleAddPhase = () => commitPhases(addPhase(phases));
-  const handleAddScene = (phaseIndex: number) =>
+  const handleAddScene = (phaseIndex: number) => {
     commitPhases(addScene(phases, phaseIndex));
-  const handleAddEvent = (phaseIndex: number, sceneIndex: number) =>
+    // 追加したシーンが隠れたままにならないよう、フェイズのアコーディオンを開く
+    expandNode(phaseNodeId(phaseIndex));
+  };
+  const handleAddEvent = (phaseIndex: number, sceneIndex: number) => {
     commitPhases(addEvent(phases, phaseIndex, sceneIndex));
+    // 追加したイベントが隠れたままにならないよう、フェイズ・シーンのアコーディオンを開く
+    expandNode(phaseNodeId(phaseIndex));
+    expandNode(sceneNodeId(phaseIndex, sceneIndex));
+  };
 
   const selection = parseNodeId(selectedId);
 
@@ -219,6 +229,8 @@ export const StructuredEditor: React.FC<Props> = ({
               onSelect={setSelectedId}
               onAddScene={handleAddScene}
               onAddEvent={handleAddEvent}
+              expandedIds={expandedIds}
+              onExpandedIdsChange={setExpandedIds}
             />
           )}
         </Box>
