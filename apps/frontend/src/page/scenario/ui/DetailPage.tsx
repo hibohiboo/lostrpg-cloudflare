@@ -16,12 +16,12 @@ import { Link, useParams } from 'react-router';
 import {
   BossAppendixView,
   EncounterTableView,
-  ItemAppendixView,
   ScenarioChartView,
   ScenarioOutlineTree,
   ScenarioPhaseList,
   type Scenario,
 } from '@lostrpg/frontend/entities/scenario';
+import { ItemAppendixView } from '@lostrpg/frontend/features/scenario';
 import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 
 // ランダムエンカウント表・ヌシ付録・アイテム付録：いずれも本文の後に付録として表示する参照用データ

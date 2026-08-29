@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { createValidator } from './helpers';
+import { itemSchema } from './items';
 
 // フェイズ本文をMarkdownから構造化した結果のスキーマ
 // （表）
@@ -115,12 +116,10 @@ export const scenarioBossAppendixSchema = z.object({
 export type ScenarioBossAppendix = z.infer<typeof scenarioBossAppendixSchema>;
 
 // 本文中に登場させたアイテムの付録（参照用一覧）。
-// アイテム選択（ルールブック標準アイテム＋サプリメント全て）から追加した場合は名前が
-// 自動入力されるが、カタログに無いアイテムも想定し、名前は自由に編集できる。
-export const scenarioItemAppendixSchema = z.object({
-  // 表示用の名前（自由記述。アイテム選択時は自動入力されるが後から編集可能）
-  itemName: z.string().optional(),
-});
+// キャラクターシートのアイテムと同じ形式（id・名前・価格・重量・特性等）を持ち、
+// アイテム選択（ルールブック標準アイテム＋サプリメント全て）で追加した内容も
+// キャラクターシートと同様にその場で自由に編集できる。
+export const scenarioItemAppendixSchema = itemSchema;
 export type ScenarioItemAppendix = z.infer<typeof scenarioItemAppendixSchema>;
 
 // 基本フィールドスキーマ

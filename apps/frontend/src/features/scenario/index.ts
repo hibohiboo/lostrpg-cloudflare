@@ -10,3 +10,4 @@ export { default as scenarioReducer } from './model/scenarioSlice';
 export * from './hooks/useEditFormHooks';
 export { default as ScenarioEditForm } from './ui/EditForm';
 export { EncounterAppendixEditor } from './ui/EncounterAppendixEditor';
+export { ItemAppendixView } from './ui/ItemAppendixView';
