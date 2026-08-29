@@ -107,13 +107,6 @@ const EditForm: React.FC<Props> = ({
         />
       </Box>
 
-      {/* 画像アップロード */}
-      <ImageUploadField
-        previewUrl={previewUrl}
-        currentImageUrl={imageUrl}
-        onImageChange={handleImageChange}
-      />
-
       {/* 概要 */}
       <Box sx={{ my: 2 }}>
         <TextField
@@ -136,6 +129,14 @@ const EditForm: React.FC<Props> = ({
           onContentChange={handleContentChange}
         />
       </Box>
+
+      {/* 画像アップロード：用意する人が少ないため、必須項目に埋もれないよう付録の直前に配置 */}
+      <ImageUploadField
+        previewUrl={previewUrl}
+        currentImageUrl={imageUrl}
+        onImageChange={handleImageChange}
+      />
+
       <h3>付録</h3>
       {/* ヌシ付録：付録のため本文の後に配置 */}
       <Box sx={{ my: 3 }}>
