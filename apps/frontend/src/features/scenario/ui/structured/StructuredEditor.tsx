@@ -3,6 +3,7 @@ import { stringifyScenario } from '@lostrpg/core/scenario/stringifyScenario';
 import AddIcon from '@mui/icons-material/Add';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
+import { EncounterTablesForm } from './EncounterTablesForm';
 import { EventForm } from './EventForm';
 import { PhaseForm } from './PhaseForm';
 import { ScenarioTree } from './ScenarioTree';
@@ -31,8 +32,6 @@ interface EditorState {
   time: string;
   limit: string;
   caution: string;
-  // ランダムエンカウント表はこのタブでは編集しない（本文のMarkdown編集タブで直接編集する）が、
-  // フェイズ編集でMarkdownへ書き戻す際に消えてしまわないよう、そのまま保持しておく。
   encounterTables: ScenarioEncounterTable[];
   phases: ScenarioPhase[];
 }
@@ -57,6 +56,8 @@ export const StructuredEditor: React.FC<Props> = ({
 
   const { phases } = state;
   const commitPhases = (next: ScenarioPhase[]) => commit({ phases: next });
+  const commitEncounterTables = (next: ScenarioEncounterTable[]) =>
+    commit({ encounterTables: next });
 
   const handleAddPhase = () => commitPhases(addPhase(phases));
   const handleAddScene = (phaseIndex: number) =>
@@ -179,6 +180,14 @@ export const StructuredEditor: React.FC<Props> = ({
           value={state.caution}
           onChange={(e) => commit({ caution: e.target.value })}
           sx={{ flex: 2, minWidth: 200 }}
+        />
+      </Box>
+
+      {/* ランダムエンカウント表 */}
+      <Box sx={{ mb: 3 }}>
+        <EncounterTablesForm
+          tables={state.encounterTables}
+          onChange={commitEncounterTables}
         />
       </Box>
 
