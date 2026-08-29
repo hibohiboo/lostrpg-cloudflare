@@ -12,16 +12,18 @@ import {
   useTheme,
 } from '@mui/material';
 import React from 'react';
-import { getScenarioTypeIcon, getScenarioTypeLabel } from '../model/scenarioIcons';
-import type { ScenarioPhase } from '../model/scenario';
+import { getScenarioTypeIcon } from '../model/scenarioIcons';
+import type { ScenarioEvent, ScenarioPhase } from '../model/scenario';
 
 const DEAD_END_LABEL = '（行き止まり）';
 
-const NODE_WIDTH = 200;
-const NODE_HEIGHT = 56;
+const NODE_WIDTH = 220;
+const MIN_NODE_HEIGHT = 44;
+const NODE_HEADER_HEIGHT = 28;
+const NODE_LIST_ROW_HEIGHT = 20;
+const NODE_VERTICAL_PADDING = 16;
 const COLUMN_GAP = 48;
 const ROW_GAP = 40;
-const ROW_HEIGHT = NODE_HEIGHT + ROW_GAP;
 const PHASE_LABEL_HEIGHT = 32;
 const PADDING = 24;
 
@@ -31,10 +33,11 @@ interface ChartNode {
   sceneIndex: number;
   name: string;
   type: string | null | undefined;
-  alias: string | null | undefined;
+  events: ScenarioEvent[];
   isDeadEnd: boolean;
   x: number;
   y: number;
+  height: number;
 }
 
 interface ChartEdge {
@@ -50,6 +53,14 @@ interface PhaseBand {
 }
 
 const sceneKey = (phaseIndex: number, sceneIndex: number): string => `${phaseIndex}-${sceneIndex}`;
+
+// シーンのイベント／項目（道・判定・アイテム等）を積み上げた分だけノードを縦に伸ばす。
+// 何も無ければ最小の高さ（名前1行分）にする。
+const estimateNodeHeight = (events: ScenarioEvent[]): number => {
+  const listRows = events.reduce((sum, event) => sum + 1 + event.items.length, 0);
+  if (listRows === 0) return MIN_NODE_HEIGHT;
+  return NODE_HEADER_HEIGHT + listRows * NODE_LIST_ROW_HEIGHT + NODE_VERTICAL_PADDING;
+};
 
 // シーンID（alias）→ ノードキー の対応表（next側の接続先を解決するために使う）
 const buildAliasIndex = (phases: ScenarioPhase[]): Map<string, string> => {
@@ -166,6 +177,21 @@ const buildChart = (
     const contentStartY = cursorY + PHASE_LABEL_HEIGHT;
     const maxLayer = Math.max(0, ...Array.from(layer.values()));
 
+    // イベント数に応じて可変になるノードの高さを先に見積もり、各行（レイヤー）は
+    // その行で一番背の高いノードに合わせて次の行との間隔を空ける
+    const nodeHeights = phase.scenes.map((scene) => estimateNodeHeight(scene.events));
+    const layerHeights = new Array(maxLayer + 1).fill(MIN_NODE_HEIGHT);
+    phase.scenes.forEach((_, sceneIndex) => {
+      const l = layer.get(sceneKey(phaseIndex, sceneIndex)) ?? 0;
+      layerHeights[l] = Math.max(layerHeights[l], nodeHeights[sceneIndex]);
+    });
+    const layerY: number[] = [];
+    let y = contentStartY;
+    for (let l = 0; l <= maxLayer; l += 1) {
+      layerY[l] = y;
+      y += layerHeights[l] + ROW_GAP;
+    }
+
     phase.scenes.forEach((scene, sceneIndex) => {
       const key = sceneKey(phaseIndex, sceneIndex);
       const next = scene.next ?? [];
@@ -175,26 +201,46 @@ const buildChart = (
         sceneIndex,
         name: scene.name,
         type: scene.type,
-        alias: scene.alias,
+        events: scene.events,
         isDeadEnd: next.includes('none'),
         x: PADDING + (column.get(key) ?? 0) * (NODE_WIDTH + COLUMN_GAP),
-        y: contentStartY + (layer.get(key) ?? 0) * ROW_HEIGHT,
+        y: layerY[layer.get(key) ?? 0],
+        height: nodeHeights[sceneIndex],
       });
     });
 
-    cursorY = contentStartY + (maxLayer + 1) * ROW_HEIGHT;
+    cursorY = y - ROW_GAP;
     bands.push({ name: phase.name, y: bandStartY, height: cursorY - bandStartY });
   });
 
   return { nodes, edges: allEdges, bands, totalHeight: cursorY + PADDING, maxColumns };
 };
 
+const NodeListRow: React.FC<{
+  icon: ReturnType<typeof getScenarioTypeIcon>;
+  label: string;
+  indent?: boolean;
+}> = ({ icon, label, indent }) => (
+  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, pl: indent ? 2 : 0, minWidth: 0 }}>
+    {icon ? (
+      <FontAwesomeIcon icon={icon} fixedWidth style={{ fontSize: '0.8em' }} />
+    ) : (
+      <Box sx={{ width: 14, flexShrink: 0 }} />
+    )}
+    <Typography
+      variant="caption"
+      sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+    >
+      {label}
+    </Typography>
+  </Box>
+);
+
 const ChartNodeBox: React.FC<{ node: ChartNode }> = ({ node }) => {
   const icon = getScenarioTypeIcon(node.type);
-  const label = getScenarioTypeLabel(node.type);
 
   return (
-    <foreignObject x={node.x} y={node.y} width={NODE_WIDTH} height={NODE_HEIGHT}>
+    <foreignObject x={node.x} y={node.y} width={NODE_WIDTH} height={node.height}>
       <Box
         component={Paper}
         variant="outlined"
@@ -206,7 +252,8 @@ const ChartNodeBox: React.FC<{ node: ChartNode }> = ({ node }) => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          gap: 0.25,
+          gap: 0.4,
+          overflow: 'hidden',
           borderColor: node.isDeadEnd ? 'error.main' : 'divider',
         }}
       >
@@ -214,16 +261,31 @@ const ChartNodeBox: React.FC<{ node: ChartNode }> = ({ node }) => {
           {icon && <FontAwesomeIcon icon={icon} fixedWidth />}
           <Typography
             variant="body2"
-            sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+            sx={{ fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
           >
             {node.name}
           </Typography>
         </Box>
-        <Typography variant="caption" color="text.secondary" sx={{ pl: icon ? 2.5 : 0 }}>
-          {[label, node.alias ? `ID:${node.alias}` : null, node.isDeadEnd ? DEAD_END_LABEL : null]
-            .filter(Boolean)
-            .join(' / ') || ' '}
-        </Typography>
+
+        {node.isDeadEnd && (
+          <Typography variant="caption" color="error.main" sx={{ pl: icon ? 2.5 : 0 }}>
+            {DEAD_END_LABEL}
+          </Typography>
+        )}
+
+        {node.events.map((event, eventIndex) => (
+          <React.Fragment key={eventIndex}>
+            <NodeListRow icon={getScenarioTypeIcon(event.type)} label={event.name} />
+            {event.items.map((item, itemIndex) => (
+              <NodeListRow
+                key={itemIndex}
+                icon={getScenarioTypeIcon(item.type)}
+                label={item.name}
+                indent
+              />
+            ))}
+          </React.Fragment>
+        ))}
       </Box>
     </foreignObject>
   );
@@ -293,7 +355,8 @@ const ChartTextTable: React.FC<Props> = ({ phases }) => {
 
 // フェイズは上から下に、フェイズ内のチェックポイント／道は「分岐は横のレーンに分かれ、
 // 合流はまた1つのノードに戻る」階層グラフとして描画するフローチャート
-// （create-now版の「チャート」タブに相当）。
+// （create-now版の「チャート」タブに相当）。各ノードには、そのシーンに紐づく
+// イベント・項目（道・判定・アイテム等）もアイコン付きの一覧として表示する。
 export const ScenarioChartView: React.FC<Props> = ({ phases }) => {
   const theme = useTheme();
   const { nodes, edges, bands, totalHeight, maxColumns } = buildChart(phases);
@@ -363,7 +426,7 @@ export const ScenarioChartView: React.FC<Props> = ({ phases }) => {
             if (!from || !to) return null;
 
             const startX = from.x + NODE_WIDTH / 2;
-            const startY = from.y + NODE_HEIGHT;
+            const startY = from.y + from.height;
             const endX = to.x + NODE_WIDTH / 2;
             const endY = to.y;
             const midY = (startY + endY) / 2;
