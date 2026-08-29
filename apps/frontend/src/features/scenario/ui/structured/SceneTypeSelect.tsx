@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  Box,
   FormControl,
   InputLabel,
   ListItemIcon,
@@ -39,6 +40,16 @@ export const SceneTypeSelect: React.FC<Props> = ({ value, onChange }) => {
         label="種類（type）"
         value={value ?? ''}
         onChange={handleChange}
+        renderValue={(selected) => {
+          const option = SCENE_TYPE_OPTIONS.find((o) => o.value === selected);
+          if (!option) return <em>未設定</em>;
+          return (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <FontAwesomeIcon icon={SCENARIO_NOTATION_ICONS[option.icon]} />
+              {option.label}
+            </Box>
+          );
+        }}
       >
         <MenuItem value="">
           <em>未設定</em>
