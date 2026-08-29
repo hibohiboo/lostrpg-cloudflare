@@ -55,12 +55,18 @@ const DetailPage: React.FC = () => {
           </Box>
         )}
 
-        {/* ランダムエンカウント表（探索フェイズの前に確認できるよう冒頭に配置） */}
-        <Box sx={{ my: 3 }}>
-          <InputLabel sx={{ mb: 1 }}>ランダムエンカウント表</InputLabel>
-          <EncounterTableView encounterTable={scenario.encounterTable} />
+        {/* 想定人数・プレイ時間・リミット */}
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, my: 3 }}>
+          {scenario.players && (
+            <Chip label={`想定人数: ${scenario.players}`} variant="outlined" />
+          )}
+          {scenario.time && (
+            <Chip label={`プレイ時間: ${scenario.time}`} variant="outlined" />
+          )}
+          {scenario.limit && (
+            <Chip label={`リミット: ${scenario.limit}`} variant="outlined" />
+          )}
         </Box>
-
         {/* 画像と概要 */}
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3 }}>
           {scenario.imageUrl && (
@@ -95,20 +101,6 @@ const DetailPage: React.FC = () => {
             </Box>
           )}
         </Box>
-
-        {/* 想定人数・プレイ時間・リミット */}
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, my: 3 }}>
-          {scenario.players && (
-            <Chip label={`想定人数: ${scenario.players}`} variant="outlined" />
-          )}
-          {scenario.time && (
-            <Chip label={`プレイ時間: ${scenario.time}`} variant="outlined" />
-          )}
-          {scenario.limit && (
-            <Chip label={`リミット: ${scenario.limit}`} variant="outlined" />
-          )}
-        </Box>
-
         {/* 注意事項 */}
         {scenario.caution?.trim() && (
           <Box sx={{ my: 3 }}>
@@ -125,7 +117,13 @@ const DetailPage: React.FC = () => {
             </Box>
           </Box>
         )}
-
+        {/* ランダムエンカウント表 */}
+        {scenario.encounterTable.mode !== 'default' && (
+          <Box sx={{ my: 3 }}>
+            <InputLabel sx={{ mb: 1 }}>ランダムエンカウント表</InputLabel>
+            <EncounterTableView encounterTable={scenario.encounterTable} />
+          </Box>
+        )}
         {/* 本文（左にツリー・右に本文）／チャート（フェイズが上から下に並ぶフロー図） */}
         {scenario.phases.length > 0 && (
           <Box sx={{ my: 3 }}>
@@ -139,7 +137,14 @@ const DetailPage: React.FC = () => {
             </Tabs>
 
             {detailTab === 0 && (
-              <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  gap: 3,
+                  alignItems: 'flex-start',
+                  flexWrap: 'wrap',
+                }}
+              >
                 <Box
                   component={Paper}
                   variant="outlined"
