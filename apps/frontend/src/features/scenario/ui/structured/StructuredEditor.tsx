@@ -19,7 +19,7 @@ import {
   updatePhase,
   updateScene,
 } from './treeOperations';
-import { parseNodeId, phaseNodeId, sceneNodeId } from './types';
+import { eventNodeId, parseNodeId, phaseNodeId, sceneNodeId } from './types';
 import type { ScenarioEncounterTable, ScenarioPhase } from '@lostrpg/frontend/entities/scenario';
 
 type Props = {
@@ -62,17 +62,27 @@ export const StructuredEditor: React.FC<Props> = ({
   const commitEncounterTables = (next: ScenarioEncounterTable[]) =>
     commit({ encounterTables: next });
 
-  const handleAddPhase = () => commitPhases(addPhase(phases));
+  const handleAddPhase = () => {
+    commitPhases(addPhase(phases));
+    // 追加した直後に編集フォームへ切り替える
+    setSelectedId(phaseNodeId(phases.length));
+  };
   const handleAddScene = (phaseIndex: number) => {
+    const newSceneIndex = phases[phaseIndex]?.scenes.length ?? 0;
     commitPhases(addScene(phases, phaseIndex));
     // 追加したシーンが隠れたままにならないよう、フェイズのアコーディオンを開く
     expandNode(phaseNodeId(phaseIndex));
+    // 追加した直後に編集フォームへ切り替える
+    setSelectedId(sceneNodeId(phaseIndex, newSceneIndex));
   };
   const handleAddEvent = (phaseIndex: number, sceneIndex: number) => {
+    const newEventIndex = phases[phaseIndex]?.scenes[sceneIndex]?.events.length ?? 0;
     commitPhases(addEvent(phases, phaseIndex, sceneIndex));
     // 追加したイベントが隠れたままにならないよう、フェイズ・シーンのアコーディオンを開く
     expandNode(phaseNodeId(phaseIndex));
     expandNode(sceneNodeId(phaseIndex, sceneIndex));
+    // 追加した直後に編集フォームへ切り替える
+    setSelectedId(eventNodeId(phaseIndex, sceneIndex, newEventIndex));
   };
 
   const selection = parseNodeId(selectedId);
