@@ -62,7 +62,7 @@ const EditForm: React.FC<Props> = ({
   const nameError = !name && isValidError;
   const nameHelperText = nameError ? 'シナリオ名は必須です' : '';
 
-  // 想定人数・プレイ時間・制限値・注意事項は本文（Markdown）側の特殊見出しで管理するため、
+  // 想定人数・プレイ時間・リミット・注意事項は本文（Markdown）側の特殊見出しで管理するため、
   // 本文が変わるたびにここから再抽出してscenarioへ反映する
   const handleContentChange = (next: string) => {
     const { players, time, limit, caution } = parseScenarioContent(next);
@@ -101,7 +101,9 @@ const EditForm: React.FC<Props> = ({
         <InputLabel sx={{ mb: 1 }}>ランダムエンカウント表</InputLabel>
         <EncounterTableEditor
           encounterTable={encounterTable}
-          onChange={(value) => setScenario({ ...scenario, encounterTable: value })}
+          onChange={(value) =>
+            setScenario({ ...scenario, encounterTable: value })
+          }
         />
       </Box>
 
@@ -127,9 +129,12 @@ const EditForm: React.FC<Props> = ({
       </Box>
 
       {/* 本文（Markdown編集 / 構造編集の切り替え）
-          想定人数・プレイ時間・制限値・注意事項もここで編集します */}
+          想定人数・プレイ時間・リミット・注意事項もここで編集します */}
       <Box sx={{ my: 2 }}>
-        <ScenarioContentEditor content={content} onContentChange={handleContentChange} />
+        <ScenarioContentEditor
+          content={content}
+          onContentChange={handleContentChange}
+        />
       </Box>
 
       {/* 公開設定 */}

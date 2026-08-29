@@ -11,7 +11,10 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { Link, useParams } from 'react-router';
-import { EncounterTableView, ScenarioPhaseList } from '@lostrpg/frontend/entities/scenario';
+import {
+  EncounterTableView,
+  ScenarioPhaseList,
+} from '@lostrpg/frontend/entities/scenario';
 import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 
 const DetailPage: React.FC = () => {
@@ -33,7 +36,9 @@ const DetailPage: React.FC = () => {
               編集
             </Button>
           </Link>
-          {scenario.isPublish && <Chip label="公開中" color="success" size="small" />}
+          {scenario.isPublish && (
+            <Chip label="公開中" color="success" size="small" />
+          )}
         </Box>
 
         {/* 作者名 */}
@@ -86,7 +91,7 @@ const DetailPage: React.FC = () => {
           )}
         </Box>
 
-        {/* 想定人数・プレイ時間・制限値 */}
+        {/* 想定人数・プレイ時間・リミット */}
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, my: 3 }}>
           {scenario.players && (
             <Chip label={`想定人数: ${scenario.players}`} variant="outlined" />
@@ -95,7 +100,7 @@ const DetailPage: React.FC = () => {
             <Chip label={`プレイ時間: ${scenario.time}`} variant="outlined" />
           )}
           {scenario.limit && (
-            <Chip label={`制限値: ${scenario.limit}`} variant="outlined" />
+            <Chip label={`リミット: ${scenario.limit}`} variant="outlined" />
           )}
         </Box>
 

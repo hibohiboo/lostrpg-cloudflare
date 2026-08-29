@@ -34,11 +34,16 @@ interface EditorState {
   phases: ScenarioPhase[];
 }
 
-// マークダウン編集タブと相互に行き来できるよう、想定人数／プレイ時間／制限値／注意事項と
+// マークダウン編集タブと相互に行き来できるよう、想定人数／プレイ時間／リミット／注意事項と
 // フェイズ／シーン／イベントのツリー＋フォームで構造化データを編集する。
 // 編集内容は都度Markdownへ書き戻し、scenario.content（唯一の保存先）と同期させる。
-export const StructuredEditor: React.FC<Props> = ({ content, onContentChange }) => {
-  const [state, setState] = useState<EditorState>(() => parseScenarioContent(content));
+export const StructuredEditor: React.FC<Props> = ({
+  content,
+  onContentChange,
+}) => {
+  const [state, setState] = useState<EditorState>(() =>
+    parseScenarioContent(content),
+  );
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const commit = (changes: Partial<EditorState>) => {
@@ -51,7 +56,8 @@ export const StructuredEditor: React.FC<Props> = ({ content, onContentChange }) 
   const commitPhases = (next: ScenarioPhase[]) => commit({ phases: next });
 
   const handleAddPhase = () => commitPhases(addPhase(phases));
-  const handleAddScene = (phaseIndex: number) => commitPhases(addScene(phases, phaseIndex));
+  const handleAddScene = (phaseIndex: number) =>
+    commitPhases(addScene(phases, phaseIndex));
   const handleAddEvent = (phaseIndex: number, sceneIndex: number) =>
     commitPhases(addEvent(phases, phaseIndex, sceneIndex));
 
@@ -72,7 +78,9 @@ export const StructuredEditor: React.FC<Props> = ({ content, onContentChange }) 
       return (
         <PhaseForm
           phase={phase}
-          onChange={(changes) => commitPhases(updatePhase(phases, selection.phaseIndex, changes))}
+          onChange={(changes) =>
+            commitPhases(updatePhase(phases, selection.phaseIndex, changes))
+          }
           onDelete={() => {
             commitPhases(removePhase(phases, selection.phaseIndex));
             setSelectedId(null);
@@ -88,10 +96,19 @@ export const StructuredEditor: React.FC<Props> = ({ content, onContentChange }) 
         <SceneForm
           scene={scene}
           onChange={(changes) =>
-            commitPhases(updateScene(phases, selection.phaseIndex, selection.sceneIndex, changes))
+            commitPhases(
+              updateScene(
+                phases,
+                selection.phaseIndex,
+                selection.sceneIndex,
+                changes,
+              ),
+            )
           }
           onDelete={() => {
-            commitPhases(removeScene(phases, selection.phaseIndex, selection.sceneIndex));
+            commitPhases(
+              removeScene(phases, selection.phaseIndex, selection.sceneIndex),
+            );
             setSelectedId(null);
           }}
         />
@@ -99,7 +116,9 @@ export const StructuredEditor: React.FC<Props> = ({ content, onContentChange }) 
     }
 
     const event =
-      phases[selection.phaseIndex]?.scenes[selection.sceneIndex]?.events[selection.eventIndex];
+      phases[selection.phaseIndex]?.scenes[selection.sceneIndex]?.events[
+        selection.eventIndex
+      ];
     if (!event) return null;
     return (
       <EventForm
@@ -117,7 +136,12 @@ export const StructuredEditor: React.FC<Props> = ({ content, onContentChange }) 
         }
         onDelete={() => {
           commitPhases(
-            removeEvent(phases, selection.phaseIndex, selection.sceneIndex, selection.eventIndex),
+            removeEvent(
+              phases,
+              selection.phaseIndex,
+              selection.sceneIndex,
+              selection.eventIndex,
+            ),
           );
           setSelectedId(null);
         }}
@@ -127,7 +151,7 @@ export const StructuredEditor: React.FC<Props> = ({ content, onContentChange }) 
 
   return (
     <Box>
-      {/* シナリオ設定（想定人数・プレイ時間・制限値・注意事項） */}
+      {/* シナリオ設定（想定人数・プレイ時間・リミット・注意事項） */}
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
         <TextField
           label="想定人数"
@@ -142,7 +166,7 @@ export const StructuredEditor: React.FC<Props> = ({ content, onContentChange }) 
           sx={{ flex: 1, minWidth: 160 }}
         />
         <TextField
-          label="制限値"
+          label="リミット"
           value={state.limit}
           onChange={(e) => commit({ limit: e.target.value })}
           sx={{ flex: 1, minWidth: 160 }}
@@ -155,9 +179,21 @@ export const StructuredEditor: React.FC<Props> = ({ content, onContentChange }) 
         />
       </Box>
 
-      <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          gap: 3,
+          alignItems: 'flex-start',
+          flexWrap: 'wrap',
+        }}
+      >
         <Box sx={{ width: 300, flexShrink: 0 }}>
-          <Button size="small" startIcon={<AddIcon />} onClick={handleAddPhase} sx={{ mb: 1 }}>
+          <Button
+            size="small"
+            startIcon={<AddIcon />}
+            onClick={handleAddPhase}
+            sx={{ mb: 1 }}
+          >
             フェイズを追加
           </Button>
           {phases.length === 0 ? (

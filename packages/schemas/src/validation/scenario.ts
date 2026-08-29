@@ -70,7 +70,9 @@ export const scenarioEncounterTableSchema = z.object({
   name: z.string(), // 表A・表B 等
   rows: z.array(scenarioEncounterRowSchema),
 });
-export type ScenarioEncounterTable = z.infer<typeof scenarioEncounterTableSchema>;
+export type ScenarioEncounterTable = z.infer<
+  typeof scenarioEncounterTableSchema
+>;
 
 // 表中に登場させたエネミーの付録（参照用一覧）。
 // エネミー表から選び、表記（出現数など）は自由記述で補足する。
@@ -81,7 +83,9 @@ export const scenarioEncounterEnemySchema = z.object({
   // 出現数などの補足（例: 「1d6体」「表Aの1で登場」等の自由記述）
   note: z.string().optional(),
 });
-export type ScenarioEncounterEnemy = z.infer<typeof scenarioEncounterEnemySchema>;
+export type ScenarioEncounterEnemy = z.infer<
+  typeof scenarioEncounterEnemySchema
+>;
 
 // mode: 'default' はルールブック標準のランダムエンカウント表を使用（追加データ不要）
 // mode: 'custom' は tables（先頭が起点の表）を使用する
@@ -91,7 +95,9 @@ export const scenarioEncounterSettingsSchema = z.object({
   // 付録のエネミー一覧（表の自由記述に登場させたエネミーの参照用）
   enemies: z.array(scenarioEncounterEnemySchema).default([]),
 });
-export type ScenarioEncounterSettings = z.infer<typeof scenarioEncounterSettingsSchema>;
+export type ScenarioEncounterSettings = z.infer<
+  typeof scenarioEncounterSettingsSchema
+>;
 
 // 基本フィールドスキーマ
 const baseScenarioFields = {
@@ -99,7 +105,7 @@ const baseScenarioFields = {
   imageUrl: z.string().optional(),
   players: z.string().optional(), // 想定人数
   time: z.string().optional(), // 想定プレイ時間
-  limit: z.string().optional(), // 制限値
+  limit: z.string().optional(), // リミット
   caution: z.string().optional(), // 注意事項
   summary: z.string().optional(), // 概要
   content: z.string().optional(), // 本文（Markdown）
