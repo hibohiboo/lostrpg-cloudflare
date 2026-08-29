@@ -169,6 +169,11 @@ const EditForm: React.FC<Props> = ({
 
       {/* 本文 */}
       <Box sx={{ my: 2 }}>
+        <Box sx={{ mb: 1 }}>
+          <MuiLink href="/scenario/sample" target="_blank" rel="noopener noreferrer">
+            記法例を見る（別タブで開きます）
+          </MuiLink>
+        </Box>
         <TextField
           fullWidth
           multiline
@@ -178,7 +183,7 @@ const EditForm: React.FC<Props> = ({
           onChange={(e) =>
             setScenario({ ...scenario, content: e.target.value })
           }
-          helperText="保存時にフェイズ／シーン／イベントの構造へ自動変換されます（記法はプレビューを参照）"
+          helperText="保存時にフェイズ／シーン／イベントの構造へ自動変換されます（記法は上のリンクから確認できます）"
         />
       </Box>
 

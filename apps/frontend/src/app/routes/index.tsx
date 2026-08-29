@@ -50,6 +50,7 @@ import {
   ScenarioDetailPage,
   ScenarioEditPage,
   ScenarioListPage,
+  ScenarioSamplePage,
 } from '@lostrpg/frontend/page/scenario';
 import {
   createScenarioCreateLoader,
@@ -151,6 +152,10 @@ export const createRouter = ({ dispatch }: { dispatch: AppDispatch }) =>
               path: 'create',
               element: <ScenarioCreatePage />,
               loader: createScenarioCreateLoader(dispatch),
+            },
+            {
+              path: 'sample',
+              element: <ScenarioSamplePage />,
             },
             {
               path: ':id',

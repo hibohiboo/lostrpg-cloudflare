@@ -1,7 +1,21 @@
 import { describe, expect, it } from 'vitest';
+import { scenarioSamples } from '../game-data/scenario';
 import { parseScenarioContent } from './parseScenarioContent';
 
 describe('parseScenarioContent', () => {
+  it('記法例（scenarioSamples）が全てエラーなく構造化でき、想定するフェイズ名になること', () => {
+    scenarioSamples.forEach((sample) => {
+      const result = parseScenarioContent(sample.content);
+      expect(result.phases.map((p) => p.name)).toEqual([
+        'キャンプフェイズ',
+        '探索フェイズ',
+        '決戦フェイズ',
+        '結果フェイズ',
+      ]);
+    });
+  });
+
+
   it('本文が空でもエラーにならず空のフェイズを返すこと', () => {
     const result = parseScenarioContent('');
     expect(result.phases).toEqual([]);
