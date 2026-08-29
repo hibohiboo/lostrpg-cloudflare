@@ -5,14 +5,13 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
-  InputLabel,
   Link as MuiLink,
   TextField,
 } from '@mui/material';
 import React, { useState } from 'react';
 import { ImageUploadField } from '@lostrpg/frontend/shared/ui';
 import { EditFormViewModel } from '../hooks/useEditFormHooks';
-import { EncounterTableEditor } from './EncounterTableEditor';
+import { EncounterAppendixEditor } from './EncounterAppendixEditor';
 import { ScenarioContentEditor } from './ScenarioContentEditor';
 
 type Props = EditFormViewModel & {
@@ -62,11 +61,23 @@ const EditForm: React.FC<Props> = ({
   const nameError = !name && isValidError;
   const nameHelperText = nameError ? 'シナリオ名は必須です' : '';
 
-  // 想定人数・プレイ時間・リミット・注意事項は本文（Markdown）側の特殊見出しで管理するため、
-  // 本文が変わるたびにここから再抽出してscenarioへ反映する
+  // 想定人数・プレイ時間・リミット・注意事項・ランダムエンカウント表は本文（Markdown）側の
+  // 特殊見出しで管理するため、本文が変わるたびにここから再抽出してscenarioへ反映する
   const handleContentChange = (next: string) => {
-    const { players, time, limit, caution } = parseScenarioContent(next);
-    setScenario({ ...scenario, content: next, players, time, limit, caution });
+    const { players, time, limit, caution, encounterTables } = parseScenarioContent(next);
+    setScenario({
+      ...scenario,
+      content: next,
+      players,
+      time,
+      limit,
+      caution,
+      encounterTable: {
+        ...encounterTable,
+        tables: encounterTables,
+        mode: encounterTables.length > 0 ? 'custom' : 'default',
+      },
+    });
   };
 
   return (
@@ -96,17 +107,6 @@ const EditForm: React.FC<Props> = ({
         />
       </Box>
 
-      {/* ランダムエンカウント表（探索フェイズの冒頭で確認できるよう、シナリオ本文より前に配置） */}
-      <Box sx={{ my: 3 }}>
-        <InputLabel sx={{ mb: 1 }}>ランダムエンカウント表</InputLabel>
-        <EncounterTableEditor
-          encounterTable={encounterTable}
-          onChange={(value) =>
-            setScenario({ ...scenario, encounterTable: value })
-          }
-        />
-      </Box>
-
       {/* 画像アップロード */}
       <ImageUploadField
         previewUrl={previewUrl}
@@ -129,11 +129,19 @@ const EditForm: React.FC<Props> = ({
       </Box>
 
       {/* 本文（Markdown編集 / 構造編集の切り替え）
-          想定人数・プレイ時間・リミット・注意事項もここで編集します */}
+          想定人数・プレイ時間・リミット・注意事項・ランダムエンカウント表もここで編集します */}
       <Box sx={{ my: 2 }}>
         <ScenarioContentEditor
           content={content}
           onContentChange={handleContentChange}
+        />
+      </Box>
+
+      {/* エネミー付録：付録のため本文の後に配置 */}
+      <Box sx={{ my: 3 }}>
+        <EncounterAppendixEditor
+          encounterTable={encounterTable}
+          onChange={(value) => setScenario({ ...scenario, encounterTable: value })}
         />
       </Box>
 

@@ -19,6 +19,7 @@ describe('parseScenarioContent', () => {
     const result = parseScenarioContent('');
     expect(result.phases).toEqual([]);
     expect(result.lines).toEqual([]);
+    expect(result.encounterTables).toEqual([]);
   });
 
   it('フェイズ見出し直下の地の文をシナリオ概要として扱うこと（フェイズ開始前）', () => {
@@ -145,6 +146,50 @@ describe('parseScenarioContent', () => {
       { url: 'https://example.com/scenario?id=abc', value: '→ヌシシートへのリンク' },
     ]);
     expect(event.lines).toEqual([]);
+  });
+
+  it('## 〇〇 {.encounterTable} セクションをランダムエンカウント表として取り出し、フェイズには含めないこと', () => {
+    const md = [
+      '## 3人 {.players}',
+      '## ランダムエンカウント表 {.encounterTable}',
+      '##### 表A {.table}',
+      '| 出目 | 内容 |',
+      '| --- | --- |',
+      '| 1 | オオカミ 1d6体 |',
+      '| 6 | 表B参照 |',
+      '##### 表B {.table}',
+      '| 出目 | 内容 |',
+      '| --- | --- |',
+      '| 1 | 強敵に遭遇した |',
+      '## キャンプフェイズ',
+      '### プロローグ',
+    ].join('\n');
+
+    const result = parseScenarioContent(md);
+
+    expect(result.players).toBe('3人');
+    expect(result.encounterTables.map((t) => t.name)).toEqual(['表A', '表B']);
+    expect(result.encounterTables[0].rows[0]).toEqual({ roll: 1, text: 'オオカミ 1d6体' });
+    expect(result.phases.map((p) => p.name)).toEqual(['キャンプフェイズ']);
+  });
+
+  it('.encounterTable} セクションが本文の途中（フェイズとフェイズの間）にあっても取り出せること', () => {
+    const md = [
+      '## キャンプフェイズ',
+      '### プロローグ',
+      '## ランダムエンカウント表 {.encounterTable}',
+      '##### 表A {.table}',
+      '| 出目 | 内容 |',
+      '| --- | --- |',
+      '| 1 | オオカミ |',
+      '## 探索フェイズ',
+      '### 道',
+    ].join('\n');
+
+    const result = parseScenarioContent(md);
+
+    expect(result.encounterTables.map((t) => t.name)).toEqual(['表A']);
+    expect(result.phases.map((p) => p.name)).toEqual(['キャンプフェイズ', '探索フェイズ']);
   });
 
   it('複数フェイズ・複数シーンを正しく積み上げること', () => {

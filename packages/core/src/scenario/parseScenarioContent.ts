@@ -1,3 +1,4 @@
+import { parseEncounterTablesMarkdown } from './encounterTableMarkdown';
 import {
   buildTableFromRows,
   getAttributes,
@@ -9,6 +10,7 @@ import {
   type TableBlock,
 } from './markdownBlocks';
 import type {
+  ScenarioEncounterTable,
   ScenarioEvent,
   ScenarioEventItem,
   ScenarioLink,
@@ -28,6 +30,8 @@ import type {
 // - `##### 項目名 {.item|.roll|.path|.prize}` … イベントに紐づく項目（ドロップ品・判定など）
 // - `##### 表題 {.table}` の直後の表      … イベントに紐づく表
 // - 独立した1行の `[表示名](URL)`         … イベントに紐づくリンク
+// - `## ランダムエンカウント表 {.encounterTable}` セクション（次の `##` 見出しの直前まで）
+//                                          … ランダムエンカウント表（本文中どこに書いてもよい）
 // - 上記以外の地の文                       … フェイズ本文 / シーン本文 / イベント本文の説明文
 //
 // パーサ本体は state を書き換えず、各ブロックごとに新しい状態を返す純粋関数として実装している
@@ -215,6 +219,44 @@ const applyBlock = (state: ParseState, block: Block): ParseState => {
   return handleTable(state, block);
 };
 
+const isEncounterTableHeading = (line: string): boolean => {
+  const heading = parseHeadingLine(line);
+  if (!heading || heading.depth !== 2) return false;
+  const [, key] = getAttributes(heading.text);
+  return key === 'encounterTable';
+};
+
+const isDepth2Heading = (line: string): boolean => parseHeadingLine(line)?.depth === 2;
+
+// content から `## 〇〇 {.encounterTable}` セクション（次の `##` 見出しの直前まで）を
+// 全て取り除き、その中身だけを結合したMarkdownとして返す。フェイズ／シーンの構造とは
+// 独立して扱うため、通常の tokenizeBlocks によるフェイズ解析より前に行単位で分離する。
+const extractEncounterTablesSection = (
+  content: string,
+): { content: string; encounterMarkdown: string } => {
+  const lines = content.replace(/\r\n/g, '\n').split('\n');
+  const remainingLines: string[] = [];
+  const sections: string[] = [];
+  let i = 0;
+
+  while (i < lines.length) {
+    if (isEncounterTableHeading(lines[i])) {
+      i += 1;
+      const sectionLines: string[] = [];
+      while (i < lines.length && !isDepth2Heading(lines[i])) {
+        sectionLines.push(lines[i]);
+        i += 1;
+      }
+      sections.push(sectionLines.join('\n'));
+    } else {
+      remainingLines.push(lines[i]);
+      i += 1;
+    }
+  }
+
+  return { content: remainingLines.join('\n'), encounterMarkdown: sections.join('\n\n') };
+};
+
 export interface ParsedScenarioContent {
   players: string;
   time: string;
@@ -222,12 +264,16 @@ export interface ParsedScenarioContent {
   caution: string;
   lines: string[];
   phases: ScenarioPhase[];
+  encounterTables: ScenarioEncounterTable[];
 }
 
 export const parseScenarioContent = (
   content: string | undefined | null,
 ): ParsedScenarioContent => {
-  const blocks = tokenizeBlocks(content ?? '');
+  const { content: withoutEncounterTables, encounterMarkdown } = extractEncounterTablesSection(
+    content ?? '',
+  );
+  const blocks = tokenizeBlocks(withoutEncounterTables);
   const parsed = blocks.reduce(applyBlock, createInitialState());
   const final = pushPhase(parsed);
 
@@ -238,6 +284,7 @@ export const parseScenarioContent = (
     caution: final.caution,
     lines: final.scenarioLines,
     phases: final.phases,
+    encounterTables: parseEncounterTablesMarkdown(encounterMarkdown),
   };
 };
 

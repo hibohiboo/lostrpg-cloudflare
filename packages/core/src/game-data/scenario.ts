@@ -42,6 +42,12 @@ export const scenarioNotationTable: {
     { purpose: 'シナリオの所要時間目安', notation: '## 〇時間 {.time}', icon: 'time', label: 'プレイ時間：〇時間' },
     { purpose: 'リミット', notation: '## 〇 {.limit}', icon: 'limit', label: 'リミット：〇' },
     { purpose: '注意書き', notation: '## 注意 {.caution}', icon: 'caution', label: '注意' },
+    {
+      purpose: 'ランダムエンカウント表',
+      notation: '## ランダムエンカウント表 {.encounterTable}',
+      label:
+        '直後に「##### 表名 {.table}」＋出目/内容の表を続けます。本文中どこに書いてもよく、1つも書かなければルールブック標準表を使用します。',
+    },
     { purpose: 'フェイズ', notation: '## 〇フェイズ', label: '' },
     { purpose: 'シーン', notation: '### シーン', label: '' },
     {

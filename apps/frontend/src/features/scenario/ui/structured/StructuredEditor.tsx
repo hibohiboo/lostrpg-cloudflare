@@ -19,7 +19,7 @@ import {
   updateScene,
 } from './treeOperations';
 import { parseNodeId } from './types';
-import type { ScenarioPhase } from '@lostrpg/frontend/entities/scenario';
+import type { ScenarioEncounterTable, ScenarioPhase } from '@lostrpg/frontend/entities/scenario';
 
 type Props = {
   content: string;
@@ -31,6 +31,9 @@ interface EditorState {
   time: string;
   limit: string;
   caution: string;
+  // ランダムエンカウント表はこのタブでは編集しない（本文のMarkdown編集タブで直接編集する）が、
+  // フェイズ編集でMarkdownへ書き戻す際に消えてしまわないよう、そのまま保持しておく。
+  encounterTables: ScenarioEncounterTable[];
   phases: ScenarioPhase[];
 }
 

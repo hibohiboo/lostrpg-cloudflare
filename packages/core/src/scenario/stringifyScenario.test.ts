@@ -43,6 +43,26 @@ describe('stringifyScenario', () => {
     expect(reparsed.caution).toBe('1行目 2行目');
   });
 
+  it('ランダムエンカウント表を含めてラウンドトリップできること', () => {
+    const original = parseScenarioContent(
+      [
+        '## ランダムエンカウント表 {.encounterTable}',
+        '##### 表A {.table}',
+        '| 出目 | 内容 |',
+        '| --- | --- |',
+        '| 1 | オオカミ 1d6体 |',
+        '## キャンプフェイズ',
+        '### プロローグ',
+      ].join('\n'),
+    );
+
+    const md = stringifyScenario(original);
+    const reparsed = parseScenarioContent(md);
+
+    expect(reparsed.encounterTables).toEqual(original.encounterTables);
+    expect(reparsed.phases).toEqual(original.phases);
+  });
+
   it('一部のメタ情報のみ指定した場合、指定分だけ見出しが生成されること', () => {
     const md = stringifyScenario({ limit: '4', phases: [] });
     expect(md).toBe('## 4 {.limit}');

@@ -196,12 +196,50 @@ describe('POST /api/scenarios', () => {
       });
     });
 
-    it('カスタム表（自由記述・エネミー付録）を保存・取得できること', async () => {
-      const encounterTable = {
+    it('本文（Markdown）の {.encounterTable} セクションからカスタム表を再生成すること', async () => {
+      const content = [
+        '## ランダムエンカウント表 {.encounterTable}',
+        '',
+        '##### 表A {.table}',
+        '',
+        '| 出目 | 内容 |',
+        '| --- | --- |',
+        '| 1 | オオカミ 1d6体 |',
+        '| 2 | 何も起きない |',
+        '| 3 |  |',
+        '| 4 |  |',
+        '| 5 |  |',
+        '| 6 | 表B参照 |',
+        '',
+        '##### 表B {.table}',
+        '',
+        '| 出目 | 内容 |',
+        '| --- | --- |',
+        '| 1 | 強敵に遭遇した |',
+        '| 2 |  |',
+        '| 3 |  |',
+        '| 4 |  |',
+        '| 5 |  |',
+        '| 6 |  |',
+      ].join('\n');
+      // エネミー付録は本文とは独立した参照用データなので、クライアントから送った値をそのまま保存する
+      const enemies = [{ enemyId: 'enemy-1', enemyName: 'オオカミ', note: '表Aの1で1d6体登場' }];
+
+      const createRes = await create({
+        ...minimalData,
+        content,
+        encounterTable: { mode: 'default', tables: [], enemies },
+      });
+      const createData = (await createRes.json()) as any;
+
+      const getRes = await get(createData.id);
+      const getData = (await getRes.json()) as any;
+
+      expect(getData.data.encounterTable).toEqual({
         mode: 'custom',
         tables: [
           {
-            id: 'table-a',
+            id: 'table-0',
             name: '表A',
             rows: [
               { roll: 1, text: 'オオカミ 1d6体' },
@@ -213,7 +251,7 @@ describe('POST /api/scenarios', () => {
             ],
           },
           {
-            id: 'table-b',
+            id: 'table-1',
             name: '表B',
             rows: [
               { roll: 1, text: '強敵に遭遇した' },
@@ -225,16 +263,26 @@ describe('POST /api/scenarios', () => {
             ],
           },
         ],
-        enemies: [{ enemyId: 'enemy-1', enemyName: 'オオカミ', note: '表Aの1で1d6体登場' }],
-      };
+        enemies,
+      });
+    });
 
-      const createRes = await create({ ...minimalData, encounterTable });
+    it('クライアントが送ったtables/modeは無視され、contentから再生成されること', async () => {
+      const createRes = await create({
+        ...minimalData,
+        content: '',
+        encounterTable: {
+          mode: 'custom',
+          tables: [{ id: 'なりすまし', name: 'なりすまし表', rows: [] }],
+          enemies: [],
+        },
+      });
       const createData = (await createRes.json()) as any;
 
       const getRes = await get(createData.id);
       const getData = (await getRes.json()) as any;
 
-      expect(getData.data.encounterTable).toEqual(encounterTable);
+      expect(getData.data.encounterTable).toEqual({ mode: 'default', tables: [], enemies: [] });
     });
   });
 

@@ -68,18 +68,24 @@ export const scenariosRouter = new Hono<{ Bindings: Env }>()
     // eslint-disable-next-line sonarjs/no-unused-vars
     const { password: _password, ...dataWithoutPassword } = scenarioData;
 
-    // 本文（Markdown）から players/time/limit/caution とフェイズ／シーン／イベントを構造化する
+    // 本文（Markdown）から players/time/limit/caution、フェイズ／シーン／イベント、
+    // ランダムエンカウント表（##### 表名 {.table}）を構造化する
     // クライアントから送られたこれらの値は使わず、常に content から再生成する
-    const { players, time, limit, caution, phases } = parseScenarioContent(
+    const { players, time, limit, caution, phases, encounterTables } = parseScenarioContent(
       scenarioData.content,
     );
+    const encounterTable = {
+      ...dataWithoutPassword.encounterTable,
+      tables: encounterTables,
+      mode: encounterTables.length > 0 ? ('custom' as const) : ('default' as const),
+    };
 
     // データベースに保存
     const [newScenario] = await getDb()
       .insert(scenarios)
       .values({
         name: scenarioData.name,
-        data: { ...dataWithoutPassword, players, time, limit, caution, phases },
+        data: { ...dataWithoutPassword, players, time, limit, caution, phases, encounterTable },
         passwordHash,
       })
       .returning();
@@ -147,11 +153,17 @@ export const scenariosRouter = new Hono<{ Bindings: Env }>()
       // eslint-disable-next-line sonarjs/no-unused-vars
       const { password: _password, ...dataWithoutPassword } = requestBody;
 
-      // 本文（Markdown）から players/time/limit/caution とフェイズ／シーン／イベントを構造化する
+      // 本文（Markdown）から players/time/limit/caution、フェイズ／シーン／イベント、
+      // ランダムエンカウント表（##### 表名 {.table}）を構造化する
       // クライアントから送られたこれらの値は使わず、常に content から再生成する
-      const { players, time, limit, caution, phases } = parseScenarioContent(
+      const { players, time, limit, caution, phases, encounterTables } = parseScenarioContent(
         requestBody.content,
       );
+      const encounterTable = {
+        ...dataWithoutPassword.encounterTable,
+        tables: encounterTables,
+        mode: encounterTables.length > 0 ? ('custom' as const) : ('default' as const),
+      };
 
       // 更新データの構築
       const updateData: {
@@ -160,7 +172,7 @@ export const scenariosRouter = new Hono<{ Bindings: Env }>()
         updatedAt: Date;
         passwordHash?: string;
       } = {
-        data: { ...dataWithoutPassword, players, time, limit, caution, phases },
+        data: { ...dataWithoutPassword, players, time, limit, caution, phases, encounterTable },
         name: requestBody.name || scenario.name,
         updatedAt: new Date(),
       };
@@ -190,6 +202,7 @@ export const scenariosRouter = new Hono<{ Bindings: Env }>()
           limit,
           caution,
           phases,
+          encounterTable,
         },
         200,
       );

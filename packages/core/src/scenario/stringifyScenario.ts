@@ -1,11 +1,13 @@
+import { stringifyEncounterTables } from './encounterTableMarkdown';
 import { stringifyScenarioPhases } from './stringifyScenarioPhases';
-import type { ScenarioPhase } from '@lostrpg/schemas';
+import type { ScenarioEncounterTable, ScenarioPhase } from '@lostrpg/schemas';
 
 export interface StringifyScenarioInput {
   players?: string;
   time?: string;
   limit?: string;
   caution?: string;
+  encounterTables?: ScenarioEncounterTable[];
   phases: ScenarioPhase[];
 }
 
@@ -19,9 +21,9 @@ const buildMetaHeading = (value: string | undefined, key: string): string | null
   return singleLine ? `## ${singleLine} {.${key}}` : null;
 };
 
-// parseScenarioContent の逆変換：players/time/limit/caution とフェイズの構造から
-// シナリオ本文（Markdown）を組み立てる。構造編集タブでの編集結果をMarkdown編集タブと
-// 同期させるために使用する。
+// parseScenarioContent の逆変換：players/time/limit/caution・ランダムエンカウント表・
+// フェイズの構造からシナリオ本文（Markdown）を組み立てる。構造編集タブでの編集結果を
+// Markdown編集タブと同期させるために使用する。
 export const stringifyScenario = (input: StringifyScenarioInput): string => {
   const metaLines = [
     buildMetaHeading(input.players, 'players'),
@@ -31,8 +33,14 @@ export const stringifyScenario = (input: StringifyScenarioInput): string => {
   ].filter((line): line is string => line !== null);
 
   const meta = metaLines.join('\n\n');
+
+  const encounterTables = input.encounterTables ?? [];
+  const encounterSection =
+    encounterTables.length > 0
+      ? `## ランダムエンカウント表 {.encounterTable}\n\n${stringifyEncounterTables(encounterTables)}`
+      : '';
+
   const body = stringifyScenarioPhases(input.phases);
 
-  if (meta && body) return `${meta}\n\n${body}`;
-  return meta || body;
+  return [meta, encounterSection, body].filter((part) => part).join('\n\n');
 };
