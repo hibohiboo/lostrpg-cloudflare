@@ -57,23 +57,35 @@ export const scenarioPhaseSchema = z.object({
 });
 export type ScenarioPhase = z.infer<typeof scenarioPhaseSchema>;
 
-// ランダムエンカウント表
-// 1マスは自由記述（例: 「オオカミ 1d6体」「表B参照」「何も起きない」等）。
+// カスタム表の種別：ランダムエンカウント表・散策表・探索表・休憩表のいずれとして使うか。
+// 同じ種別のカスタム表が1つも無ければ、その種別はルールブック標準の表を使用する。
+export const scenarioCustomTableKindSchema = z.enum([
+  'encounter',
+  'wander',
+  'search',
+  'rest',
+]);
+export type ScenarioCustomTableKind = z.infer<typeof scenarioCustomTableKindSchema>;
+
+// カスタム表の1マス。1マスは自由記述（例: 「オオカミ 1d6体」「表B参照」「何も起きない」等）。
 // 出現数（1d6等）や他の表への振り直しも、表記自体を自由記述の中に書いてもらう。
-export const scenarioEncounterRowSchema = z.object({
-  roll: z.number().int().min(1).max(6),
+export const scenarioCustomTableRowSchema = z.object({
+  roll: z.number().int(),
   text: z.string().optional(),
 });
-export type ScenarioEncounterRow = z.infer<typeof scenarioEncounterRowSchema>;
+export type ScenarioCustomTableRow = z.infer<typeof scenarioCustomTableRowSchema>;
 
-export const scenarioEncounterTableSchema = z.object({
+// カスタム表：ランダムエンカウント表・散策表・探索表・休憩表を1つの配列にまとめて管理する。
+// 出目の範囲はサイコロの個数（diceCount：1d/2d）と面数（diceSides：6・8・10等）から決まる。
+export const scenarioCustomTableSchema = z.object({
   id: z.string(),
+  kind: scenarioCustomTableKindSchema,
   name: z.string(), // 表A・表B 等
-  rows: z.array(scenarioEncounterRowSchema),
+  diceCount: z.number().int().min(1).max(2).default(1),
+  diceSides: z.number().int().min(2).max(100).default(6),
+  rows: z.array(scenarioCustomTableRowSchema),
 });
-export type ScenarioEncounterTable = z.infer<
-  typeof scenarioEncounterTableSchema
->;
+export type ScenarioCustomTable = z.infer<typeof scenarioCustomTableSchema>;
 
 // 表中に登場させたエネミーの付録（参照用一覧）。
 // エネミー選択から追加した場合は名前・URL（サイト内のエネミー詳細ページ）が自動入力されるが、
@@ -88,43 +100,6 @@ export const scenarioEncounterEnemySchema = z.object({
 });
 export type ScenarioEncounterEnemy = z.infer<
   typeof scenarioEncounterEnemySchema
->;
-
-// mode: 'default' はルールブック標準のランダムエンカウント表を使用（追加データ不要）
-// mode: 'custom' は tables（先頭が起点の表）を使用する
-export const scenarioEncounterSettingsSchema = z.object({
-  mode: z.enum(['default', 'custom']).default('default'),
-  tables: z.array(scenarioEncounterTableSchema).default([]),
-  // 付録のエネミー一覧（表の自由記述に登場させたエネミーの参照用）
-  enemies: z.array(scenarioEncounterEnemySchema).default([]),
-});
-export type ScenarioEncounterSettings = z.infer<
-  typeof scenarioEncounterSettingsSchema
->;
-
-// 散策表・探索表・休憩表（いずれもルールブック標準では2d6で決定する）のカスタム表。
-// 行の形はランダムエンカウント表と同じだが、出目の範囲が2〜12になる。
-export const scenarioRollRow2d6Schema = z.object({
-  roll: z.number().int().min(2).max(12),
-  text: z.string().optional(),
-});
-export type ScenarioRollRow2d6 = z.infer<typeof scenarioRollRow2d6Schema>;
-
-export const scenarioRollTable2d6Schema = z.object({
-  id: z.string(),
-  name: z.string(), // 表A・表B 等
-  rows: z.array(scenarioRollRow2d6Schema),
-});
-export type ScenarioRollTable2d6 = z.infer<typeof scenarioRollTable2d6Schema>;
-
-// mode: 'default' はルールブック標準の表を使用（追加データ不要）
-// mode: 'custom' は tables（先頭が起点の表）を使用する
-export const scenarioRollTableSettings2d6Schema = z.object({
-  mode: z.enum(['default', 'custom']).default('default'),
-  tables: z.array(scenarioRollTable2d6Schema).default([]),
-});
-export type ScenarioRollTableSettings2d6 = z.infer<
-  typeof scenarioRollTableSettings2d6Schema
 >;
 
 // 本文中に登場させたヌシ（ボス）の付録（参照用一覧）。
@@ -160,22 +135,11 @@ const baseScenarioFields = {
   // 本文（Markdown）から構造化されたフェイズ／シーン／イベント。
   // クライアントからの入力値は無視し、サーバー側で content から再生成する。
   phases: z.array(scenarioPhaseSchema).optional().default([]),
-  // ランダムエンカウント表（デフォルト表 or カスタム表、1d6）
-  encounterTable: scenarioEncounterSettingsSchema
-    .optional()
-    .default({ mode: 'default', tables: [], enemies: [] }),
-  // 散策表（デフォルト表 or カスタム表、2d6）
-  wanderTable: scenarioRollTableSettings2d6Schema
-    .optional()
-    .default({ mode: 'default', tables: [] }),
-  // 探索表（デフォルト表 or カスタム表、2d6）
-  searchTable: scenarioRollTableSettings2d6Schema
-    .optional()
-    .default({ mode: 'default', tables: [] }),
-  // 休憩表（デフォルト表 or カスタム表、2d6）
-  restTable: scenarioRollTableSettings2d6Schema
-    .optional()
-    .default({ mode: 'default', tables: [] }),
+  // カスタム表（ランダムエンカウント表・散策表・探索表・休憩表。種別ごとに1つも無ければ
+  // ルールブック標準の表を使用する）
+  customTables: z.array(scenarioCustomTableSchema).optional().default([]),
+  // 付録のエネミー一覧（ランダムエンカウント表の自由記述に登場させたエネミーの参照用）
+  enemies: z.array(scenarioEncounterEnemySchema).optional().default([]),
   // ヌシ付録（本文に登場させたヌシの参照用一覧）
   bosses: z.array(scenarioBossAppendixSchema).optional().default([]),
   // アイテム付録（本文に登場させたアイテムの参照用一覧）

@@ -63,10 +63,16 @@ export const scenarioNotationTable: {
       label: '注意',
     },
     {
-      purpose: 'ランダムエンカウント表',
-      notation: '## ランダムエンカウント表 {.encounterTable}',
+      purpose: 'カスタム表\n（ランダムエンカウント表・散策表・探索表・休憩表）',
+      notation: '## カスタム表 {.customTable}',
       label:
-        '直後に「##### 表名 {.table}」＋出目/内容の表を続けます。本文中どこに書いてもよく、1つも書かなければルールブック標準表を使用します。',
+        '直後に出目表（##### 表名 {.table...}）を1つ以上並べます。本文中どこに書いてもよく、種別ごとに1つも書かなければルールブック標準表を使用します。',
+    },
+    {
+      purpose: 'カスタム表の1つの表（出目表）',
+      notation: '##### 表名 {.table.kind-種別.d個数.s面数}',
+      label:
+        '種別: encounter=ランダムエンカウント表 / wander=散策表 / search=探索表 / rest=休憩表\nd: サイコロの個数（1 か 2）　s: 面数（6・8 等）\n省略時は encounter・1d6として扱われます。直後に「出目｜内容」の表を続けます。',
     },
     { purpose: 'フェイズ', notation: '## 〇フェイズ', label: '' },
     { purpose: 'シーン', notation: '### シーン', label: '' },

@@ -1,5 +1,5 @@
 // 汎用的なMarkdownブロック分割ユーティリティ（見出し／段落／表）。
-// parseScenarioContent.ts と encounterTableMarkdown.ts で共有する。
+// parseScenarioContent.ts と customTableMarkdown.ts で共有する。
 //
 // 正規表現の破局的バックトラックを避けるため、可能な限り文字列走査で実装している。
 

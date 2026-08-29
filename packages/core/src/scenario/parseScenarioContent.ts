@@ -1,4 +1,4 @@
-import { parseRollTablesMarkdown, ROLLS_1D6, ROLLS_2D6 } from './encounterTableMarkdown';
+import { parseCustomTablesMarkdown } from './customTableMarkdown';
 import {
   buildTableFromRows,
   getAttributes,
@@ -10,7 +10,7 @@ import {
   type TableBlock,
 } from './markdownBlocks';
 import type {
-  ScenarioEncounterTable,
+  ScenarioCustomTable,
   ScenarioEvent,
   ScenarioEventItem,
   ScenarioLink,
@@ -30,10 +30,10 @@ import type {
 // - `##### 項目名 {.item|.roll|.path|.prize}` … イベントに紐づく項目（ドロップ品・判定など）
 // - `##### 表題 {.table}` の直後の表      … イベントに紐づく表
 // - 独立した1行の `[表示名](URL)`         … イベントに紐づくリンク
-// - `## ランダムエンカウント表 {.encounterTable}` セクション（次の `##` 見出しの直前まで）
-//                                          … ランダムエンカウント表（1d6、本文中どこに書いてもよい）
-// - `## 散策表 {.wanderTable}` / `## 探索表 {.searchTable}` / `## 休憩表 {.restTable}` セクション
-//                                          … 散策表・探索表・休憩表（いずれも2d6、本文中どこに書いてもよい）
+// - `## カスタム表 {.customTable}` セクション（次の `##` 見出しの直前まで）
+//                                          … カスタム表（ランダムエンカウント表・散策表・探索表・
+//                                            休憩表。本文中どこに書いてもよい。表ごとの見出しで
+//                                            種別・サイコロを指定する。詳細は customTableMarkdown.ts）
 // - 上記以外の地の文                       … フェイズ本文 / シーン本文 / イベント本文の説明文
 //
 // パーサ本体は state を書き換えず、各ブロックごとに新しい状態を返す純粋関数として実装している
@@ -233,8 +233,6 @@ const isDepth2Heading = (line: string): boolean => parseHeadingLine(line)?.depth
 // content から `## 〇〇 {.key}` セクション（次の `##` 見出しの直前まで）を全て取り除き、
 // その中身だけを結合したMarkdownとして返す。フェイズ／シーンの構造とは独立して扱うため、
 // 通常の tokenizeBlocks によるフェイズ解析より前に行単位で分離する。
-// ランダムエンカウント表・散策表・探索表・休憩表のいずれも同じ形式のセクションのため、
-// key（encounterTable / wanderTable / searchTable / restTable）を変えて使い回す。
 const extractMarkedSection = (
   content: string,
   key: string,
@@ -269,21 +267,18 @@ export interface ParsedScenarioContent {
   caution: string;
   lines: string[];
   phases: ScenarioPhase[];
-  encounterTables: ScenarioEncounterTable[];
-  wanderTables: ScenarioEncounterTable[];
-  searchTables: ScenarioEncounterTable[];
-  restTables: ScenarioEncounterTable[];
+  customTables: ScenarioCustomTable[];
 }
 
 export const parseScenarioContent = (
   content: string | undefined | null,
 ): ParsedScenarioContent => {
-  const encounter = extractMarkedSection(content ?? '', 'encounterTable');
-  const wander = extractMarkedSection(encounter.content, 'wanderTable');
-  const search = extractMarkedSection(wander.content, 'searchTable');
-  const rest = extractMarkedSection(search.content, 'restTable');
+  const { content: withoutCustomTables, sectionMarkdown } = extractMarkedSection(
+    content ?? '',
+    'customTable',
+  );
 
-  const blocks = tokenizeBlocks(rest.content);
+  const blocks = tokenizeBlocks(withoutCustomTables);
   const parsed = blocks.reduce(applyBlock, createInitialState());
   const final = pushPhase(parsed);
 
@@ -294,10 +289,7 @@ export const parseScenarioContent = (
     caution: final.caution,
     lines: final.scenarioLines,
     phases: final.phases,
-    encounterTables: parseRollTablesMarkdown(encounter.sectionMarkdown, ROLLS_1D6),
-    wanderTables: parseRollTablesMarkdown(wander.sectionMarkdown, ROLLS_2D6),
-    searchTables: parseRollTablesMarkdown(search.sectionMarkdown, ROLLS_2D6),
-    restTables: parseRollTablesMarkdown(rest.sectionMarkdown, ROLLS_2D6),
+    customTables: parseCustomTablesMarkdown(sectionMarkdown),
   };
 };
 

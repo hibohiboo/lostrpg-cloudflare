@@ -1,11 +1,11 @@
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
 import React from 'react';
-import type { ScenarioEncounterTable, ScenarioRollTableSettings2d6 } from '../model/scenario';
+import type { ScenarioCustomTable } from '../model/scenario';
 
-const RollTableCard: React.FC<{ table: ScenarioEncounterTable }> = ({ table }) => (
+const CustomTableCard: React.FC<{ table: ScenarioCustomTable }> = ({ table }) => (
   <Box sx={{ my: 2 }}>
     <Typography variant="subtitle1" gutterBottom>
-      {table.name}
+      {table.name}（{table.diceCount}d{table.diceSides}）
     </Typography>
     <TableContainer component={Paper} variant="outlined">
       <Table size="small">
@@ -23,16 +23,14 @@ const RollTableCard: React.FC<{ table: ScenarioEncounterTable }> = ({ table }) =
 );
 
 type Props = {
-  settings: ScenarioRollTableSettings2d6;
+  // すでに種別（ランダムエンカウント表・散策表・探索表・休憩表）で絞り込んだ表の一覧
+  tables: ScenarioCustomTable[];
   defaultLabel: string;
 };
 
-// 散策表・探索表・休憩表（いずれも2d6）の詳細表示。ランダムエンカウント表と違い、
-// エネミー付録のような専用の参照用一覧は持たない。
-export const RollTableView: React.FC<Props> = ({ settings, defaultLabel }) => {
-  const { mode, tables } = settings;
-
-  if (mode === 'default') {
+// カスタム表（種別ごと）の詳細表示。同じ種別のカスタム表が1つも無ければルールブック標準を使う旨を表示する。
+export const CustomTableView: React.FC<Props> = ({ tables, defaultLabel }) => {
+  if (tables.length === 0) {
     return (
       <Typography variant="body2" color="text.secondary">
         {defaultLabel}
@@ -40,18 +38,10 @@ export const RollTableView: React.FC<Props> = ({ settings, defaultLabel }) => {
     );
   }
 
-  if (tables.length === 0) {
-    return (
-      <Typography variant="body2" color="text.secondary">
-        カスタム表が設定されていません
-      </Typography>
-    );
-  }
-
   return (
     <Box>
       {tables.map((table) => (
-        <RollTableCard key={table.id} table={table} />
+        <CustomTableCard key={table.id} table={table} />
       ))}
     </Box>
   );

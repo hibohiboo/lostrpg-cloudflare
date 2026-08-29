@@ -181,26 +181,23 @@ describe('POST /api/scenarios', () => {
     });
   });
 
-  describe('ランダムエンカウント表', () => {
-    it('未指定の場合デフォルト表になること', async () => {
+  describe('カスタム表', () => {
+    it('未指定の場合カスタム表・エネミー付録がともに空配列になること', async () => {
       const createRes = await create(minimalData);
       const createData = (await createRes.json()) as any;
 
       const getRes = await get(createData.id);
       const getData = (await getRes.json()) as any;
 
-      expect(getData.data.encounterTable).toEqual({
-        mode: 'default',
-        tables: [],
-        enemies: [],
-      });
+      expect(getData.data.customTables).toEqual([]);
+      expect(getData.data.enemies).toEqual([]);
     });
 
-    it('本文（Markdown）の {.encounterTable} セクションからカスタム表を再生成すること', async () => {
+    it('本文（Markdown）の {.customTable} セクションから、種別・ダイス設定込みでカスタム表を再生成すること', async () => {
       const content = [
-        '## ランダムエンカウント表 {.encounterTable}',
+        '## カスタム表 {.customTable}',
         '',
-        '##### 表A {.table}',
+        '##### 表A {.table.kind-encounter.d1.s6}',
         '',
         '| 出目 | 内容 |',
         '| --- | --- |',
@@ -211,147 +208,99 @@ describe('POST /api/scenarios', () => {
         '| 5 |  |',
         '| 6 | 表B参照 |',
         '',
-        '##### 表B {.table}',
-        '',
-        '| 出目 | 内容 |',
-        '| --- | --- |',
-        '| 1 | 強敵に遭遇した |',
-        '| 2 |  |',
-        '| 3 |  |',
-        '| 4 |  |',
-        '| 5 |  |',
-        '| 6 |  |',
-      ].join('\n');
-      // エネミー付録は本文とは独立した参照用データなので、クライアントから送った値をそのまま保存する
-      const enemies = [{ enemyId: 'enemy-1', enemyName: 'オオカミ', url: '/enemy/enemy-1' }];
-
-      const createRes = await create({
-        ...minimalData,
-        content,
-        encounterTable: { mode: 'default', tables: [], enemies },
-      });
-      const createData = (await createRes.json()) as any;
-
-      const getRes = await get(createData.id);
-      const getData = (await getRes.json()) as any;
-
-      expect(getData.data.encounterTable).toEqual({
-        mode: 'custom',
-        tables: [
-          {
-            id: 'table-0',
-            name: '表A',
-            rows: [
-              { roll: 1, text: 'オオカミ 1d6体' },
-              { roll: 2, text: '何も起きない' },
-              { roll: 3, text: '' },
-              { roll: 4, text: '' },
-              { roll: 5, text: '' },
-              { roll: 6, text: '表B参照' },
-            ],
-          },
-          {
-            id: 'table-1',
-            name: '表B',
-            rows: [
-              { roll: 1, text: '強敵に遭遇した' },
-              { roll: 2, text: '' },
-              { roll: 3, text: '' },
-              { roll: 4, text: '' },
-              { roll: 5, text: '' },
-              { roll: 6, text: '' },
-            ],
-          },
-        ],
-        enemies,
-      });
-    });
-
-    it('クライアントが送ったtables/modeは無視され、contentから再生成されること', async () => {
-      const createRes = await create({
-        ...minimalData,
-        content: '',
-        encounterTable: {
-          mode: 'custom',
-          tables: [{ id: 'なりすまし', name: 'なりすまし表', rows: [] }],
-          enemies: [],
-        },
-      });
-      const createData = (await createRes.json()) as any;
-
-      const getRes = await get(createData.id);
-      const getData = (await getRes.json()) as any;
-
-      expect(getData.data.encounterTable).toEqual({ mode: 'default', tables: [], enemies: [] });
-    });
-  });
-
-  describe('散策表・探索表・休憩表（2d6）', () => {
-    it('未指定の場合いずれもデフォルト表になること', async () => {
-      const createRes = await create(minimalData);
-      const createData = (await createRes.json()) as any;
-
-      const getRes = await get(createData.id);
-      const getData = (await getRes.json()) as any;
-
-      expect(getData.data.wanderTable).toEqual({ mode: 'default', tables: [] });
-      expect(getData.data.searchTable).toEqual({ mode: 'default', tables: [] });
-      expect(getData.data.restTable).toEqual({ mode: 'default', tables: [] });
-    });
-
-    it('本文（Markdown）の {.wanderTable}/{.searchTable}/{.restTable} セクションから、2d6のカスタム表をそれぞれ再生成すること', async () => {
-      const content = [
-        '## 散策表 {.wanderTable}',
-        '',
-        '##### 表A {.table}',
+        '##### 表B {.table.kind-wander.d2.s6}',
         '',
         '| 出目 | 内容 |',
         '| --- | --- |',
         '| 2 | 何も見つからない |',
         '| 12 | 大当たり |',
         '',
-        '## 探索表 {.searchTable}',
-        '',
-        '##### 表A {.table}',
+        '##### 表C {.table.kind-search.d1.s8}',
         '',
         '| 出目 | 内容 |',
         '| --- | --- |',
-        '| 7 | 平凡な発見 |',
-        '',
-        '## 休憩表 {.restTable}',
-        '',
-        '##### 表A {.table}',
-        '',
-        '| 出目 | 内容 |',
-        '| --- | --- |',
-        '| 2 | 悪夢を見る |',
+        '| 8 | レアアイテム |',
       ].join('\n');
+      // エネミー付録は本文とは独立した参照用データなので、クライアントから送った値をそのまま保存する
+      const enemies = [{ enemyId: 'enemy-1', enemyName: 'オオカミ', url: '/enemy/enemy-1' }];
 
-      const createRes = await create({ ...minimalData, content });
+      const createRes = await create({ ...minimalData, content, enemies });
       const createData = (await createRes.json()) as any;
 
       const getRes = await get(createData.id);
       const getData = (await getRes.json()) as any;
 
-      expect(getData.data.wanderTable.mode).toBe('custom');
-      expect(getData.data.wanderTable.tables[0].rows).toHaveLength(11);
-      expect(getData.data.wanderTable.tables[0].rows[0]).toEqual({
-        roll: 2,
-        text: '何も見つからない',
-      });
-      expect(getData.data.wanderTable.tables[0].rows[10]).toEqual({
-        roll: 12,
-        text: '大当たり',
-      });
+      expect(getData.data.customTables).toEqual([
+        {
+          id: 'table-0',
+          kind: 'encounter',
+          name: '表A',
+          diceCount: 1,
+          diceSides: 6,
+          rows: [
+            { roll: 1, text: 'オオカミ 1d6体' },
+            { roll: 2, text: '何も起きない' },
+            { roll: 3, text: '' },
+            { roll: 4, text: '' },
+            { roll: 5, text: '' },
+            { roll: 6, text: '表B参照' },
+          ],
+        },
+        {
+          id: 'table-1',
+          kind: 'wander',
+          name: '表B',
+          diceCount: 2,
+          diceSides: 6,
+          rows: [
+            { roll: 2, text: '何も見つからない' },
+            { roll: 3, text: '' },
+            { roll: 4, text: '' },
+            { roll: 5, text: '' },
+            { roll: 6, text: '' },
+            { roll: 7, text: '' },
+            { roll: 8, text: '' },
+            { roll: 9, text: '' },
+            { roll: 10, text: '' },
+            { roll: 11, text: '' },
+            { roll: 12, text: '大当たり' },
+          ],
+        },
+        {
+          id: 'table-2',
+          kind: 'search',
+          name: '表C',
+          diceCount: 1,
+          diceSides: 8,
+          rows: [
+            { roll: 1, text: '' },
+            { roll: 2, text: '' },
+            { roll: 3, text: '' },
+            { roll: 4, text: '' },
+            { roll: 5, text: '' },
+            { roll: 6, text: '' },
+            { roll: 7, text: '' },
+            { roll: 8, text: 'レアアイテム' },
+          ],
+        },
+      ]);
+      expect(getData.data.enemies).toEqual(enemies);
+    });
 
-      expect(getData.data.searchTable.mode).toBe('custom');
-      expect(getData.data.searchTable.tables[0].rows.find((r: any) => r.roll === 7)).toEqual({
-        roll: 7,
-        text: '平凡な発見',
+    it('クライアントが送ったcustomTablesは無視され、contentから再生成されること', async () => {
+      const createRes = await create({
+        ...minimalData,
+        content: '',
+        customTables: [
+          { id: 'なりすまし', kind: 'encounter', name: 'なりすまし表', diceCount: 1, diceSides: 6, rows: [] },
+        ],
       });
+      const createData = (await createRes.json()) as any;
 
-      expect(getData.data.restTable.mode).toBe('custom');
-      expect(getData.data.restTable.tables[0].rows[0]).toEqual({ roll: 2, text: '悪夢を見る' });
+      const getRes = await get(createData.id);
+      const getData = (await getRes.json()) as any;
+
+      expect(getData.data.customTables).toEqual([]);
     });
   });
 

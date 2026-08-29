@@ -43,45 +43,23 @@ describe('stringifyScenario', () => {
     expect(reparsed.caution).toBe('1行目 2行目');
   });
 
-  it('ランダムエンカウント表を含めてラウンドトリップできること', () => {
+  it('カスタム表（種別・ダイス設定が異なる複数表）を含めてラウンドトリップできること', () => {
     const original = parseScenarioContent(
       [
-        '## ランダムエンカウント表 {.encounterTable}',
-        '##### 表A {.table}',
+        '## カスタム表 {.customTable}',
+        '##### 表A {.table.kind-encounter.d1.s6}',
         '| 出目 | 内容 |',
         '| --- | --- |',
         '| 1 | オオカミ 1d6体 |',
-        '## キャンプフェイズ',
-        '### プロローグ',
-      ].join('\n'),
-    );
-
-    const md = stringifyScenario(original);
-    const reparsed = parseScenarioContent(md);
-
-    expect(reparsed.encounterTables).toEqual(original.encounterTables);
-    expect(reparsed.phases).toEqual(original.phases);
-  });
-
-  it('散策表・探索表・休憩表（2d6）を含めてラウンドトリップできること', () => {
-    const original = parseScenarioContent(
-      [
-        '## 散策表 {.wanderTable}',
-        '##### 表A {.table}',
+        '##### 表B {.table.kind-wander.d2.s6}',
         '| 出目 | 内容 |',
         '| --- | --- |',
         '| 2 | 何も見つからない |',
         '| 12 | 大当たり |',
-        '## 探索表 {.searchTable}',
-        '##### 表A {.table}',
+        '##### 表C {.table.kind-search.d1.s8}',
         '| 出目 | 内容 |',
         '| --- | --- |',
-        '| 7 | 平凡な発見 |',
-        '## 休憩表 {.restTable}',
-        '##### 表A {.table}',
-        '| 出目 | 内容 |',
-        '| --- | --- |',
-        '| 2 | 悪夢を見る |',
+        '| 8 | レアアイテム |',
         '## キャンプフェイズ',
         '### プロローグ',
       ].join('\n'),
@@ -90,9 +68,7 @@ describe('stringifyScenario', () => {
     const md = stringifyScenario(original);
     const reparsed = parseScenarioContent(md);
 
-    expect(reparsed.wanderTables).toEqual(original.wanderTables);
-    expect(reparsed.searchTables).toEqual(original.searchTables);
-    expect(reparsed.restTables).toEqual(original.restTables);
+    expect(reparsed.customTables).toEqual(original.customTables);
     expect(reparsed.phases).toEqual(original.phases);
   });
 

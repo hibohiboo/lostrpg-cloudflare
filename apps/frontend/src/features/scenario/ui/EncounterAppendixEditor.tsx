@@ -3,61 +3,38 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, Button, IconButton, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { EnemySelectionModal } from '@lostrpg/frontend/entities/enemy';
-import type { ScenarioEncounterSettings } from '@lostrpg/frontend/entities/scenario';
+import type { ScenarioEncounterEnemy } from '@lostrpg/frontend/entities/scenario';
 
 type Props = {
-  encounterTable: ScenarioEncounterSettings;
-  onChange: (value: ScenarioEncounterSettings) => void;
+  enemies: ScenarioEncounterEnemy[];
+  onChange: (value: ScenarioEncounterEnemy[]) => void;
 };
 
 // エネミー付録：本文（Markdown）のランダムエンカウント表に登場させたエネミーの参照用一覧。
-// ランダムエンカウント表本体は本文の「## ランダムエンカウント表 {.encounterTable}」セクションで
+// ランダムエンカウント表本体はカスタム表（本文の「## カスタム表 {.customTable}」セクション）で
 // 編集するため、ここでは付録（エネミー一覧）のみを編集する。
-export const EncounterAppendixEditor: React.FC<Props> = ({
-  encounterTable,
-  onChange,
-}) => {
+export const EncounterAppendixEditor: React.FC<Props> = ({ enemies, onChange }) => {
   const [isEnemyModalOpen, setEnemyModalOpen] = useState(false);
-  const { enemies } = encounterTable;
 
   const handleAddEnemy = (enemyId: string, enemyName: string) => {
     if (!enemyId) return;
-    onChange({
-      ...encounterTable,
-      enemies: [...enemies, { enemyId, enemyName, url: `/enemy/${enemyId}` }],
-    });
+    onChange([...enemies, { enemyId, enemyName, url: `/enemy/${enemyId}` }]);
   };
 
   const handleAddManualEnemy = () => {
-    onChange({
-      ...encounterTable,
-      enemies: [...enemies, { enemyName: '', url: '' }],
-    });
+    onChange([...enemies, { enemyName: '', url: '' }]);
   };
 
   const handleRemoveEnemy = (index: number) => {
-    onChange({
-      ...encounterTable,
-      enemies: enemies.filter((_, i) => i !== index),
-    });
+    onChange(enemies.filter((_, i) => i !== index));
   };
 
   const handleEnemyNameChange = (index: number, enemyName: string) => {
-    onChange({
-      ...encounterTable,
-      enemies: enemies.map((enemy, i) =>
-        i === index ? { ...enemy, enemyName } : enemy,
-      ),
-    });
+    onChange(enemies.map((enemy, i) => (i === index ? { ...enemy, enemyName } : enemy)));
   };
 
   const handleEnemyUrlChange = (index: number, url: string) => {
-    onChange({
-      ...encounterTable,
-      enemies: enemies.map((enemy, i) =>
-        i === index ? { ...enemy, url } : enemy,
-      ),
-    });
+    onChange(enemies.map((enemy, i) => (i === index ? { ...enemy, url } : enemy)));
   };
 
   return (
