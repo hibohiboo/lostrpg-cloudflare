@@ -16,6 +16,7 @@ import { Link, useParams } from 'react-router';
 import {
   BossAppendixView,
   EncounterTableView,
+  ItemAppendixView,
   ScenarioChartView,
   ScenarioOutlineTree,
   ScenarioPhaseList,
@@ -23,7 +24,7 @@ import {
 } from '@lostrpg/frontend/entities/scenario';
 import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 
-// ランダムエンカウント表・ヌシ付録：どちらも本文の後に付録として表示する参照用データ
+// ランダムエンカウント表・ヌシ付録・アイテム付録：いずれも本文の後に付録として表示する参照用データ
 const ScenarioAppendixSection: React.FC<{ scenario: Scenario }> = ({
   scenario,
 }) => (
@@ -38,6 +39,12 @@ const ScenarioAppendixSection: React.FC<{ scenario: Scenario }> = ({
       <Box sx={{ my: 3 }}>
         <InputLabel sx={{ mb: 1 }}>ヌシ</InputLabel>
         <BossAppendixView bosses={scenario.bosses} />
+      </Box>
+    )}
+    {scenario.items.length > 0 && (
+      <Box sx={{ my: 3 }}>
+        <InputLabel sx={{ mb: 1 }}>アイテム</InputLabel>
+        <ItemAppendixView items={scenario.items} />
       </Box>
     )}
   </>

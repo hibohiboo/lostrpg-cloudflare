@@ -1,6 +1,7 @@
 import type {
   ScenarioBossAppendix,
   ScenarioEncounterSettings,
+  ScenarioItemAppendix,
   ScenarioPhase,
 } from '@lostrpg/schemas';
 
@@ -16,6 +17,7 @@ export type {
   ScenarioEncounterRow,
   ScenarioEncounterEnemy,
   ScenarioBossAppendix,
+  ScenarioItemAppendix,
 } from '@lostrpg/schemas';
 
 export interface Scenario {
@@ -34,6 +36,8 @@ export interface Scenario {
   encounterTable: ScenarioEncounterSettings;
   // ヌシ付録（本文に登場させたヌシの参照用一覧）
   bosses: ScenarioBossAppendix[];
+  // アイテム付録（本文に登場させたアイテムの参照用一覧）
+  items: ScenarioItemAppendix[];
   creatorName?: string; // 作者名
   isPublish: boolean; // 公開フラグ
   hideFromList: boolean; // 一覧に表示しない

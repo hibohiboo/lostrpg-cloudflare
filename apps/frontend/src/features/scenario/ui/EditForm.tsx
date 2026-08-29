@@ -13,6 +13,7 @@ import { ImageUploadField } from '@lostrpg/frontend/shared/ui';
 import { EditFormViewModel } from '../hooks/useEditFormHooks';
 import { BossAppendixEditor } from './BossAppendixEditor';
 import { EncounterAppendixEditor } from './EncounterAppendixEditor';
+import { ItemAppendixEditor } from './ItemAppendixEditor';
 import { ScenarioContentEditor } from './ScenarioContentEditor';
 
 type Props = EditFormViewModel & {
@@ -55,6 +56,7 @@ const EditForm: React.FC<Props> = ({
     content = '',
     encounterTable,
     bosses = [],
+    items = [],
     creatorName = '',
     password = '',
     isPublish = false,
@@ -152,6 +154,14 @@ const EditForm: React.FC<Props> = ({
         <BossAppendixEditor
           bosses={bosses}
           onChange={(value) => setScenario({ ...scenario, bosses: value })}
+        />
+      </Box>
+
+      {/* アイテム付録：付録のため本文の後に配置 */}
+      <Box sx={{ my: 3 }}>
+        <ItemAppendixEditor
+          items={items}
+          onChange={(value) => setScenario({ ...scenario, items: value })}
         />
       </Box>
 

@@ -26,6 +26,7 @@ const initialState: ScenarioFormData = {
   phases: [],
   encounterTable: { mode: 'default', tables: [], enemies: [] },
   bosses: [],
+  items: [],
   creatorName: '',
   isPublish: false,
   hideFromList: false,

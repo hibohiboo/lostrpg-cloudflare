@@ -114,6 +114,15 @@ export const scenarioBossAppendixSchema = z.object({
 });
 export type ScenarioBossAppendix = z.infer<typeof scenarioBossAppendixSchema>;
 
+// 本文中に登場させたアイテムの付録（参照用一覧）。
+// アイテム選択（ルールブック標準アイテム＋サプリメント全て）から追加した場合は名前が
+// 自動入力されるが、カタログに無いアイテムも想定し、名前は自由に編集できる。
+export const scenarioItemAppendixSchema = z.object({
+  // 表示用の名前（自由記述。アイテム選択時は自動入力されるが後から編集可能）
+  itemName: z.string().optional(),
+});
+export type ScenarioItemAppendix = z.infer<typeof scenarioItemAppendixSchema>;
+
 // 基本フィールドスキーマ
 const baseScenarioFields = {
   name: z.string().max(50, 'name は50文字以内で入力してください'),
@@ -133,6 +142,8 @@ const baseScenarioFields = {
     .default({ mode: 'default', tables: [], enemies: [] }),
   // ヌシ付録（本文に登場させたヌシの参照用一覧）
   bosses: z.array(scenarioBossAppendixSchema).optional().default([]),
+  // アイテム付録（本文に登場させたアイテムの参照用一覧）
+  items: z.array(scenarioItemAppendixSchema).optional().default([]),
   creatorName: z.string().optional(), // 作者名
   isPublish: z.boolean().optional().default(false), // 公開フラグ
   password: z.string().nullable().optional(),

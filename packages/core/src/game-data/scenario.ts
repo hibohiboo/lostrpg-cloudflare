@@ -38,10 +38,30 @@ export const scenarioNotationTable: {
   columns: ['やりたいこと', '記法', 'アイコン'],
   rows: [
     { purpose: 'シナリオタイトル', notation: '#', label: '' },
-    { purpose: '推奨するプレイヤー人数', notation: '## 〇人 {.players}', icon: 'players', label: '推奨人数：〇人' },
-    { purpose: 'シナリオの所要時間目安', notation: '## 〇時間 {.time}', icon: 'time', label: 'プレイ時間：〇時間' },
-    { purpose: 'リミット', notation: '## 〇 {.limit}', icon: 'limit', label: 'リミット：〇' },
-    { purpose: '注意書き', notation: '## 注意 {.caution}', icon: 'caution', label: '注意' },
+    {
+      purpose: '推奨するプレイヤー人数',
+      notation: '## 〇人 {.players}',
+      icon: 'players',
+      label: '推奨人数：〇人',
+    },
+    {
+      purpose: 'シナリオの所要時間目安',
+      notation: '## 〇時間 {.time}',
+      icon: 'time',
+      label: 'プレイ時間：〇時間',
+    },
+    {
+      purpose: 'リミット',
+      notation: '## 〇 {.limit}',
+      icon: 'limit',
+      label: 'リミット：〇',
+    },
+    {
+      purpose: '注意書き',
+      notation: '## 注意 {.caution}',
+      icon: 'caution',
+      label: '注意',
+    },
     {
       purpose: 'ランダムエンカウント表',
       notation: '## ランダムエンカウント表 {.encounterTable}',
@@ -56,28 +76,68 @@ export const scenarioNotationTable: {
       icon: 'checkpoint',
       label: 'チェックポイント',
     },
-    { purpose: '道', notation: '### 道 {.type-path}', icon: 'path', label: '道' },
+    {
+      purpose: '道',
+      notation: '### 道 {.type-path}',
+      icon: 'path',
+      label: '道',
+    },
     { purpose: '描写', notation: '#### 描写', icon: 'view', label: '描写' },
-    { purpose: '戦闘', notation: '#### 戦闘 {.battle}', icon: 'battle', label: '戦闘' },
-    { purpose: '障害', notation: '#### 障害 {.lock}', icon: 'lock', label: '障害' },
-    { purpose: '探索オブジェクト', notation: '#### 探索 {.search}', icon: 'search', label: '探索' },
+    {
+      purpose: '戦闘',
+      notation: '#### 戦闘 {.battle}',
+      icon: 'battle',
+      label: '戦闘',
+    },
+    {
+      purpose: '障害',
+      notation: '#### 障害 {.lock}',
+      icon: 'lock',
+      label: '障害',
+    },
+    {
+      purpose: '探索オブジェクト',
+      notation: '#### 探索 {.search}',
+      icon: 'search',
+      label: '探索',
+    },
     {
       purpose: 'リミット増加オブジェクト',
       notation: '#### オブジェクト {.limitUp}',
       icon: 'limitUp',
       label: 'オブジェクト',
     },
-    { purpose: 'ヌシ', notation: '#### ヌシ {.boss}', icon: 'boss', label: 'ヌシ' },
+    {
+      purpose: 'ヌシ',
+      notation: '#### ヌシ {.boss}',
+      icon: 'boss',
+      label: 'ヌシ',
+    },
     {
       purpose: '判定',
       notation: '##### 《判定/分野 x》 {.roll}',
       icon: 'roll',
       label: '《判定/分野 x》',
     },
-    { purpose: 'アイテム', notation: '##### アイテム {.item}', icon: 'item', label: 'アイテム' },
-    { purpose: '報酬', notation: '##### 報酬 {.prize}', icon: 'prize', label: '報酬' },
+    {
+      purpose: 'アイテム',
+      notation: '##### アイテム {.item}',
+      icon: 'item',
+      label: 'アイテム',
+    },
+    {
+      purpose: '報酬',
+      notation: '##### 報酬 {.prize}',
+      icon: 'prize',
+      label: '報酬',
+    },
     { purpose: '道', notation: '##### 道 {.path}', icon: 'path', label: '道' },
-    { purpose: '表', notation: '##### 表 {.table}', icon: 'table', label: '表' },
+    {
+      purpose: '表',
+      notation: '##### 表 {.table}',
+      icon: 'table',
+      label: '表',
+    },
     { purpose: 'リンク', notation: '[文字](URL)', label: '文字（リンク）' },
     {
       purpose: 'シーンID:X',
@@ -94,18 +154,26 @@ export const scenarioNotationTable: {
       notation: '### シーン {.next-X1-X2}',
       label: 'X1,X2は[.-]以外の文字ならなんでもOK。チャート用。',
     },
-    { purpose: '次のシーンなし', notation: '### シーン {.next-none}', label: '行き止まり。チャート用。' },
+    {
+      purpose: '次のシーンなし',
+      notation: '### シーン {.next-none}',
+      label: '行き止まり。チャート用。',
+    },
   ],
 };
 
 // アイコン（type）→ 表示用の日本語名。詳細画面でシーン／イベント／項目の種類を
 // 人間が読める名前で表示するために scenarioNotationTable から導出する
 // （同じアイコンキーが複数行にまたがる場合は最初に出てきた purpose を採用する）。
-export const scenarioTypeLabels: Partial<Record<ScenarioNotationIconKey, string>> =
-  scenarioNotationTable.rows.reduce<Partial<Record<ScenarioNotationIconKey, string>>>(
-    (acc, row) => (row.icon && !acc[row.icon] ? { ...acc, [row.icon]: row.purpose } : acc),
-    {},
-  );
+export const scenarioTypeLabels: Partial<
+  Record<ScenarioNotationIconKey, string>
+> = scenarioNotationTable.rows.reduce<
+  Partial<Record<ScenarioNotationIconKey, string>>
+>(
+  (acc, row) =>
+    row.icon && !acc[row.icon] ? { ...acc, [row.icon]: row.purpose } : acc,
+  {},
+);
 
 export interface ScenarioSample {
   title: string;
@@ -345,8 +413,6 @@ PC が＜フィールド＞への挑戦に名乗りをあげたら、このフ�
 
 #### ゴウカギュウ {.boss}
 
-[→ ゴウカギュウ](https://create-now.now.sh/lostrpg/public/ja/boss?id=ktrzE0GfeZ0wpDLGjYPj)
-
 ## 結果フェイズ
 
 ### 戦闘に勝利した場合
@@ -535,7 +601,6 @@ PC が＜フィールド＞への挑戦に名乗りをあげたら、このフ�
 
 #### アラシノドラゴン {.boss}
 
-[→ アラシノドラゴン](https://create-now.now.sh/lostrpg/public/ja/boss?id=e0nkMDwnDrhkcauM19aO)
 
 ## 結果フェイズ
 
