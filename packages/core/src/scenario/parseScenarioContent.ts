@@ -1,3 +1,13 @@
+import {
+  buildTableFromRows,
+  getAttributes,
+  parseHeadingLine,
+  tokenizeBlocks,
+  type Block,
+  type HeadingBlock,
+  type ParagraphBlock,
+  type TableBlock,
+} from './markdownBlocks';
 import type {
   ScenarioEvent,
   ScenarioEventItem,
@@ -23,137 +33,7 @@ import type {
 // パーサ本体は state を書き換えず、各ブロックごとに新しい状態を返す純粋関数として実装している
 // （no-param-reassign を避けつつ、処理の流れを追いやすくするため）。
 
-type HeadingBlock = { type: 'heading'; depth: number; text: string };
-type ParagraphBlock = { type: 'paragraph'; lines: string[] };
-type TableBlock = { type: 'table'; rows: string[][] };
-type Block = HeadingBlock | ParagraphBlock | TableBlock;
-
 const LINK_LINE_RE = /^\[([^[\]]*)]\(([^()]*)\)$/;
-const SEPARATOR_CELL_RE = /^:?-+:?$/;
-
-const isBlank = (line: string) => line.trim() === '';
-
-// `# 見出し` 〜 `###### 見出し` を解析する（正規表現の破局的バックトラックを避けるため文字走査で実装）
-const parseHeadingLine = (rawLine: string): HeadingBlock | null => {
-  const line = rawLine.trimEnd();
-  let depth = 0;
-  while (depth < line.length && depth < 6 && line[depth] === '#') {
-    depth += 1;
-  }
-  if (depth === 0) return null;
-  const afterHashes = line[depth];
-  if (afterHashes !== ' ' && afterHashes !== '\t') return null;
-  return { type: 'heading', depth, text: line.slice(depth).trim() };
-};
-
-const isTableRowLine = (line: string): boolean => {
-  const trimmed = line.trim();
-  return trimmed.length >= 2 && trimmed.startsWith('|') && trimmed.endsWith('|');
-};
-
-const splitTableRow = (line: string): string[] =>
-  line
-    .trim()
-    .slice(1, -1)
-    .split('|')
-    .map((cell) => cell.trim());
-
-const isSeparatorRow = (cells: string[]): boolean =>
-  cells.length > 0 && cells.every((cell) => SEPARATOR_CELL_RE.test(cell));
-
-interface BlockResult {
-  block: Block;
-  nextIndex: number;
-}
-
-const readTableBlock = (lines: string[], start: number): BlockResult => {
-  const rows: string[][] = [];
-  let i = start;
-  while (i < lines.length && isTableRowLine(lines[i])) {
-    const cells = splitTableRow(lines[i]);
-    if (!isSeparatorRow(cells)) rows.push(cells);
-    i += 1;
-  }
-  return { block: { type: 'table', rows }, nextIndex: i };
-};
-
-const readParagraphBlock = (lines: string[], start: number): BlockResult => {
-  const collected: string[] = [];
-  let i = start;
-  while (
-    i < lines.length &&
-    !isBlank(lines[i]) &&
-    !parseHeadingLine(lines[i]) &&
-    !isTableRowLine(lines[i])
-  ) {
-    collected.push(lines[i].trim());
-    i += 1;
-  }
-  return { block: { type: 'paragraph', lines: collected }, nextIndex: i };
-};
-
-// content を見出し／表／段落のブロック列に分解する
-const tokenizeBlocks = (content: string): Block[] => {
-  const rawLines = content.replace(/\r\n/g, '\n').split('\n');
-  const blocks: Block[] = [];
-  let i = 0;
-
-  while (i < rawLines.length) {
-    const line = rawLines[i];
-    const heading = parseHeadingLine(line);
-
-    if (isBlank(line)) {
-      i += 1;
-    } else if (heading) {
-      blocks.push(heading);
-      i += 1;
-    } else if (isTableRowLine(line)) {
-      const { block, nextIndex } = readTableBlock(rawLines, i);
-      blocks.push(block);
-      i = nextIndex;
-    } else {
-      const { block, nextIndex } = readParagraphBlock(rawLines, i);
-      blocks.push(block);
-      i = nextIndex;
-    }
-  }
-
-  return blocks;
-};
-
-// `値 {.attr1.attr2}` を [値, 属性1, 属性2, ...] に分解する。属性が無ければ [値] を返す
-// （正規表現ではなく文字列探索で実装し、破局的バックトラックの可能性を排除している）
-const getAttributes = (text: string): [string | null, ...string[]] => {
-  const trimmed = text.trim();
-  if (!trimmed) return [null];
-
-  const braceStart = trimmed.indexOf('{');
-  const hasClosingBrace = trimmed.endsWith('}');
-  if (braceStart === -1 || !hasClosingBrace || braceStart >= trimmed.length - 1) {
-    return [trimmed];
-  }
-
-  const inner = trimmed.slice(braceStart + 1, -1).trim();
-  if (!inner.startsWith('.')) return [trimmed];
-
-  const val = trimmed.slice(0, braceStart).trim();
-  const attributes = inner
-    .slice(1)
-    .split('.')
-    .map((a) => a.trim())
-    .filter((a) => a !== '');
-  return [val || null, ...attributes];
-};
-
-const getTable = (rows: string[][], title: string): ScenarioTable | null => {
-  if (rows.length < 2) return null;
-  const [columns, ...bodyRows] = rows;
-  return {
-    title: title || undefined,
-    columns,
-    rows: bodyRows.map((cells) => ({ cells })),
-  };
-};
 
 interface ParseState {
   phases: ScenarioPhase[];
@@ -324,8 +204,8 @@ const handleParagraph = (state: ParseState, block: ParagraphBlock): ParseState =
 };
 
 const handleTable = (state: ParseState, block: TableBlock): ParseState => {
-  const table = getTable(block.rows, state.tableTitle);
-  const tables = table ? [...state.tables, table] : state.tables;
+  const parsed = buildTableFromRows(block.rows, state.tableTitle);
+  const tables = parsed ? [...state.tables, parsed] : state.tables;
   return { ...state, tables, tableTitle: '' };
 };
 
@@ -370,7 +250,6 @@ export interface SplitScenarioIntroResult {
 
 // content の先頭から「最初の実フェイズ見出し」より前の部分
 // （タイトル・概要文・players/time/limit/caution 等のメタ見出し）を intro として切り出す。
-// 構造化編集タブでフェイズ以降を書き換える際、この部分をそのまま温存するために使用する。
 export const splitScenarioIntro = (
   content: string | undefined | null,
 ): SplitScenarioIntroResult => {

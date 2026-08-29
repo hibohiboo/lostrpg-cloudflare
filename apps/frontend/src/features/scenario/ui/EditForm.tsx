@@ -1,3 +1,4 @@
+import { parseScenarioContent } from '@lostrpg/core/scenario/parseScenarioContent';
 import SaveIcon from '@mui/icons-material/Save';
 import {
   Box,
@@ -50,10 +51,6 @@ const EditForm: React.FC<Props> = ({
   const {
     name,
     imageUrl,
-    players = '',
-    time = '',
-    limit = '',
-    caution = '',
     summary = '',
     content = '',
     encounterTable,
@@ -64,6 +61,13 @@ const EditForm: React.FC<Props> = ({
   } = scenario;
   const nameError = !name && isValidError;
   const nameHelperText = nameError ? 'シナリオ名は必須です' : '';
+
+  // 想定人数・プレイ時間・制限値・注意事項は本文（Markdown）側の特殊見出しで管理するため、
+  // 本文が変わるたびにここから再抽出してscenarioへ反映する
+  const handleContentChange = (next: string) => {
+    const { players, time, limit, caution } = parseScenarioContent(next);
+    setScenario({ ...scenario, content: next, players, time, limit, caution });
+  };
 
   return (
     <Box>
@@ -108,46 +112,6 @@ const EditForm: React.FC<Props> = ({
         onImageChange={handleImageChange}
       />
 
-      {/* 想定人数・プレイ時間・制限値 */}
-      <Box sx={{ display: 'flex', gap: 2, my: 2, flexWrap: 'wrap' }}>
-        <TextField
-          label="想定人数"
-          value={players}
-          onChange={(e) =>
-            setScenario({ ...scenario, players: e.target.value })
-          }
-          sx={{ flex: 1, minWidth: 160 }}
-        />
-        <TextField
-          label="プレイ時間"
-          value={time}
-          onChange={(e) => setScenario({ ...scenario, time: e.target.value })}
-          sx={{ flex: 1, minWidth: 160 }}
-        />
-        <TextField
-          label="制限値"
-          value={limit}
-          onChange={(e) =>
-            setScenario({ ...scenario, limit: e.target.value })
-          }
-          sx={{ flex: 1, minWidth: 160 }}
-        />
-      </Box>
-
-      {/* 注意事項 */}
-      <Box sx={{ my: 2 }}>
-        <TextField
-          fullWidth
-          multiline
-          rows={2}
-          label="注意事項"
-          value={caution}
-          onChange={(e) =>
-            setScenario({ ...scenario, caution: e.target.value })
-          }
-        />
-      </Box>
-
       {/* 概要 */}
       <Box sx={{ my: 2 }}>
         <TextField
@@ -162,12 +126,10 @@ const EditForm: React.FC<Props> = ({
         />
       </Box>
 
-      {/* 本文（Markdown編集 / 構造編集の切り替え） */}
+      {/* 本文（Markdown編集 / 構造編集の切り替え）
+          想定人数・プレイ時間・制限値・注意事項もここで編集します */}
       <Box sx={{ my: 2 }}>
-        <ScenarioContentEditor
-          content={content}
-          onContentChange={(next) => setScenario({ ...scenario, content: next })}
-        />
+        <ScenarioContentEditor content={content} onContentChange={handleContentChange} />
       </Box>
 
       {/* 公開設定 */}

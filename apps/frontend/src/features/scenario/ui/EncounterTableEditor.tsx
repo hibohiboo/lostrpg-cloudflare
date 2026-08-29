@@ -8,11 +8,14 @@ import {
   Paper,
   Radio,
   RadioGroup,
+  Tab,
+  Tabs,
   TextField,
   Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
 import { EnemySelectionModal } from '@lostrpg/frontend/entities/enemy';
+import { EncounterTablesMarkdownEditor } from './EncounterTablesMarkdownEditor';
 import type {
   ScenarioEncounterRow,
   ScenarioEncounterSettings,
@@ -40,6 +43,7 @@ export const EncounterTableEditor: React.FC<Props> = ({
   onChange,
 }) => {
   const [isEnemyModalOpen, setEnemyModalOpen] = useState(false);
+  const [tablesTab, setTablesTab] = useState(0);
   const { mode, tables, enemies } = encounterTable;
 
   const handleModeChange = (nextMode: 'default' | 'custom') => {
@@ -115,45 +119,65 @@ export const EncounterTableEditor: React.FC<Props> = ({
 
       {mode === 'custom' && (
         <Box>
-          {tables.map((table) => (
-            <Paper key={table.id} variant="outlined" sx={{ p: 2, my: 2 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                <TextField
-                  label="表の名前"
-                  size="small"
-                  value={table.name}
-                  onChange={(e) => handleRenameTable(table.id, e.target.value)}
-                />
-                <IconButton
-                  aria-label="表を削除"
-                  size="small"
-                  onClick={() => handleRemoveTable(table.id)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Box>
+          <Tabs
+            value={tablesTab}
+            onChange={(_, value) => setTablesTab(value)}
+            sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}
+          >
+            <Tab label="構造編集" />
+            <Tab label="Markdown編集" />
+          </Tabs>
 
-              {table.rows.map((row) => (
-                <Box
-                  key={row.roll}
-                  sx={{ display: 'flex', alignItems: 'center', gap: 1, my: 1 }}
-                >
-                  <Typography sx={{ width: 24 }}>{row.roll}</Typography>
-                  <TextField
-                    size="small"
-                    fullWidth
-                    placeholder="例: オオカミ 1d6体 / 表B参照 / 何も起きない"
-                    value={row.text ?? ''}
-                    onChange={(e) => handleRowTextChange(table.id, row.roll, e.target.value)}
-                  />
-                </Box>
+          {tablesTab === 0 && (
+            <Box>
+              {tables.map((table) => (
+                <Paper key={table.id} variant="outlined" sx={{ p: 2, my: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+                    <TextField
+                      label="表の名前"
+                      size="small"
+                      value={table.name}
+                      onChange={(e) => handleRenameTable(table.id, e.target.value)}
+                    />
+                    <IconButton
+                      aria-label="表を削除"
+                      size="small"
+                      onClick={() => handleRemoveTable(table.id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Box>
+
+                  {table.rows.map((row) => (
+                    <Box
+                      key={row.roll}
+                      sx={{ display: 'flex', alignItems: 'center', gap: 1, my: 1 }}
+                    >
+                      <Typography sx={{ width: 24 }}>{row.roll}</Typography>
+                      <TextField
+                        size="small"
+                        fullWidth
+                        placeholder="例: オオカミ 1d6体 / 表B参照 / 何も起きない"
+                        value={row.text ?? ''}
+                        onChange={(e) => handleRowTextChange(table.id, row.roll, e.target.value)}
+                      />
+                    </Box>
+                  ))}
+                </Paper>
               ))}
-            </Paper>
-          ))}
 
-          <Button startIcon={<AddIcon />} onClick={handleAddTable}>
-            表を追加
-          </Button>
+              <Button startIcon={<AddIcon />} onClick={handleAddTable}>
+                表を追加
+              </Button>
+            </Box>
+          )}
+
+          {tablesTab === 1 && (
+            <EncounterTablesMarkdownEditor
+              tables={tables}
+              onChange={(next) => onChange({ ...encounterTable, tables: next })}
+            />
+          )}
         </Box>
       )}
 

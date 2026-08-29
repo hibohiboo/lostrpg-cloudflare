@@ -144,6 +144,41 @@ describe('POST /api/scenarios', () => {
       const getData = (await getRes.json()) as any;
       expect(getData.data.phases).toEqual([{ name: 'B', scenes: [] }]);
     });
+
+    it('contentのplayers/time/limit/caution見出しから値が抽出されること', async () => {
+      const md = [
+        '## 3人 {.players}',
+        '## 3時間 {.time}',
+        '## 4 {.limit}',
+        '## 時間は目安です {.caution}',
+        '## キャンプフェイズ',
+      ].join('\n');
+
+      const createRes = await create({ ...minimalData, content: md });
+      const createData = (await createRes.json()) as any;
+
+      const getRes = await get(createData.id);
+      const getData = (await getRes.json()) as any;
+
+      expect(getData.data.players).toBe('3人');
+      expect(getData.data.time).toBe('3時間');
+      expect(getData.data.limit).toBe('4');
+      expect(getData.data.caution).toBe('時間は目安です');
+    });
+
+    it('クライアントが送ったplayers等は無視され、contentから再生成されること', async () => {
+      const createRes = await create({
+        ...minimalData,
+        content: '## 3人 {.players}',
+        players: 'なりすまし',
+      });
+      const createData = (await createRes.json()) as any;
+
+      const getRes = await get(createData.id);
+      const getData = (await getRes.json()) as any;
+
+      expect(getData.data.players).toBe('3人');
+    });
   });
 
   describe('ランダムエンカウント表', () => {

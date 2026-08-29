@@ -4,6 +4,7 @@ import React from 'react';
 import { EventItemsEditor } from './EventItemsEditor';
 import { EventLinksEditor } from './EventLinksEditor';
 import { EventTablesEditor } from './EventTablesEditor';
+import { EventTypeSelect } from './EventTypeSelect';
 import type { ScenarioEvent } from '@lostrpg/frontend/entities/scenario';
 
 type Props = {
@@ -24,14 +25,9 @@ export const EventForm: React.FC<Props> = ({ event, onChange, onDelete }) => (
       onChange={(e) => onChange({ name: e.target.value })}
       sx={{ my: 2 }}
     />
-    <TextField
-      fullWidth
-      label="種類（type）"
-      placeholder="battle / lock / search / limitUp / boss など"
-      helperText="描写（通常の説明イベント）は空欄のままでOKです"
-      value={event.type === 'view' ? '' : event.type}
-      onChange={(e) => onChange({ type: e.target.value || 'view' })}
-      sx={{ my: 2 }}
+    <EventTypeSelect
+      value={event.type}
+      onChange={(type) => onChange({ type })}
     />
     <TextField
       fullWidth
