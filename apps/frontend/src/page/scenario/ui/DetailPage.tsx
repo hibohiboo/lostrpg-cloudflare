@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { Link, useParams } from 'react-router';
-import { ScenarioPhaseList } from '@lostrpg/frontend/entities/scenario';
+import { EncounterTableView, ScenarioPhaseList } from '@lostrpg/frontend/entities/scenario';
 import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 
 const DetailPage: React.FC = () => {
@@ -44,6 +44,12 @@ const DetailPage: React.FC = () => {
             </Typography>
           </Box>
         )}
+
+        {/* ランダムエンカウント表（探索フェイズの前に確認できるよう冒頭に配置） */}
+        <Box sx={{ my: 3 }}>
+          <InputLabel sx={{ mb: 1 }}>ランダムエンカウント表</InputLabel>
+          <EncounterTableView encounterTable={scenario.encounterTable} />
+        </Box>
 
         {/* 画像と概要 */}
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3 }}>

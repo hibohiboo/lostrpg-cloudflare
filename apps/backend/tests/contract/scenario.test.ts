@@ -146,6 +146,58 @@ describe('POST /api/scenarios', () => {
     });
   });
 
+  describe('ランダムエンカウント表', () => {
+    it('未指定の場合デフォルト表になること', async () => {
+      const createRes = await create(minimalData);
+      const createData = (await createRes.json()) as any;
+
+      const getRes = await get(createData.id);
+      const getData = (await getRes.json()) as any;
+
+      expect(getData.data.encounterTable).toEqual({ mode: 'default', tables: [] });
+    });
+
+    it('カスタム表（エネミー参照・他の表への振り直し）を保存・取得できること', async () => {
+      const encounterTable = {
+        mode: 'custom',
+        tables: [
+          {
+            id: 'table-a',
+            name: '表A',
+            rows: [
+              { roll: 1, type: 'enemy', enemyId: 'enemy-1', enemyName: 'テストエネミー' },
+              { roll: 2, type: 'text', text: '何も起きない' },
+              { roll: 3, type: 'text', text: '' },
+              { roll: 4, type: 'text', text: '' },
+              { roll: 5, type: 'text', text: '' },
+              { roll: 6, type: 'table', targetTableId: 'table-b' },
+            ],
+          },
+          {
+            id: 'table-b',
+            name: '表B',
+            rows: [
+              { roll: 1, type: 'text', text: '強敵に遭遇した' },
+              { roll: 2, type: 'text', text: '' },
+              { roll: 3, type: 'text', text: '' },
+              { roll: 4, type: 'text', text: '' },
+              { roll: 5, type: 'text', text: '' },
+              { roll: 6, type: 'text', text: '' },
+            ],
+          },
+        ],
+      };
+
+      const createRes = await create({ ...minimalData, encounterTable });
+      const createData = (await createRes.json()) as any;
+
+      const getRes = await get(createData.id);
+      const getData = (await getRes.json()) as any;
+
+      expect(getData.data.encounterTable).toEqual(encounterTable);
+    });
+  });
+
   describe('パスワード', () => {
     it('パスワードありで作成できること', async () => {
       const dataWithPassword = { ...minimalData, password: 'secret123' };

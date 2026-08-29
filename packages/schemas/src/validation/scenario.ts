@@ -56,6 +56,40 @@ export const scenarioPhaseSchema = z.object({
 });
 export type ScenarioPhase = z.infer<typeof scenarioPhaseSchema>;
 
+// ランダムエンカウント表
+// 1マスの内容は「エネミー（エネミー表から選択）」「他の表への振り直し（例: 6は表Bへ）」
+// 「自由記述（アイテム発見・何も起きない等）」のいずれか
+const scenarioEncounterRowTypeEnum = z.enum(['enemy', 'table', 'text']);
+export type ScenarioEncounterRowType = z.infer<typeof scenarioEncounterRowTypeEnum>;
+
+export const scenarioEncounterRowSchema = z.object({
+  roll: z.number().int().min(1).max(6),
+  type: scenarioEncounterRowTypeEnum.default('text'),
+  // type: 'enemy' のとき使用（エネミー表のIDと、表示用に名前もキャッシュしておく）
+  enemyId: z.string().optional(),
+  enemyName: z.string().optional(),
+  // type: 'table' のとき使用（振り直し先の表ID）
+  targetTableId: z.string().optional(),
+  // type: 'text' のとき使用
+  text: z.string().optional(),
+});
+export type ScenarioEncounterRow = z.infer<typeof scenarioEncounterRowSchema>;
+
+export const scenarioEncounterTableSchema = z.object({
+  id: z.string(),
+  name: z.string(), // 表A・表B 等
+  rows: z.array(scenarioEncounterRowSchema),
+});
+export type ScenarioEncounterTable = z.infer<typeof scenarioEncounterTableSchema>;
+
+// mode: 'default' はルールブック標準のランダムエンカウント表を使用（追加データ不要）
+// mode: 'custom' は tables（先頭が起点の表）を使用する
+export const scenarioEncounterSettingsSchema = z.object({
+  mode: z.enum(['default', 'custom']).default('default'),
+  tables: z.array(scenarioEncounterTableSchema).default([]),
+});
+export type ScenarioEncounterSettings = z.infer<typeof scenarioEncounterSettingsSchema>;
+
 // 基本フィールドスキーマ
 const baseScenarioFields = {
   name: z.string().max(50, 'name は50文字以内で入力してください'),
@@ -69,6 +103,10 @@ const baseScenarioFields = {
   // 本文（Markdown）から構造化されたフェイズ／シーン／イベント。
   // クライアントからの入力値は無視し、サーバー側で content から再生成する。
   phases: z.array(scenarioPhaseSchema).optional().default([]),
+  // ランダムエンカウント表（デフォルト表 or カスタム表）
+  encounterTable: scenarioEncounterSettingsSchema
+    .optional()
+    .default({ mode: 'default', tables: [] }),
   creatorName: z.string().optional(), // 作者名
   isPublish: z.boolean().optional().default(false), // 公開フラグ
   password: z.string().nullable().optional(),

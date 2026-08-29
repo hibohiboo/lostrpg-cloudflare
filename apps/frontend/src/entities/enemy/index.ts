@@ -1,5 +1,6 @@
 export * from './api/api';
 export * from './actions/crud';
+export { EnemySelectionModal } from './ui/molecules/EnemySelectionModal';
 export type {
   EnemyAbility,
   EnemyType,

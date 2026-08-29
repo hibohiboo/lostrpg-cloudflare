@@ -13,6 +13,7 @@ import React, { useMemo, useState } from 'react';
 import { ScenarioPhaseList } from '@lostrpg/frontend/entities/scenario';
 import { ImageUploadField } from '@lostrpg/frontend/shared/ui';
 import { EditFormViewModel } from '../hooks/useEditFormHooks';
+import { EncounterTableEditor } from './EncounterTableEditor';
 
 type Props = EditFormViewModel & {
   handleSave: () => void;
@@ -56,6 +57,7 @@ const EditForm: React.FC<Props> = ({
     caution = '',
     summary = '',
     content = '',
+    encounterTable,
     creatorName = '',
     password = '',
     isPublish = false,
@@ -92,6 +94,15 @@ const EditForm: React.FC<Props> = ({
           onChange={(e) =>
             setScenario({ ...scenario, creatorName: e.target.value })
           }
+        />
+      </Box>
+
+      {/* ランダムエンカウント表（探索フェイズの冒頭で確認できるよう、シナリオ本文より前に配置） */}
+      <Box sx={{ my: 3 }}>
+        <InputLabel sx={{ mb: 1 }}>ランダムエンカウント表</InputLabel>
+        <EncounterTableEditor
+          encounterTable={encounterTable}
+          onChange={(value) => setScenario({ ...scenario, encounterTable: value })}
         />
       </Box>
 

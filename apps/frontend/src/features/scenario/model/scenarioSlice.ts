@@ -13,6 +13,7 @@ const initialState: ScenarioFormData = {
   summary: '',
   content: '',
   phases: [],
+  encounterTable: { mode: 'default', tables: [] },
   creatorName: '',
   isPublish: false,
   hideFromList: false,
