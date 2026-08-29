@@ -57,20 +57,10 @@ export const scenarioPhaseSchema = z.object({
 export type ScenarioPhase = z.infer<typeof scenarioPhaseSchema>;
 
 // ランダムエンカウント表
-// 1マスの内容は「エネミー（エネミー表から選択）」「他の表への振り直し（例: 6は表Bへ）」
-// 「自由記述（アイテム発見・何も起きない等）」のいずれか
-const scenarioEncounterRowTypeEnum = z.enum(['enemy', 'table', 'text']);
-export type ScenarioEncounterRowType = z.infer<typeof scenarioEncounterRowTypeEnum>;
-
+// 1マスは自由記述（例: 「オオカミ 1d6体」「表B参照」「何も起きない」等）。
+// 出現数（1d6等）や他の表への振り直しも、表記自体を自由記述の中に書いてもらう。
 export const scenarioEncounterRowSchema = z.object({
   roll: z.number().int().min(1).max(6),
-  type: scenarioEncounterRowTypeEnum.default('text'),
-  // type: 'enemy' のとき使用（エネミー表のIDと、表示用に名前もキャッシュしておく）
-  enemyId: z.string().optional(),
-  enemyName: z.string().optional(),
-  // type: 'table' のとき使用（振り直し先の表ID）
-  targetTableId: z.string().optional(),
-  // type: 'text' のとき使用
   text: z.string().optional(),
 });
 export type ScenarioEncounterRow = z.infer<typeof scenarioEncounterRowSchema>;
@@ -82,11 +72,24 @@ export const scenarioEncounterTableSchema = z.object({
 });
 export type ScenarioEncounterTable = z.infer<typeof scenarioEncounterTableSchema>;
 
+// 表中に登場させたエネミーの付録（参照用一覧）。
+// エネミー表から選び、表記（出現数など）は自由記述で補足する。
+export const scenarioEncounterEnemySchema = z.object({
+  enemyId: z.string(),
+  // 表示用に名前もキャッシュしておく（エネミーが削除された場合のフォールバック表示にも使う）
+  enemyName: z.string().optional(),
+  // 出現数などの補足（例: 「1d6体」「表Aの1で登場」等の自由記述）
+  note: z.string().optional(),
+});
+export type ScenarioEncounterEnemy = z.infer<typeof scenarioEncounterEnemySchema>;
+
 // mode: 'default' はルールブック標準のランダムエンカウント表を使用（追加データ不要）
 // mode: 'custom' は tables（先頭が起点の表）を使用する
 export const scenarioEncounterSettingsSchema = z.object({
   mode: z.enum(['default', 'custom']).default('default'),
   tables: z.array(scenarioEncounterTableSchema).default([]),
+  // 付録のエネミー一覧（表の自由記述に登場させたエネミーの参照用）
+  enemies: z.array(scenarioEncounterEnemySchema).default([]),
 });
 export type ScenarioEncounterSettings = z.infer<typeof scenarioEncounterSettingsSchema>;
 
@@ -106,7 +109,7 @@ const baseScenarioFields = {
   // ランダムエンカウント表（デフォルト表 or カスタム表）
   encounterTable: scenarioEncounterSettingsSchema
     .optional()
-    .default({ mode: 'default', tables: [] }),
+    .default({ mode: 'default', tables: [], enemies: [] }),
   creatorName: z.string().optional(), // 作者名
   isPublish: z.boolean().optional().default(false), // 公開フラグ
   password: z.string().nullable().optional(),

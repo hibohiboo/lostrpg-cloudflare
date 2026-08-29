@@ -154,10 +154,14 @@ describe('POST /api/scenarios', () => {
       const getRes = await get(createData.id);
       const getData = (await getRes.json()) as any;
 
-      expect(getData.data.encounterTable).toEqual({ mode: 'default', tables: [] });
+      expect(getData.data.encounterTable).toEqual({
+        mode: 'default',
+        tables: [],
+        enemies: [],
+      });
     });
 
-    it('カスタム表（エネミー参照・他の表への振り直し）を保存・取得できること', async () => {
+    it('カスタム表（自由記述・エネミー付録）を保存・取得できること', async () => {
       const encounterTable = {
         mode: 'custom',
         tables: [
@@ -165,27 +169,28 @@ describe('POST /api/scenarios', () => {
             id: 'table-a',
             name: '表A',
             rows: [
-              { roll: 1, type: 'enemy', enemyId: 'enemy-1', enemyName: 'テストエネミー' },
-              { roll: 2, type: 'text', text: '何も起きない' },
-              { roll: 3, type: 'text', text: '' },
-              { roll: 4, type: 'text', text: '' },
-              { roll: 5, type: 'text', text: '' },
-              { roll: 6, type: 'table', targetTableId: 'table-b' },
+              { roll: 1, text: 'オオカミ 1d6体' },
+              { roll: 2, text: '何も起きない' },
+              { roll: 3, text: '' },
+              { roll: 4, text: '' },
+              { roll: 5, text: '' },
+              { roll: 6, text: '表B参照' },
             ],
           },
           {
             id: 'table-b',
             name: '表B',
             rows: [
-              { roll: 1, type: 'text', text: '強敵に遭遇した' },
-              { roll: 2, type: 'text', text: '' },
-              { roll: 3, type: 'text', text: '' },
-              { roll: 4, type: 'text', text: '' },
-              { roll: 5, type: 'text', text: '' },
-              { roll: 6, type: 'text', text: '' },
+              { roll: 1, text: '強敵に遭遇した' },
+              { roll: 2, text: '' },
+              { roll: 3, text: '' },
+              { roll: 4, text: '' },
+              { roll: 5, text: '' },
+              { roll: 6, text: '' },
             ],
           },
         ],
+        enemies: [{ enemyId: 'enemy-1', enemyName: 'オオカミ', note: '表Aの1で1d6体登場' }],
       };
 
       const createRes = await create({ ...minimalData, encounterTable });

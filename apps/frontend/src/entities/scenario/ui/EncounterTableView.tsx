@@ -1,6 +1,5 @@
 import {
   Box,
-  Chip,
   Link as MuiLink,
   Paper,
   Table,
@@ -11,42 +10,9 @@ import {
   Typography,
 } from '@mui/material';
 import React from 'react';
-import type {
-  ScenarioEncounterRow,
-  ScenarioEncounterSettings,
-  ScenarioEncounterTable,
-} from '../model/scenario';
+import type { ScenarioEncounterSettings, ScenarioEncounterTable } from '../model/scenario';
 
-const describeRow = (row: ScenarioEncounterRow, tables: ScenarioEncounterTable[]) => {
-  if (row.type === 'enemy') {
-    return row.enemyId ? (
-      <MuiLink href={`/enemy/${row.enemyId}`} underline="hover">
-        {row.enemyName || 'エネミー'}
-      </MuiLink>
-    ) : (
-      <Typography variant="body2" color="text.secondary">
-        未設定
-      </Typography>
-    );
-  }
-  if (row.type === 'table') {
-    const target = tables.find((table) => table.id === row.targetTableId);
-    return (
-      <Chip
-        label={`→ ${target?.name ?? '未設定'}`}
-        size="small"
-        color="secondary"
-        variant="outlined"
-      />
-    );
-  }
-  return <Typography variant="body2">{row.text || '－'}</Typography>;
-};
-
-const EncounterTableCard: React.FC<{
-  table: ScenarioEncounterTable;
-  tables: ScenarioEncounterTable[];
-}> = ({ table, tables }) => (
+const EncounterTableCard: React.FC<{ table: ScenarioEncounterTable }> = ({ table }) => (
   <Box sx={{ my: 2 }}>
     <Typography variant="subtitle1" gutterBottom>
       {table.name}
@@ -57,7 +23,7 @@ const EncounterTableCard: React.FC<{
           {table.rows.map((row) => (
             <TableRow key={row.roll}>
               <TableCell sx={{ width: 48 }}>{row.roll}</TableCell>
-              <TableCell>{describeRow(row, tables)}</TableCell>
+              <TableCell>{row.text || '－'}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -71,7 +37,7 @@ type Props = {
 };
 
 export const EncounterTableView: React.FC<Props> = ({ encounterTable }) => {
-  const { mode, tables } = encounterTable;
+  const { mode, tables, enemies } = encounterTable;
 
   if (mode === 'default') {
     return (
@@ -81,19 +47,39 @@ export const EncounterTableView: React.FC<Props> = ({ encounterTable }) => {
     );
   }
 
-  if (tables.length === 0) {
-    return (
-      <Typography variant="body2" color="text.secondary">
-        カスタム表が設定されていません
-      </Typography>
-    );
-  }
-
   return (
     <Box>
-      {tables.map((table) => (
-        <EncounterTableCard key={table.id} table={table} tables={tables} />
-      ))}
+      {tables.length === 0 ? (
+        <Typography variant="body2" color="text.secondary">
+          カスタム表が設定されていません
+        </Typography>
+      ) : (
+        tables.map((table) => <EncounterTableCard key={table.id} table={table} />)
+      )}
+
+      {enemies.length > 0 && (
+        <Box sx={{ mt: 2 }}>
+          <Typography variant="subtitle2" gutterBottom>
+            エネミー付録
+          </Typography>
+          <TableContainer component={Paper} variant="outlined">
+            <Table size="small">
+              <TableBody>
+                {enemies.map((enemy, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      <MuiLink href={`/enemy/${enemy.enemyId}`} underline="hover">
+                        {enemy.enemyName || 'エネミー'}
+                      </MuiLink>
+                    </TableCell>
+                    <TableCell>{enemy.note || ''}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      )}
     </Box>
   );
 };

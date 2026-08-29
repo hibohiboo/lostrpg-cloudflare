@@ -5,11 +5,9 @@ import {
   Button,
   FormControlLabel,
   IconButton,
-  MenuItem,
   Paper,
   Radio,
   RadioGroup,
-  Select,
   TextField,
   Typography,
 } from '@mui/material';
@@ -17,7 +15,6 @@ import React, { useState } from 'react';
 import { EnemySelectionModal } from '@lostrpg/frontend/entities/enemy';
 import type {
   ScenarioEncounterRow,
-  ScenarioEncounterRowType,
   ScenarioEncounterSettings,
   ScenarioEncounterTable,
 } from '@lostrpg/frontend/entities/scenario';
@@ -25,7 +22,7 @@ import type {
 const ROLLS = [1, 2, 3, 4, 5, 6] as const;
 
 const createEmptyRows = (): ScenarioEncounterRow[] =>
-  ROLLS.map((roll) => ({ roll, type: 'text', text: '' }));
+  ROLLS.map((roll) => ({ roll, text: '' }));
 
 const createTable = (index: number): ScenarioEncounterTable => ({
   id: `table-${Date.now()}`,
@@ -33,34 +30,17 @@ const createTable = (index: number): ScenarioEncounterTable => ({
   rows: createEmptyRows(),
 });
 
-// 削除された表への「他の表」参照は自由記述にフォールバックする
-const clearReferencesToTable = (
-  tables: ScenarioEncounterTable[],
-  removedTableId: string,
-): ScenarioEncounterTable[] =>
-  tables.map((table) => ({
-    ...table,
-    rows: table.rows.map((row) =>
-      row.type === 'table' && row.targetTableId === removedTableId
-        ? { roll: row.roll, type: 'text', text: '' }
-        : row,
-    ),
-  }));
-
 type Props = {
   encounterTable: ScenarioEncounterSettings;
   onChange: (value: ScenarioEncounterSettings) => void;
 };
 
-type EditingEnemyTarget = { tableId: string; roll: number };
-
 export const EncounterTableEditor: React.FC<Props> = ({
   encounterTable,
   onChange,
 }) => {
-  const [editingEnemyTarget, setEditingEnemyTarget] =
-    useState<EditingEnemyTarget | null>(null);
-  const { mode, tables } = encounterTable;
+  const [isEnemyModalOpen, setEnemyModalOpen] = useState(false);
+  const { mode, tables, enemies } = encounterTable;
 
   const handleModeChange = (nextMode: 'default' | 'custom') => {
     onChange({ ...encounterTable, mode: nextMode });
@@ -71,8 +51,7 @@ export const EncounterTableEditor: React.FC<Props> = ({
   };
 
   const handleRemoveTable = (tableId: string) => {
-    const remaining = tables.filter((table) => table.id !== tableId);
-    onChange({ ...encounterTable, tables: clearReferencesToTable(remaining, tableId) });
+    onChange({ ...encounterTable, tables: tables.filter((table) => table.id !== tableId) });
   };
 
   const handleRenameTable = (tableId: string, name: string) => {
@@ -82,45 +61,38 @@ export const EncounterTableEditor: React.FC<Props> = ({
     });
   };
 
-  const handleRowChange = (
-    tableId: string,
-    roll: number,
-    changes: Partial<ScenarioEncounterRow>,
-  ) => {
+  const handleRowTextChange = (tableId: string, roll: number, text: string) => {
     onChange({
       ...encounterTable,
       tables: tables.map((table) => {
         if (table.id !== tableId) return table;
         return {
           ...table,
-          rows: table.rows.map((row) =>
-            row.roll === roll ? { ...row, ...changes } : row,
-          ),
+          rows: table.rows.map((row) => (row.roll === roll ? { ...row, text } : row)),
         };
       }),
     });
   };
 
-  const handleRowTypeChange = (
-    tableId: string,
-    roll: number,
-    type: ScenarioEncounterRowType,
-  ) => {
-    handleRowChange(tableId, roll, {
-      type,
-      enemyId: undefined,
-      enemyName: undefined,
-      targetTableId: undefined,
-      text: undefined,
+  const handleAddEnemy = (enemyId: string, enemyName: string) => {
+    if (!enemyId) return;
+    onChange({
+      ...encounterTable,
+      enemies: [...enemies, { enemyId, enemyName, note: '' }],
     });
   };
 
-  const handleEnemySelect = (enemyId: string, enemyName: string) => {
-    if (!editingEnemyTarget) return;
-    const { tableId, roll } = editingEnemyTarget;
-    handleRowChange(tableId, roll, {
-      enemyId: enemyId || undefined,
-      enemyName: enemyId ? enemyName : undefined,
+  const handleRemoveEnemy = (index: number) => {
+    onChange({
+      ...encounterTable,
+      enemies: enemies.filter((_, i) => i !== index),
+    });
+  };
+
+  const handleEnemyNoteChange = (index: number, note: string) => {
+    onChange({
+      ...encounterTable,
+      enemies: enemies.map((enemy, i) => (i === index ? { ...enemy, note } : enemy)),
     });
   };
 
@@ -164,72 +136,16 @@ export const EncounterTableEditor: React.FC<Props> = ({
               {table.rows.map((row) => (
                 <Box
                   key={row.roll}
-                  sx={{ display: 'flex', alignItems: 'center', gap: 1, my: 1, flexWrap: 'wrap' }}
+                  sx={{ display: 'flex', alignItems: 'center', gap: 1, my: 1 }}
                 >
-                  <Typography sx={{ width: 56 }}>{row.roll}</Typography>
-                  <Select
+                  <Typography sx={{ width: 24 }}>{row.roll}</Typography>
+                  <TextField
                     size="small"
-                    value={row.type}
-                    onChange={(e) =>
-                      handleRowTypeChange(
-                        table.id,
-                        row.roll,
-                        e.target.value as ScenarioEncounterRowType,
-                      )
-                    }
-                    sx={{ minWidth: 140 }}
-                  >
-                    <MenuItem value="enemy">エネミー</MenuItem>
-                    <MenuItem value="table">他の表</MenuItem>
-                    <MenuItem value="text">自由記述</MenuItem>
-                  </Select>
-
-                  {row.type === 'enemy' && (
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      onClick={() =>
-                        setEditingEnemyTarget({ tableId: table.id, roll: row.roll })
-                      }
-                    >
-                      {row.enemyName || 'エネミーを選択'}
-                    </Button>
-                  )}
-
-                  {row.type === 'table' && (
-                    <Select
-                      size="small"
-                      displayEmpty
-                      value={row.targetTableId ?? ''}
-                      onChange={(e) =>
-                        handleRowChange(table.id, row.roll, {
-                          targetTableId: e.target.value || undefined,
-                        })
-                      }
-                      sx={{ minWidth: 160 }}
-                    >
-                      <MenuItem value="">未選択</MenuItem>
-                      {tables
-                        .filter((candidate) => candidate.id !== table.id)
-                        .map((candidate) => (
-                          <MenuItem key={candidate.id} value={candidate.id}>
-                            {candidate.name}
-                          </MenuItem>
-                        ))}
-                    </Select>
-                  )}
-
-                  {row.type === 'text' && (
-                    <TextField
-                      size="small"
-                      placeholder="例: 何も起きない、アイテム発見 など"
-                      value={row.text ?? ''}
-                      onChange={(e) =>
-                        handleRowChange(table.id, row.roll, { text: e.target.value })
-                      }
-                      sx={{ flex: 1, minWidth: 200 }}
-                    />
-                  )}
+                    fullWidth
+                    placeholder="例: オオカミ 1d6体 / 表B参照 / 何も起きない"
+                    value={row.text ?? ''}
+                    onChange={(e) => handleRowTextChange(table.id, row.roll, e.target.value)}
+                  />
                 </Box>
               ))}
             </Paper>
@@ -241,18 +157,43 @@ export const EncounterTableEditor: React.FC<Props> = ({
         </Box>
       )}
 
+      {/* エネミー付録：表の自由記述に登場させたエネミーの参照用一覧 */}
+      <Box sx={{ mt: 3 }}>
+        <Typography variant="subtitle2" gutterBottom>
+          エネミー付録（表に登場させたエネミーの参照用）
+        </Typography>
+        {enemies.map((enemy, index) => (
+          <Box
+            key={index}
+            sx={{ display: 'flex', alignItems: 'center', gap: 1, my: 1 }}
+          >
+            <Typography sx={{ minWidth: 140 }}>{enemy.enemyName || 'エネミー'}</Typography>
+            <TextField
+              size="small"
+              fullWidth
+              placeholder="補足（例: 1d6体、表Aの1で登場 など）"
+              value={enemy.note ?? ''}
+              onChange={(e) => handleEnemyNoteChange(index, e.target.value)}
+            />
+            <IconButton
+              aria-label="エネミーを削除"
+              size="small"
+              onClick={() => handleRemoveEnemy(index)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Box>
+        ))}
+        <Button startIcon={<AddIcon />} onClick={() => setEnemyModalOpen(true)}>
+          エネミーを追加
+        </Button>
+      </Box>
+
       <EnemySelectionModal
-        open={!!editingEnemyTarget}
-        onClose={() => setEditingEnemyTarget(null)}
-        selectedEnemyId={
-          editingEnemyTarget
-            ? tables
-                .find((table) => table.id === editingEnemyTarget.tableId)
-                ?.rows.find((row) => row.roll === editingEnemyTarget.roll)
-                ?.enemyId ?? ''
-            : ''
-        }
-        onSelect={handleEnemySelect}
+        open={isEnemyModalOpen}
+        onClose={() => setEnemyModalOpen(false)}
+        selectedEnemyId=""
+        onSelect={handleAddEnemy}
       />
     </Box>
   );

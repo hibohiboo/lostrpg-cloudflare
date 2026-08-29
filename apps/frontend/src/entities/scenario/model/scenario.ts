@@ -10,7 +10,7 @@ export type {
   ScenarioEncounterSettings,
   ScenarioEncounterTable,
   ScenarioEncounterRow,
-  ScenarioEncounterRowType,
+  ScenarioEncounterEnemy,
 } from '@lostrpg/schemas';
 
 export interface Scenario {
