@@ -84,10 +84,10 @@ const DetailPage: React.FC = () => {
           </Box>
         )}
 
-        {/* 想定人数・プレイ時間・リミット */}
+        {/* 推奨人数・プレイ時間・リミット */}
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, my: 3 }}>
           {scenario.players && (
-            <Chip label={`想定人数: ${scenario.players}`} variant="outlined" />
+            <Chip label={`推奨人数: ${scenario.players}`} variant="outlined" />
           )}
           {scenario.time && (
             <Chip label={`プレイ時間: ${scenario.time}`} variant="outlined" />

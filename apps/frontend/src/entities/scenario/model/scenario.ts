@@ -24,7 +24,7 @@ export interface Scenario {
   name: string;
   password?: string;
   imageUrl?: string;
-  players?: string; // 想定人数
+  players?: string; // 推奨人数
   time?: string; // 想定プレイ時間
   limit?: string; // リミット
   caution?: string; // 注意事項

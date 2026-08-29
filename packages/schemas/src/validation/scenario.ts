@@ -126,7 +126,7 @@ export type ScenarioItemAppendix = z.infer<typeof scenarioItemAppendixSchema>;
 const baseScenarioFields = {
   name: z.string().max(50, 'name は50文字以内で入力してください'),
   imageUrl: z.string().optional(),
-  players: z.string().optional(), // 想定人数
+  players: z.string().optional(), // 推奨人数
   time: z.string().optional(), // 想定プレイ時間
   limit: z.string().optional(), // リミット
   caution: z.string().optional(), // 注意事項

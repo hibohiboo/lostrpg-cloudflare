@@ -20,7 +20,10 @@ import {
   updateScene,
 } from './treeOperations';
 import { eventNodeId, parseNodeId, phaseNodeId, sceneNodeId } from './types';
-import type { ScenarioEncounterTable, ScenarioPhase } from '@lostrpg/frontend/entities/scenario';
+import type {
+  ScenarioEncounterTable,
+  ScenarioPhase,
+} from '@lostrpg/frontend/entities/scenario';
 
 type Props = {
   content: string;
@@ -36,7 +39,7 @@ interface EditorState {
   phases: ScenarioPhase[];
 }
 
-// マークダウン編集タブと相互に行き来できるよう、想定人数／プレイ時間／リミット／注意事項と
+// マークダウン編集タブと相互に行き来できるよう、推奨人数／プレイ時間／リミット／注意事項と
 // フェイズ／シーン／イベントのツリー＋フォームで構造化データを編集する。
 // 編集内容は都度Markdownへ書き戻し、scenario.content（唯一の保存先）と同期させる。
 export const StructuredEditor: React.FC<Props> = ({
@@ -76,7 +79,8 @@ export const StructuredEditor: React.FC<Props> = ({
     setSelectedId(sceneNodeId(phaseIndex, newSceneIndex));
   };
   const handleAddEvent = (phaseIndex: number, sceneIndex: number) => {
-    const newEventIndex = phases[phaseIndex]?.scenes[sceneIndex]?.events.length ?? 0;
+    const newEventIndex =
+      phases[phaseIndex]?.scenes[sceneIndex]?.events.length ?? 0;
     commitPhases(addEvent(phases, phaseIndex, sceneIndex));
     // 追加したイベントが隠れたままにならないよう、フェイズ・シーンのアコーディオンを開く
     expandNode(phaseNodeId(phaseIndex));
@@ -136,7 +140,9 @@ export const StructuredEditor: React.FC<Props> = ({
             );
             setSelectedId(null);
           }}
-          onAddEvent={() => handleAddEvent(selection.phaseIndex, selection.sceneIndex)}
+          onAddEvent={() =>
+            handleAddEvent(selection.phaseIndex, selection.sceneIndex)
+          }
         />
       );
     }
@@ -177,10 +183,9 @@ export const StructuredEditor: React.FC<Props> = ({
 
   return (
     <Box>
-      {/* シナリオ設定（想定人数・プレイ時間・リミット・注意事項） */}
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
         <TextField
-          label="想定人数"
+          label="推奨人数"
           value={state.players}
           onChange={(e) => commit({ players: e.target.value })}
           sx={{ flex: 1, minWidth: 160 }}
