@@ -286,6 +286,75 @@ describe('POST /api/scenarios', () => {
     });
   });
 
+  describe('散策表・探索表・休憩表（2d6）', () => {
+    it('未指定の場合いずれもデフォルト表になること', async () => {
+      const createRes = await create(minimalData);
+      const createData = (await createRes.json()) as any;
+
+      const getRes = await get(createData.id);
+      const getData = (await getRes.json()) as any;
+
+      expect(getData.data.wanderTable).toEqual({ mode: 'default', tables: [] });
+      expect(getData.data.searchTable).toEqual({ mode: 'default', tables: [] });
+      expect(getData.data.restTable).toEqual({ mode: 'default', tables: [] });
+    });
+
+    it('本文（Markdown）の {.wanderTable}/{.searchTable}/{.restTable} セクションから、2d6のカスタム表をそれぞれ再生成すること', async () => {
+      const content = [
+        '## 散策表 {.wanderTable}',
+        '',
+        '##### 表A {.table}',
+        '',
+        '| 出目 | 内容 |',
+        '| --- | --- |',
+        '| 2 | 何も見つからない |',
+        '| 12 | 大当たり |',
+        '',
+        '## 探索表 {.searchTable}',
+        '',
+        '##### 表A {.table}',
+        '',
+        '| 出目 | 内容 |',
+        '| --- | --- |',
+        '| 7 | 平凡な発見 |',
+        '',
+        '## 休憩表 {.restTable}',
+        '',
+        '##### 表A {.table}',
+        '',
+        '| 出目 | 内容 |',
+        '| --- | --- |',
+        '| 2 | 悪夢を見る |',
+      ].join('\n');
+
+      const createRes = await create({ ...minimalData, content });
+      const createData = (await createRes.json()) as any;
+
+      const getRes = await get(createData.id);
+      const getData = (await getRes.json()) as any;
+
+      expect(getData.data.wanderTable.mode).toBe('custom');
+      expect(getData.data.wanderTable.tables[0].rows).toHaveLength(11);
+      expect(getData.data.wanderTable.tables[0].rows[0]).toEqual({
+        roll: 2,
+        text: '何も見つからない',
+      });
+      expect(getData.data.wanderTable.tables[0].rows[10]).toEqual({
+        roll: 12,
+        text: '大当たり',
+      });
+
+      expect(getData.data.searchTable.mode).toBe('custom');
+      expect(getData.data.searchTable.tables[0].rows.find((r: any) => r.roll === 7)).toEqual({
+        roll: 7,
+        text: '平凡な発見',
+      });
+
+      expect(getData.data.restTable.mode).toBe('custom');
+      expect(getData.data.restTable.tables[0].rows[0]).toEqual({ roll: 2, text: '悪夢を見る' });
+    });
+  });
+
   describe('パスワード', () => {
     it('パスワードありで作成できること', async () => {
       const dataWithPassword = { ...minimalData, password: 'secret123' };

@@ -18,6 +18,19 @@ const listScenariosQuerySchema = z.object({
   name: z.string().trim().optional(),
 });
 
+// ランダムエンカウント表・散策表・探索表・休憩表はいずれも「本文にカスタム表を書けば custom、
+// 何も書かなければ default」という同じルールで mode を決めるため、共通の関数にまとめる。
+// existing は partial な更新リクエストでは undefined になり得るが、スプレッドすれば無視される。
+const withCustomTables = <T extends { mode: 'default' | 'custom'; tables: unknown[] }>(
+  existing: T | undefined,
+  tables: T['tables'],
+): T =>
+  ({
+    ...existing,
+    tables,
+    mode: tables.length > 0 ? 'custom' : 'default',
+  }) as T;
+
 export const scenariosRouter = new Hono<{ Bindings: Env }>()
   // Get scenarios (paginated, optionally filtered by name)
   .get('/', zValidator('query', listScenariosQuerySchema), async (c) => {
@@ -69,23 +82,32 @@ export const scenariosRouter = new Hono<{ Bindings: Env }>()
     const { password: _password, ...dataWithoutPassword } = scenarioData;
 
     // 本文（Markdown）から players/time/limit/caution、フェイズ／シーン／イベント、
-    // ランダムエンカウント表（##### 表名 {.table}）を構造化する
+    // ランダムエンカウント表・散策表・探索表・休憩表（##### 表名 {.table}）を構造化する
     // クライアントから送られたこれらの値は使わず、常に content から再生成する
-    const { players, time, limit, caution, phases, encounterTables } = parseScenarioContent(
-      scenarioData.content,
-    );
-    const encounterTable = {
-      ...dataWithoutPassword.encounterTable,
-      tables: encounterTables,
-      mode: encounterTables.length > 0 ? ('custom' as const) : ('default' as const),
-    };
+    const { players, time, limit, caution, phases, encounterTables, wanderTables, searchTables, restTables } =
+      parseScenarioContent(scenarioData.content);
+    const encounterTable = withCustomTables(dataWithoutPassword.encounterTable, encounterTables);
+    const wanderTable = withCustomTables(dataWithoutPassword.wanderTable, wanderTables);
+    const searchTable = withCustomTables(dataWithoutPassword.searchTable, searchTables);
+    const restTable = withCustomTables(dataWithoutPassword.restTable, restTables);
 
     // データベースに保存
     const [newScenario] = await getDb()
       .insert(scenarios)
       .values({
         name: scenarioData.name,
-        data: { ...dataWithoutPassword, players, time, limit, caution, phases, encounterTable },
+        data: {
+          ...dataWithoutPassword,
+          players,
+          time,
+          limit,
+          caution,
+          phases,
+          encounterTable,
+          wanderTable,
+          searchTable,
+          restTable,
+        },
         passwordHash,
       })
       .returning();
@@ -154,16 +176,14 @@ export const scenariosRouter = new Hono<{ Bindings: Env }>()
       const { password: _password, ...dataWithoutPassword } = requestBody;
 
       // 本文（Markdown）から players/time/limit/caution、フェイズ／シーン／イベント、
-      // ランダムエンカウント表（##### 表名 {.table}）を構造化する
+      // ランダムエンカウント表・散策表・探索表・休憩表（##### 表名 {.table}）を構造化する
       // クライアントから送られたこれらの値は使わず、常に content から再生成する
-      const { players, time, limit, caution, phases, encounterTables } = parseScenarioContent(
-        requestBody.content,
-      );
-      const encounterTable = {
-        ...dataWithoutPassword.encounterTable,
-        tables: encounterTables,
-        mode: encounterTables.length > 0 ? ('custom' as const) : ('default' as const),
-      };
+      const { players, time, limit, caution, phases, encounterTables, wanderTables, searchTables, restTables } =
+        parseScenarioContent(requestBody.content);
+      const encounterTable = withCustomTables(dataWithoutPassword.encounterTable, encounterTables);
+      const wanderTable = withCustomTables(dataWithoutPassword.wanderTable, wanderTables);
+      const searchTable = withCustomTables(dataWithoutPassword.searchTable, searchTables);
+      const restTable = withCustomTables(dataWithoutPassword.restTable, restTables);
 
       // 更新データの構築
       const updateData: {
@@ -172,7 +192,18 @@ export const scenariosRouter = new Hono<{ Bindings: Env }>()
         updatedAt: Date;
         passwordHash?: string;
       } = {
-        data: { ...dataWithoutPassword, players, time, limit, caution, phases, encounterTable },
+        data: {
+          ...dataWithoutPassword,
+          players,
+          time,
+          limit,
+          caution,
+          phases,
+          encounterTable,
+          wanderTable,
+          searchTable,
+          restTable,
+        },
         name: requestBody.name || scenario.name,
         updatedAt: new Date(),
       };
@@ -203,6 +234,9 @@ export const scenariosRouter = new Hono<{ Bindings: Env }>()
           caution,
           phases,
           encounterTable,
+          wanderTable,
+          searchTable,
+          restTable,
         },
         200,
       );

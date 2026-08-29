@@ -7,25 +7,34 @@ import type {
   ScenarioEncounterTable,
 } from '@lostrpg/frontend/entities/scenario';
 
-const ROLLS = [1, 2, 3, 4, 5, 6] as const;
+const createEmptyRows = (rolls: readonly number[]): ScenarioEncounterRow[] =>
+  rolls.map((roll) => ({ roll, text: '' }));
 
-const createEmptyRows = (): ScenarioEncounterRow[] => ROLLS.map((roll) => ({ roll, text: '' }));
-
-const createTable = (index: number): ScenarioEncounterTable => ({
+const createTable = (index: number, rolls: readonly number[]): ScenarioEncounterTable => ({
   id: `table-${Date.now()}-${index}`,
   name: `表${String.fromCharCode(65 + index)}`,
-  rows: createEmptyRows(),
+  rows: createEmptyRows(rolls),
 });
 
 type Props = {
+  title: string;
+  helperText: string;
+  rolls: readonly number[];
   tables: ScenarioEncounterTable[];
   onChange: (tables: ScenarioEncounterTable[]) => void;
 };
 
-// 本文の「## ランダムエンカウント表 {.encounterTable}」セクションを、出目1〜6の自由記述
-// フォームで編集する。Markdown編集タブで直接書いた内容もここに反映され、双方向に同期する。
-export const EncounterTablesForm: React.FC<Props> = ({ tables, onChange }) => {
-  const handleAddTable = () => onChange([...tables, createTable(tables.length)]);
+// 本文の「## 〇〇表 {.xxxTable}」セクションを、出目ごとの自由記述フォームで編集する。
+// ランダムエンカウント表（1d6）・散策表／探索表／休憩表（2d6）で共通して使用する。
+// Markdown編集タブで直接書いた内容もここに反映され、双方向に同期する。
+export const RollTablesForm: React.FC<Props> = ({
+  title,
+  helperText,
+  rolls,
+  tables,
+  onChange,
+}) => {
+  const handleAddTable = () => onChange([...tables, createTable(tables.length, rolls)]);
 
   const handleRemoveTable = (tableId: string) =>
     onChange(tables.filter((table) => table.id !== tableId));
@@ -47,10 +56,10 @@ export const EncounterTablesForm: React.FC<Props> = ({ tables, onChange }) => {
   return (
     <Box>
       <Typography variant="subtitle2" gutterBottom>
-        ランダムエンカウント表
+        {title}
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-        表を追加するとカスタム表を使用します。何も追加しなければルールブック標準のランダムエンカウント表を使用します。
+        {helperText}
       </Typography>
 
       {tables.map((table) => (

@@ -55,6 +55,9 @@ const EditForm: React.FC<Props> = ({
     summary = '',
     content = '',
     encounterTable,
+    wanderTable,
+    searchTable,
+    restTable,
     bosses = [],
     items = [],
     creatorName = '',
@@ -65,11 +68,19 @@ const EditForm: React.FC<Props> = ({
   const nameError = !name && isValidError;
   const nameHelperText = nameError ? 'シナリオ名は必須です' : '';
 
-  // 推奨人数・プレイ時間・リミット・注意事項・ランダムエンカウント表は本文（Markdown）側の
-  // 特殊見出しで管理するため、本文が変わるたびにここから再抽出してscenarioへ反映する
+  // 推奨人数・プレイ時間・リミット・注意事項・ランダムエンカウント表／散策表／探索表／休憩表は
+  // 本文（Markdown）側の特殊見出しで管理するため、本文が変わるたびにここから再抽出してscenarioへ反映する
   const handleContentChange = (next: string) => {
-    const { players, time, limit, caution, encounterTables } =
-      parseScenarioContent(next);
+    const {
+      players,
+      time,
+      limit,
+      caution,
+      encounterTables,
+      wanderTables,
+      searchTables,
+      restTables,
+    } = parseScenarioContent(next);
     setScenario({
       ...scenario,
       content: next,
@@ -81,6 +92,21 @@ const EditForm: React.FC<Props> = ({
         ...encounterTable,
         tables: encounterTables,
         mode: encounterTables.length > 0 ? 'custom' : 'default',
+      },
+      wanderTable: {
+        ...wanderTable,
+        tables: wanderTables,
+        mode: wanderTables.length > 0 ? 'custom' : 'default',
+      },
+      searchTable: {
+        ...searchTable,
+        tables: searchTables,
+        mode: searchTables.length > 0 ? 'custom' : 'default',
+      },
+      restTable: {
+        ...restTable,
+        tables: restTables,
+        mode: restTables.length > 0 ? 'custom' : 'default',
       },
     });
   };

@@ -3,11 +3,12 @@ import { stringifyScenario } from '@lostrpg/core/scenario/stringifyScenario';
 import AddIcon from '@mui/icons-material/Add';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { EncounterTablesForm } from './EncounterTablesForm';
 import { EventForm } from './EventForm';
 import { PhaseForm } from './PhaseForm';
+import { RollTablesForm } from './RollTablesForm';
 import { ScenarioTree } from './ScenarioTree';
 import { SceneForm } from './SceneForm';
+import { ROLLS_1D6, ROLLS_2D6 } from './rolls';
 import {
   addEvent,
   addPhase,
@@ -36,6 +37,9 @@ interface EditorState {
   limit: string;
   caution: string;
   encounterTables: ScenarioEncounterTable[];
+  wanderTables: ScenarioEncounterTable[];
+  searchTables: ScenarioEncounterTable[];
+  restTables: ScenarioEncounterTable[];
   phases: ScenarioPhase[];
 }
 
@@ -64,6 +68,11 @@ export const StructuredEditor: React.FC<Props> = ({
   const commitPhases = (next: ScenarioPhase[]) => commit({ phases: next });
   const commitEncounterTables = (next: ScenarioEncounterTable[]) =>
     commit({ encounterTables: next });
+  const commitWanderTables = (next: ScenarioEncounterTable[]) =>
+    commit({ wanderTables: next });
+  const commitSearchTables = (next: ScenarioEncounterTable[]) =>
+    commit({ searchTables: next });
+  const commitRestTables = (next: ScenarioEncounterTable[]) => commit({ restTables: next });
 
   const handleAddPhase = () => {
     commitPhases(addPhase(phases));
@@ -245,11 +254,44 @@ export const StructuredEditor: React.FC<Props> = ({
         </Box>
         <Box sx={{ flex: 1, minWidth: 280 }}>{renderForm()}</Box>
       </Box>
-      {/* ランダムエンカウント表 */}
+      {/* ランダムエンカウント表（1d6） */}
       <Box sx={{ mb: 3 }}>
-        <EncounterTablesForm
+        <RollTablesForm
+          title="ランダムエンカウント表"
+          helperText="表を追加するとカスタム表を使用します。何も追加しなければルールブック標準のランダムエンカウント表を使用します。"
+          rolls={ROLLS_1D6}
           tables={state.encounterTables}
           onChange={commitEncounterTables}
+        />
+      </Box>
+      {/* 散策表（2d6） */}
+      <Box sx={{ mb: 3 }}>
+        <RollTablesForm
+          title="散策表"
+          helperText="表を追加するとカスタム表を使用します。何も追加しなければルールブック標準の散策表を使用します。"
+          rolls={ROLLS_2D6}
+          tables={state.wanderTables}
+          onChange={commitWanderTables}
+        />
+      </Box>
+      {/* 探索表（2d6） */}
+      <Box sx={{ mb: 3 }}>
+        <RollTablesForm
+          title="探索表"
+          helperText="表を追加するとカスタム表を使用します。何も追加しなければルールブック標準の探索表を使用します。"
+          rolls={ROLLS_2D6}
+          tables={state.searchTables}
+          onChange={commitSearchTables}
+        />
+      </Box>
+      {/* 休憩表（2d6） */}
+      <Box sx={{ mb: 3 }}>
+        <RollTablesForm
+          title="休憩表"
+          helperText="表を追加するとカスタム表を使用します。何も追加しなければルールブック標準の休憩表を使用します。"
+          rolls={ROLLS_2D6}
+          tables={state.restTables}
+          onChange={commitRestTables}
         />
       </Box>
     </Box>

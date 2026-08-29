@@ -20,6 +20,9 @@ describe('parseScenarioContent', () => {
     expect(result.phases).toEqual([]);
     expect(result.lines).toEqual([]);
     expect(result.encounterTables).toEqual([]);
+    expect(result.wanderTables).toEqual([]);
+    expect(result.searchTables).toEqual([]);
+    expect(result.restTables).toEqual([]);
   });
 
   it('フェイズ見出し直下の地の文をシナリオ概要として扱うこと（フェイズ開始前）', () => {
@@ -190,6 +193,38 @@ describe('parseScenarioContent', () => {
 
     expect(result.encounterTables.map((t) => t.name)).toEqual(['表A']);
     expect(result.phases.map((p) => p.name)).toEqual(['キャンプフェイズ', '探索フェイズ']);
+  });
+
+  it('## 散策表 {.wanderTable} / ## 探索表 {.searchTable} / ## 休憩表 {.restTable} を2d6の表として取り出せること', () => {
+    const md = [
+      '## 散策表 {.wanderTable}',
+      '##### 表A {.table}',
+      '| 出目 | 内容 |',
+      '| --- | --- |',
+      '| 2 | 何も見つからない |',
+      '| 12 | 大当たり |',
+      '## 探索表 {.searchTable}',
+      '##### 表A {.table}',
+      '| 出目 | 内容 |',
+      '| --- | --- |',
+      '| 7 | 平凡な発見 |',
+      '## 休憩表 {.restTable}',
+      '##### 表A {.table}',
+      '| 出目 | 内容 |',
+      '| --- | --- |',
+      '| 2 | 悪夢を見る |',
+      '## キャンプフェイズ',
+      '### プロローグ',
+    ].join('\n');
+
+    const result = parseScenarioContent(md);
+
+    expect(result.wanderTables[0].rows).toContainEqual({ roll: 2, text: '何も見つからない' });
+    expect(result.wanderTables[0].rows).toContainEqual({ roll: 12, text: '大当たり' });
+    expect(result.wanderTables[0].rows).toHaveLength(11);
+    expect(result.searchTables[0].rows).toContainEqual({ roll: 7, text: '平凡な発見' });
+    expect(result.restTables[0].rows).toContainEqual({ roll: 2, text: '悪夢を見る' });
+    expect(result.phases.map((p) => p.name)).toEqual(['キャンプフェイズ']);
   });
 
   it('複数フェイズ・複数シーンを正しく積み上げること', () => {

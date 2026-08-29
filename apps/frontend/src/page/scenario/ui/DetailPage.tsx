@@ -16,6 +16,7 @@ import { Link, useParams } from 'react-router';
 import {
   BossAppendixView,
   EncounterTableView,
+  RollTableView,
   ScenarioChartView,
   ScenarioOutlineTree,
   ScenarioPhaseList,
@@ -24,7 +25,8 @@ import {
 import { ItemAppendixView } from '@lostrpg/frontend/features/scenario';
 import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 
-// ランダムエンカウント表・ヌシ付録・アイテム付録：いずれも本文の後に付録として表示する参照用データ
+// ランダムエンカウント表・散策表・探索表・休憩表・ヌシ付録・アイテム付録：
+// いずれも本文の後に付録として表示する参照用データ
 const ScenarioAppendixSection: React.FC<{ scenario: Scenario }> = ({
   scenario,
 }) => (
@@ -33,6 +35,33 @@ const ScenarioAppendixSection: React.FC<{ scenario: Scenario }> = ({
       <Box sx={{ my: 3 }}>
         <InputLabel sx={{ mb: 1 }}>ランダムエンカウント表</InputLabel>
         <EncounterTableView encounterTable={scenario.encounterTable} />
+      </Box>
+    )}
+    {scenario.wanderTable.mode !== 'default' && (
+      <Box sx={{ my: 3 }}>
+        <InputLabel sx={{ mb: 1 }}>散策表</InputLabel>
+        <RollTableView
+          settings={scenario.wanderTable}
+          defaultLabel="ルールブック標準の散策表を使用します。"
+        />
+      </Box>
+    )}
+    {scenario.searchTable.mode !== 'default' && (
+      <Box sx={{ my: 3 }}>
+        <InputLabel sx={{ mb: 1 }}>探索表</InputLabel>
+        <RollTableView
+          settings={scenario.searchTable}
+          defaultLabel="ルールブック標準の探索表を使用します。"
+        />
+      </Box>
+    )}
+    {scenario.restTable.mode !== 'default' && (
+      <Box sx={{ my: 3 }}>
+        <InputLabel sx={{ mb: 1 }}>休憩表</InputLabel>
+        <RollTableView
+          settings={scenario.restTable}
+          defaultLabel="ルールブック標準の休憩表を使用します。"
+        />
       </Box>
     )}
     {scenario.bosses.length > 0 && (

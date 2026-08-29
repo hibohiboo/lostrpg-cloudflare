@@ -10,9 +10,14 @@ import {
   Typography,
 } from '@mui/material';
 import React from 'react';
-import type { ScenarioEncounterSettings, ScenarioEncounterTable } from '../model/scenario';
+import type {
+  ScenarioEncounterSettings,
+  ScenarioEncounterTable,
+} from '../model/scenario';
 
-const EncounterTableCard: React.FC<{ table: ScenarioEncounterTable }> = ({ table }) => (
+const EncounterTableCard: React.FC<{ table: ScenarioEncounterTable }> = ({
+  table,
+}) => (
   <Box sx={{ my: 2 }}>
     <Typography variant="subtitle1" gutterBottom>
       {table.name}
@@ -54,7 +59,9 @@ export const EncounterTableView: React.FC<Props> = ({ encounterTable }) => {
           カスタム表が設定されていません
         </Typography>
       ) : (
-        tables.map((table) => <EncounterTableCard key={table.id} table={table} />)
+        tables.map((table) => (
+          <EncounterTableCard key={table.id} table={table} />
+        ))
       )}
 
       {enemies.length > 0 && (
@@ -70,7 +77,12 @@ export const EncounterTableView: React.FC<Props> = ({ encounterTable }) => {
                     <TableCell>{enemy.enemyName || 'エネミー'}</TableCell>
                     <TableCell>
                       {enemy.url ? (
-                        <MuiLink href={enemy.url} underline="hover" target="_blank" rel="noopener noreferrer">
+                        <MuiLink
+                          href={enemy.url}
+                          underline="hover"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           {enemy.url}
                         </MuiLink>
                       ) : (

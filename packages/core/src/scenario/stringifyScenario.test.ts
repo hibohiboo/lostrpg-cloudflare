@@ -63,6 +63,39 @@ describe('stringifyScenario', () => {
     expect(reparsed.phases).toEqual(original.phases);
   });
 
+  it('散策表・探索表・休憩表（2d6）を含めてラウンドトリップできること', () => {
+    const original = parseScenarioContent(
+      [
+        '## 散策表 {.wanderTable}',
+        '##### 表A {.table}',
+        '| 出目 | 内容 |',
+        '| --- | --- |',
+        '| 2 | 何も見つからない |',
+        '| 12 | 大当たり |',
+        '## 探索表 {.searchTable}',
+        '##### 表A {.table}',
+        '| 出目 | 内容 |',
+        '| --- | --- |',
+        '| 7 | 平凡な発見 |',
+        '## 休憩表 {.restTable}',
+        '##### 表A {.table}',
+        '| 出目 | 内容 |',
+        '| --- | --- |',
+        '| 2 | 悪夢を見る |',
+        '## キャンプフェイズ',
+        '### プロローグ',
+      ].join('\n'),
+    );
+
+    const md = stringifyScenario(original);
+    const reparsed = parseScenarioContent(md);
+
+    expect(reparsed.wanderTables).toEqual(original.wanderTables);
+    expect(reparsed.searchTables).toEqual(original.searchTables);
+    expect(reparsed.restTables).toEqual(original.restTables);
+    expect(reparsed.phases).toEqual(original.phases);
+  });
+
   it('一部のメタ情報のみ指定した場合、指定分だけ見出しが生成されること', () => {
     const md = stringifyScenario({ limit: '4', phases: [] });
     expect(md).toBe('## 4 {.limit}');

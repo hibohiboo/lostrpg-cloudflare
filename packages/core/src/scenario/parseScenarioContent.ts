@@ -1,4 +1,4 @@
-import { parseEncounterTablesMarkdown } from './encounterTableMarkdown';
+import { parseRollTablesMarkdown, ROLLS_1D6, ROLLS_2D6 } from './encounterTableMarkdown';
 import {
   buildTableFromRows,
   getAttributes,
@@ -31,7 +31,9 @@ import type {
 // - `##### 表題 {.table}` の直後の表      … イベントに紐づく表
 // - 独立した1行の `[表示名](URL)`         … イベントに紐づくリンク
 // - `## ランダムエンカウント表 {.encounterTable}` セクション（次の `##` 見出しの直前まで）
-//                                          … ランダムエンカウント表（本文中どこに書いてもよい）
+//                                          … ランダムエンカウント表（1d6、本文中どこに書いてもよい）
+// - `## 散策表 {.wanderTable}` / `## 探索表 {.searchTable}` / `## 休憩表 {.restTable}` セクション
+//                                          … 散策表・探索表・休憩表（いずれも2d6、本文中どこに書いてもよい）
 // - 上記以外の地の文                       … フェイズ本文 / シーン本文 / イベント本文の説明文
 //
 // パーサ本体は state を書き換えず、各ブロックごとに新しい状態を返す純粋関数として実装している
@@ -219,28 +221,31 @@ const applyBlock = (state: ParseState, block: Block): ParseState => {
   return handleTable(state, block);
 };
 
-const isEncounterTableHeading = (line: string): boolean => {
+const isMarkedHeading = (line: string, key: string): boolean => {
   const heading = parseHeadingLine(line);
   if (!heading || heading.depth !== 2) return false;
-  const [, key] = getAttributes(heading.text);
-  return key === 'encounterTable';
+  const [, headingKey] = getAttributes(heading.text);
+  return headingKey === key;
 };
 
 const isDepth2Heading = (line: string): boolean => parseHeadingLine(line)?.depth === 2;
 
-// content から `## 〇〇 {.encounterTable}` セクション（次の `##` 見出しの直前まで）を
-// 全て取り除き、その中身だけを結合したMarkdownとして返す。フェイズ／シーンの構造とは
-// 独立して扱うため、通常の tokenizeBlocks によるフェイズ解析より前に行単位で分離する。
-const extractEncounterTablesSection = (
+// content から `## 〇〇 {.key}` セクション（次の `##` 見出しの直前まで）を全て取り除き、
+// その中身だけを結合したMarkdownとして返す。フェイズ／シーンの構造とは独立して扱うため、
+// 通常の tokenizeBlocks によるフェイズ解析より前に行単位で分離する。
+// ランダムエンカウント表・散策表・探索表・休憩表のいずれも同じ形式のセクションのため、
+// key（encounterTable / wanderTable / searchTable / restTable）を変えて使い回す。
+const extractMarkedSection = (
   content: string,
-): { content: string; encounterMarkdown: string } => {
+  key: string,
+): { content: string; sectionMarkdown: string } => {
   const lines = content.replace(/\r\n/g, '\n').split('\n');
   const remainingLines: string[] = [];
   const sections: string[] = [];
   let i = 0;
 
   while (i < lines.length) {
-    if (isEncounterTableHeading(lines[i])) {
+    if (isMarkedHeading(lines[i], key)) {
       i += 1;
       const sectionLines: string[] = [];
       while (i < lines.length && !isDepth2Heading(lines[i])) {
@@ -254,7 +259,7 @@ const extractEncounterTablesSection = (
     }
   }
 
-  return { content: remainingLines.join('\n'), encounterMarkdown: sections.join('\n\n') };
+  return { content: remainingLines.join('\n'), sectionMarkdown: sections.join('\n\n') };
 };
 
 export interface ParsedScenarioContent {
@@ -265,15 +270,20 @@ export interface ParsedScenarioContent {
   lines: string[];
   phases: ScenarioPhase[];
   encounterTables: ScenarioEncounterTable[];
+  wanderTables: ScenarioEncounterTable[];
+  searchTables: ScenarioEncounterTable[];
+  restTables: ScenarioEncounterTable[];
 }
 
 export const parseScenarioContent = (
   content: string | undefined | null,
 ): ParsedScenarioContent => {
-  const { content: withoutEncounterTables, encounterMarkdown } = extractEncounterTablesSection(
-    content ?? '',
-  );
-  const blocks = tokenizeBlocks(withoutEncounterTables);
+  const encounter = extractMarkedSection(content ?? '', 'encounterTable');
+  const wander = extractMarkedSection(encounter.content, 'wanderTable');
+  const search = extractMarkedSection(wander.content, 'searchTable');
+  const rest = extractMarkedSection(search.content, 'restTable');
+
+  const blocks = tokenizeBlocks(rest.content);
   const parsed = blocks.reduce(applyBlock, createInitialState());
   const final = pushPhase(parsed);
 
@@ -284,7 +294,10 @@ export const parseScenarioContent = (
     caution: final.caution,
     lines: final.scenarioLines,
     phases: final.phases,
-    encounterTables: parseEncounterTablesMarkdown(encounterMarkdown),
+    encounterTables: parseRollTablesMarkdown(encounter.sectionMarkdown, ROLLS_1D6),
+    wanderTables: parseRollTablesMarkdown(wander.sectionMarkdown, ROLLS_2D6),
+    searchTables: parseRollTablesMarkdown(search.sectionMarkdown, ROLLS_2D6),
+    restTables: parseRollTablesMarkdown(rest.sectionMarkdown, ROLLS_2D6),
   };
 };
 

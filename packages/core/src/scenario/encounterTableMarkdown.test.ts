@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
   parseEncounterTablesMarkdown,
+  parseRollTablesMarkdown,
+  ROLLS_2D6,
   stringifyEncounterTables,
+  stringifyRollTables,
 } from './encounterTableMarkdown';
 
 describe('encounterTableMarkdown', () => {
@@ -86,6 +89,42 @@ describe('encounterTableMarkdown', () => {
 
     const md = stringifyEncounterTables(tables);
     const reparsed = parseEncounterTablesMarkdown(md);
+
+    expect(reparsed.map((t) => ({ name: t.name, rows: t.rows }))).toEqual(
+      tables.map((t) => ({ name: t.name, rows: t.rows })),
+    );
+  });
+
+  it('rollsに2〜12（2d6）を渡すと、出目2〜12の行として読み取れること（散策表・探索表・休憩表用）', () => {
+    const md = [
+      '##### 表A {.table}',
+      '| 出目 | 内容 |',
+      '| --- | --- |',
+      '| 2 | 悪夢を見る |',
+      '| 7 | 何も起きない |',
+      '| 12 | 大当たり |',
+    ].join('\n');
+
+    const tables = parseRollTablesMarkdown(md, ROLLS_2D6);
+
+    expect(tables).toHaveLength(1);
+    expect(tables[0].rows).toHaveLength(11);
+    expect(tables[0].rows[0]).toEqual({ roll: 2, text: '悪夢を見る' });
+    expect(tables[0].rows.find((r) => r.roll === 7)).toEqual({ roll: 7, text: '何も起きない' });
+    expect(tables[0].rows[tables[0].rows.length - 1]).toEqual({ roll: 12, text: '大当たり' });
+  });
+
+  it('2d6の表もラウンドトリップできること', () => {
+    const tables = [
+      {
+        id: 'a',
+        name: '表A',
+        rows: ROLLS_2D6.map((roll) => ({ roll, text: roll === 7 ? '何も起きない' : '' })),
+      },
+    ];
+
+    const md = stringifyRollTables(tables);
+    const reparsed = parseRollTablesMarkdown(md, ROLLS_2D6);
 
     expect(reparsed.map((t) => ({ name: t.name, rows: t.rows }))).toEqual(
       tables.map((t) => ({ name: t.name, rows: t.rows })),
