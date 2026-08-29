@@ -1,4 +1,7 @@
-import type { ScenarioEncounterSettings, ScenarioPhase } from '@lostrpg/schemas';
+import type {
+  ScenarioEncounterSettings,
+  ScenarioPhase,
+} from '@lostrpg/schemas';
 
 export type {
   ScenarioPhase,
@@ -19,7 +22,7 @@ export interface Scenario {
   imageUrl?: string;
   players?: string; // 想定人数
   time?: string; // 想定プレイ時間
-  limit?: string; // 制限値
+  limit?: string; // リミット
   caution?: string; // 注意事項
   summary?: string; // 概要
   content?: string; // 本文（Markdown）
