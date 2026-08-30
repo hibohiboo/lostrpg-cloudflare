@@ -14,6 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import React from 'react';
+import { Link } from 'react-router';
 
 interface Prop {
   list: { name: string; id: string; imageUrl?: string }[];
@@ -57,7 +58,7 @@ const ListPage: React.FC<Prop> = (props) => {
 
         {/* 認証リンク */}
         <Box sx={{ mt: 2 }}>
-          <MuiLink href={createPath} underline="hover">
+          <MuiLink component={Link} to={createPath} underline="hover">
             作成
           </MuiLink>
         </Box>
@@ -116,8 +117,8 @@ const ListPage: React.FC<Prop> = (props) => {
                         }}
                       >
                         <CardActionArea
-                          component="a"
-                          href={`${detailPathPrefix}/${camp.id}`}
+                          component={Link}
+                          to={`${detailPathPrefix}/${camp.id}`}
                           sx={{
                             height: '100%',
                             display: 'flex',
@@ -211,7 +212,7 @@ const ListPage: React.FC<Prop> = (props) => {
 
         {/* 戻るリンク */}
         <Box sx={{ mt: 4 }}>
-          <MuiLink href="/" underline="hover">
+          <MuiLink component={Link} to="/" underline="hover">
             戻る
           </MuiLink>
         </Box>

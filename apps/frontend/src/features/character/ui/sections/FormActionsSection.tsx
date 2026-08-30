@@ -3,7 +3,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import SaveIcon from '@mui/icons-material/Save';
 import { Box, Button, Link as MuiLink, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 import { copyCharacterToCcfolia } from '../../utils/exportCcfolia';
 import { exportCharacterToTRPGStudio } from '../../utils/exportTRPGStudio';
@@ -142,7 +142,7 @@ export const FormActionsSection: React.FC<Props> = ({
       )}
 
       <Box sx={{ mt: 4 }}>
-        <MuiLink href={prevPath} underline="hover">
+        <MuiLink component={Link} to={prevPath} underline="hover">
           戻る
         </MuiLink>
       </Box>

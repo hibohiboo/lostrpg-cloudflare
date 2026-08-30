@@ -15,6 +15,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useMemo } from 'react';
+import { Link } from 'react-router';
 import {
   AddFacilityForm,
   AddPersonalityForm,
@@ -265,7 +266,7 @@ const EditForm: React.FC<Props> = ({
 
       {/* 戻るリンク */}
       <Box sx={{ mt: 4 }}>
-        <MuiLink href={prevPath} underline="hover">
+        <MuiLink component={Link} to={prevPath} underline="hover">
           戻る
         </MuiLink>
       </Box>

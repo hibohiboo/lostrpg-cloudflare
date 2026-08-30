@@ -9,6 +9,7 @@ import {
   TextField,
 } from '@mui/material';
 import React, { useState } from 'react';
+import { Link } from 'react-router';
 import { ImageUploadField } from '@lostrpg/frontend/shared/ui';
 import { EditFormViewModel } from '../hooks/useEditFormHooks';
 import { BossAppendixEditor } from './BossAppendixEditor';
@@ -241,7 +242,7 @@ const EditForm: React.FC<Props> = ({
 
       {/* 戻るリンク */}
       <Box sx={{ mt: 4 }}>
-        <MuiLink href={prevPath} underline="hover">
+        <MuiLink component={Link} to={prevPath} underline="hover">
           戻る
         </MuiLink>
       </Box>

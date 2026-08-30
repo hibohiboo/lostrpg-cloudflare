@@ -17,6 +17,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
+import { Link } from 'react-router';
 import { SCENARIO_NOTATION_ICONS, ScenarioChartView } from '@lostrpg/frontend/entities/scenario';
 
 const CopyButton: React.FC<{ text: string }> = ({ text }) => {
@@ -128,7 +129,7 @@ const SamplePage: React.FC = () => (
 
       {/* 戻るリンク */}
       <Box sx={{ mt: 4 }}>
-        <MuiLink href="/scenario/" underline="hover">
+        <MuiLink component={Link} to="/scenario/" underline="hover">
           戻る
         </MuiLink>
       </Box>

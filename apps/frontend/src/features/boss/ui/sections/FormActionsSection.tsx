@@ -1,6 +1,7 @@
 import SaveIcon from '@mui/icons-material/Save';
 import { Box, Button, Link as MuiLink } from '@mui/material';
 import React, { useState } from 'react';
+import { Link } from 'react-router';
 
 type Props = {
   handleSave: () => void;
@@ -48,7 +49,7 @@ export const FormActionsSection: React.FC<Props> = ({
       )}
 
       <Box sx={{ mt: 4 }}>
-        <MuiLink href={prevPath} underline="hover">
+        <MuiLink component={Link} to={prevPath} underline="hover">
           戻る
         </MuiLink>
       </Box>

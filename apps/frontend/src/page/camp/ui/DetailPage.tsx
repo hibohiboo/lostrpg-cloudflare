@@ -179,7 +179,7 @@ const DetailPage: React.FC = () => {
 
         {/* 戻るリンク */}
         <Box sx={{ mt: 4 }}>
-          <MuiLink href="/camp/" underline="hover">
+          <MuiLink component={Link} to="/camp/" underline="hover">
             戻る
           </MuiLink>
         </Box>

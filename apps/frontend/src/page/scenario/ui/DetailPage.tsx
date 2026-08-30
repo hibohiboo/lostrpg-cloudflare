@@ -235,7 +235,7 @@ const DetailPage: React.FC = () => {
         <ScenarioAppendixSection scenario={scenario} />
         {/* 戻るリンク */}
         <Box sx={{ mt: 4 }}>
-          <MuiLink href="/scenario/" underline="hover">
+          <MuiLink component={Link} to="/scenario/" underline="hover">
             戻る
           </MuiLink>
         </Box>

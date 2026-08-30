@@ -265,7 +265,7 @@ const ListPage: React.FC = () => {
 
         {/* 戻るリンク */}
         <Box sx={{ mt: 4 }}>
-          <MuiLink href="/" underline="hover">
+          <MuiLink component={Link} to="/" underline="hover">
             戻る
           </MuiLink>
         </Box>
