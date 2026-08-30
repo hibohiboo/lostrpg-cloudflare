@@ -1,8 +1,11 @@
 import EditIcon from '@mui/icons-material/Edit';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Box,
   Button,
   Chip,
+  Collapse,
   Container,
   InputLabel,
   Link as MuiLink,
@@ -10,6 +13,8 @@ import {
   Tab,
   Tabs,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router';
@@ -22,6 +27,7 @@ import {
   ScenarioPhaseList,
   type Scenario,
   type ScenarioCustomTableKind,
+  type ScenarioPhase,
 } from '@lostrpg/frontend/entities/scenario';
 import {
   FacilityAppendixView,
@@ -87,6 +93,48 @@ const ScenarioAppendixSection: React.FC<{ scenario: Scenario }> = ({
     )}
   </>
 );
+
+// フェイズ/シーンのツリー：スマホでは本文の上に被ってしまうため、
+// スマホ幅ではデフォルトで畳んでおき、ボタンで開閉できるようにする。
+const ScenarioTreePanel: React.FC<{ phases: ScenarioPhase[] }> = ({
+  phases,
+}) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [isTreeOpen, setIsTreeOpen] = useState(false);
+
+  return (
+    <Box sx={{ width: { xs: '100%', sm: 280 }, flexShrink: 0 }}>
+      {isMobile && (
+        <Button
+          fullWidth
+          variant="outlined"
+          onClick={() => setIsTreeOpen((prev) => !prev)}
+          endIcon={isTreeOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          sx={{ mb: isTreeOpen ? 1 : 0 }}
+        >
+          ツリー
+        </Button>
+      )}
+      <Collapse in={!isMobile || isTreeOpen}>
+        <Box
+          component={Paper}
+          variant="outlined"
+          sx={{
+            p: 2,
+            position: { sm: 'sticky' },
+            top: { sm: 16 },
+            maxHeight: { sm: 'calc(100vh - 32px)' },
+            overflowY: { sm: 'auto' },
+          }}
+        >
+          {!isMobile && <InputLabel sx={{ mb: 1 }}>ツリー</InputLabel>}
+          <ScenarioOutlineTree phases={phases} />
+        </Box>
+      </Collapse>
+    </Box>
+  );
+};
 
 const DetailPage: React.FC = () => {
   const { id } = useParams();
@@ -206,22 +254,7 @@ const DetailPage: React.FC = () => {
                   flexWrap: 'wrap',
                 }}
               >
-                <Box
-                  component={Paper}
-                  variant="outlined"
-                  sx={{
-                    width: 280,
-                    flexShrink: 0,
-                    p: 2,
-                    position: 'sticky',
-                    top: 16,
-                    maxHeight: 'calc(100vh - 32px)',
-                    overflowY: 'auto',
-                  }}
-                >
-                  <InputLabel sx={{ mb: 1 }}>ツリー</InputLabel>
-                  <ScenarioOutlineTree phases={scenario.phases} />
-                </Box>
+                <ScenarioTreePanel phases={scenario.phases} />
                 <Box sx={{ flex: 1, minWidth: 280 }}>
                   <ScenarioPhaseList phases={scenario.phases} />
                 </Box>
