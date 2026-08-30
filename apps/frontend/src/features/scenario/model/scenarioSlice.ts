@@ -28,6 +28,7 @@ const initialState: ScenarioFormData = {
   enemies: [],
   bosses: [],
   items: [],
+  facilities: [],
   creatorName: '',
   isPublish: false,
   hideFromList: false,

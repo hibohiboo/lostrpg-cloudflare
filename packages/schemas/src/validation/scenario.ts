@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { facilitySchema } from './camp';
 import { createValidator } from './helpers';
 import { itemSchema } from './items';
 
@@ -138,6 +139,14 @@ export type ScenarioBossAppendix = z.infer<typeof scenarioBossAppendixSchema>;
 export const scenarioItemAppendixSchema = itemSchema;
 export type ScenarioItemAppendix = z.infer<typeof scenarioItemAppendixSchema>;
 
+// 本文中に登場させたキャンプの施設の付録（参照用一覧）。
+// キャンプの施設と同じ形式（id・名前・種別・特技・レベル・効果）を持ち、
+// 施設選択（設備・人材のマスタ一覧）で追加した内容もキャンプと同様にその場で自由に編集できる。
+export const scenarioFacilityAppendixSchema = facilitySchema;
+export type ScenarioFacilityAppendix = z.infer<
+  typeof scenarioFacilityAppendixSchema
+>;
+
 // 基本フィールドスキーマ
 const baseScenarioFields = {
   name: z.string().max(50, 'name は50文字以内で入力してください'),
@@ -160,6 +169,8 @@ const baseScenarioFields = {
   bosses: z.array(scenarioBossAppendixSchema).optional().default([]),
   // アイテム付録（本文に登場させたアイテムの参照用一覧）
   items: z.array(scenarioItemAppendixSchema).optional().default([]),
+  // 施設付録（本文に登場させたキャンプの施設の参照用一覧）
+  facilities: z.array(scenarioFacilityAppendixSchema).optional().default([]),
   creatorName: z.string().optional(), // 作者名
   isPublish: z.boolean().optional().default(false), // 公開フラグ
   password: z.string().nullable().optional(),

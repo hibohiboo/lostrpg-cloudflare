@@ -4,7 +4,7 @@ import { createValidator } from './helpers';
 import { itemSchema } from './items';
 
 // 施設スキーマ
-const facilitySchema = z.object({
+export const facilitySchema = z.object({
   id: z.string(),
   name: z.string(),
   type: z.string(),
@@ -12,6 +12,7 @@ const facilitySchema = z.object({
   level: z.number().int().min(1),
   effect: z.string(),
 });
+export type Facility = z.infer<typeof facilitySchema>;
 
 // 基本フィールドスキーマ
 const baseCampFields = {

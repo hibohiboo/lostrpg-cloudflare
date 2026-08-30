@@ -2,6 +2,7 @@ import type {
   ScenarioBossAppendix,
   ScenarioCustomTable,
   ScenarioEncounterEnemy,
+  ScenarioFacilityAppendix,
   ScenarioItemAppendix,
   ScenarioPhase,
 } from '@lostrpg/schemas';
@@ -20,6 +21,7 @@ export type {
   ScenarioEncounterEnemy,
   ScenarioBossAppendix,
   ScenarioItemAppendix,
+  ScenarioFacilityAppendix,
 } from '@lostrpg/schemas';
 
 export interface Scenario {
@@ -43,6 +45,8 @@ export interface Scenario {
   bosses: ScenarioBossAppendix[];
   // アイテム付録（本文に登場させたアイテムの参照用一覧）
   items: ScenarioItemAppendix[];
+  // 施設付録（本文に登場させたキャンプの施設の参照用一覧）
+  facilities: ScenarioFacilityAppendix[];
   creatorName?: string; // 作者名
   isPublish: boolean; // 公開フラグ
   hideFromList: boolean; // 一覧に表示しない

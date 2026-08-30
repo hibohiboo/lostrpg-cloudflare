@@ -23,7 +23,10 @@ import {
   type Scenario,
   type ScenarioCustomTableKind,
 } from '@lostrpg/frontend/entities/scenario';
-import { ItemAppendixView } from '@lostrpg/frontend/features/scenario';
+import {
+  FacilityAppendixView,
+  ItemAppendixView,
+} from '@lostrpg/frontend/features/scenario';
 import { useAppSelector } from '@lostrpg/frontend/shared/lib/store';
 
 const CUSTOM_TABLE_SECTIONS: {
@@ -43,7 +46,7 @@ const CUSTOM_TABLE_SECTIONS: {
 ];
 
 // カスタム表（ランダムエンカウント表・散策表・探索表・休憩表・その他）・エネミー付録・
-// ヌシ付録・アイテム付録：いずれも本文の後に付録として表示する参照用データ
+// ヌシ付録・アイテム付録・施設付録：いずれも本文の後に付録として表示する参照用データ
 const ScenarioAppendixSection: React.FC<{ scenario: Scenario }> = ({
   scenario,
 }) => (
@@ -74,6 +77,12 @@ const ScenarioAppendixSection: React.FC<{ scenario: Scenario }> = ({
       <Box sx={{ my: 3 }}>
         <InputLabel sx={{ mb: 1 }}>アイテム</InputLabel>
         <ItemAppendixView items={scenario.items} />
+      </Box>
+    )}
+    {scenario.facilities.length > 0 && (
+      <Box sx={{ my: 3 }}>
+        <InputLabel sx={{ mb: 1 }}>施設</InputLabel>
+        <FacilityAppendixView facilities={scenario.facilities} />
       </Box>
     )}
   </>

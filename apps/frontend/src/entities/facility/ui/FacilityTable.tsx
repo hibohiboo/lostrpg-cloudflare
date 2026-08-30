@@ -12,12 +12,14 @@ type Props = {
       rowId: GridRowId;
     },
   ) => Facility;
+  hideActions?: boolean;
 };
 
 export const FacilityTable: React.FC<Props> = ({
   facilities,
   handleFacilityDelete,
   handleFacilityUpdate,
+  hideActions = false,
 }) => {
   // 施設テーブルの列定義
   const facilityColumns: GridColDef<Facility>[] = [
@@ -40,6 +42,7 @@ export const FacilityTable: React.FC<Props> = ({
       columns={facilityColumns}
       processRowUpdate={handleFacilityUpdate}
       onDelete={(id: GridRowId) => handleFacilityDelete(String(id))}
+      hideActions={hideActions}
       hideFooter
       disableRowSelectionOnClick
       localeText={{

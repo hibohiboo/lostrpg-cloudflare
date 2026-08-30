@@ -11,3 +11,4 @@ export * from './hooks/useEditFormHooks';
 export { default as ScenarioEditForm } from './ui/EditForm';
 export { EncounterAppendixEditor } from './ui/EncounterAppendixEditor';
 export { ItemAppendixView } from './ui/ItemAppendixView';
+export { FacilityAppendixView } from './ui/FacilityAppendixView';
