@@ -1275,7 +1275,7 @@ export const dragonPlainItemList = [
     target: '自身',
     trait: '判定強化',
     effect:
-      '《バランス》が指定特技の判定にプラス1の修正がつく。『瓦礫』などの足場ペナルティ無効。アビリティ【地震】無効。',
+      '《バランス》が指定特技の判定にプラス1の修正がつく。『瓦礫』などの足場ペナルティ無効。',
   },
   {
     name: '忍者の足袋',
@@ -1776,7 +1776,7 @@ export const dragonPlainGreaterItemList = [
     target: '自身',
     trait: '判定強化',
     effect:
-      '《バランス》が指定特技の判定にプラス3の修正がつく。『瓦礫』などの足場ペナルティ無効。アビリティ【地震】無効。',
+      '《バランス》が指定特技の判定にプラス3の修正がつく。『瓦礫』などの足場ペナルティ無効。',
   },
   {
     name: '☾忍者の足袋',
@@ -1808,6 +1808,7 @@ export const buildItemCatalog = (supplements: {
 }) => {
   const catalog = [...items];
   if (supplements.useStrangeField) catalog.push(...strangeFieldsItemList);
-  if (supplements.useDragonPlain) catalog.push(...dragonPlainItemList, ...dragonPlainGreaterItemList);
+  if (supplements.useDragonPlain)
+    catalog.push(...dragonPlainItemList, ...dragonPlainGreaterItemList);
   return catalog;
 };
