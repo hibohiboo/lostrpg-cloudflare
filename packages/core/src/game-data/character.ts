@@ -1840,7 +1840,7 @@ export const trophyAbilityList = [
         type: '攻撃',
         recoil: '10',
         specialty: '自由',
-        target: '自身',
+        target: '単体',
         effect:
           '指定特技の判定に成功すると、装備中の《指定特技》が一致している武器1つの[攻撃力+成功度]点のダメージを与える。',
       },
