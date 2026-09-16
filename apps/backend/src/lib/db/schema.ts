@@ -12,6 +12,18 @@ export const characters = pgTable('characters', {
 export type Character = typeof characters.$inferSelect;
 export type NewCharacter = typeof characters.$inferInsert;
 
+export const motherlessCharacters = pgTable('motherless_characters', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  name: varchar('name', { length: 50 }).notNull(),
+  data: jsonb('data').notNull(), // キャラクターデータ全体をJSONBで格納
+  passwordHash: varchar('password_hash', { length: 255 }), // パスワードハッシュ(オプション)
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type MotherlessCharacter = typeof motherlessCharacters.$inferSelect;
+export type NewMotherlessCharacter = typeof motherlessCharacters.$inferInsert;
+
 export const bosses = pgTable('bosses', {
   id: uuid('id').primaryKey().defaultRandom(),
   name: varchar('name', { length: 50 }).notNull(),

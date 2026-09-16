@@ -3,6 +3,8 @@ import { bossApi } from '@lostrpg/frontend/entities/boss';
 import { campApi } from '@lostrpg/frontend/entities/camp';
 import { characterApi } from '@lostrpg/frontend/entities/character';
 import { enemyApi } from '@lostrpg/frontend/entities/enemy';
+import { motherlessCharacterApi } from '@lostrpg/frontend/entities/motherlessCharacter';
+import { motherlessSheetApi } from '@lostrpg/frontend/entities/motherlessSheet';
 import { recordApi } from '@lostrpg/frontend/entities/record';
 import { scenarioApi } from '@lostrpg/frontend/entities/scenario';
 import { rootReducer } from './rootReducer';
@@ -17,6 +19,8 @@ export const store = configureStore({
       bossApi.middleware,
       enemyApi.middleware,
       scenarioApi.middleware,
+      motherlessCharacterApi.middleware,
+      motherlessSheetApi.middleware,
     ),
 });
 

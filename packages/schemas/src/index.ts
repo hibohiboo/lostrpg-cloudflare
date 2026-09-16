@@ -2,5 +2,6 @@ export * from './validation/boss';
 export * from './validation/camp';
 export * from './validation/character';
 export * from './validation/enemy';
+export * from './validation/motherlessCharacter';
 export * from './validation/record';
 export * from './validation/scenario';

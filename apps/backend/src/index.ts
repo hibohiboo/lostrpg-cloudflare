@@ -7,6 +7,7 @@ import { campsRouter } from './routes/camps';
 import { charactersRouter } from './routes/characters';
 import { enemiesRouter } from './routes/enemies';
 import { imagesRouter } from './routes/images';
+import { motherlessCharactersRouter } from './routes/motherlessCharacters';
 import { scenariosRouter } from './routes/scenarios';
 import type { Env } from './types/cloudflare';
 
@@ -44,7 +45,8 @@ const _routes = app
   .route('/api/characters', charactersRouter)
   .route('/api/bosses', bossesRouter)
   .route('/api/enemies', enemiesRouter)
-  .route('/api/scenarios', scenariosRouter);
+  .route('/api/scenarios', scenariosRouter)
+  .route('/api/motherless-characters', motherlessCharactersRouter);
 app.route('/api/images', imagesRouter);
 
 const port = Number(process.env.PORT) || 3001;
