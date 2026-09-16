@@ -3,6 +3,8 @@ import { bossApi } from '@lostrpg/frontend/entities/boss';
 import { campApi } from '@lostrpg/frontend/entities/camp';
 import { characterApi } from '@lostrpg/frontend/entities/character';
 import { enemyApi } from '@lostrpg/frontend/entities/enemy';
+import { motherlessCharacterApi } from '@lostrpg/frontend/entities/motherlessCharacter';
+import { motherlessSheetApi } from '@lostrpg/frontend/entities/motherlessSheet';
 import { recordSlice, recordApi } from '@lostrpg/frontend/entities/record';
 import { scenarioApi } from '@lostrpg/frontend/entities/scenario';
 import { bossSlice } from '@lostrpg/frontend/features/boss';
@@ -12,11 +14,13 @@ import {
   characterSlice,
 } from '@lostrpg/frontend/features/character';
 import { enemySlice } from '@lostrpg/frontend/features/enemy';
+import { motherlessCharacterSlice } from '@lostrpg/frontend/features/motherlessCharacter';
 import { scenarioSlice } from '@lostrpg/frontend/features/scenario';
 import { bossListPageSlice } from '@lostrpg/frontend/page/boss/model';
 import { campListPageSlice } from '@lostrpg/frontend/page/camp/model';
 import { characterListPageSlice } from '@lostrpg/frontend/page/character/model';
 import { enemyListPageSlice } from '@lostrpg/frontend/page/enemy/model';
+import { motherlessCharacterListPageSlice } from '@lostrpg/frontend/page/motherlessCharacter/model';
 import { scenarioListPageSlice } from '@lostrpg/frontend/page/scenario/model';
 
 const combinedReducer = combineReducers({
@@ -38,6 +42,11 @@ const combinedReducer = combineReducers({
   [scenarioSlice.reducerPath]: scenarioSlice.reducer,
   [scenarioApi.reducerPath]: scenarioApi.reducer,
   [scenarioListPageSlice.reducerPath]: scenarioListPageSlice.reducer,
+  [motherlessCharacterSlice.reducerPath]: motherlessCharacterSlice.reducer,
+  [motherlessCharacterApi.reducerPath]: motherlessCharacterApi.reducer,
+  [motherlessSheetApi.reducerPath]: motherlessSheetApi.reducer,
+  [motherlessCharacterListPageSlice.reducerPath]:
+    motherlessCharacterListPageSlice.reducer,
 });
 
 type CombinedState = ReturnType<typeof combinedReducer>;

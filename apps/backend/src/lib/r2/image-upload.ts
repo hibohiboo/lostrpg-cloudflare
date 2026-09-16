@@ -27,7 +27,13 @@ export function validateImageFile(imageFile: File | null): File {
 // R2へ画像をアップロード
 export async function uploadImageToR2(
   bucket: R2Bucket,
-  resourceType: 'camps' | 'characters' | 'bosses' | 'enemies' | 'scenarios',
+  resourceType:
+    | 'camps'
+    | 'characters'
+    | 'bosses'
+    | 'enemies'
+    | 'scenarios'
+    | 'motherless-characters',
   id: string,
   imageFile: File,
 ): Promise<string> {

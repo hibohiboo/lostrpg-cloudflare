@@ -42,6 +42,16 @@ import {
   createEnemyLoader,
 } from '@lostrpg/frontend/page/enemy/loader';
 import {
+  MotherlessCharacterCreatePage,
+  MotherlessCharacterDetailPage,
+  MotherlessCharacterEditPage,
+  MotherlessCharacterListPage,
+} from '@lostrpg/frontend/page/motherlessCharacter';
+import {
+  createMotherlessCharacterCreateLoader,
+  createMotherlessCharacterLoader,
+} from '@lostrpg/frontend/page/motherlessCharacter/loader';
+import {
   RecordCreatePage,
   RecordEditPage,
 } from '@lostrpg/frontend/page/record';
@@ -206,6 +216,31 @@ export const createRouter = ({ dispatch }: { dispatch: AppDispatch }) =>
                   loader: createRecordLoader(dispatch),
                 },
               ],
+            },
+          ],
+        },
+        {
+          // 試作中のためトップページ・ナビからはリンクしない。直接URLでのみアクセス可能。
+          path: '/motherless/characters',
+          children: [
+            {
+              path: '',
+              element: <MotherlessCharacterListPage />,
+            },
+            {
+              path: 'create',
+              element: <MotherlessCharacterCreatePage />,
+              loader: createMotherlessCharacterCreateLoader(dispatch),
+            },
+            {
+              path: ':id',
+              element: <MotherlessCharacterDetailPage />,
+              loader: createMotherlessCharacterLoader(dispatch),
+            },
+            {
+              path: ':id/edit',
+              element: <MotherlessCharacterEditPage />,
+              loader: createMotherlessCharacterLoader(dispatch),
             },
           ],
         },
