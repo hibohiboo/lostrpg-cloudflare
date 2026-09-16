@@ -17,14 +17,14 @@ TRPG「LOSTRPG」のキャラクターシート・キャンプシート・ヌシ
 
 ## 技術スタック
 
-| レイヤー | 技術 |
-| --- | --- |
+| レイヤー       | 技術                                                              |
+| -------------- | ----------------------------------------------------------------- |
 | フロントエンド | React 19 / Vite / React Router / Redux Toolkit（RTK Query） / MUI |
-| バックエンド | Hono（Cloudflare Workers） |
-| DB | Neon（サーバーレスPostgres） / Drizzle ORM |
-| ストレージ | Cloudflare R2（画像） |
-| バリデーション | Zod |
-| モノレポ管理 | bun workspaces + Turborepo |
+| バックエンド   | Hono（Cloudflare Workers）                                        |
+| DB             | Neon（サーバーレスPostgres） / Drizzle ORM                        |
+| ストレージ     | Cloudflare R2（画像）                                             |
+| バリデーション | Zod                                                               |
+| モノレポ管理   | bun workspaces + Turborepo                                        |
 
 ## モノレポ構成
 
@@ -140,3 +140,5 @@ bun run deploy:staging   # ステージング
 ```
 
 フロントエンドは `apps/frontend/dist` を Cloudflare Workers の静的アセットとして配信します（`wrangler.jsonc` 参照）。
+
+/motherless/characters はテスト公開中。
