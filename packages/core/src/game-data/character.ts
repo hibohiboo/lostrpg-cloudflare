@@ -2018,6 +2018,22 @@ export const dragonPlainAbilityList = [
     ],
   },
   {
+    name: 'チビ',
+    id: 'little',
+    list: [
+      {
+        name: '双撃',
+        group: 'チビ',
+        type: '割込み',
+        recoil: '8',
+        specialty: '《休まない》',
+        target: '自身',
+        effect:
+          '自身の攻撃が終わった後に割込んで使用する。このアビリティは重量が＜生命力＞以下の武器を2つ装備している状態でのみ使用できる。指定特技の判定に成功すると、攻撃に使用しなかったほうの武器でもう一度攻撃を行う。この攻撃で与えるダメージは1/2となる。',
+      },
+    ],
+  },
+  {
     name: 'センシ',
     id: 'fighter',
     list: [
